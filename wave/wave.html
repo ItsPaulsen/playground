@@ -15,7 +15,7 @@
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="../shared/tweaks-panel.jsx"></script>
 <script type="text/babel" src="wave.jsx"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "centerOffset": -0.18,
   "fray": 0.04,
   "direction": "vertical",
-  "lineColor": "#bcc3fb",
+  "lineColor": "#818cf8",
   "pulseAmount": 2,
   "pulseRatio": 0.5,
   "pulseSpeed": 0.5,
@@ -59,7 +59,7 @@ function App() {
     frequency:   rand(0.5, 10, 0.1),
     turbulence:  rand(0, 1, 0.01),
     fray:        rand(0, 1, 0.01),
-    pulseAmount: rand(0, 6, 0.5),
+    pulseAmount: rand(0, 3, 0.25),
     pulseRatio:  rand(0, 1, 0.01),
     pulseSpeed:  rand(0.5, 2, 0.5),
   });
@@ -117,7 +117,7 @@ function App() {
         <TweakSection label="Motion">
           <TweakSlider label="Amplitude" value={t.amplitude.toFixed(2)} min={0.05} max={1} step={0.05}
                        onChange={(v) => setTweak('amplitude', Number(v))} />
-          <TweakSlider label="Frequency" value={t.frequency.toFixed(1)} min={0.5} max={10} step={0.1}
+          <TweakSlider label="Frequency" value={t.frequency.toFixed(1)} min={1} max={10} step={0.1}
                        onChange={(v) => setTweak('frequency', Number(v))} />
           <TweakSlider label="Turbulence" value={Math.round(t.turbulence * 100)} min={0} max={100} step={1} unit="%"
                        onChange={(v) => setTweak('turbulence', v / 100)} />
@@ -128,7 +128,7 @@ function App() {
         </TweakSection>
 
         <TweakSection label="Pulse">
-          <TweakSlider label="Bulge size" value={t.pulseAmount.toFixed(1)} min={0} max={6} step={0.5} unit="px"
+          <TweakSlider label="Bulge size" value={t.pulseAmount.toFixed(2)} min={0} max={3} step={0.25} unit="px"
                        onChange={(v) => setTweak('pulseAmount', Number(v))} />
           <TweakSlider label="Lines pulsing" value={Math.round(t.pulseRatio * 100)} min={0} max={100} step={1} unit="%"
                        onChange={(v) => setTweak('pulseRatio', v / 100)} />

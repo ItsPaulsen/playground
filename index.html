@@ -13,8 +13,6 @@
       --card-bg:       #ffffff;
       --card-border:   #e7e5e4;
       --card-border-h: #a8a29e;
-      --card-icon-bg:  #dbeafe;
-      --card-icon-color: #1e40af;
       --text:          #1c1917;
       --muted:         #78716c;
     }
@@ -24,8 +22,6 @@
       --card-bg:       #292524;
       --card-border:   #44403c;
       --card-border-h: #78716c;
-      --card-icon-bg:  #1e3a8a;
-      --card-icon-color: #93c5fd;
       --text:          #fafaf9;
       --muted:         #d6d3d1;
     }
@@ -130,6 +126,11 @@
       justify-content: center;
       margin-bottom: 20px;
     }
+    .card-icon--indigo { background: #e0e7ff; color: #3730a3; }
+    html[data-theme="dark"] .card-icon--indigo { background: #312e81; color: #a5b4fc; }
+    .card-icon--purple { background: #f3e8ff; color: #6b21a8; }
+    html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe;
+    }
 
   </style>
 </head>
@@ -141,14 +142,24 @@
     </div>
 
     <div class="grid">
-      <a class="card" href="Claude/Wave/Wave.html">
-        <div class="card-icon">
+      <a class="card" href="wave/wave.html">
+        <div class="card-icon card-icon--indigo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(90deg)">
             <path d="M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2" />
           </svg>
         </div>
         <h2>Wave</h2>
         <p>Interactive wave animation with tweakable parameters.</p>
+      </a>
+
+      <a class="card" href="typo/typo.html">
+        <div class="card-icon card-icon--purple">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>
+          </svg>
+        </div>
+        <h2>Typo</h2>
+        <p>Animated typography with tweakable font controls.</p>
       </a>
     </div>
   </div>

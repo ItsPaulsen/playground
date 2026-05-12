@@ -81,7 +81,7 @@ const __TWEAKS_STYLE = `
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
-    backdrop-filter:blur(6px) saturate(180%);
+    backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);border-radius:20px;
     box-shadow:0 1px 0 var(--sh-in) inset,0 12px 40px var(--sh-out);
     font:11.5px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
@@ -165,7 +165,7 @@ const __TWEAKS_STYLE = `
   .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:36px;height:36px;
     border:0;border-radius:12px;cursor:pointer;padding:0;
     background:var(--bg);
-    backdrop-filter:blur(6px) saturate(180%);
+    backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);
     box-shadow:0 1px 0 var(--sh-in) inset,0 4px 16px var(--sh-out);
     display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.80)}

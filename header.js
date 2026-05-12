@@ -18,7 +18,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 24px; box-sizing: border-box;
       background: rgba(245,245,244,.80);
-      backdrop-filter: blur(6px) saturate(180%);
+      backdrop-filter: blur(12px) saturate(180%);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
     @media (max-width: 639px) {
