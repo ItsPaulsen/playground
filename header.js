@@ -34,7 +34,7 @@
     }
 
     .site-logo {
-      font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
+      font-size: 19px; font-weight: 500; letter-spacing: -0.01em;
       color: #1c1917; text-decoration: none;
     }
     html[data-theme="dark"] .site-logo { color: #fafaf9; }
