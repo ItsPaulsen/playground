@@ -78,20 +78,23 @@ const __TWEAKS_STYLE = `
   }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:280px;
-    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
     backdrop-filter:blur(6px) saturate(180%);
     border:.5px solid var(--bd);border-radius:20px;
     box-shadow:0 1px 0 var(--sh-in) inset,0 12px 40px var(--sh-out);
-    font:11.5px/1.4 'DM Sans',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+    font:11.5px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:10px 8px 10px 14px;cursor:move;user-select:none}
-  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
-  .twk-x{appearance:none;border:0;background:transparent;color:var(--muted);
-    width:22px;height:22px;border-radius:8px;cursor:default;font-size:13px;line-height:1}
-  .twk-x:hover{background:var(--hov-x);color:var(--text)}
-  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    padding:8px 8px 4px 16px}
+  .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.80);
+    width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:13px;line-height:1;
+    display:flex;align-items:center;justify-content:center}
+  .twk-x:hover{color:var(--text)}
+  html[data-theme="dark"] .twk-x{color:rgba(250,250,249,.80)}
+  html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
+  .twk-body{padding:2px 16px 24px;display:flex;flex-direction:column;gap:10px;
     overflow-y:auto;overflow-x:hidden;min-height:0;
     scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}
   .twk-body::-webkit-scrollbar{width:8px}
@@ -120,14 +123,17 @@ const __TWEAKS_STYLE = `
     background-repeat:no-repeat;background-position:right 8px center}
 
   .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
-    border-radius:999px;background:var(--track);outline:none}
+    border-radius:999px;background:var(--track);outline:none;cursor:grab}
+  .twk-slider:active{cursor:grabbing}
   .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     width:14px;height:14px;border-radius:50%;background:#fff;
-    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:grab}
+  .twk-slider:active::-webkit-slider-thumb{cursor:grabbing}
   .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
-    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:grab}
+  .twk-slider:active::-moz-range-thumb{cursor:grabbing}
 
-  .twk-seg{position:relative;display:flex;padding:2px;border-radius:12px;
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
     background:var(--seg);user-select:none}
   .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:8px;
     background:var(--thumb);box-shadow:0 1px 2px rgba(0,0,0,.12);
@@ -135,11 +141,11 @@ const __TWEAKS_STYLE = `
   .twk-seg.dragging .twk-seg-thumb{transition:none}
   .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
     background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
-    border-radius:8px;cursor:default;padding:4px 6px;line-height:1.2;
+    border-radius:8px;cursor:pointer;padding:4px 6px;line-height:1.2;
     overflow-wrap:anywhere}
 
   .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-    background:var(--tog-off);transition:background .15s;cursor:default;padding:0}
+    background:var(--tog-off);transition:background .15s;cursor:pointer;padding:0}
   .twk-toggle[data-on="1"]{background:#34c759}
   .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
     background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
@@ -157,22 +163,24 @@ const __TWEAKS_STYLE = `
   .twk-num-unit{padding-right:8px;color:var(--num-unit)}
 
   .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:36px;height:36px;
-    border:0;border-radius:12px;cursor:default;padding:0;
+    border:0;border-radius:12px;cursor:pointer;padding:0;
     background:var(--bg);
     backdrop-filter:blur(6px) saturate(180%);
     border:.5px solid var(--bd);
     box-shadow:0 1px 0 var(--sh-in) inset,0 4px 16px var(--sh-out);
-    display:flex;align-items:center;justify-content:center;color:var(--muted)}
+    display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.80)}
   .twk-reopen:hover{color:var(--text)}
+  html[data-theme="dark"] .twk-reopen{color:rgba(250,250,249,.80)}
+  html[data-theme="dark"] .twk-reopen:hover{color:rgba(250,250,249,1)}
 
   .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;
-    background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:default}
+    background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:pointer}
   .twk-btn:hover{background:var(--btn-h)}
   .twk-btn.secondary{background:var(--sec);color:inherit}
   .twk-btn.secondary:hover{background:var(--sec-h)}
 
-  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
-    border:.5px solid var(--fld-bd);border-radius:8px;padding:0;cursor:default;
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:36px;height:26px;
+    border:.5px solid var(--fld-bd);border-radius:8px;padding:0;cursor:pointer;
     background:transparent;flex-shrink:0}
   .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
   .twk-swatch::-webkit-color-swatch{border:0;border-radius:7.5px}
@@ -180,12 +188,12 @@ const __TWEAKS_STYLE = `
 
   .twk-chips{display:flex;gap:6px}
   .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
-    padding:0;border:0;border-radius:8px;overflow:hidden;cursor:default;
+    padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;
     box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
     transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
   .twk-chip:hover{transform:translateY(-1px);
     box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
-  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+  .twk-chip[data-on="1"]{border-radius:8px;box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
     0 2px 6px rgba(0,0,0,.15)}
   .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
     display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
@@ -225,7 +233,6 @@ function useTweaks(defaults) {
 function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange }) {
   const [open, setOpen] = React.useState(() => window.parent === window);
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open]);
-  const dragRef = React.useRef(null);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
   // state is mirrored from the same localStorage key the deck reads so
@@ -259,38 +266,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     setRailVisible(on);
     window.postMessage({ type: '__deck_rail_visible', on }, '*');
   };
-  const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
-  const offsetRef = React.useRef({ x: 16, y: headerH + 16 });
-  const PAD = 16;
-
-  const clampToViewport = React.useCallback(() => {
-    const panel = dragRef.current;
-    if (!panel) return;
-    const w = panel.offsetWidth, h = panel.offsetHeight;
-    const minTop = headerH + PAD;
-    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
-    const maxTop = Math.max(minTop, window.innerHeight - h - PAD);
-    offsetRef.current = {
-      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
-      y: Math.min(maxTop, Math.max(minTop, offsetRef.current.y)),
-    };
-    panel.style.right = offsetRef.current.x + 'px';
-    panel.style.top = offsetRef.current.y + 'px';
-    panel.style.maxHeight = (window.innerHeight - offsetRef.current.y - PAD) + 'px';
-  }, []);
-
-  React.useEffect(() => {
-    if (!open) return;
-    clampToViewport();
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', clampToViewport);
-      return () => window.removeEventListener('resize', clampToViewport);
-    }
-    const ro = new ResizeObserver(clampToViewport);
-    ro.observe(document.documentElement);
-    return () => ro.disconnect();
-  }, [open, clampToViewport]);
-
   React.useEffect(() => {
     const onMsg = (e) => {
       const t = e?.data?.type;
@@ -307,33 +282,11 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
 
-  const onDragStart = (e) => {
-    const panel = dragRef.current;
-    if (!panel) return;
-    const r = panel.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
-    const startRight = window.innerWidth - r.right;
-    const startTop = r.top;
-    const move = (ev) => {
-      offsetRef.current = {
-        x: startRight - (ev.clientX - sx),
-        y: startTop + (ev.clientY - sy),
-      };
-      clampToViewport();
-    };
-    const up = () => {
-      window.removeEventListener('mousemove', move);
-      window.removeEventListener('mouseup', up);
-    };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
-  };
-
   if (!open) return (
     <>
       <style>{__TWEAKS_STYLE}</style>
       <button className="twk-reopen" aria-label="Open tweaks" onClick={() => setOpen(true)}>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M10 5H3" /><path d="M12 19H3" /><path d="M14 3v4" />
           <path d="M16 17v4" /><path d="M21 12h-9" /><path d="M21 19h-5" />
           <path d="M21 5h-7" /><path d="M8 10v4" /><path d="M8 12H3" />
@@ -344,13 +297,14 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
-      <div ref={dragRef} className="twk-panel" data-noncommentable=""
-           style={{ right: offsetRef.current.x, top: offsetRef.current.y }}>
-        <div className="twk-hd" onMouseDown={onDragStart}>
+      <div className="twk-panel" data-noncommentable="">
+        <div className="twk-hd">
           <b>{title}</b>
-          <button className="twk-x" aria-label="Close tweaks"
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={dismiss}>✕</button>
+          <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
         </div>
         <div className="twk-body">
           {children}
