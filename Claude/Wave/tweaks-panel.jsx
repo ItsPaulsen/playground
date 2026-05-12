@@ -47,110 +47,140 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 const __TWEAKS_STYLE = `
-  .twk-panel{position:fixed;right:16px;top:16px;z-index:2147483646;width:280px;
+  .twk-panel,.twk-reopen{
+    --bg:rgba(250,250,249,.80);--text:#1c1917;--bd:rgba(255,255,255,.6);
+    --sh-in:rgba(255,255,255,.5);--sh-out:rgba(0,0,0,.18);
+    --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.70);--val:rgba(28,25,23,.50);
+    --sect:rgba(28,25,23,.42);--hov-x:rgba(0,0,0,.06);
+    --scroll:rgba(0,0,0,.15);--scroll-h:rgba(0,0,0,.25);
+    --fld-bg:rgba(255,255,255,.6);--fld-bgf:rgba(255,255,255,.85);
+    --fld-bd:rgba(0,0,0,.1);--fld-bdf:rgba(0,0,0,.25);
+    --track:rgba(0,0,0,.12);--seg:rgba(0,0,0,.06);--thumb:rgba(255,255,255,.92);
+    --tog-off:rgba(0,0,0,.15);--num-bg:rgba(255,255,255,.6);
+    --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.42);
+    --btn:rgba(0,0,0,.80);--btn-t:#fff;--btn-h:rgba(0,0,0,.90);
+    --sec:rgba(0,0,0,.06);--sec-h:rgba(0,0,0,.10);
+  }
+  html[data-theme="dark"] .twk-panel,
+  html[data-theme="dark"] .twk-reopen{
+    --bg:rgba(28,25,23,.80);--text:#f5f5f4;--bd:rgba(255,255,255,.10);
+    --sh-in:rgba(255,255,255,.05);--sh-out:rgba(0,0,0,.50);
+    --muted:rgba(245,245,244,.48);--label:rgba(245,245,244,.68);--val:rgba(245,245,244,.44);
+    --sect:rgba(245,245,244,.38);--hov-x:rgba(255,255,255,.08);
+    --scroll:rgba(255,255,255,.15);--scroll-h:rgba(255,255,255,.25);
+    --fld-bg:rgba(255,255,255,.07);--fld-bgf:rgba(255,255,255,.12);
+    --fld-bd:rgba(255,255,255,.10);--fld-bdf:rgba(255,255,255,.22);
+    --track:rgba(255,255,255,.15);--seg:rgba(255,255,255,.08);--thumb:rgba(255,255,255,.18);
+    --tog-off:rgba(255,255,255,.20);--num-bg:rgba(255,255,255,.07);
+    --num-lbl:rgba(245,245,244,.52);--num-unit:rgba(245,245,244,.38);
+    --btn:rgba(255,255,255,.14);--btn-t:#f5f5f4;--btn-h:rgba(255,255,255,.20);
+    --sec:rgba(255,255,255,.07);--sec-h:rgba(255,255,255,.12);
+  }
+
+  .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:280px;
     max-height:calc(100vh - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
-    background:rgba(250,249,247,.78);color:#29261b;
-    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
-    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
-    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
-    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+    background:var(--bg);color:var(--text);
+    backdrop-filter:blur(6px) saturate(180%);
+    border:.5px solid var(--bd);border-radius:20px;
+    box-shadow:0 1px 0 var(--sh-in) inset,0 12px 40px var(--sh-out);
+    font:11.5px/1.4 'DM Sans',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:10px 8px 10px 14px;cursor:move;user-select:none}
   .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
-  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
-    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
-  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-x{appearance:none;border:0;background:transparent;color:var(--muted);
+    width:22px;height:22px;border-radius:8px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:var(--hov-x);color:var(--text)}
   .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
     overflow-y:auto;overflow-x:hidden;min-height:0;
-    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+    scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}
   .twk-body::-webkit-scrollbar{width:8px}
   .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
-  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+  .twk-body::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:6px;
     border:2px solid transparent;background-clip:content-box}
-  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+  .twk-body::-webkit-scrollbar-thumb:hover{background:var(--scroll-h);
     border:2px solid transparent;background-clip:content-box}
   .twk-row{display:flex;flex-direction:column;gap:5px}
   .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
   .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
-    color:rgba(41,38,27,.72)}
+    color:var(--label)}
   .twk-lbl>span:first-child{font-weight:500}
-  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-val{color:var(--val);font-variant-numeric:tabular-nums}
 
   .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-    color:rgba(41,38,27,.45);padding:10px 0 0}
+    color:var(--sect);padding:10px 0 0}
   .twk-sect:first-child{padding-top:0}
 
   .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
-    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
-  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+    border:.5px solid var(--fld-bd);border-radius:8px;
+    background:var(--fld-bg);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:var(--fld-bdf);background:var(--fld-bgf)}
   select.twk-field{padding-right:22px;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
     background-repeat:no-repeat;background-position:right 8px center}
 
   .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
-    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+    border-radius:999px;background:var(--track);outline:none}
   .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
     width:14px;height:14px;border-radius:50%;background:#fff;
     border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
   .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
     background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
 
-  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
-    background:rgba(0,0,0,.06);user-select:none}
-  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
-    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:12px;
+    background:var(--seg);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:8px;
+    background:var(--thumb);box-shadow:0 1px 2px rgba(0,0,0,.12);
     transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
   .twk-seg.dragging .twk-seg-thumb{transition:none}
   .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
     background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
-    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    border-radius:8px;cursor:default;padding:4px 6px;line-height:1.2;
     overflow-wrap:anywhere}
 
   .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+    background:var(--tog-off);transition:background .15s;cursor:default;padding:0}
   .twk-toggle[data-on="1"]{background:#34c759}
   .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
     background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
   .twk-toggle[data-on="1"] i{transform:translateX(14px)}
 
   .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
-  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    border:.5px solid var(--fld-bd);border-radius:8px;background:var(--num-bg)}
+  .twk-num-lbl{font-weight:500;color:var(--num-lbl);cursor:ew-resize;
     user-select:none;padding-right:8px}
   .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
     font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
     outline:none;color:inherit;-moz-appearance:textfield}
   .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
     -webkit-appearance:none;margin:0}
-  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+  .twk-num-unit{padding-right:8px;color:var(--num-unit)}
 
-  .twk-reopen{position:fixed;right:16px;top:16px;z-index:2147483646;width:36px;height:36px;
-    border:0;border-radius:10px;cursor:default;padding:0;
-    background:rgba(250,249,247,.78);color:#29261b;
-    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
-    border:.5px solid rgba(255,255,255,.6);
-    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 4px 16px rgba(0,0,0,.14);
-    display:flex;align-items:center;justify-content:center;color:rgba(41,38,27,.55)}
-  .twk-reopen:hover{background:rgba(250,249,247,.95);color:#29261b}
+  .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:36px;height:36px;
+    border:0;border-radius:12px;cursor:default;padding:0;
+    background:var(--bg);
+    backdrop-filter:blur(6px) saturate(180%);
+    border:.5px solid var(--bd);
+    box-shadow:0 1px 0 var(--sh-in) inset,0 4px 16px var(--sh-out);
+    display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .twk-reopen:hover{color:var(--text)}
 
-  .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:7px;
-    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
-  .twk-btn:hover{background:rgba(0,0,0,.88)}
-  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
-  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+  .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;
+    background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:var(--btn-h)}
+  .twk-btn.secondary{background:var(--sec);color:inherit}
+  .twk-btn.secondary:hover{background:var(--sec-h)}
 
   .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    border:.5px solid var(--fld-bd);border-radius:8px;padding:0;cursor:default;
     background:transparent;flex-shrink:0}
   .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
-  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
-  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:7.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:7.5px}
 
   .twk-chips{display:flex;gap:6px}
   .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
-    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    padding:0;border:0;border-radius:8px;overflow:hidden;cursor:default;
     box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
     transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
   .twk-chip:hover{transform:translateY(-1px);
@@ -229,21 +259,24 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     setRailVisible(on);
     window.postMessage({ type: '__deck_rail_visible', on }, '*');
   };
-  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 0;
+  const offsetRef = React.useRef({ x: 16, y: headerH + 16 });
   const PAD = 16;
 
   const clampToViewport = React.useCallback(() => {
     const panel = dragRef.current;
     if (!panel) return;
     const w = panel.offsetWidth, h = panel.offsetHeight;
+    const minTop = headerH + PAD;
     const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
-    const maxTop = Math.max(PAD, window.innerHeight - h - PAD);
+    const maxTop = Math.max(minTop, window.innerHeight - h - PAD);
     offsetRef.current = {
       x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
-      y: Math.min(maxTop, Math.max(PAD, offsetRef.current.y)),
+      y: Math.min(maxTop, Math.max(minTop, offsetRef.current.y)),
     };
     panel.style.right = offsetRef.current.x + 'px';
     panel.style.top = offsetRef.current.y + 'px';
+    panel.style.maxHeight = (window.innerHeight - offsetRef.current.y - PAD) + 'px';
   }, []);
 
   React.useEffect(() => {
@@ -300,13 +333,10 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     <>
       <style>{__TWEAKS_STYLE}</style>
       <button className="twk-reopen" aria-label="Open tweaks" onClick={() => setOpen(true)}>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <line x1="2" y1="4"  x2="14" y2="4"  stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-          <line x1="2" y1="8"  x2="14" y2="8"  stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-          <line x1="2" y1="12" x2="14" y2="12" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-          <circle cx="5"  cy="4"  r="1.25" fill="currentColor"/>
-          <circle cx="11" cy="8"  r="1.25" fill="currentColor"/>
-          <circle cx="7"  cy="12" r="1.25" fill="currentColor"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M10 5H3" /><path d="M12 19H3" /><path d="M14 3v4" />
+          <path d="M16 17v4" /><path d="M21 12h-9" /><path d="M21 19h-5" />
+          <path d="M21 5h-7" /><path d="M8 10v4" /><path d="M8 12H3" />
         </svg>
       </button>
     </>
@@ -524,10 +554,10 @@ function __twkIsLight(hex) {
 }
 
 const __TwkCheck = ({ light }) => (
-  <svg viewBox="0 0 14 14" aria-hidden="true">
-    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
-          strokeLinecap="round" strokeLinejoin="round"
-          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5"
+       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+       stroke={light ? 'rgba(0,0,0,.78)' : '#fff'}>
+    <path d="M20 6 9 17l-5-5" />
   </svg>
 );
 
