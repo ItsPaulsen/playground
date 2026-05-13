@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Style Guide — Paulsen</title>
+  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') === 'dark' ? 'dark' : 'light');</script>
+  <link rel="stylesheet" href="/shared/tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--pg-bg);
+      color: var(--pg-text);
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      padding: 0 32px 64px;
+    }
+
+    .page {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding-top: 48px;
+    }
+
+    .page-header {
+      margin-bottom: 48px;
+    }
+
+    .page-header h1 {
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .section {
+      margin-bottom: 56px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--pg-muted);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--pg-border);
+    }
+
+    /* ── Colors ── */
+    .color-themes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .color-theme-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--pg-muted);
+      margin-bottom: 12px;
+    }
+
+    .color-swatches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .swatch {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--pg-border);
+    }
+
+    .swatch-color {
+      height: 52px;
+    }
+
+    .swatch-info {
+      padding: 8px 10px;
+      background: var(--pg-surface);
+    }
+
+    .swatch-name {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--pg-text);
+      margin-bottom: 2px;
+    }
+
+    .swatch-value {
+      font-size: 10px;
+      color: var(--pg-muted);
+      font-family: ui-monospace, monospace;
+    }
+
+    /* ── Breakpoints ── */
+    .breakpoints {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .breakpoint {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .breakpoint-label {
+      font-size: 14px;
+      font-weight: 500;
+      min-width: 72px;
+    }
+
+    .breakpoint-bar-wrap {
+      flex: 1;
+      height: 5px;
+      background: var(--pg-surface);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .breakpoint-bar {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .breakpoint-range {
+      font-size: 13px;
+      color: var(--pg-muted);
+      font-family: ui-monospace, monospace;
+      min-width: 140px;
+      text-align: right;
+    }
+
+    /* ── Type ── */
+    .type-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--pg-border);
+    }
+
+    .type-row:first-child {
+      border-top: 1px solid var(--pg-border);
+    }
+
+    .type-meta {
+      min-width: 96px;
+      font-size: 11px;
+      color: var(--pg-muted);
+      font-family: ui-monospace, monospace;
+      flex-shrink: 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 639px) {
+      body { padding: 0 16px 48px; }
+      .page { padding-top: 32px; }
+      .page-header { margin-bottom: 32px; }
+      .page-header h1 { font-size: 32px; }
+      .color-themes { grid-template-columns: 1fr; }
+      .breakpoint-range { display: none; }
+    }
+
+    @media (min-width: 640px) and (max-width: 1024px) {
+      body { padding: 0 24px 64px; }
+      .page { padding-top: 40px; }
+      .page-header h1 { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="page-header">
+      <h1>Style Guide</h1>
+    </div>
+
+    <!-- Colors -->
+    <div class="section">
+      <div class="section-title">Colors</div>
+      <div class="color-themes">
+        <div>
+          <div class="color-theme-label">Light</div>
+          <div class="color-swatches">
+            <div class="swatch">
+              <div class="swatch-color" style="background:#fdfdfb"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Background</div>
+                <div class="swatch-value">#fdfdfb</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#f4f4f3"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Surface</div>
+                <div class="swatch-value">#f4f4f3</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#e7e5e4"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Border</div>
+                <div class="swatch-value">#e7e5e4</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#a8a29e"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Border hover</div>
+                <div class="swatch-value">#a8a29e</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#1c1917"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Text</div>
+                <div class="swatch-value">#1c1917</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#78716c"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Muted</div>
+                <div class="swatch-value">#78716c</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="color-theme-label">Dark</div>
+          <div class="color-swatches">
+            <div class="swatch">
+              <div class="swatch-color" style="background:#131212"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Background</div>
+                <div class="swatch-value">#131212</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#292524"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Surface</div>
+                <div class="swatch-value">#292524</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#44403c"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Border</div>
+                <div class="swatch-value">#44403c</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#78716c"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Border hover</div>
+                <div class="swatch-value">#78716c</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#fafaf9"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Text</div>
+                <div class="swatch-value">#fafaf9</div>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatch-color" style="background:#d6d3d1"></div>
+              <div class="swatch-info">
+                <div class="swatch-name">Muted</div>
+                <div class="swatch-value">#d6d3d1</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakpoints -->
+    <div class="section">
+      <div class="section-title">Breakpoints</div>
+      <div class="breakpoints">
+        <div class="breakpoint">
+          <div class="breakpoint-label">Mobile</div>
+          <div class="breakpoint-bar-wrap">
+            <div class="breakpoint-bar" style="width:25%;background:#93c5fd"></div>
+          </div>
+          <div class="breakpoint-range">&lt; 640px</div>
+        </div>
+        <div class="breakpoint">
+          <div class="breakpoint-label">Tablet</div>
+          <div class="breakpoint-bar-wrap">
+            <div class="breakpoint-bar" style="width:62%;background:#60a5fa"></div>
+          </div>
+          <div class="breakpoint-range">640px – 1024px</div>
+        </div>
+        <div class="breakpoint">
+          <div class="breakpoint-label">Desktop</div>
+          <div class="breakpoint-bar-wrap">
+            <div class="breakpoint-bar" style="width:100%;background:#3b82f6"></div>
+          </div>
+          <div class="breakpoint-range">&gt; 1024px</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type -->
+    <div class="section">
+      <div class="section-title">Type</div>
+      <div>
+        <div class="type-row">
+          <div class="type-meta">48px / 500</div>
+          <div style="font-size:48px;font-weight:500;letter-spacing:-0.02em;line-height:1">Page heading</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">24px / 500</div>
+          <div style="font-size:24px;font-weight:500;line-height:1">Card heading</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">18px / 400</div>
+          <div style="font-size:18px;font-weight:400;line-height:1.5;color:var(--pg-muted)">Subtitle and intro text</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">16px / 400</div>
+          <div style="font-size:16px;font-weight:400;line-height:1.5;color:var(--pg-muted)">Body text, card descriptions</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">14px / 400</div>
+          <div style="font-size:14px;font-weight:400;line-height:1.5;color:var(--pg-muted)">Small text, secondary labels</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">11.5px / 400</div>
+          <div style="font-size:11.5px;font-weight:400;line-height:1.4;color:var(--pg-muted)">Tweaks panel, captions</div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">10px / 600</div>
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--pg-muted)">Section labels</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/header.js"></script>
+</body>
+</html>

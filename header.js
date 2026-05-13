@@ -8,6 +8,7 @@
     { label: 'Wave',  href: '/wave/' },
     { label: 'Typo',  href: '/typo/' },
     { label: 'Mesh',  href: '/mesh/' },
+    { label: 'Style', href: '/style/' },
   ];
 
   const fontLink = document.createElement('link');
