@@ -109,15 +109,6 @@ function App() {
             onChange={(v) => setTweak('fontColor', v)}
           />
           <TweakRadio
-            value={t.fontStyle}
-            options={[
-              { value: 'normal', label: 'Normal' },
-              { value: 'italic', label: 'Italic' },
-            ]}
-            onChange={(v) => setTweak('fontStyle', v)}
-          />
-          <TweakSelect
-            label="Effect"
             value={t.fontEffect}
             options={[
               { value: 'flat',    label: 'Flat'    },
@@ -125,10 +116,6 @@ function App() {
             ]}
             onChange={(v) => setTweak('fontEffect', v)}
           />
-          <div style={{ display: 'flex', gap: 8 }}>
-            <TweakButton label="Randomize" secondary onClick={randomize} />
-            <TweakButton label="Default"   secondary onClick={() => setTweak(TWEAK_DEFAULTS)} />
-          </div>
         </TweakSection>
 
         <TweakSection label="Typography">
