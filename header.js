@@ -34,9 +34,8 @@
 
     .site-logo {
       font-size: 19px; font-weight: 500; letter-spacing: -0.01em;
-      color: #1c1917; text-decoration: none;
+      color: var(--pg-text); text-decoration: none;
     }
-    html[data-theme="dark"] .site-logo { color: #fafaf9; }
 
     .header-right {
       display: flex; align-items: center; gap: 0;
@@ -49,11 +48,9 @@
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: color .15s;
     }
-    #theme-toggle:hover, #menu-toggle:hover { color: #1c1917; }
+    #theme-toggle:hover, #menu-toggle:hover { color: var(--pg-text); }
     html[data-theme="dark"] #theme-toggle,
     html[data-theme="dark"] #menu-toggle { color: rgba(250,250,249,.80); }
-    html[data-theme="dark"] #theme-toggle:hover,
-    html[data-theme="dark"] #menu-toggle:hover { color: #fafaf9; }
 
     #site-menu {
       position: fixed; inset: 0; z-index: 299;
@@ -79,11 +76,10 @@
 
     #site-menu nav a {
       font-size: 48px; font-weight: 500; letter-spacing: -0.02em;
-      color: #1c1917; text-decoration: none;
+      color: var(--pg-text); text-decoration: none;
       opacity: 0; transform: translateY(12px);
       transition: opacity .3s ease, transform .3s ease, color .15s;
     }
-    html[data-theme="dark"] #site-menu nav a { color: #fafaf9; }
     #site-menu.is-open nav a { opacity: .8; transform: translateY(0); }
     #site-menu nav a:nth-child(1) { transition-delay: .05s; }
     #site-menu nav a:nth-child(2) { transition-delay: .10s; }

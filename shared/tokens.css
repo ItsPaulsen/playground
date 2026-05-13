@@ -1,0 +1,16 @@
+:root {
+  --pg-bg:       #fdfdfb;
+  --pg-surface:  #f5f5f4;
+  --pg-border:   #e7e5e4;
+  --pg-border-h: #a8a29e;
+  --pg-text:     #1c1917;
+  --pg-muted:    #78716c;
+}
+html[data-theme="dark"] {
+  --pg-bg:       #131212;
+  --pg-surface:  #292524;
+  --pg-border:   #44403c;
+  --pg-border-h: #78716c;
+  --pg-text:     #fafaf9;
+  --pg-muted:    #d6d3d1;
+}

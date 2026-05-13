@@ -5,31 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Playground — Paulsen</title>
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') === 'dark' ? 'dark' : 'light');</script>
+  <link rel="stylesheet" href="/shared/tokens.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:            #fdfdfb;
-      --card-bg:       #f5f5f4;
-      --card-border:   #e7e5e4;
-      --card-border-h: #a8a29e;
-      --text:          #1c1917;
-      --muted:         #78716c;
-    }
-
-    html[data-theme="dark"] {
-      --bg:            #131212;
-      --card-bg:       #292524;
-      --card-border:   #44403c;
-      --card-border-h: #78716c;
-      --text:          #fafaf9;
-      --muted:         #d6d3d1;
-    }
-
     body {
       min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
+      background: var(--pg-bg);
+      color: var(--pg-text);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
       padding: 0 32px 64px;
     }
@@ -54,7 +37,7 @@
     .page-header p {
       margin-top: 8px;
       font-size: 18px;
-      color: var(--muted);
+      color: var(--pg-muted);
     }
 
     .grid {
@@ -66,13 +49,13 @@
     .card h2 {
       font-size: 24px;
       font-weight: 500;
-      color: var(--text);
+      color: var(--pg-text);
       margin-bottom: 6px;
     }
 
     .card p {
       font-size: 16px;
-      color: var(--muted);
+      color: var(--pg-muted);
       line-height: 1.5;
     }
 
@@ -104,7 +87,7 @@
       display: block;
       text-decoration: none;
       color: inherit;
-      background: var(--card-bg);
+      background: var(--pg-surface);
       border-radius: 28px;
       padding: 28px;
       transition: transform .4s cubic-bezier(.25,.46,.45,.94),
