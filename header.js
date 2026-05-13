@@ -146,10 +146,6 @@
     setMenuOpen(!menu.classList.contains('is-open'));
   });
 
-  menu.addEventListener('click', function (e) {
-    if (e.target === menu) setMenuOpen(false);
-  });
-
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenuOpen(false);
   });
