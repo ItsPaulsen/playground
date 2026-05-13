@@ -9,8 +9,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:            #f5f5f4;
-      --card-bg:       #ffffff;
+      --bg:            #fdfdfb;
+      --card-bg:       #f5f5f4;
       --card-border:   #e7e5e4;
       --card-border-h: #a8a29e;
       --text:          #1c1917;
@@ -18,7 +18,7 @@
     }
 
     html[data-theme="dark"] {
-      --bg:            #0c0a09;
+      --bg:            #131212;
       --card-bg:       #292524;
       --card-border:   #44403c;
       --card-border-h: #78716c;
@@ -129,8 +129,9 @@
     .card-icon--indigo { background: #e0e7ff; color: #3730a3; }
     html[data-theme="dark"] .card-icon--indigo { background: #312e81; color: #a5b4fc; }
     .card-icon--purple { background: #f3e8ff; color: #6b21a8; }
-    html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe;
-    }
+    html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe; }
+    .card-icon--red { background: #fee2e2; color: #991b1b; }
+    html[data-theme="dark"] .card-icon--red { background: #7f1d1d; color: #fca5a5; }
 
   </style>
 </head>
@@ -160,6 +161,16 @@
         </div>
         <h2>Typo</h2>
         <p>Animated typography with tweakable font controls.</p>
+      </a>
+
+      <a class="card" href="mesh/mesh.html">
+        <div class="card-icon card-icon--red">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/>
+          </svg>
+        </div>
+        <h2>Mesh</h2>
+        <p>Animated mesh gradient with tweakable color points.</p>
       </a>
     </div>
   </div>

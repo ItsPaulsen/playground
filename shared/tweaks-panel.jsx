@@ -48,7 +48,7 @@
 
 const __TWEAKS_STYLE = `
   .twk-panel,.twk-reopen{
-    --bg:rgba(250,250,249,.80);--text:#1c1917;--bd:rgba(255,255,255,.6);
+    --bg:rgba(255,255,255,.80);--text:#1c1917;--bd:rgba(0,0,0,.10);
     --sh-in:rgba(255,255,255,.5);--sh-out:rgba(0,0,0,.18);
     --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.70);--val:rgba(28,25,23,.50);
     --sect:rgba(28,25,23,.42);--hov-x:rgba(0,0,0,.06);
@@ -63,17 +63,17 @@ const __TWEAKS_STYLE = `
   }
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
-    --bg:rgba(28,25,23,.80);--text:#f5f5f4;--bd:rgba(255,255,255,.10);
+    --bg:rgba(41,37,36,.80);--text:#fafaf9;--bd:rgba(255,255,255,.10);
     --sh-in:rgba(255,255,255,.05);--sh-out:rgba(0,0,0,.50);
-    --muted:rgba(245,245,244,.48);--label:rgba(245,245,244,.68);--val:rgba(245,245,244,.44);
-    --sect:rgba(245,245,244,.38);--hov-x:rgba(255,255,255,.08);
+    --muted:rgba(250,250,249,.48);--label:rgba(250,250,249,.68);--val:rgba(250,250,249,.44);
+    --sect:rgba(250,250,249,.38);--hov-x:rgba(255,255,255,.08);
     --scroll:rgba(255,255,255,.15);--scroll-h:rgba(255,255,255,.25);
     --fld-bg:rgba(255,255,255,.07);--fld-bgf:rgba(255,255,255,.12);
     --fld-bd:rgba(255,255,255,.10);--fld-bdf:rgba(255,255,255,.22);
     --track:rgba(255,255,255,.15);--seg:rgba(255,255,255,.08);--thumb:rgba(255,255,255,.18);
     --tog-off:rgba(255,255,255,.20);--num-bg:rgba(255,255,255,.07);
-    --num-lbl:rgba(245,245,244,.52);--num-unit:rgba(245,245,244,.38);
-    --btn:rgba(255,255,255,.14);--btn-t:#f5f5f4;--btn-h:rgba(255,255,255,.20);
+    --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
+    --btn:rgba(255,255,255,.14);--btn-t:#fafaf9;--btn-h:rgba(255,255,255,.20);
     --sec:rgba(255,255,255,.07);--sec-h:rgba(255,255,255,.12);
   }
 
@@ -83,7 +83,7 @@ const __TWEAKS_STYLE = `
     background:var(--bg);color:var(--text);
     backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);border-radius:20px;
-    box-shadow:0 1px 0 var(--sh-in) inset,0 12px 40px var(--sh-out);
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     font:11.5px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:8px 8px 4px 16px}
@@ -167,7 +167,7 @@ const __TWEAKS_STYLE = `
     background:var(--bg);
     backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);
-    box-shadow:0 1px 0 var(--sh-in) inset,0 4px 16px var(--sh-out);
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.80)}
   .twk-reopen:hover{color:var(--text)}
   html[data-theme="dark"] .twk-reopen{color:rgba(250,250,249,.80)}

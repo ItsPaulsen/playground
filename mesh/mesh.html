@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" data-page="mesh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mesh — Paulsen</title>
+<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') === 'dark' ? 'dark' : 'light');</script>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #fdfdfb; overflow: hidden;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  html[data-theme="dark"] body { background: #131212; }
+  #root { position: fixed; inset: 0; }
+
+  @keyframes mesh-orbit {
+    0%   { transform: rotate(0turn)  scale(1.00); }
+    50%  { transform: rotate(.5turn) scale(0.75); }
+    100% { transform: rotate(1turn)  scale(1.00); }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="../shared/tweaks-panel.jsx"></script>
+<script type="text/babel" src="mesh.jsx"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "color1": "#fca5a5",
+  "color2": "#c4b5fd",
+  "count": 2,
+  "speed": 0.5
+}/*EDITMODE-END*/;
+
+const PALETTES = [
+  ['#fca5a5', '#c4b5fd'],
+  ['#7dd3fc', '#f9a8d4'],
+  ['#6ee7b7', '#a5b4fc'],
+  ['#fcd34d', '#f0abfc'],
+  ['#67e8f9', '#fda4af'],
+  ['#bef264', '#93c5fd'],
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [panelOpen, setPanelOpen] = React.useState(true);
+  const paletteIdx = React.useRef(0);
+
+  const nextPalette = () => {
+    paletteIdx.current = (paletteIdx.current + 1) % PALETTES.length;
+    const [c1, c2] = PALETTES[paletteIdx.current];
+    setTweak({ color1: c1, color2: c2 });
+  };
+
+  return (
+    <>
+      <Mesh t={t} />
+
+      <TweaksPanel title="Mesh" onOpenChange={setPanelOpen}>
+        <TweakSection label="Colors">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 6 }}>
+              {['color1', 'color2'].map(key => (
+                <div key={key} style={{ flex: 1, minWidth: 0 }}>
+                  <TweakColor value={t[key]} onChange={v => setTweak(key, v)} />
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <TweakButton label="Randomize" secondary onClick={nextPalette} />
+              <TweakButton label="Default"      secondary onClick={() => setTweak(TWEAK_DEFAULTS)} />
+            </div>
+          </div>
+        </TweakSection>
+
+        <TweakSection label="Animation">
+          <TweakSlider label="Speed" value={t.speed} min={0.5} max={3} step={0.1}
+                       onChange={v => setTweak('speed', v)} />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<script src="/header.js"></script>
+</body>
+</html>

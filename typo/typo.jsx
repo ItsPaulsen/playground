@@ -1,3 +1,27 @@
+function hexToRgb(hex) {
+  const h = (hex || '#ffffff').replace('#', '');
+  const full = h.length === 3 ? h.replace(/./g, c => c + c) : h.padEnd(6, '0');
+  const n = parseInt(full.slice(0, 6), 16);
+  if (isNaN(n)) return [128, 128, 128];
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function getEffectStyle(effect, color) {
+  const [r, g, b] = hexToRgb(color);
+  switch (effect) {
+    case 'outline':
+      // paint-order: stroke fill covers internal junction overlaps (t crossbar, h arch, etc.)
+      // with the page bg color so only the outer stroke edge stays visible
+      return {
+        WebkitTextStroke: `0.08em rgba(${r},${g},${b},.9)`,
+        WebkitTextFillColor: 'var(--pg-bg)',
+        paintOrder: 'stroke fill',
+      };
+    default:
+      return {};
+  }
+}
+
 function Typo({ t, panelOpen }) {
   const containerRef = React.useRef(null);
   const timeRef     = React.useRef(0);
@@ -36,6 +60,11 @@ function Typo({ t, panelOpen }) {
     return segs.length ? segs : [' '];
   }, [t.text, segmenter]);
 
+  const effectStyle = React.useMemo(
+    () => getEffectStyle(t.fontEffect || 'flat', t.fontColor),
+    [t.fontEffect, t.fontColor],
+  );
+
   return (
     <div style={{
       position: 'fixed', inset: 0,
@@ -64,6 +93,7 @@ function Typo({ t, panelOpen }) {
               display:     'inline-block',
               whiteSpace:  'pre',
               marginRight: i < chars.length - 1 ? `${t.letterSpacing}px` : 0,
+              ...effectStyle,
             }}
           >
             {char}
