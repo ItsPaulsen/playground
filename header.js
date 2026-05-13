@@ -8,7 +8,6 @@
     { label: 'Wave',  href: '/wave/' },
     { label: 'Typo',  href: '/typo/' },
     { label: 'Mesh',  href: '/mesh/' },
-    { label: 'Style', href: '/style/' },
   ];
 
   const fontLink = document.createElement('link');
@@ -21,9 +20,9 @@
     :root { --header-h: 48px; }
 
     #site-header {
-      position: relative; left: 50%; margin-left: -50vw;
-      width: 100vw; box-sizing: border-box;
-      height: var(--header-h); z-index: 300;
+      position: relative; z-index: 300;
+      width: 100%; box-sizing: border-box;
+      height: var(--header-h);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 24px;
       background: transparent;
@@ -35,7 +34,7 @@
 
     .site-logo {
       font-size: 19px; font-weight: 500; letter-spacing: -0.01em;
-      color: var(--pg-text); text-decoration: none;
+      color: var(--pg-primary); text-decoration: none;
     }
 
     .header-right {
@@ -49,7 +48,7 @@
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: color .15s;
     }
-    #theme-toggle:hover, #menu-toggle:hover { color: var(--pg-text); }
+    #theme-toggle:hover, #menu-toggle:hover { color: var(--pg-primary); }
     html[data-theme="dark"] #theme-toggle,
     html[data-theme="dark"] #menu-toggle { color: rgba(250,250,249,.80); }
 
@@ -76,8 +75,8 @@
     }
 
     #site-menu nav a {
-      font-size: 48px; font-weight: 500; letter-spacing: -0.02em;
-      color: var(--pg-text); text-decoration: none;
+      font-size: 48px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1;
+      color: var(--pg-primary); text-decoration: none;
       opacity: 0; transform: translateY(12px);
       transition: opacity .3s ease, transform .3s ease, color .15s;
     }
@@ -129,7 +128,14 @@
     btn.innerHTML = open ? CLOSE : HAMBURGER;
     btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     btn.setAttribute('aria-expanded', open);
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.paddingRight = scrollbarWidth + 'px';
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.paddingRight = '';
+      document.body.style.overflow = '';
+    }
   }
 
   document.getElementById('theme-toggle').addEventListener('click', function () {

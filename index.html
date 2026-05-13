@@ -12,15 +12,14 @@
     body {
       min-height: 100vh;
       background: var(--pg-bg);
-      color: var(--pg-text);
+      color: var(--pg-primary);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-      padding: 0 32px 64px;
     }
 
     .page {
       max-width: 1140px;
       margin: 0 auto;
-      padding-top: 48px;
+      padding: 48px 32px 64px;
     }
 
     .page-header {
@@ -32,12 +31,14 @@
       font-size: 48px;
       font-weight: 500;
       letter-spacing: -0.02em;
+      line-height: 1.1;
     }
 
     .page-header p {
       margin-top: 8px;
       font-size: 18px;
       color: var(--pg-muted);
+      line-height: 1.6;
     }
 
     .grid {
@@ -49,8 +50,9 @@
     .card h2 {
       font-size: 24px;
       font-weight: 500;
-      color: var(--pg-text);
+      color: var(--pg-primary);
       margin-bottom: 6px;
+      line-height: 1.2;
     }
 
     .card p {
@@ -61,8 +63,7 @@
 
     /* Tablet */
     @media (min-width: 640px) and (max-width: 1024px) {
-      body { padding: 0 24px 64px; }
-      .page { padding-top: 40px; }
+      .page { padding: 40px 24px 64px; }
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 40px; }
       .page-header p { font-size: 16px; }
@@ -73,8 +74,7 @@
 
     /* Mobile */
     @media (max-width: 639px) {
-      body { padding: 0 16px 48px; }
-      .page { padding-top: 32px; }
+      .page { padding: 32px 16px 48px; }
       .page-header { margin-bottom: 24px; }
       .page-header h1 { font-size: 32px; }
       .page-header p { font-size: 14px; }
@@ -115,8 +115,6 @@
     html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe; }
     .card-icon--red { background: #fee2e2; color: #991b1b; }
     html[data-theme="dark"] .card-icon--red { background: #7f1d1d; color: #fca5a5; }
-    .card-icon--stone { background: #e7e5e4; color: #78716c; }
-    html[data-theme="dark"] .card-icon--stone { background: #44403c; color: #d6d3d1; }
 
   </style>
 </head>
@@ -158,17 +156,12 @@
         <p>Animated mesh gradient with tweakable color points.</p>
       </a>
 
-      <a class="card" href="style/">
-        <div class="card-icon card-icon--stone">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
-          </svg>
-        </div>
-        <h2>Style Guide</h2>
-        <p>Colors, breakpoints, and type scale for this project.</p>
-      </a>
     </div>
   </div>
+
+  <footer style="position:fixed;bottom:20px;right:24px;">
+    <a href="style/" style="font-size:12px;color:var(--pg-muted);text-decoration:none;">Style</a>
+  </footer>
 
   <script src="/header.js"></script>
 </body>
