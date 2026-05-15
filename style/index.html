@@ -54,24 +54,20 @@
       gap: 24px;
     }
 
-    .color-theme-label {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--pg-primary);
-      margin-bottom: 16px;
-    }
+    .color-theme-row--dark { display: none; }
+    html[data-theme="dark"] .color-theme-row--light { display: none; }
+    html[data-theme="dark"] .color-theme-row--dark { display: block; }
 
     .color-swatches {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 24px;
     }
 
     .swatch {
       display: flex;
       flex-direction: column;
-      width: calc((100% - 7 * 8px) / 8);
-      max-width: 127.5px;
+      width: calc((100% - 7 * 24px) / 8);
     }
 
     .swatch-color {
@@ -80,7 +76,7 @@
       position: relative;
       border-radius: 16px;
       overflow: hidden;
-      border: .5px solid rgba(0,0,0,.10);
+      border: 1px solid rgba(0,0,0,.10);
     }
     html[data-theme="dark"] .swatch-color { border-color: rgba(255,255,255,.10); }
 
@@ -98,18 +94,6 @@
     }
 
     .swatch:hover .swatch-copy-btn { opacity: 1; }
-
-    .swatch-info {
-      padding: 6px 0;
-      text-align: center;
-    }
-
-    .swatch-name {
-      font-size: 12px;
-      font-weight: 400;
-      line-height: 1.4;
-      color: var(--pg-muted);
-    }
 
     /* ── Type ── */
     .type-grid {
@@ -168,7 +152,7 @@
       width: 80px;
       height: 80px;
       background: var(--pg-surface);
-      border: .5px solid rgba(0,0,0,.10);
+      border: 1px solid rgba(0,0,0,.10);
     }
     html[data-theme="dark"] .radius-box { border-color: rgba(255,255,255,.10); }
 
@@ -200,7 +184,7 @@
       border-radius: 16px;
       background: rgba(255,255,255,.8);
       backdrop-filter: blur(20px) saturate(180%);
-      border: .5px solid rgba(0,0,0,.10);
+      border: 1px solid rgba(0,0,0,.10);
       box-shadow: 0 8px 40px rgba(0,0,0,.12);
     }
 
@@ -268,24 +252,26 @@
     .section-title.pg-anim.is-visible    { transition-delay: 0s; }
     .section-title + .pg-anim.is-visible          { transition-delay: .2s; }
     .type-grid > div.pg-anim.is-visible            { transition-delay: calc(.2s + var(--stagger-i, 0) * .15s); }
-    .color-theme-label.pg-anim.is-visible          { transition-delay: .2s; }
-    .color-swatches .swatch.pg-anim.is-visible     { transition-delay: calc(.3s + var(--stagger-i, 0) * .08s); }
+    .color-swatches .swatch.pg-anim.is-visible    { transition-delay: calc(.3s + var(--stagger-i, 0) * .08s); }
+    .radius-row .radius-item.pg-anim.is-visible    { transition-delay: calc(.2s + var(--stagger-i, 0) * .08s); }
 
     /* ── Responsive ── */
     @media (max-width: 639px) {
       .page { padding: 40px 16px 48px; }
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 32px; }
-      .swatch-prefix { display: none; }
-      .swatch { width: calc((100% - 3 * 8px) / 4); max-width: none; }
+
       .type-grid { display: flex; flex-direction: column; gap: 32px; }
       .type-grid > div { display: block; }
+
+      .color-swatches { gap: 16px; }
+      .swatch { width: calc((100% - 3 * 16px) / 4); }
+      .radius-row { gap: 16px; }
     }
 
     @media (min-width: 640px) and (max-width: 1024px) {
       .page { padding: 48px 24px 64px; }
       .page-header h1 { font-size: 40px; }
-      .swatch-prefix { display: none; }
     }
   </style>
 </head>
@@ -299,54 +285,42 @@
     <div class="section">
       <div class="section-title">Colors</div>
       <div class="color-themes">
-        <div>
-          <div class="color-theme-label">Light</div>
+        <div class="color-theme-row color-theme-row--light">
           <div class="color-swatches">
-            <div class="swatch" data-color="#fdfdfb">
-              <div class="swatch-color" style="background:#fdfdfb"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">light-</span>100</div></div>
-            </div>
-            <div class="swatch" data-color="#f4f4f3">
-              <div class="swatch-color" style="background:#f4f4f3"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">light-</span>200</div></div>
-            </div>
-            <div class="swatch" data-color="#e7e5e4">
-              <div class="swatch-color" style="background:#e7e5e4"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">light-</span>300</div></div>
+            <div class="swatch" data-color="#1c1917">
+              <div class="swatch-color" style="background:#1c1917"></div>
             </div>
             <div class="swatch" data-color="#78716c">
               <div class="swatch-color" style="background:#78716c"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">light-</span>400</div></div>
             </div>
-            <div class="swatch" data-color="#1c1917">
-              <div class="swatch-color" style="background:#1c1917"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">light-</span>500</div></div>
+            <div class="swatch" data-color="#e7e5e4">
+              <div class="swatch-color" style="background:#e7e5e4"></div>
+            </div>
+            <div class="swatch" data-color="#f4f4f3">
+              <div class="swatch-color" style="background:#f4f4f3"></div>
+            </div>
+            <div class="swatch" data-color="#fdfdfb">
+              <div class="swatch-color" style="background:#fdfdfb"></div>
             </div>
           </div>
         </div>
 
-        <div>
-          <div class="color-theme-label">Dark</div>
+        <div class="color-theme-row color-theme-row--dark">
           <div class="color-swatches">
-            <div class="swatch" data-color="#131212">
-              <div class="swatch-color" style="background:#131212"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">dark-</span>100</div></div>
-            </div>
-            <div class="swatch" data-color="#292524">
-              <div class="swatch-color" style="background:#292524"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">dark-</span>200</div></div>
-            </div>
-            <div class="swatch" data-color="#44403c">
-              <div class="swatch-color" style="background:#44403c"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">dark-</span>300</div></div>
+            <div class="swatch" data-color="#fafaf9">
+              <div class="swatch-color" style="background:#fafaf9"></div>
             </div>
             <div class="swatch" data-color="#d6d3d1">
               <div class="swatch-color" style="background:#d6d3d1"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">dark-</span>400</div></div>
             </div>
-            <div class="swatch" data-color="#fafaf9">
-              <div class="swatch-color" style="background:#fafaf9"></div>
-              <div class="swatch-info"><div class="swatch-name"><span class="swatch-prefix">dark-</span>500</div></div>
+            <div class="swatch" data-color="#44403c">
+              <div class="swatch-color" style="background:#44403c"></div>
+            </div>
+            <div class="swatch" data-color="#292524">
+              <div class="swatch-color" style="background:#292524"></div>
+            </div>
+            <div class="swatch" data-color="#131212">
+              <div class="swatch-color" style="background:#131212"></div>
             </div>
           </div>
         </div>
@@ -510,11 +484,12 @@
         });
       });
 
-      var labelEls = Array.from(document.querySelectorAll('.color-theme-label'));
+      var radiusEls = Array.from(document.querySelectorAll('.radius-item'));
+      radiusEls.forEach(function (el, i) { el.style.setProperty('--stagger-i', i); });
 
       var els = Array.from(document.querySelectorAll(
-        '.page-header, .section-title, .radius-row, .shadow-row'
-      )).concat(typeEls, labelEls, swatchEls);
+        '.page-header, .section-title, .shadow-row'
+      )).concat(typeEls, swatchEls, radiusEls);
       els.forEach(function (el) { el.classList.add('pg-anim'); });
 
       var obs = new IntersectionObserver(function (entries) {

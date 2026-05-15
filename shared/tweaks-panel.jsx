@@ -52,13 +52,13 @@ const __TWEAKS_STYLE = `
     --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.70);--val:rgba(28,25,23,.50);
     --sect:rgba(28,25,23,.5);--hov-x:rgba(0,0,0,.06);
     --scroll:rgba(0,0,0,.15);--scroll-h:rgba(0,0,0,.25);
-    --fld-bg:rgba(255,255,255,.6);--fld-bgf:rgba(255,255,255,.85);
-    --fld-bd:rgba(0,0,0,.1);--fld-bdf:rgba(0,0,0,.25);
-    --track:rgba(0,0,0,.12);--seg:rgba(0,0,0,.06);--thumb:rgba(255,255,255,.92);
-    --tog-off:rgba(0,0,0,.15);--num-bg:rgba(255,255,255,.6);
+    --fld-bg:rgba(0,0,0,.1);--fld-bgf:rgba(0,0,0,.15);
+    --fld-bd:rgba(0,0,0,.1);--fld-bdf:rgba(0,0,0,.24);
+    --track:rgba(0,0,0,.1);--seg:rgba(0,0,0,.1);--thumb:rgba(255,255,255,.92);
+    --tog-off:rgba(0,0,0,.15);--num-bg:rgba(0,0,0,.1);
     --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.42);
     --btn:rgba(0,0,0,.80);--btn-t:#fff;--btn-h:rgba(0,0,0,.90);
-    --sec:rgba(0,0,0,.06);--sec-h:rgba(0,0,0,.10);
+    --sec:rgba(0,0,0,.1);--sec-h:rgba(0,0,0,.15);
     --bar-fill:rgba(28,25,23,.85);--bar-val:#fff;
   }
   html[data-theme="dark"] .twk-panel,
@@ -67,13 +67,13 @@ const __TWEAKS_STYLE = `
     --muted:rgba(250,250,249,.48);--label:rgba(250,250,249,.68);--val:rgba(250,250,249,.44);
     --sect:rgba(250,250,249,.5);--hov-x:rgba(255,255,255,.08);
     --scroll:rgba(255,255,255,.15);--scroll-h:rgba(255,255,255,.25);
-    --fld-bg:rgba(255,255,255,.07);--fld-bgf:rgba(255,255,255,.12);
-    --fld-bd:rgba(255,255,255,.10);--fld-bdf:rgba(255,255,255,.22);
-    --track:rgba(255,255,255,.15);--seg:rgba(255,255,255,.08);--thumb:rgba(255,255,255,.18);
-    --tog-off:rgba(255,255,255,.20);--num-bg:rgba(255,255,255,.07);
+    --fld-bg:rgba(255,255,255,.1);--fld-bgf:rgba(255,255,255,.15);
+    --fld-bd:rgba(255,255,255,.10);--fld-bdf:rgba(255,255,255,.24);
+    --track:rgba(255,255,255,.1);--seg:rgba(255,255,255,.1);--thumb:rgba(255,255,255,.18);
+    --tog-off:rgba(255,255,255,.20);--num-bg:rgba(255,255,255,.1);
     --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
     --btn:rgba(255,255,255,.14);--btn-t:#fafaf9;--btn-h:rgba(255,255,255,.20);
-    --sec:rgba(255,255,255,.07);--sec-h:rgba(255,255,255,.12);
+    --sec:rgba(255,255,255,.1);--sec-h:rgba(255,255,255,.15);
     --bar-fill:rgba(250,250,249,.85);--bar-val:#1c1917;
   }
 
@@ -100,7 +100,7 @@ const __TWEAKS_STYLE = `
   .twk-x:hover{color:var(--text)}
   html[data-theme="dark"] .twk-x{color:rgba(250,250,249,.80)}
   html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
-  .twk-body{padding:2px 16px 24px;display:flex;flex-direction:column;gap:8px;
+  .twk-body{padding:2px 16px 16px;display:flex;flex-direction:column;gap:8px;
     overflow-y:auto;overflow-x:hidden;min-height:0;
     scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}
   .twk-body::-webkit-scrollbar{width:8px}
@@ -117,13 +117,14 @@ const __TWEAKS_STYLE = `
   .twk-val{color:var(--val);font-variant-numeric:tabular-nums}
 
   .twk-sect{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--sect);padding:10px 0 0}
-  .twk-sect:first-child{padding-top:0}
+    color:var(--sect);margin-top:-8px}
+  .twk-sect:first-child{margin-top:0}
+  .twk-sect::before{content:'';display:block;border-top:1px solid var(--bd);margin:16px 0}
+  .twk-sect:first-child::before{display:none}
 
   .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
-    border:.5px solid var(--fld-bd);border-radius:8px;
-    background:var(--fld-bg);color:inherit;font:inherit;outline:none}
-  .twk-field:focus{border-color:var(--fld-bdf);background:var(--fld-bgf)}
+    border:1px solid var(--fld-bd);border-radius:8px;
+    background:transparent;color:inherit;font:inherit;outline:none}
   select.twk-field{padding-right:22px;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
     background-repeat:no-repeat;background-position:right 8px center}
@@ -131,7 +132,7 @@ const __TWEAKS_STYLE = `
   .twk-bar-row{display:flex;align-items:center;gap:8px}
   .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}
   .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);
-    cursor:ew-resize;overflow:hidden;user-select:none;touch-action:none}
+    cursor:pointer;overflow:hidden;user-select:none;touch-action:none}
   .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);
     border-radius:8px 0 0 8px;pointer-events:none;min-width:8px}
   .twk-bar-val{position:absolute;inset:0;display:flex;align-items:center;
@@ -197,22 +198,23 @@ const __TWEAKS_STYLE = `
   .twk-color-row{display:flex;align-items:center;gap:6px}
   .twk-bar-row .twk-color-row{width:172px;flex-shrink:0}
   .twk-color-main{display:flex;align-items:center;flex:1;min-width:0;height:26px;
-    border:1px solid var(--fld-bd);border-radius:8px;background:var(--fld-bg);box-sizing:border-box}
+    border:1px solid var(--fld-bd);border-radius:8px;background:transparent;box-sizing:border-box}
   .twk-color-preview{flex-shrink:0;cursor:pointer;
     width:26px;height:calc(100% + 2px);
     margin:-1px 0 -1px -1px;border-radius:7px 0 0 7px}
   .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;padding:0 6px;outline:none}
-  .twk-color-hex:focus{background:var(--fld-bgf)}
+  .twk-color-main:focus-within{border-color:var(--fld-bdf)}
   .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;
-    background:var(--fld-bg);font-size:12px;display:flex;align-items:center;gap:1px;
+    background:transparent;font-size:12px;display:flex;align-items:center;gap:1px;
     white-space:nowrap;flex-shrink:0}
+  .twk-color-opacity:focus-within{border-color:var(--fld-bdf)}
   .twk-color-opacity-input{width:20px;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;text-align:right;padding:0;outline:none;-moz-appearance:textfield}
   .twk-color-opacity-input::-webkit-inner-spin-button,.twk-color-opacity-input::-webkit-outer-spin-button{-webkit-appearance:none}
   .twk-color-opacity-pct{color:inherit;font-size:10px}
-  .twk-color-pick{appearance:none;width:26px;height:26px;border:1px solid var(--fld-bd);
-    border-radius:8px;background:var(--fld-bg);color:var(--label);cursor:pointer;
+  .twk-color-pick{appearance:none;width:26px;height:26px;border:0;
+    border-radius:8px;background:transparent;color:var(--label);cursor:pointer;
     display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;box-sizing:border-box}
   .twk-color-pick:hover{color:var(--text)}
 
@@ -397,6 +399,7 @@ function TweakRow({ label, value, children, inline = false }) {
 function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
   const pct = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
   const barRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
 
   const compute = (clientX) => {
     const rect = barRef.current.getBoundingClientRect();
@@ -409,18 +412,21 @@ function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', on
 
   const onPointerDown = (e) => {
     barRef.current.setPointerCapture(e.pointerId);
+    setDragging(true);
     onChange(compute(e.clientX));
   };
   const onPointerMove = (e) => {
     if (e.buttons === 0) return;
     onChange(compute(e.clientX));
   };
+  const onPointerUp = () => setDragging(false);
 
   return (
     <div className="twk-bar-row">
       <span className="twk-bar-lbl">{label}{unit ? ` (${unit})` : ''}</span>
       <div ref={barRef} className="twk-bar"
-           onPointerDown={onPointerDown} onPointerMove={onPointerMove}>
+           style={{ cursor: dragging ? 'grabbing' : 'pointer' }}
+           onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
         <div className="twk-bar-fill" style={{ width: pct + '%' }} />
         <span className="twk-bar-val twk-bar-val--fill" style={{ clipPath: `inset(0 ${100 - pct}% 0 0)` }}>{value}</span>
         <span className="twk-bar-val twk-bar-val--track" style={{ clipPath: `inset(0 0 0 ${pct}%)` }}>{value}</span>

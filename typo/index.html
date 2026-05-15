@@ -22,6 +22,8 @@
 <div id="root"></div>
 
 <script type="text/babel">
+const _seg = new Intl.Segmenter();
+
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "text": "Catch 🤽",
   "fontSize": 128,
@@ -38,15 +40,6 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [panelOpen, setPanelOpen] = React.useState(true);
-  const inputRef = React.useRef(null);
-  const [emojiHint, setEmojiHint] = React.useState(false);
-  const hintTimer = React.useRef(null);
-  const openEmojiHint = () => {
-    inputRef.current?.focus();
-    setEmojiHint(true);
-    clearTimeout(hintTimer.current);
-    hintTimer.current = setTimeout(() => setEmojiHint(false), 2500);
-  };
 
   const rand = (min, max, step = 1) => {
     const v = Math.random() * (max - min) + min;
@@ -67,42 +60,19 @@ function App() {
 
       <TweaksPanel title="Typo" onOpenChange={setPanelOpen}>
         <TweakSection>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-              <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--muted)' }}>Text</span>
-              <span style={{ fontSize: 10, color: 'var(--muted)', opacity: 0.6 }}>{[...new Intl.Segmenter().segment(t.text || '')].length}/20</span>
-            </div>
-            <div style={{ position: 'relative' }}>
-              <input
-                ref={inputRef}
-                className="twk-field"
-                type="text"
-                value={t.text}
-                placeholder="Type something…"
-                style={{ paddingRight: 28 }}
-                onChange={(e) => { const v = [...new Intl.Segmenter().segment(e.target.value)].slice(0, 20).map(s => s.segment).join(''); setTweak('text', v); }}
-              />
-              <button onClick={openEmojiHint}
-                onMouseEnter={e => e.currentTarget.style.color = 'var(--text)'}
-                onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}
-                style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)',
-                  background: 'none', border: 'none', cursor: 'pointer', padding: 0,
-                  color: 'var(--muted)', display: 'flex', alignItems: 'center', lineHeight: 1,
-                  transition: 'color .15s' }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                  <line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
-                </svg>
-              </button>
-              {emojiHint && (
-                <div style={{ position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
-                  background: '#1c1917', color: '#fafaf9', borderRadius: 6, padding: '4px 8px',
-                  fontSize: 10, textAlign: 'center', zIndex: 100, whiteSpace: 'nowrap',
-                  pointerEvents: 'none' }}>
-                  Press ⌘⌃Space to open emoji picker
-                </div>
-              )}
-            </div>
+          <div style={{ position: 'relative' }}>
+            <input
+              className="twk-field"
+              type="text"
+              value={t.text}
+              placeholder="Type something…"
+              style={{ paddingRight: 36 }}
+              onChange={(e) => { const v = [..._seg.segment(e.target.value)].slice(0, 20).map(s => s.segment).join(''); setTweak('text', v); }}
+            />
+            <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
+              fontSize: 10, color: 'var(--muted)', pointerEvents: 'none' }}>
+              {[..._seg.segment(t.text || '')].length}/20
+            </span>
           </div>
           <TweakColor
             value={t.fontColor}

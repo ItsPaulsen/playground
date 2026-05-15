@@ -139,7 +139,21 @@
   }
 
   document.getElementById('theme-toggle').addEventListener('click', function () {
-    applyTheme(!isDark());
+    var dark = isDark();
+    var cover = document.createElement('div');
+    cover.style.cssText = 'position:fixed;inset:0;z-index:9999;background:' + (dark ? '#fdfdfb' : '#1c1917') + ';pointer-events:none;opacity:0;transition:opacity .15s ease';
+    document.body.appendChild(cover);
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        cover.style.opacity = '1';
+      });
+    });
+    setTimeout(function () {
+      applyTheme(!dark);
+      cover.style.transition = 'opacity .6s ease';
+      cover.style.opacity = '0';
+      setTimeout(function () { cover.remove(); }, 600);
+    }, 150);
   });
 
   document.getElementById('menu-toggle').addEventListener('click', function () {

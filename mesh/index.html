@@ -91,14 +91,14 @@ function App() {
       <Mesh t={t} />
 
       <TweaksPanel title="Mesh">
+        <div style={{ display: 'flex', gap: 8 }}>
+          <TweakButton label="Randomize" secondary onClick={nextPalette} />
+          <TweakButton label="Default" secondary onClick={() => setTweak({ ...TWEAK_DEFAULTS, color1: palettes[0][0], color2: palettes[0][1] })} />
+        </div>
         <TweakSection label="Colors">
           {['color1', 'color2'].map((key, i) => (
             <TweakColor key={key} label={`Color ${i + 1}`} value={t[key]} onChange={v => setTweak(key, v)} />
           ))}
-          <div style={{ display: 'flex', gap: 8 }}>
-            <TweakButton label="Randomize" secondary onClick={nextPalette} />
-            <TweakButton label="Default" secondary onClick={() => setTweak({ ...TWEAK_DEFAULTS, color1: palettes[0][0], color2: palettes[0][1] })} />
-          </div>
         </TweakSection>
 
         <TweakSection label="Animation">
