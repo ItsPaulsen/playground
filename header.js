@@ -63,7 +63,7 @@
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
     html[data-theme="dark"] #site-menu {
-      background: rgba(19,18,18,.8);
+      background: rgba(28,25,23,.8);
     }
     #site-menu.is-open {
       opacity: 1; pointer-events: auto;
@@ -71,7 +71,7 @@
 
     #site-menu nav {
       display: flex; flex-direction: column;
-      align-items: center; gap: 20px;
+      align-items: center; gap: 32px;
     }
 
     #site-menu nav a {

@@ -59,6 +59,7 @@ const __TWEAKS_STYLE = `
     --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.42);
     --btn:rgba(0,0,0,.80);--btn-t:#fff;--btn-h:rgba(0,0,0,.90);
     --sec:rgba(0,0,0,.06);--sec-h:rgba(0,0,0,.10);
+    --bar-fill:rgba(28,25,23,.85);--bar-val:#fff;
   }
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
@@ -73,9 +74,16 @@ const __TWEAKS_STYLE = `
     --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
     --btn:rgba(255,255,255,.14);--btn-t:#fafaf9;--btn-h:rgba(255,255,255,.20);
     --sec:rgba(255,255,255,.07);--sec-h:rgba(255,255,255,.12);
+    --bar-fill:rgba(250,250,249,.85);--bar-val:#1c1917;
   }
 
-  .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:280px;
+  @keyframes twk-in {
+    from { opacity: 0; translate: 10px 0; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+
+  .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
+    animation:twk-in .35s cubic-bezier(.4,0,.2,1) both;z-index:2147483646;width:320px;
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
@@ -92,7 +100,7 @@ const __TWEAKS_STYLE = `
   .twk-x:hover{color:var(--text)}
   html[data-theme="dark"] .twk-x{color:rgba(250,250,249,.80)}
   html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
-  .twk-body{padding:2px 16px 24px;display:flex;flex-direction:column;gap:10px;
+  .twk-body{padding:2px 16px 24px;display:flex;flex-direction:column;gap:8px;
     overflow-y:auto;overflow-x:hidden;min-height:0;
     scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}
   .twk-body::-webkit-scrollbar{width:8px}
@@ -120,27 +128,29 @@ const __TWEAKS_STYLE = `
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
     background-repeat:no-repeat;background-position:right 8px center}
 
-  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
-    border-radius:999px;background:var(--track);outline:none;cursor:grab}
-  .twk-slider:active{cursor:grabbing}
-  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
-    width:14px;height:14px;border-radius:50%;background:#fff;
-    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:grab}
-  .twk-slider:active::-webkit-slider-thumb{cursor:grabbing}
-  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
-    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:grab}
-  .twk-slider:active::-moz-range-thumb{cursor:grabbing}
+  .twk-bar-row{display:flex;align-items:center;gap:8px}
+  .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}
+  .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);
+    cursor:ew-resize;overflow:hidden;user-select:none;touch-action:none}
+  .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);
+    border-radius:8px 0 0 8px;pointer-events:none;min-width:8px}
+  .twk-bar-val{position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;font-size:11px;font-variant-numeric:tabular-nums;
+    pointer-events:none;font-weight:500}
+  .twk-bar-val--fill{color:var(--bar-val)}
+  .twk-bar-val--track{color:var(--text)}
 
-  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
-    background:var(--seg);user-select:none}
-  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:8px;
-    background:var(--thumb);box-shadow:0 1px 2px rgba(0,0,0,.12);
-    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg{position:relative;display:flex;border-radius:10px;
+    background:var(--seg);user-select:none;box-sizing:border-box;height:32px;padding:3px}
+  .twk-seg-thumb{position:absolute;top:3px;bottom:3px;border-radius:8px;
+    background:var(--bar-fill);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .4s cubic-bezier(.4,0,.2,1),width .4s cubic-bezier(.4,0,.2,1)}
   .twk-seg.dragging .twk-seg-thumb{transition:none}
   .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
     background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
     border-radius:8px;cursor:pointer;padding:4px 6px;line-height:1.2;
-    overflow-wrap:anywhere}
+    overflow-wrap:anywhere;transition:color .2s ease}
+  .twk-seg button[aria-checked="true"]{color:var(--bar-val);transition-delay:.1s}
 
   .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
     background:var(--tog-off);transition:background .15s;cursor:pointer;padding:0}
@@ -184,6 +194,28 @@ const __TWEAKS_STYLE = `
   .twk-swatch::-webkit-color-swatch{border:0;border-radius:7.5px}
   .twk-swatch::-moz-color-swatch{border:0;border-radius:7.5px}
 
+  .twk-color-row{display:flex;align-items:center;gap:6px}
+  .twk-bar-row .twk-color-row{width:172px;flex-shrink:0}
+  .twk-color-main{display:flex;align-items:center;flex:1;min-width:0;height:26px;
+    border:1px solid var(--fld-bd);border-radius:8px;background:var(--fld-bg);box-sizing:border-box}
+  .twk-color-preview{flex-shrink:0;cursor:pointer;
+    width:26px;height:calc(100% + 2px);
+    margin:-1px 0 -1px -1px;border-radius:7px 0 0 7px}
+  .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
+    font:inherit;font-size:12px;padding:0 6px;outline:none}
+  .twk-color-hex:focus{background:var(--fld-bgf)}
+  .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;
+    background:var(--fld-bg);font-size:12px;display:flex;align-items:center;gap:1px;
+    white-space:nowrap;flex-shrink:0}
+  .twk-color-opacity-input{width:20px;border:0;background:transparent;color:inherit;
+    font:inherit;font-size:12px;text-align:right;padding:0;outline:none;-moz-appearance:textfield}
+  .twk-color-opacity-input::-webkit-inner-spin-button,.twk-color-opacity-input::-webkit-outer-spin-button{-webkit-appearance:none}
+  .twk-color-opacity-pct{color:inherit;font-size:10px}
+  .twk-color-pick{appearance:none;width:26px;height:26px;border:1px solid var(--fld-bd);
+    border-radius:8px;background:var(--fld-bg);color:var(--label);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;box-sizing:border-box}
+  .twk-color-pick:hover{color:var(--text)}
+
   .twk-chips{display:flex;gap:6px}
   .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
     padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;
@@ -199,6 +231,26 @@ const __TWEAKS_STYLE = `
   .twk-chip>span>i:first-child{box-shadow:none}
   .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+
+  .twk-cpick{position:fixed;z-index:2147483647;width:212px;
+    background:var(--bg);backdrop-filter:blur(12px) saturate(180%);
+    border:.5px solid var(--bd);border-radius:12px;padding:12px;
+    box-shadow:0 8px 40px rgba(0,0,0,.20);
+    display:flex;flex-direction:column;gap:8px}
+  .twk-cpick-sv{position:relative;width:100%;height:140px;
+    border-radius:8px;overflow:hidden;cursor:crosshair;flex-shrink:0}
+  .twk-cpick-sv-white{position:absolute;inset:0;
+    background:linear-gradient(to right,#fff,transparent)}
+  .twk-cpick-sv-black{position:absolute;inset:0;
+    background:linear-gradient(to top,#000,transparent)}
+  .twk-cpick-sv-thumb{position:absolute;width:12px;height:12px;border-radius:50%;
+    border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);
+    transform:translate(-50%,-50%);pointer-events:none}
+  .twk-cpick-hue{position:relative;height:10px;border-radius:5px;cursor:ew-resize;
+    background:linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))}
+  .twk-cpick-hue-thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
+    background:#fff;border:1.5px solid rgba(0,0,0,.2);box-shadow:0 1px 3px rgba(0,0,0,.2);
+    transform:translate(-50%,-50%);pointer-events:none}
 `;
 
 // ── useTweaks ───────────────────────────────────────────────────────────────
@@ -230,7 +282,7 @@ function useTweaks(defaults) {
 // is what actually hides the panel.
 function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange }) {
   const [open, setOpen] = React.useState(() => window.parent === window);
-  React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open]);
+  React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
   // state is mirrored from the same localStorage key the deck reads so
@@ -280,39 +332,37 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
 
-  if (!open) return (
-    <>
-      <style>{__TWEAKS_STYLE}</style>
-      <button className="twk-reopen" aria-label="Open tweaks" onClick={() => setOpen(true)}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M10 5H3" /><path d="M12 19H3" /><path d="M14 3v4" />
-          <path d="M16 17v4" /><path d="M21 12h-9" /><path d="M21 19h-5" />
-          <path d="M21 5h-7" /><path d="M8 10v4" /><path d="M8 12H3" />
-        </svg>
-      </button>
-    </>
-  );
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
-      <div className="twk-panel" data-noncommentable="">
-        <div className="twk-hd">
-          <b>{title}</b>
-          <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-            </svg>
-          </button>
+      {open ? (
+        <div className="twk-panel" data-noncommentable="">
+          <div className="twk-hd">
+            <b>{title}</b>
+            <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+          <div className="twk-body">
+            {children}
+            {hasDeckStage && railEnabled && !noDeckControls && (
+              <TweakSection label="Deck">
+                <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+              </TweakSection>
+            )}
+          </div>
         </div>
-        <div className="twk-body">
-          {children}
-          {hasDeckStage && railEnabled && !noDeckControls && (
-            <TweakSection label="Deck">
-              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
-            </TweakSection>
-          )}
-        </div>
-      </div>
+      ) : (
+        <button className="twk-reopen" aria-label="Open tweaks" onClick={() => setOpen(true)}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M10 5H3" /><path d="M12 19H3" /><path d="M14 3v4" />
+            <path d="M16 17v4" /><path d="M21 12h-9" /><path d="M21 19h-5" />
+            <path d="M21 5h-7" /><path d="M8 10v4" /><path d="M8 12H3" />
+          </svg>
+        </button>
+      )}
     </>
   );
 }
@@ -345,11 +395,37 @@ function TweakRow({ label, value, children, inline = false }) {
 // ── Controls ────────────────────────────────────────────────────────────────
 
 function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  const pct = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
+  const barRef = React.useRef(null);
+
+  const compute = (clientX) => {
+    const rect = barRef.current.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const raw = min + p * (max - min);
+    const snapped = Math.round(raw / step) * step;
+    const decimals = (String(step).split('.')[1] || '').length;
+    return Number(snapped.toFixed(decimals));
+  };
+
+  const onPointerDown = (e) => {
+    barRef.current.setPointerCapture(e.pointerId);
+    onChange(compute(e.clientX));
+  };
+  const onPointerMove = (e) => {
+    if (e.buttons === 0) return;
+    onChange(compute(e.clientX));
+  };
+
   return (
-    <TweakRow label={label} value={`${value}${unit}`}>
-      <input type="range" className="twk-slider" min={min} max={max} step={step}
-             value={value} onChange={(e) => onChange(Number(e.target.value))} />
-    </TweakRow>
+    <div className="twk-bar-row">
+      <span className="twk-bar-lbl">{label}{unit ? ` (${unit})` : ''}</span>
+      <div ref={barRef} className="twk-bar"
+           onPointerDown={onPointerDown} onPointerMove={onPointerMove}>
+        <div className="twk-bar-fill" style={{ width: pct + '%' }} />
+        <span className="twk-bar-val twk-bar-val--fill" style={{ clipPath: `inset(0 ${100 - pct}% 0 0)` }}>{value}</span>
+        <span className="twk-bar-val twk-bar-val--track" style={{ clipPath: `inset(0 0 0 ${pct}%)` }}>{value}</span>
+      </div>
+    </div>
   );
 }
 
@@ -396,36 +472,34 @@ function TweakRadio({ label, value, options, onChange }) {
 
   const segAt = (clientX) => {
     const r = trackRef.current.getBoundingClientRect();
-    const inner = r.width - 4;
-    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    const inner = r.width - 6;
+    const i = Math.floor(((clientX - r.left - 3) / inner) * n);
     return opts[Math.max(0, Math.min(n - 1, i))].value;
   };
 
   const onPointerDown = (e) => {
-    setDragging(true);
+    trackRef.current.setPointerCapture(e.pointerId);
     const v0 = segAt(e.clientX);
     if (v0 !== valueRef.current) onChange(v0);
-    const move = (ev) => {
-      if (!trackRef.current) return;
-      const v = segAt(ev.clientX);
-      if (v !== valueRef.current) onChange(v);
-    };
-    const up = () => {
-      setDragging(false);
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
   };
+  const onPointerMove = (e) => {
+    if (e.buttons === 0) return;
+    setDragging(true);
+    const v = segAt(e.clientX);
+    if (v !== valueRef.current) onChange(v);
+  };
+  const onPointerUp = () => setDragging(false);
 
   return (
     <TweakRow label={label}>
-      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+      <div ref={trackRef} role="radiogroup"
+           onPointerDown={onPointerDown}
+           onPointerMove={onPointerMove}
+           onPointerUp={onPointerUp}
            className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
         <div className="twk-seg-thumb"
-             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
-                      width: `calc((100% - 4px) / ${n})` }} />
+             style={{ left: `calc(3px + ${idx} * (100% - 6px) / ${n})`,
+                      width: `calc((100% - 6px) / ${n})` }} />
         {opts.map((o) => (
           <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
             {o.label}
@@ -466,26 +540,24 @@ function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) 
     return n;
   };
   const startRef = React.useRef({ x: 0, val: 0 });
-  const onScrubStart = (e) => {
+  const decimals = (String(step).split('.')[1] || '').length;
+  const onScrubDown = (e) => {
     e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
     startRef.current = { x: e.clientX, val: value };
-    const decimals = (String(step).split('.')[1] || '').length;
-    const move = (ev) => {
-      const dx = ev.clientX - startRef.current.x;
-      const raw = startRef.current.val + dx * step;
-      const snapped = Math.round(raw / step) * step;
-      onChange(clamp(Number(snapped.toFixed(decimals))));
-    };
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
+  };
+  const onScrubMove = (e) => {
+    if (e.buttons === 0) return;
+    const dx = e.clientX - startRef.current.x;
+    const raw = startRef.current.val + dx * step;
+    const snapped = Math.round(raw / step) * step;
+    onChange(clamp(Number(snapped.toFixed(decimals))));
   };
   return (
     <div className="twk-num">
-      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <span className="twk-num-lbl"
+            onPointerDown={onScrubDown}
+            onPointerMove={onScrubMove}>{label}</span>
       <input type="number" value={value} min={min} max={max} step={step}
              onChange={(e) => onChange(clamp(Number(e.target.value)))} />
       {unit && <span className="twk-num-unit">{unit}</span>}
@@ -519,22 +591,195 @@ const __TwkCheck = ({ light }) => (
 // rest stacked in a sharp column on the right. onChange emits the
 // option in the shape it was passed (string stays string, array stays array).
 // Without options it falls back to the native color input for back-compat.
+function __hexToRgb(hex) {
+  return { r: parseInt(hex.slice(1,3),16), g: parseInt(hex.slice(3,5),16), b: parseInt(hex.slice(5,7),16) };
+}
+
+function __hexToHsv(hex) {
+  const {r:r255,g:g255,b:b255} = __hexToRgb(hex);
+  const r=r255/255, g=g255/255, b=b255/255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min;
+  let h=0, s=max===0?0:d/max, v=max;
+  if (d) switch(max){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;case b:h=((r-g)/d+4)/6;break;}
+  return {h:h*360, s:s*100, v:v*100};
+}
+
+function __hsvToHex(h,s,v) {
+  h/=360; s/=100; v/=100;
+  const i=Math.floor(h*6), f=h*6-i, p=v*(1-s), q=v*(1-f*s), t=v*(1-(1-f)*s);
+  let r,g,b;
+  switch(i%6){case 0:r=v;g=t;b=p;break;case 1:r=q;g=v;b=p;break;case 2:r=p;g=v;b=t;break;case 3:r=p;g=q;b=v;break;case 4:r=t;g=p;b=v;break;case 5:r=v;g=p;b=q;break;}
+  return '#'+[r,g,b].map(x=>Math.round(x*255).toString(16).padStart(2,'0')).join('');
+}
+
+function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
+  const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
+  const svRef = React.useRef(null);
+  const hueRef = React.useRef(null);
+  const dropRef = React.useRef(null);
+  const [pos, setPos] = React.useState(null);
+
+  React.useEffect(() => {
+    if (!anchorRef.current) return;
+    const rect = anchorRef.current.getBoundingClientRect();
+    const H = 220, W = 212;
+    const above = window.innerHeight - rect.bottom < H;
+    const centeredLeft = rect.left + rect.width / 2 - W / 2;
+    setPos({
+      top: above ? rect.top - H - 6 : rect.bottom + 6,
+      left: Math.max(8, Math.min(centeredLeft, window.innerWidth - W - 8)),
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const close = (e) => {
+      if (dropRef.current && !dropRef.current.contains(e.target) && anchorRef.current && !anchorRef.current.contains(e.target))
+        onClose();
+    };
+    const closeScroll = () => onClose();
+    document.addEventListener('pointerdown', close);
+    window.addEventListener('scroll', closeScroll, true);
+    return () => { document.removeEventListener('pointerdown', close); window.removeEventListener('scroll', closeScroll, true); };
+  }, []);
+
+  const emit = (h, s, v) => { setHsv({h,s,v}); onHexChange(__hsvToHex(h,s,v)); };
+  const dragSV = (cx, cy) => {
+    const r = svRef.current.getBoundingClientRect();
+    emit(hsv.h, Math.max(0,Math.min(100,((cx-r.left)/r.width)*100)), Math.max(0,Math.min(100,100-((cy-r.top)/r.height)*100)));
+  };
+  const dragHue = (cx) => {
+    const r = hueRef.current.getBoundingClientRect();
+    emit(Math.max(0,Math.min(360,((cx-r.left)/r.width)*360)), hsv.s, hsv.v);
+  };
+
+  if (!pos) return null;
+  return ReactDOM.createPortal(
+    <div ref={dropRef} className="twk-cpick twk-panel" style={{top:pos.top, left:pos.left}}>
+      <div ref={svRef} className="twk-cpick-sv" style={{background:`hsl(${hsv.h},100%,50%)`}}
+           onPointerDown={(e)=>{e.currentTarget.setPointerCapture(e.pointerId);dragSV(e.clientX,e.clientY);}}
+           onPointerMove={(e)=>{if(e.buttons)dragSV(e.clientX,e.clientY);}}>
+        <div className="twk-cpick-sv-white"/>
+        <div className="twk-cpick-sv-black"/>
+        <div className="twk-cpick-sv-thumb" style={{left:`${hsv.s}%`,top:`${100-hsv.v}%`}}/>
+      </div>
+      <div ref={hueRef} className="twk-cpick-hue"
+           onPointerDown={(e)=>{e.currentTarget.setPointerCapture(e.pointerId);dragHue(e.clientX);}}
+           onPointerMove={(e)=>{if(e.buttons)dragHue(e.clientX);}}>
+        <div className="twk-cpick-hue-thumb" style={{left:`${hsv.h/360*100}%`}}/>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
+function __parseColor(value) {
+  if (!value) return { hex: '#000000', opacity: 100 };
+  const m = String(value).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+  if (m) {
+    const hex = '#' + [m[1], m[2], m[3]].map((v) => parseInt(v).toString(16).padStart(2, '0')).join('');
+    const opacity = m[4] !== undefined ? Math.round(parseFloat(m[4]) * 100) : 100;
+    return { hex, opacity };
+  }
+  return { hex: value, opacity: 100 };
+}
+
+function __toColorString(hex, opacity) {
+  if (opacity >= 100) return hex;
+  const {r,g,b} = __hexToRgb(hex);
+  return `rgba(${r},${g},${b},${(opacity / 100).toFixed(2)})`;
+}
+
+function __TweakColorInput({ label, value, onChange }) {
+  const parsed = __parseColor(value);
+  const [hex, setHex] = React.useState(parsed.hex);
+  const [opacity, setOpacity] = React.useState(parsed.opacity);
+  const [opacityStr, setOpacityStr] = React.useState(String(parsed.opacity));
+  const [showPicker, setShowPicker] = React.useState(false);
+  const swatchRef = React.useRef(null);
+
+  const committedRef = React.useRef(value);
+
+  React.useEffect(() => {
+    if (value === committedRef.current) return;
+    committedRef.current = value;
+    const p = __parseColor(value);
+    setHex(p.hex);
+    setOpacity(p.opacity);
+    setOpacityStr(String(p.opacity));
+  }, [value]);
+
+  const commitColor = (h, o) => {
+    const str = __toColorString(h, o);
+    committedRef.current = str;
+    onChange(str);
+  };
+
+  const onHexChange = (e) => {
+    const v = e.target.value;
+    setHex(v);
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) commitColor(v, opacity);
+  };
+
+  const onOpacityChange = (e) => {
+    setOpacityStr(e.target.value);
+    const n = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+    setOpacity(n);
+    if (/^\d+$/.test(e.target.value)) commitColor(hex, n);
+  };
+
+  const onOpacityBlur = () => setOpacityStr(String(opacity));
+
+  const row = (
+    <div className="twk-color-row">
+      <div className="twk-color-main">
+        <div ref={swatchRef} className="twk-color-preview" style={{ background: hex }}
+             onClick={() => setShowPicker(v => !v)} />
+        <input className="twk-color-hex" type="text" value={hex}
+               onChange={onHexChange} spellCheck={false} />
+      </div>
+      <div className="twk-color-opacity">
+        <input className="twk-color-opacity-input" type="text" value={opacityStr}
+               onChange={onOpacityChange} onBlur={onOpacityBlur} />
+        <span className="twk-color-opacity-pct">%</span>
+      </div>
+      {'EyeDropper' in window && (
+        <button type="button" className="twk-color-pick" onClick={() => {
+          new window.EyeDropper().open().then((r) => {
+            setHex(r.sRGBHex);
+            commitColor(r.sRGBHex, opacity);
+          }).catch(() => {});
+        }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"/>
+            <path d="m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"/>
+            <path d="m2 22 .414-.414"/>
+          </svg>
+        </button>
+      )}
+      {showPicker && (
+        <__ColorPickerDropdown
+          hex={hex}
+          onHexChange={(h) => { setHex(h); commitColor(h, opacity); }}
+          anchorRef={swatchRef}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
+    </div>
+  );
+
+  if (!label) return row;
+  return (
+    <div className="twk-bar-row">
+      <span className="twk-bar-lbl">{label}</span>
+      {row}
+    </div>
+  );
+}
+
 function TweakColor({ label, value, options, onChange }) {
   if (!options || !options.length) {
-    if (!label) {
-      return (
-        <input type="color" className="twk-swatch" value={value}
-               style={{ width: '100%', height: '26px' }}
-               onChange={(e) => onChange(e.target.value)} />
-      );
-    }
-    return (
-      <div className="twk-row twk-row-h">
-        <div className="twk-lbl"><span>{label}</span></div>
-        <input type="color" className="twk-swatch" value={value}
-               onChange={(e) => onChange(e.target.value)} />
-      </div>
-    );
+    return <__TweakColorInput label={label} value={value} onChange={onChange} />;
   }
   // Native <input type=color> emits lowercase hex per the HTML spec, so
   // compare case-insensitively. String() guards JSON.stringify(undefined),

@@ -31,10 +31,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "color1": "#fca5a5",
   "color2": "#c4b5fd",
   "count": 2,
-  "speed": 0.5
+  "speed": 1
 }/*EDITMODE-END*/;
 
-const PALETTES = [
+const PALETTES_LIGHT = [
   ['#fca5a5', '#c4b5fd'],
   ['#7dd3fc', '#f9a8d4'],
   ['#6ee7b7', '#a5b4fc'],
@@ -43,14 +43,46 @@ const PALETTES = [
   ['#bef264', '#93c5fd'],
 ];
 
+const PALETTES_DARK = [
+  ['#dc2626', '#7c3aed'],
+  ['#0284c7', '#db2777'],
+  ['#059669', '#4f46e5'],
+  ['#d97706', '#c026d3'],
+  ['#0891b2', '#e11d48'],
+  ['#65a30d', '#2563eb'],
+];
+
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [panelOpen, setPanelOpen] = React.useState(true);
   const paletteIdx = React.useRef(0);
+  const [isDark, setIsDark] = React.useState(() => document.documentElement.getAttribute('data-theme') === 'dark');
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  React.useEffect(() => {
+    const from = isDark ? PALETTES_LIGHT : PALETTES_DARK;
+    const to   = isDark ? PALETTES_DARK  : PALETTES_LIGHT;
+    const idx = from.findIndex(([c1, c2]) =>
+      c1.toLowerCase() === t.color1.toLowerCase() && c2.toLowerCase() === t.color2.toLowerCase()
+    );
+    if (idx !== -1) {
+      paletteIdx.current = idx;
+      const [c1, c2] = to[idx];
+      setTweak({ color1: c1, color2: c2 });
+    }
+  }, [isDark]);
+
+  const palettes = isDark ? PALETTES_DARK : PALETTES_LIGHT;
 
   const nextPalette = () => {
-    paletteIdx.current = (paletteIdx.current + 1) % PALETTES.length;
-    const [c1, c2] = PALETTES[paletteIdx.current];
+    paletteIdx.current = (paletteIdx.current + 1) % palettes.length;
+    const [c1, c2] = palettes[paletteIdx.current];
     setTweak({ color1: c1, color2: c2 });
   };
 
@@ -58,20 +90,14 @@ function App() {
     <>
       <Mesh t={t} />
 
-      <TweaksPanel title="Mesh" onOpenChange={setPanelOpen}>
+      <TweaksPanel title="Mesh">
         <TweakSection label="Colors">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <div style={{ display: 'flex', gap: 6 }}>
-              {['color1', 'color2'].map(key => (
-                <div key={key} style={{ flex: 1, minWidth: 0 }}>
-                  <TweakColor value={t[key]} onChange={v => setTweak(key, v)} />
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <TweakButton label="Randomize" secondary onClick={nextPalette} />
-              <TweakButton label="Default"      secondary onClick={() => setTweak(TWEAK_DEFAULTS)} />
-            </div>
+          {['color1', 'color2'].map((key, i) => (
+            <TweakColor key={key} label={`Color ${i + 1}`} value={t[key]} onChange={v => setTweak(key, v)} />
+          ))}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <TweakButton label="Randomize" secondary onClick={nextPalette} />
+            <TweakButton label="Default" secondary onClick={() => setTweak({ ...TWEAK_DEFAULTS, color1: palettes[0][0], color2: palettes[0][1] })} />
           </div>
         </TweakSection>
 
