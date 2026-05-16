@@ -1,0 +1,12 @@
+{
+  "name": "playground",
+  "private": true,
+  "scripts": {
+    "build": "babel --presets @babel/preset-react shared/tweaks-panel.jsx -o shared/tweaks-panel.js && babel --presets @babel/preset-react trail/trail.jsx -o trail/trail.js && babel --presets @babel/preset-react trail/app.jsx -o trail/app.js &&babel --presets @babel/preset-react wave/wave.jsx -o wave/wave.js && babel --presets @babel/preset-react wave/app.jsx -o wave/app.js && babel --presets @babel/preset-react typo/typo.jsx -o typo/typo.js && babel --presets @babel/preset-react typo/app.jsx -o typo/app.js && babel --presets @babel/preset-react mesh/mesh.jsx -o mesh/mesh.js && babel --presets @babel/preset-react mesh/app.jsx -o mesh/app.js"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/preset-react": "^7.28.5"
+  }
+}

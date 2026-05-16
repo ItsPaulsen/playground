@@ -61,20 +61,20 @@
     .color-swatches {
       display: flex;
       flex-wrap: wrap;
-      gap: 24px;
+      gap: 20px;
     }
 
     .swatch {
       display: flex;
       flex-direction: column;
-      width: calc((100% - 7 * 24px) / 8);
+      width: calc((100% - 7 * 20px) / 8);
     }
 
     .swatch-color {
       aspect-ratio: 1;
       width: 100%;
       position: relative;
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
       border: 1px solid rgba(0,0,0,.10);
     }
@@ -266,6 +266,7 @@
 
       .color-swatches { gap: 16px; }
       .swatch { width: calc((100% - 3 * 16px) / 4); }
+      .swatch-color { border-radius: 16px; }
       .radius-row { gap: 16px; }
     }
 

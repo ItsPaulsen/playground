@@ -110,12 +110,16 @@
       justify-content: center;
       margin-bottom: 20px;
     }
-    .card-icon--indigo { background: #dbeafe; color: #1e40af; }
+    .card-icon--indigo { background: rgba(191,219,254,.7); color: #1e40af; }
     html[data-theme="dark"] .card-icon--indigo { background: #1e3a8a; color: #93c5fd; }
-    .card-icon--purple { background: #f3e8ff; color: #6b21a8; }
+    .card-icon--purple { background: rgba(233,213,255,.7); color: #6b21a8; }
     html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe; }
-    .card-icon--red { background: #fee2e2; color: #991b1b; }
+    .card-icon--red { background: rgba(254,202,202,.7); color: #991b1b; }
     html[data-theme="dark"] .card-icon--red { background: #7f1d1d; color: #fca5a5; }
+    .card-icon--amber { background: rgba(253,215,170,.7); color: #9a3412; }
+    html[data-theme="dark"] .card-icon--amber { background: #7c2d12; color: #fb923c; }
+    .card-icon--green { background: rgba(187,247,208,.7); color: #166534; }
+    html[data-theme="dark"] .card-icon--green { background: #14532d; color: #86efac; }
 
     @keyframes pg-up {
       from { opacity: 0; translate: 0 24px; }
@@ -137,6 +141,8 @@
     .card:nth-child(1) { animation-delay: .2s; }
     .card:nth-child(2) { animation-delay: .3s; }
     .card:nth-child(3) { animation-delay: .4s; }
+    .card:nth-child(4) { animation-delay: .5s; }
+    .card:nth-child(5) { animation-delay: .6s; }
 
 
     .style-link {
@@ -170,8 +176,8 @@
 
       <a class="card" href="typo/">
         <div class="card-icon card-icon--purple">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 5h16"/><path d="M12 5v15"/>
           </svg>
         </div>
         <h2>Typo</h2>
@@ -186,6 +192,17 @@
         </div>
         <h2>Mesh</h2>
         <p>Animated mesh gradient with tweakable color points.</p>
+      </a>
+
+
+      <a class="card" href="trail/">
+        <div class="card-icon card-icon--amber">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m4 4 7.07 17 2.51-7.39L21 11.07z"/>
+          </svg>
+        </div>
+        <h2>Trail</h2>
+        <p>Glowing cursor trail with tweakable particles, gravity, and spread.</p>
       </a>
 
     </div>

@@ -17,101 +17,14 @@
     100% { transform: rotate(1turn)  scale(1.00); }
   }
 </style>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script type="text/babel" src="../shared/tweaks-panel.jsx"></script>
-<script type="text/babel" src="mesh.jsx"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script src="../shared/tweaks-panel.js"></script>
+<script src="mesh.js"></script>
 </head>
 <body>
 <div id="root"></div>
-
-<script type="text/babel">
-const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "color1": "#fca5a5",
-  "color2": "#c4b5fd",
-  "count": 2,
-  "speed": 1
-}/*EDITMODE-END*/;
-
-const PALETTES_LIGHT = [
-  ['#fca5a5', '#c4b5fd'],
-  ['#7dd3fc', '#f9a8d4'],
-  ['#6ee7b7', '#a5b4fc'],
-  ['#fcd34d', '#f0abfc'],
-  ['#67e8f9', '#fda4af'],
-  ['#bef264', '#93c5fd'],
-];
-
-const PALETTES_DARK = [
-  ['#dc2626', '#7c3aed'],
-  ['#0284c7', '#db2777'],
-  ['#059669', '#4f46e5'],
-  ['#d97706', '#c026d3'],
-  ['#0891b2', '#e11d48'],
-  ['#65a30d', '#2563eb'],
-];
-
-function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const paletteIdx = React.useRef(0);
-  const [isDark, setIsDark] = React.useState(() => document.documentElement.getAttribute('data-theme') === 'dark');
-
-  React.useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.getAttribute('data-theme') === 'dark');
-    });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, []);
-
-  React.useEffect(() => {
-    const from = isDark ? PALETTES_LIGHT : PALETTES_DARK;
-    const to   = isDark ? PALETTES_DARK  : PALETTES_LIGHT;
-    const idx = from.findIndex(([c1, c2]) =>
-      c1.toLowerCase() === t.color1.toLowerCase() && c2.toLowerCase() === t.color2.toLowerCase()
-    );
-    if (idx !== -1) {
-      paletteIdx.current = idx;
-      const [c1, c2] = to[idx];
-      setTweak({ color1: c1, color2: c2 });
-    }
-  }, [isDark]);
-
-  const palettes = isDark ? PALETTES_DARK : PALETTES_LIGHT;
-
-  const nextPalette = () => {
-    paletteIdx.current = (paletteIdx.current + 1) % palettes.length;
-    const [c1, c2] = palettes[paletteIdx.current];
-    setTweak({ color1: c1, color2: c2 });
-  };
-
-  return (
-    <>
-      <Mesh t={t} />
-
-      <TweaksPanel title="Mesh">
-        <div style={{ display: 'flex', gap: 8 }}>
-          <TweakButton label="Randomize" secondary onClick={nextPalette} />
-          <TweakButton label="Default" secondary onClick={() => setTweak({ ...TWEAK_DEFAULTS, color1: palettes[0][0], color2: palettes[0][1] })} />
-        </div>
-        <TweakSection label="Colors">
-          {['color1', 'color2'].map((key, i) => (
-            <TweakColor key={key} label={`Color ${i + 1}`} value={t[key]} onChange={v => setTweak(key, v)} />
-          ))}
-        </TweakSection>
-
-        <TweakSection label="Animation">
-          <TweakSlider label="Speed" value={t.speed} min={0.5} max={3} step={0.1}
-                       onChange={v => setTweak('speed', v)} />
-        </TweakSection>
-      </TweaksPanel>
-    </>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-</script>
+<script src="app.js"></script>
 <script src="/header.js"></script>
 </body>
 </html>

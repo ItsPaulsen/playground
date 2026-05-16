@@ -5,9 +5,10 @@
   const CLOSE    = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`;
 
   const NAV_ITEMS = [
-    { label: 'Wave',  href: '/wave/' },
-    { label: 'Typo',  href: '/typo/' },
-    { label: 'Mesh',  href: '/mesh/' },
+    { label: 'Wave',   href: '/wave/' },
+    { label: 'Typo',   href: '/typo/' },
+    { label: 'Mesh',   href: '/mesh/' },
+    { label: 'Trail',  href: '/trail/' },
   ];
 
   const fontLink = document.createElement('link');
@@ -20,7 +21,7 @@
     :root { --header-h: 48px; }
 
     #site-header {
-      position: relative; z-index: 300;
+      position: relative; z-index: 2147483647;
       width: 100%; box-sizing: border-box;
       height: var(--header-h);
       display: flex; align-items: center; justify-content: space-between;
@@ -53,7 +54,7 @@
     html[data-theme="dark"] #menu-toggle { color: rgba(250,250,249,.80); }
 
     #site-menu {
-      position: fixed; inset: 0; z-index: 299;
+      position: fixed; inset: 0; z-index: 2147483646;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       background: rgba(255,255,255,.8);
@@ -81,9 +82,6 @@
       transition: opacity .3s ease, transform .3s ease, color .15s;
     }
     #site-menu.is-open nav a { opacity: .8; transform: translateY(0); }
-    #site-menu nav a:nth-child(1) { transition-delay: .05s; }
-    #site-menu nav a:nth-child(2) { transition-delay: .10s; }
-    #site-menu nav a:nth-child(3) { transition-delay: .15s; }
     #site-menu nav a:hover { opacity: 1; }
 
     @media (max-width: 639px) {
@@ -108,7 +106,7 @@
   const menu = document.createElement('div');
   menu.id = 'site-menu';
   menu.setAttribute('aria-hidden', 'true');
-  menu.innerHTML = `<nav>${NAV_ITEMS.map(i => `<a href="${i.href}">${i.label}</a>`).join('')}</nav>`;
+  menu.innerHTML = `<nav>${NAV_ITEMS.map((item, i) => `<a href="${item.href}" style="transition-delay:${((i + 1) * .05).toFixed(2)}s">${item.label}</a>`).join('')}</nav>`;
   document.body.appendChild(menu);
 
   function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
