@@ -42,7 +42,7 @@ function App() {
                            onChange={(v) => setTweak('numColors', v)} />
               {Array.from({ length: t.numColors }, (_, i) => (
                 <TweakColor key={i} label={`Color ${i + 1}`} value={t.colors[i]}
-                            onChange={(v) => setColor(i, v)} />
+                            onChange={(v) => setColor(i, v)} noAlpha />
               ))}
             </>
           )}

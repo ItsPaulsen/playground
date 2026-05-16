@@ -49,7 +49,8 @@ function App() {
     key: i,
     label: `Color ${i + 1}`,
     value: t.colors[i],
-    onChange: v => setColor(i, v)
+    onChange: v => setColor(i, v),
+    noAlpha: true
   })))), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Shape"
   }, /*#__PURE__*/React.createElement(TweakToggle, {

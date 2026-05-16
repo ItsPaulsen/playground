@@ -83,7 +83,7 @@ const __TWEAKS_STYLE = `
   }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
-    animation:twk-in .35s cubic-bezier(.4,0,.2,1) both;z-index:2147483646;width:320px;
+    animation:twk-in .35s cubic-bezier(.4,0,.2,1) both;z-index:9999;width:320px;
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
@@ -171,7 +171,7 @@ const __TWEAKS_STYLE = `
     -webkit-appearance:none;margin:0}
   .twk-num-unit{padding-right:8px;color:var(--num-unit)}
 
-  .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483646;width:36px;height:36px;
+  .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:9999;width:36px;height:36px;
     border:0;border-radius:12px;cursor:pointer;padding:0;
     background:var(--bg);
     backdrop-filter:blur(12px) saturate(180%);
@@ -234,7 +234,7 @@ const __TWEAKS_STYLE = `
   .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 
-  .twk-cpick{position:fixed;z-index:2147483647;width:212px;
+  .twk-cpick{position:fixed;z-index:10000;width:212px;
     background:var(--bg);backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);border-radius:12px;padding:12px;
     box-shadow:0 8px 40px rgba(0,0,0,.20);
@@ -695,7 +695,7 @@ function __toColorString(hex, opacity) {
   return `rgba(${r},${g},${b},${(opacity / 100).toFixed(2)})`;
 }
 
-function __TweakColorInput({ label, value, onChange }) {
+function __TweakColorInput({ label, value, onChange, noAlpha }) {
   const parsed = __parseColor(value);
   const [hex, setHex] = React.useState(parsed.hex);
   const [opacity, setOpacity] = React.useState(parsed.opacity);
@@ -743,11 +743,13 @@ function __TweakColorInput({ label, value, onChange }) {
         <input className="twk-color-hex" type="text" value={hex}
                onChange={onHexChange} spellCheck={false} />
       </div>
-      <div className="twk-color-opacity">
-        <input className="twk-color-opacity-input" type="text" value={opacityStr}
-               onChange={onOpacityChange} onBlur={onOpacityBlur} />
-        <span className="twk-color-opacity-pct">%</span>
-      </div>
+      {!noAlpha && (
+        <div className="twk-color-opacity">
+          <input className="twk-color-opacity-input" type="text" value={opacityStr}
+                 onChange={onOpacityChange} onBlur={onOpacityBlur} />
+          <span className="twk-color-opacity-pct">%</span>
+        </div>
+      )}
       {'EyeDropper' in window && (
         <button type="button" className="twk-color-pick" onClick={() => {
           new window.EyeDropper().open().then((r) => {
@@ -783,9 +785,9 @@ function __TweakColorInput({ label, value, onChange }) {
   );
 }
 
-function TweakColor({ label, value, options, onChange }) {
+function TweakColor({ label, value, options, onChange, noAlpha }) {
   if (!options || !options.length) {
-    return <__TweakColorInput label={label} value={value} onChange={onChange} />;
+    return <__TweakColorInput label={label} value={value} onChange={onChange} noAlpha={noAlpha} />;
   }
   // Native <input type=color> emits lowercase hex per the HTML spec, so
   // compare case-insensitively. String() guards JSON.stringify(undefined),
