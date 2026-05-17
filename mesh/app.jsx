@@ -69,15 +69,16 @@ function App() {
         <TweakSection label="Colors">
           <TweakColor label="Color 1" value={t.color1} onChange={v => setTweak('color1', v)} />
           <TweakColor label="Color 2" value={t.color2} onChange={v => setTweak('color2', v)} />
-          <div style={{ display: 'flex' }}>
-            <TweakButton label="Randomize" secondary onClick={nextPalette} />
-          </div>
         </TweakSection>
 
         <TweakSection label="Animation">
           <TweakSlider label="Speed" value={t.speed} min={0.5} max={3} step={0.1}
                        onChange={v => setTweak('speed', v)} />
         </TweakSection>
+
+        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+          <TweakButton label="Randomize" secondary onClick={nextPalette} />
+        </div>
       </TweaksPanel>
     </>
   );

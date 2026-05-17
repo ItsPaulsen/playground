@@ -71,13 +71,7 @@ function App() {
     label: "Color 2",
     value: t.color2,
     onChange: v => setTweak('color2', v)
-  }), /*#__PURE__*/React.createElement("div", {
-    style: { display: 'flex' }
-  }, /*#__PURE__*/React.createElement(TweakButton, {
-    label: "Randomize",
-    secondary: true,
-    onClick: nextPalette
-  }))), /*#__PURE__*/React.createElement(TweakSection, {
+  })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Animation"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Speed",
@@ -86,6 +80,12 @@ function App() {
     max: 3,
     step: 0.1,
     onChange: v => setTweak('speed', v)
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {display:'flex',borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+  }, /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Randomize",
+    secondary: true,
+    onClick: nextPalette
   }))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
