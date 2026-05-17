@@ -29,6 +29,44 @@
 </head>
 <body>
 <div id="root"></div>
+<div id="mesh-boot"></div>
+<script>
+(function(){
+  var B=100,E=200;
+  var dark=document.documentElement.getAttribute('data-theme')==='dark';
+  var palettes=[
+    {light:['#f87171','#38bdf8'],dark:['#dc2626','#0284c7']},
+    {light:['#fb923c','#a78bfa'],dark:['#ea580c','#7c3aed']},
+    {light:['#fbbf24','#2dd4bf'],dark:['#d97706','#0d9488']},
+    {light:['#22d3ee','#c084fc'],dark:['#0891b2','#9333ea']},
+  ];
+  var c=palettes[0][dark?'dark':'light'];
+  var d=Math.ceil(Math.hypot(innerWidth,innerHeight)*2)+'px';
+  var boot=document.getElementById('mesh-boot');
+  boot.style.cssText='position:fixed;inset:0;overflow:hidden;pointer-events:none;transition:opacity .3s';
+  var wrap=document.createElement('div');
+  wrap.style.cssText='position:absolute;inset:-'+E+'px;filter:blur('+B+'px) saturate(120%)';
+  var spin=document.createElement('div');
+  spin.style.cssText='position:absolute;left:calc(50vw + '+E+'px);top:calc(50vh + '+E+'px);animation:mesh-orbit 45s linear infinite';
+  [['35vmin','-35vmin'],['-35vmin','35vmin']].forEach(function(o,i){
+    var w=document.createElement('div');
+    w.style.cssText='position:absolute;left:'+o[0]+';top:'+o[1]+';transform:translate(-50%,-50%);mix-blend-mode:lighten';
+    var b=document.createElement('div');
+    b.style.cssText='width:'+d+';height:'+d+';border-radius:50%;background:radial-gradient(ellipse at center,'+c[i]+' 0%,transparent 80%)';
+    w.appendChild(b);spin.appendChild(w);
+  });
+  wrap.appendChild(spin);boot.appendChild(wrap);
+  new MutationObserver(function(_,obs){
+    if(document.getElementById('root').firstChild){
+      obs.disconnect();
+      setTimeout(function(){
+        boot.style.opacity='0';
+        setTimeout(function(){boot.remove();},300);
+      },150);
+    }
+  }).observe(document.getElementById('root'),{childList:true});
+})();
+</script>
 <script src="app.js"></script>
 <script src="/header.js"></script>
 </body>
