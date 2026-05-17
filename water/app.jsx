@@ -1,8 +1,7 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "strength": 300,
   "radius": 3,
-  "damping": 0.97,
-  "rate": 6
+  "damping": 0.97
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -22,11 +21,6 @@ function App() {
                        onChange={(v) => setTweak('radius', v)} />
           <TweakSlider label="Damping"  value={t.damping}  min={0.90} max={0.99} step={0.01}
                        onChange={(v) => setTweak('damping', v)} />
-        </TweakSection>
-
-        <TweakSection label="Interaction">
-          <TweakSlider label="Rate" value={t.rate} min={1} max={30} step={1} unit="px"
-                       onChange={(v) => setTweak('rate', v)} />
         </TweakSection>
 
         <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>

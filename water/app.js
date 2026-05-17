@@ -1,8 +1,7 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "strength": 300,
   "radius": 3,
-  "damping": 0.97,
-  "rate": 6
+  "damping": 0.97
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -37,16 +36,6 @@ function App() {
     max: 0.99,
     step: 0.01,
     onChange: v => setTweak('damping', v)
-  })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Interaction"
-  }, /*#__PURE__*/React.createElement(TweakSlider, {
-    label: "Rate",
-    value: t.rate,
-    min: 1,
-    max: 30,
-    step: 1,
-    unit: "px",
-    onChange: v => setTweak('rate', v)
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',

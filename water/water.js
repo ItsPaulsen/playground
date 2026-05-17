@@ -54,12 +54,11 @@ function WaterTrail({
     const onMove = e => {
       const s = stateRef.current;
       if (!s) return;
-      const { strength, radius, rate } = tRef.current;
+      const { strength, radius } = tRef.current;
       const x = Math.round(e.clientX / SIM_SCALE);
       const y = Math.round(e.clientY / SIM_SCALE);
       const ddx = x - s.lastX, ddy = y - s.lastY;
-      const minDist = rate / SIM_SCALE;
-      if (s.lastX < 0 || ddx * ddx + ddy * ddy >= minDist * minDist) {
+      if (s.lastX < 0 || ddx * ddx + ddy * ddy >= 1) {
         const r = Math.round(radius);
         for (let dy = -r; dy <= r; dy++) {
           for (let dx = -r; dx <= r; dx++) {
