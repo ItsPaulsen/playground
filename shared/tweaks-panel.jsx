@@ -68,7 +68,7 @@ const __TWEAKS_STYLE = `
     --sect:rgba(250,250,249,.5);--hov-x:rgba(255,255,255,.08);
     --scroll:rgba(255,255,255,.15);--scroll-h:rgba(255,255,255,.25);
     --fld-bg:rgba(255,255,255,.1);--fld-bgf:rgba(255,255,255,.15);
-    --fld-bd:rgba(250,250,249,.15);--fld-bdf:rgba(250,250,249,.25);--fld-surf:rgba(250,250,249,.05);
+    --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --track:rgba(250,250,249,.15);--seg:rgba(250,250,249,.15);--thumb:rgba(255,255,255,.18);
     --tog-off:rgba(250,250,249,.30);--tog-handle:#fff;--num-bg:rgba(255,255,255,.1);
     --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
