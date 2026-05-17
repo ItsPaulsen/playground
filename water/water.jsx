@@ -136,7 +136,9 @@ function WaterTrail({ t }) {
               const dot  = Math.max(0, (nx * LX + ny * LY + LZ) / (nlen * LLEN));
               const b    = Math.min(255, Math.round(Math.pow(dot, 3) * activity * specular * 255));
               if (b > 0) {
-                specPx[di] = specPx[di + 1] = specPx[di + 2] = 255;
+                specPx[di]     = 255;
+                specPx[di + 1] = 220;
+                specPx[di + 2] = 150;
                 specPx[di + 3] = b;
               }
             }
