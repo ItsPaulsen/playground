@@ -48,7 +48,7 @@
 const __TWEAKS_STYLE = `
   .twk-panel,.twk-reopen{
     --bg:rgba(253,253,251,.8);--text:rgb(28,25,23);--bd:rgba(28,25,23,.1);
-    --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.7);--val:rgba(28,25,23,.5);
+    --label:rgba(28,25,23,.7);--val:rgba(28,25,23,.5);
     --sect:rgba(28,25,23,.5);--hov-x:rgba(28,25,23,.06);
     --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.25);--fld-surf:rgba(28,25,23,.05);
     --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);
@@ -62,7 +62,7 @@ const __TWEAKS_STYLE = `
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
     --bg:rgba(28,25,23,.8);--text:rgb(253,253,251);--bd:rgba(253,253,251,.1);
-    --muted:rgba(253,253,251,.48);--label:rgba(253,253,251,.68);--val:rgba(253,253,251,.5);
+    --label:rgba(253,253,251,.68);--val:rgba(253,253,251,.5);
     --sect:rgba(253,253,251,.5);--hov-x:rgba(253,253,251,.08);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --thumb:rgba(253,253,251,.18);
