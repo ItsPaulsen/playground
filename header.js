@@ -20,14 +20,9 @@
 
     #site-nav {
       position: relative; z-index: 2147483647;
-      background: color-mix(in srgb, var(--pg-bg) 80%, transparent);
-      backdrop-filter: blur(12px) saturate(180%);
+      background: transparent;
       transition: background .4s ease, backdrop-filter .4s ease;
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    }
-    #site-nav.menu-open {
-      background: var(--pg-bg);
-      backdrop-filter: none;
     }
 
     .header-bar {
