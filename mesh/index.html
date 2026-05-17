@@ -11,9 +11,6 @@
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
   #root { position: fixed; inset: 0; }
 
-  #site-nav { background: color-mix(in srgb, var(--pg-surface) 80%, transparent); backdrop-filter: blur(12px) saturate(180%); }
-  #site-nav.menu-open { background: var(--pg-surface); backdrop-filter: none; }
-
   @keyframes mesh-orbit {
     0%   { transform: rotate(0turn)  scale(1.00); }
     50%  { transform: rotate(.5turn) scale(0.75); }
@@ -29,5 +26,9 @@
 <div id="root"></div>
 <script src="app.js"></script>
 <script src="/header.js"></script>
+<style>
+  #site-nav { background: color-mix(in srgb, var(--pg-surface) 80%, transparent); backdrop-filter: blur(12px) saturate(180%); }
+  #site-nav.menu-open { background: var(--pg-surface); backdrop-filter: none; }
+</style>
 </body>
 </html>
