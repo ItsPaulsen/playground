@@ -69,6 +69,7 @@ const __TWEAKS_STYLE = `
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
+  @keyframes twk-in  { from { opacity:0; translate:16px 0; } to { opacity:1; translate:0 0; } }
   @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
@@ -80,6 +81,7 @@ const __TWEAKS_STYLE = `
     border:.5px solid var(--bd);border-radius:20px;
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+  .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
   .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:8px 8px 4px 16px}
@@ -280,6 +282,7 @@ function TweaksPanel({
 }) {
   const [open, setOpen] = React.useState(() => window.parent === window);
   const [closing, setClosing] = React.useState(false);
+  const [animateIn, setAnimateIn] = React.useState(false);
   React.useEffect(() => {
     onOpenChange && onOpenChange(open);
   }, [open, onOpenChange]);
@@ -340,7 +343,7 @@ function TweaksPanel({
     if (e.animationName === 'twk-out') { setClosing(false); setOpen(false); }
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), open ? /*#__PURE__*/React.createElement("div", {
-    className: closing ? 'twk-panel twk-closing' : 'twk-panel',
+    className: closing ? 'twk-panel twk-closing' : animateIn ? 'twk-panel twk-opening' : 'twk-panel',
     "data-noncommentable": "",
     onAnimationEnd: handleAnimEnd
   }, /*#__PURE__*/React.createElement("div", {
@@ -374,7 +377,7 @@ function TweaksPanel({
   })))) : /*#__PURE__*/React.createElement("button", {
     className: "twk-reopen",
     "aria-label": "Open tweaks",
-    onClick: () => setOpen(true)
+    onClick: () => { setAnimateIn(true); setOpen(true); }
   }, /*#__PURE__*/React.createElement("svg", {
     width: "18",
     height: "18",
