@@ -106,7 +106,8 @@ function Wave({
         directionRef.current = tw.direction;
         centerOffsetAnimRef.current = tw.centerOffset;
       }
-      centerOffsetAnimRef.current += (tw.centerOffset - centerOffsetAnimRef.current) * Math.min(1, dt * 5);
+      const coDiff = tw.centerOffset - centerOffsetAnimRef.current;
+      centerOffsetAnimRef.current += coDiff * Math.min(1, dt * (coDiff > 0 ? 15 : 5));
       draw(ctx, canvas, tRef.current, { ...tw, centerOffset: centerOffsetAnimRef.current });
       rafRef.current = requestAnimationFrame(frame);
     };
