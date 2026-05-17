@@ -21,7 +21,6 @@
     #site-nav {
       position: relative; z-index: 2147483647;
       background: transparent;
-      transition: background .4s ease, backdrop-filter .4s ease;
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
 
