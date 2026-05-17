@@ -76,7 +76,7 @@ function App() {
                        onChange={v => setTweak('speed', v)} />
         </TweakSection>
 
-        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div className="twk-button-row">
           <TweakButton label="Randomize" secondary onClick={nextPalette} />
         </div>
       </TweaksPanel>

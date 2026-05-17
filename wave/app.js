@@ -17,15 +17,13 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 const COLORS = ['#f87171','#fb923c','#fbbf24','#facc15','#a3e635','#4ade80','#34d399','#2dd4bf','#22d3ee','#38bdf8','#60a5fa','#818cf8','#a78bfa','#c084fc','#e879f9','#f472b6','#fb7185'];
+const DIRECTIONS = ['vertical', 'horizontal'];
+const rand = (min, max, step = 0.01) => Math.round((Math.random() * (max - min) + min) / step) * step;
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const [panelOpen, setPanelOpen] = React.useState(true);
-  const rand = (min, max, step = 0.01) => {
-    const v = Math.random() * (max - min) + min;
-    return Math.round(v / step) * step;
-  };
-  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
   const randomize = () => setTweak({
     seed: rand(0, 50, 1),
     lineCount: rand(1, 100, 1),
@@ -39,7 +37,7 @@ function App() {
     pulseRatio: rand(0, 1, 0.01),
     pulseSpeed: rand(0.5, 2, 0.5),
     lineColor: pick(COLORS),
-    direction: pick(['vertical', 'horizontal'])
+    direction: pick(DIRECTIONS)
   });
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Wave, {
     t: {
@@ -173,7 +171,7 @@ function App() {
     step: 0.5,
     onChange: v => setTweak('pulseSpeed', Number(v))
   })), /*#__PURE__*/React.createElement("div", {
-    style: {display:'flex',gap:8,borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+    className: "twk-button-row"
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Randomize",
     secondary: true,

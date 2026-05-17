@@ -100,12 +100,7 @@ function App() {
     unit: "s",
     onChange: v => setTweak('lifetime', v)
   })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      borderTop: '1px solid var(--bd)',
-      marginTop: '8px',
-      paddingTop: '16px'
-    }
+    className: "twk-button-row"
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Reset",
     secondary: true,
