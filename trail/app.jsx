@@ -17,7 +17,7 @@ const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
+  const isDirty = JSON.stringify({ ...t, rainbow: TWEAK_DEFAULTS.rainbow }) !== TWEAK_DEFAULTS_JSON;
 
   const setColor = (i, v) => {
     const c = [...t.colors];
