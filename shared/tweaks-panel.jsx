@@ -70,11 +70,10 @@ const __TWEAKS_STYLE = `
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
-  @keyframes twk-in  { from { opacity:0; translate:16px 0; } to { opacity:1; translate:0 0; } }
   @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
-    animation:twk-in 1s cubic-bezier(.16,1,.3,1) both;z-index:9999;width:320px;
+    z-index:9999;width:320px;
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
