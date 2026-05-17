@@ -282,7 +282,7 @@ function TweaksPanel({
 }) {
   const [open, setOpen] = React.useState(() => window.parent === window);
   const [closing, setClosing] = React.useState(false);
-  const [animateIn, setAnimateIn] = React.useState(false);
+  const [animateIn, setAnimateIn] = React.useState(true);
   React.useEffect(() => {
     onOpenChange && onOpenChange(open);
   }, [open, onOpenChange]);

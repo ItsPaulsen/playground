@@ -269,7 +269,7 @@ function useTweaks(defaults) {
 function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange }) {
   const [open, setOpen] = React.useState(() => window.parent === window);
   const [closing, setClosing] = React.useState(false);
-  const [animateIn, setAnimateIn] = React.useState(false);
+  const [animateIn, setAnimateIn] = React.useState(true);
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
