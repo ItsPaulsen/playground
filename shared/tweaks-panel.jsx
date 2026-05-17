@@ -54,8 +54,7 @@ const __TWEAKS_STYLE = `
     --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.25);--fld-surf:rgba(28,25,23,.05);
     --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);
     --track:var(--fld-bd);--seg:var(--fld-bd);
-    --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);--num-bg:var(--bd);
-    --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.4);
+    --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);
     --btn:rgba(28,25,23,.8);--btn-t:rgb(253,253,251);
     --sec:var(--bd);--sec-h:var(--fld-bd);
     --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);
@@ -66,7 +65,6 @@ const __TWEAKS_STYLE = `
     --label:rgba(253,253,251,.7);--val:rgba(253,253,251,.5);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --tog-off:rgba(253,253,251,.3);
-    --num-lbl:rgba(253,253,251,.52);--num-unit:rgba(253,253,251,.4);
     --btn:rgba(253,253,251,.14);
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
@@ -154,18 +152,7 @@ const __TWEAKS_STYLE = `
     background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
   .twk-toggle[data-on="1"] i{transform:translateX(16px)}
 
-  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
-    border:.5px solid var(--fld-bd);border-radius:8px;background:var(--fld-surf)}
-  .twk-num-lbl{font-weight:500;color:var(--num-lbl);cursor:ew-resize;
-    user-select:none;padding-right:8px}
-  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
-    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
-    outline:none;color:inherit;-moz-appearance:textfield}
-  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
-    -webkit-appearance:none;margin:0}
-  .twk-num-unit{padding-right:8px;color:var(--num-unit)}
-
-  .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:9999;width:36px;height:36px;
+.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:9999;width:36px;height:36px;
     border:0;border-radius:12px;cursor:pointer;padding:0;
     background:var(--bg);
     backdrop-filter:blur(12px) saturate(180%);
@@ -534,37 +521,6 @@ function TweakText({ label, value, placeholder, onChange }) {
   );
 }
 
-function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
-  const clamp = (n) => {
-    if (min != null && n < min) return min;
-    if (max != null && n > max) return max;
-    return n;
-  };
-  const startRef = React.useRef({ x: 0, val: 0 });
-  const decimals = (String(step).split('.')[1] || '').length;
-  const onScrubDown = (e) => {
-    e.preventDefault();
-    e.currentTarget.setPointerCapture(e.pointerId);
-    startRef.current = { x: e.clientX, val: value };
-  };
-  const onScrubMove = (e) => {
-    if (e.buttons === 0) return;
-    const dx = e.clientX - startRef.current.x;
-    const raw = startRef.current.val + dx * step;
-    const snapped = Math.round(raw / step) * step;
-    onChange(clamp(Number(snapped.toFixed(decimals))));
-  };
-  return (
-    <div className="twk-num">
-      <span className="twk-num-lbl"
-            onPointerDown={onScrubDown}
-            onPointerMove={onScrubMove}>{label}</span>
-      <input type="number" value={value} min={min} max={max} step={step}
-             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
-      {unit && <span className="twk-num-unit">{unit}</span>}
-    </div>
-  );
-}
 
 // Relative-luminance contrast pick — checkmarks drawn over a swatch need to
 // read on both #111 and #fafafa without per-option configuration. Hex input
@@ -827,5 +783,5 @@ function TweakButton({ label, onClick, secondary = false, disabled = false }) {
 Object.assign(window, {
   useTweaks, TweaksPanel, TweakSection, TweakRow,
   TweakSlider, TweakToggle, TweakRadio, TweakSelect,
-  TweakText, TweakNumber, TweakColor, TweakButton,
+  TweakText, TweakColor, TweakButton,
 });
