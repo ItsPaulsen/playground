@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Cursor Trail — Paulsen</title>
 <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') || 'light');</script>
+<script>var _img=new Image();_img.onload=function(){document.body.style.backgroundImage='url('+_img.src+')';};_img.src='https://picsum.photos/1920/1080';</script>
 <link rel="stylesheet" href="/shared/tokens.css" />
 <style>
   html, body { margin: 0; padding: 0; height: 100%; overflow: hidden;
@@ -24,11 +25,6 @@
 </head>
 <body>
 <div id="root"></div>
-<script>
-  var img = new Image();
-  img.onload = function() { document.body.style.backgroundImage = 'url(' + img.src + ')'; };
-  img.src = 'https://picsum.photos/1920/1080';
-</script>
 <script src="app.js"></script>
 <script src="/header.js"></script>
 </body>
