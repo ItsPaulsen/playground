@@ -78,6 +78,7 @@ function Wave({
   const lastRef = useRef(performance.now());
   const tweaksRef = useRef(t);
   tweaksRef.current = t;
+  const centerOffsetAnimRef = useRef(t.centerOffset);
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -100,10 +101,8 @@ function Wave({
       lastRef.current = now;
       const tw = tweaksRef.current;
       if (!tw.paused) tRef.current += dt;
-      draw(ctx, canvas, tRef.current, {
-        ...tw,
-        centerOffset: tw.centerOffset
-      });
+      centerOffsetAnimRef.current += (tw.centerOffset - centerOffsetAnimRef.current) * Math.min(1, dt * 5);
+      draw(ctx, canvas, tRef.current, { ...tw, centerOffset: centerOffsetAnimRef.current });
       rafRef.current = requestAnimationFrame(frame);
     };
     rafRef.current = requestAnimationFrame(frame);
