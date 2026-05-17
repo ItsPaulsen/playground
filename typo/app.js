@@ -15,7 +15,7 @@ const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [panelOpen, setPanelOpen] = React.useState(true);
-  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
+  const isDirty = JSON.stringify({ ...t, text: TWEAK_DEFAULTS.text }) !== TWEAK_DEFAULTS_JSON;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Typo, {
     t: t,
     panelOpen: panelOpen
@@ -118,7 +118,7 @@ function App() {
     label: "Reset",
     secondary: true,
     disabled: !isDirty,
-    onClick: () => setTweak(TWEAK_DEFAULTS)
+    onClick: () => setTweak({ ...TWEAK_DEFAULTS, text: t.text })
   }))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));

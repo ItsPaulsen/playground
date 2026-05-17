@@ -18,7 +18,7 @@ const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [panelOpen, setPanelOpen] = React.useState(true);
-  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
+  const isDirty = JSON.stringify({ ...t, text: TWEAK_DEFAULTS.text }) !== TWEAK_DEFAULTS_JSON;
 
   return (
     <>
@@ -73,7 +73,7 @@ function App() {
         </TweakSection>
 
         <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
-          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak(TWEAK_DEFAULTS)} />
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, text: t.text })} />
         </div>
       </TweaksPanel>
     </>
