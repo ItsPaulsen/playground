@@ -128,7 +128,7 @@ function WaterTrail({
               const nx = -gxn, ny = -gyn;
               const nlen = Math.sqrt(nx * nx + ny * ny + 1.0);
               const dot  = Math.max(0, (nx * LX + ny * LY + LZ) / (nlen * LLEN));
-              const b    = Math.min(255, Math.round(Math.pow(dot, 3) * activity * specular * 255));
+              const b    = Math.min(255, Math.round(Math.pow(dot, 2) * activity * specular * 255));
               if (b > 0) {
                 specPx[di] = specPx[di + 1] = specPx[di + 2] = 255;
                 specPx[di + 3] = b;
@@ -187,7 +187,7 @@ function WaterTrail({
         position: 'fixed', inset: 0,
         width: '100%', height: '100%',
         mixBlendMode: 'screen',
-        filter: 'blur(4px)',
+        filter: 'blur(8px)',
         pointerEvents: 'none'
       }
     })
