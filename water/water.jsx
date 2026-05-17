@@ -1,7 +1,10 @@
 const SIM_SCALE = 4;
+const LX = 0.0, LY = -0.7, LZ = 0.7;
+const LLEN = Math.sqrt(LX * LX + LY * LY + LZ * LZ);
 
 function WaterTrail({ t }) {
   const bgRef    = React.useRef(null);
+  const specRef  = React.useRef(null);
   const stateRef = React.useRef(null);
   const tRef     = React.useRef(t);
   const rafRef   = React.useRef(null);
@@ -24,8 +27,15 @@ function WaterTrail({ t }) {
     }
     simCtx.putImageData(simData, 0, 0);
 
+    const specEl  = specRef.current;
+    specEl.width  = W; specEl.height = H;
+    const specCtx  = specEl.getContext('2d');
+    const specData = specCtx.createImageData(W, H);
+
     stateRef.current = {
-      simCanvas, simCtx, simData, W, H,
+      simCanvas, simCtx, simData,
+      specCtx, specData,
+      W, H,
       buf1: new Float32Array(W * H),
       buf2: new Float32Array(W * H),
       lastX: -1, lastY: -1,
@@ -45,6 +55,8 @@ function WaterTrail({ t }) {
       s.W = nW; s.H = nH;
       s.simCanvas.width = nW; s.simCanvas.height = nH;
       s.simData = s.simCtx.createImageData(nW, nH);
+      specEl.width = nW; specEl.height = nH;
+      s.specData = s.specCtx.createImageData(nW, nH);
       s.buf1 = new Float32Array(nW * nH);
       s.buf2 = new Float32Array(nW * nH);
     };
@@ -88,11 +100,11 @@ function WaterTrail({ t }) {
       const s = stateRef.current;
       if (!s) { rafRef.current = requestAnimationFrame(tick); return; }
 
-      const { W, H, simCanvas, simCtx, simData } = s;
-      const { viscosity } = tRef.current;
+      const { W, H, simCanvas, simCtx, simData, specCtx, specData } = s;
+      const { viscosity, specular } = tRef.current;
       const data = simData.data;
+      const specPx = specData.data;
 
-      // Wave propagation
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
           const i = y * W + x;
@@ -102,19 +114,38 @@ function WaterTrail({ t }) {
       }
       const tmp = s.buf1; s.buf1 = s.buf2; s.buf2 = tmp;
 
-      // Encode wave gradient as displacement map (R=X, G=Y, neutral=128)
       const h = s.buf1;
+      specPx.fill(0);
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
-          const i = y * W + x;
+          const i  = y * W + x;
           const di = i * 4;
-          data[di]     = 128 + Math.round(Math.max(-127, Math.min(127, (h[i + 1] - h[i - 1]) * 0.4)));
-          data[di + 1] = 128 + Math.round(Math.max(-127, Math.min(127, (h[i + W] - h[i - W]) * 0.4)));
+          const gx = h[i + 1] - h[i - 1];
+          const gy = h[i + W] - h[i - W];
+          data[di]     = 128 + Math.round(Math.max(-127, Math.min(127, gx * 0.4)));
+          data[di + 1] = 128 + Math.round(Math.max(-127, Math.min(127, gy * 0.4)));
           data[di + 2] = 128;
           data[di + 3] = 255;
+          if (specular > 0) {
+            const gxn = gx / 300, gyn = gy / 300;
+            const gradMag2 = gxn * gxn + gyn * gyn;
+            if (gradMag2 > 0.00001) {
+              const activity = Math.min(1.0, gradMag2 * 200);
+              const nx = -gxn, ny = -gyn;
+              const nlen = Math.sqrt(nx * nx + ny * ny + 1.0);
+              const dot  = Math.max(0, (nx * LX + ny * LY + LZ) / (nlen * LLEN));
+              const b    = Math.min(255, Math.round(Math.pow(dot, 3) * activity * specular * 255));
+              if (b > 0) {
+                specPx[di] = specPx[di + 1] = specPx[di + 2] = 255;
+                specPx[di + 3] = b;
+              }
+            }
+          }
         }
       }
+
       simCtx.putImageData(simData, 0, 0);
+      specCtx.putImageData(specData, 0, 0);
       if (feImg) feImg.setAttribute('href', simCanvas.toDataURL());
 
       rafRef.current = requestAnimationFrame(tick);
@@ -141,6 +172,15 @@ function WaterTrail({ t }) {
           width: '100%', height: '100%',
           objectFit: 'cover',
           filter: 'url(#water-filter)',
+        }}
+      />
+      <canvas
+        ref={specRef}
+        style={{
+          position: 'fixed', inset: 0,
+          width: '100%', height: '100%',
+          mixBlendMode: 'screen',
+          pointerEvents: 'none',
         }}
       />
     </>
