@@ -113,14 +113,12 @@ function App() {
     unit: "%",
     onChange: v => setTweak('spread', v / 100)
   })), /*#__PURE__*/React.createElement("div", {
-    style: {display:'flex',gap:8,borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+    style: {display:'flex',borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Reset",
     secondary: true,
     disabled: !isDirty,
     onClick: () => setTweak({ ...TWEAK_DEFAULTS, text: t.text })
-  }), /*#__PURE__*/React.createElement(TweakButton, {
-    label: "Primary"
   }))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));

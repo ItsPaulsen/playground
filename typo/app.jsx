@@ -72,9 +72,8 @@ function App() {
                        onChange={(v) => setTweak('spread', v / 100)} />
         </TweakSection>
 
-        <div style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, text: t.text })} />
-          <TweakButton label="Primary" />
         </div>
       </TweaksPanel>
     </>
