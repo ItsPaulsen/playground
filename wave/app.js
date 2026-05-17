@@ -29,10 +29,10 @@ function App() {
   const randomize = () => setTweak({
     seed: rand(0, 50, 1),
     lineCount: rand(1, 100, 1),
-    thickness: rand(0.5, 2, 0.5),
+    thickness: rand(0.25, 2, 0.25),
     spacing: rand(1, 24, 1),
-    amplitude: rand(0, 1, 0.05),
-    frequency: rand(0.5, 10, 0.1),
+    amplitude: rand(0.05, 1, 0.05),
+    frequency: rand(1, 10, 0.1),
     turbulence: rand(0, 1, 0.01),
     fray: rand(0, 1, 0.01),
     pulseAmount: rand(0, 3, 0.25),
