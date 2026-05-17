@@ -54,10 +54,6 @@ function App() {
   }, [isDark]);
 
   const theme = isDark ? 'dark' : 'light';
-  const isDirty = t.count !== TWEAK_DEFAULTS.count ||
-                  t.speed !== TWEAK_DEFAULTS.speed ||
-                  t.color1.toLowerCase() !== PALETTES[0][theme][0] ||
-                  t.color2.toLowerCase() !== PALETTES[0][theme][1];
 
   const nextPalette = () => {
     paletteIdx.current = (paletteIdx.current % (PALETTES.length - 1)) + 1;
@@ -70,15 +66,10 @@ function App() {
       <Mesh t={t} />
 
       <TweaksPanel title="Mesh">
-        <div style={{ display: 'flex', gap: 8 }}>
-          <TweakButton label="Randomize" secondary onClick={nextPalette} />
-          <TweakButton label="Default" secondary disabled={!isDirty}
-            onClick={() => setTweak({ ...TWEAK_DEFAULTS, color1: PALETTES[0][theme][0], color2: PALETTES[0][theme][1] })} />
-        </div>
         <TweakSection label="Colors">
-          {['color1', 'color2'].map((key, i) => (
-            <TweakColor key={key} label={`Color ${i + 1}`} value={t[key]} onChange={v => setTweak(key, v)} />
-          ))}
+          <TweakColor label="Color 1" value={t.color1} onChange={v => setTweak('color1', v)} />
+          <TweakColor label="Color 2" value={t.color2} onChange={v => setTweak('color2', v)} />
+          <TweakButton label="Randomize" secondary onClick={nextPalette} />
         </TweakSection>
 
         <TweakSection label="Animation">

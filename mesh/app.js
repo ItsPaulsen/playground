@@ -52,10 +52,6 @@ function App() {
     }
   }, [isDark]);
   const theme = isDark ? 'dark' : 'light';
-  const isDirty = t.count !== TWEAK_DEFAULTS.count ||
-                  t.speed !== TWEAK_DEFAULTS.speed ||
-                  t.color1.toLowerCase() !== PALETTES[0][theme][0] ||
-                  t.color2.toLowerCase() !== PALETTES[0][theme][1];
   const nextPalette = () => {
     paletteIdx.current = (paletteIdx.current % (PALETTES.length - 1)) + 1;
     const [c1, c2] = PALETTES[paletteIdx.current][theme];
@@ -65,32 +61,21 @@ function App() {
     t: t
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Mesh"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(TweakButton, {
+  }, /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Colors"
+  }, /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color 1",
+    value: t.color1,
+    onChange: v => setTweak('color1', v)
+  }), /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color 2",
+    value: t.color2,
+    onChange: v => setTweak('color2', v)
+  }), /*#__PURE__*/React.createElement(TweakButton, {
     label: "Randomize",
     secondary: true,
     onClick: nextPalette
-  }), /*#__PURE__*/React.createElement(TweakButton, {
-    label: "Default",
-    secondary: true,
-    disabled: !isDirty,
-    onClick: () => setTweak({
-      ...TWEAK_DEFAULTS,
-      color1: PALETTES[0][theme][0],
-      color2: PALETTES[0][theme][1]
-    })
   })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Colors"
-  }, ['color1', 'color2'].map((key, i) => /*#__PURE__*/React.createElement(TweakColor, {
-    key: key,
-    label: `Color ${i + 1}`,
-    value: t[key],
-    onChange: v => setTweak(key, v)
-  }))), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Animation"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Speed",
