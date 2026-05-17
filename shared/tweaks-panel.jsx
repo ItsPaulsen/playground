@@ -62,17 +62,17 @@ const __TWEAKS_STYLE = `
   }
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
-    --bg:rgba(41,37,36,.80);--text:rgb(250,250,249);--bd:rgba(253,253,251,.10);
-    --muted:rgba(250,250,249,.48);--label:rgba(250,250,249,.68);--val:rgba(250,250,249,.44);
-    --sect:rgba(250,250,249,.5);--hov-x:rgba(253,253,251,.08);
+    --bg:rgba(41,37,36,.80);--text:rgb(253,253,251);--bd:rgba(253,253,251,.10);
+    --muted:rgba(253,253,251,.48);--label:rgba(253,253,251,.68);--val:rgba(253,253,251,.44);
+    --sect:rgba(253,253,251,.5);--hov-x:rgba(253,253,251,.08);
     --scroll:rgba(253,253,251,.15);--scroll-h:rgba(253,253,251,.25);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
-    --track:rgba(250,250,249,.15);--seg:rgba(250,250,249,.15);--thumb:rgba(253,253,251,.18);
-    --tog-off:rgba(250,250,249,.30);--num-bg:rgba(253,253,251,.1);
-    --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
-    --btn:rgba(250,250,249,.14);--btn-t:rgb(250,250,249);--btn-h:rgba(250,250,249,.20);
+    --track:rgba(253,253,251,.15);--seg:rgba(253,253,251,.15);--thumb:rgba(253,253,251,.18);
+    --tog-off:rgba(253,253,251,.30);--num-bg:rgba(253,253,251,.1);
+    --num-lbl:rgba(253,253,251,.52);--num-unit:rgba(253,253,251,.38);
+    --btn:rgba(253,253,251,.14);--btn-t:rgb(253,253,251);--btn-h:rgba(253,253,251,.20);
     --sec:rgba(253,253,251,.1);--sec-h:rgba(253,253,251,.15);
-    --bar-fill:rgba(250,250,249,.85);--bar-val:rgb(28,25,23);
+    --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
   @keyframes twk-in {
@@ -96,7 +96,7 @@ const __TWEAKS_STYLE = `
     width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center}
   .twk-x:hover{color:var(--text)}
-  html[data-theme="dark"] .twk-x{color:rgba(250,250,249,.80)}
+  html[data-theme="dark"] .twk-x{color:rgba(253,253,251,.80)}
   html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
   .twk-body{padding:2px 16px 16px;display:flex;flex-direction:column;gap:8px;
     overflow-y:auto;overflow-x:hidden;min-height:0;
@@ -177,8 +177,8 @@ const __TWEAKS_STYLE = `
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.80)}
   .twk-reopen:hover{color:var(--text)}
-  html[data-theme="dark"] .twk-reopen{color:rgba(250,250,249,.80)}
-  html[data-theme="dark"] .twk-reopen:hover{color:rgba(250,250,249,1)}
+  html[data-theme="dark"] .twk-reopen{color:rgba(253,253,251,.80)}
+  html[data-theme="dark"] .twk-reopen:hover{color:rgba(253,253,251,1)}
 
   .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;
     background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:pointer}
