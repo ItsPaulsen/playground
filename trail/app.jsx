@@ -1,11 +1,10 @@
-// Frogskis default palette (0–1 RGB converted to hex)
-const FROGSKIS_COLORS = ['#ff0000','#c25900','#14ba00','#008aff','#0000ff','#9400ff'];
+const DEFAULT_COLORS = ['#f87171','#fb923c','#facc15','#4ade80','#60a5fa','#a78bfa'];
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "rainbow": true,
   "colorSpeed": 0.5,
   "numColors": 3,
-  "colors": ["#ff0000","#c25900","#14ba00","#008aff","#0000ff","#9400ff"],
+  "colors": ["#f87171","#fb923c","#facc15","#4ade80","#60a5fa","#a78bfa"],
   "glow": true,
   "dotDistance": 3,
   "maxDots": 300,
@@ -66,7 +65,7 @@ function App() {
         </TweakSection>
 
         <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
-          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...FROGSKIS_COLORS], rainbow: t.rainbow })} />
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...DEFAULT_COLORS], rainbow: t.rainbow })} />
         </div>
       </TweaksPanel>
     </>
