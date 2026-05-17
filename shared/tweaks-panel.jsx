@@ -56,7 +56,7 @@ const __TWEAKS_STYLE = `
     --track:var(--fld-bd);--seg:var(--fld-bd);
     --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);
     --btn:rgb(28,25,23);--btn-t:rgb(253,253,251);--btn-h:rgba(28,25,23,.8);
-    --sec:var(--bd);--sec-h:var(--fld-bd);
+    --sec:rgba(28,25,23,.15);--sec-h:rgba(28,25,23,.1);
     --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);
   }
   html[data-theme="dark"] .twk-panel,
@@ -66,6 +66,7 @@ const __TWEAKS_STYLE = `
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --tog-off:rgba(253,253,251,.3);
     --btn:rgba(253,253,251,.14);--btn-h:rgba(253,253,251,.2);
+    --sec:rgba(253,253,251,.15);--sec-h:rgba(253,253,251,.1);
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
