@@ -81,7 +81,7 @@ const __TWEAKS_STYLE = `
     background:var(--bg);color:var(--text);
     backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);border-radius:20px;
-    box-shadow:0 0 2px 0 rgba(0,0,0,.1),0 8px 40px 0 rgba(0,0,0,0.12);
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:8px 8px 4px 16px}
@@ -157,7 +157,7 @@ const __TWEAKS_STYLE = `
     background:var(--bg);
     backdrop-filter:blur(12px) saturate(180%);
     border:.5px solid var(--bd);
-    box-shadow:0 0 2px 0 rgba(0,0,0,.1),0 8px 40px 0 rgba(0,0,0,0.12);
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.8)}
   .twk-reopen:hover{color:var(--text)}
   html[data-theme="dark"] .twk-reopen{color:rgba(253,253,251,.8)}
