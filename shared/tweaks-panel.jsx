@@ -48,32 +48,32 @@
 
 const __TWEAKS_STYLE = `
   .twk-panel,.twk-reopen{
-    --bg:rgba(253,253,251,.80);--text:#1c1917;--bd:rgba(0,0,0,.10);
+    --bg:rgba(253,253,251,.80);--text:#1c1917;--bd:rgba(28,25,23,.10);
     --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.70);--val:rgba(28,25,23,.50);
-    --sect:rgba(28,25,23,.5);--hov-x:rgba(0,0,0,.06);
-    --scroll:rgba(0,0,0,.15);--scroll-h:rgba(0,0,0,.25);
-    --fld-bg:rgba(0,0,0,.1);--fld-bgf:rgba(0,0,0,.15);
+    --sect:rgba(28,25,23,.5);--hov-x:rgba(28,25,23,.06);
+    --scroll:rgba(28,25,23,.15);--scroll-h:rgba(28,25,23,.25);
+    --fld-bg:rgba(28,25,23,.1);--fld-bgf:rgba(28,25,23,.15);
     --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.25);--fld-surf:rgba(28,25,23,.05);
-    --track:rgba(28,25,23,.15);--seg:rgba(28,25,23,.15);--thumb:rgba(255,255,255,.92);
-    --tog-off:rgba(28,25,23,.30);--tog-handle:#fff;--num-bg:rgba(0,0,0,.1);
+    --track:rgba(28,25,23,.15);--seg:rgba(28,25,23,.15);--thumb:rgba(253,253,251,.92);
+    --tog-off:rgba(28,25,23,.30);--tog-handle:#fdfdfb;--num-bg:rgba(28,25,23,.1);
     --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.42);
-    --btn:rgba(28,25,23,.80);--btn-t:#fff;--btn-h:rgba(28,25,23,.90);
-    --sec:rgba(0,0,0,.1);--sec-h:rgba(0,0,0,.15);
-    --bar-fill:rgba(28,25,23,.85);--bar-val:#fff;
+    --btn:rgba(28,25,23,.80);--btn-t:#fdfdfb;--btn-h:rgba(28,25,23,.90);
+    --sec:rgba(28,25,23,.1);--sec-h:rgba(28,25,23,.15);
+    --bar-fill:rgba(28,25,23,.85);--bar-val:#fdfdfb;
   }
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
-    --bg:rgba(41,37,36,.80);--text:#fafaf9;--bd:rgba(255,255,255,.10);
+    --bg:rgba(41,37,36,.80);--text:#fafaf9;--bd:rgba(253,253,251,.10);
     --muted:rgba(250,250,249,.48);--label:rgba(250,250,249,.68);--val:rgba(250,250,249,.44);
-    --sect:rgba(250,250,249,.5);--hov-x:rgba(255,255,255,.08);
-    --scroll:rgba(255,255,255,.15);--scroll-h:rgba(255,255,255,.25);
-    --fld-bg:rgba(255,255,255,.1);--fld-bgf:rgba(255,255,255,.15);
+    --sect:rgba(250,250,249,.5);--hov-x:rgba(253,253,251,.08);
+    --scroll:rgba(253,253,251,.15);--scroll-h:rgba(253,253,251,.25);
+    --fld-bg:rgba(253,253,251,.1);--fld-bgf:rgba(253,253,251,.15);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
-    --track:rgba(250,250,249,.15);--seg:rgba(250,250,249,.15);--thumb:rgba(255,255,255,.18);
-    --tog-off:rgba(250,250,249,.30);--tog-handle:#fff;--num-bg:rgba(255,255,255,.1);
+    --track:rgba(250,250,249,.15);--seg:rgba(250,250,249,.15);--thumb:rgba(253,253,251,.18);
+    --tog-off:rgba(250,250,249,.30);--tog-handle:#fdfdfb;--num-bg:rgba(253,253,251,.1);
     --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
     --btn:rgba(250,250,249,.14);--btn-t:#fafaf9;--btn-h:rgba(250,250,249,.20);
-    --sec:rgba(255,255,255,.1);--sec-h:rgba(255,255,255,.15);
+    --sec:rgba(253,253,251,.1);--sec-h:rgba(253,253,251,.15);
     --bar-fill:rgba(250,250,249,.85);--bar-val:#1c1917;
   }
 
