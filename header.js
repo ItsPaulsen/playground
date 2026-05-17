@@ -73,7 +73,7 @@
     .menu-icon.is-open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
     #site-menu {
-      position: fixed; top: var(--header-h); left: 0; right: 0; bottom: 0; z-index: 2147483646;
+      position: fixed; inset: 0; z-index: 2147483646;
       background: color-mix(in srgb, var(--pg-bg) 80%, transparent);
       backdrop-filter: blur(12px) saturate(180%);
       opacity: 0; pointer-events: none;
@@ -90,7 +90,7 @@
       height: 100%;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 32px;
-      padding-bottom: var(--header-h); box-sizing: border-box;
+      padding-top: var(--header-h); box-sizing: border-box;
     }
 
     #site-menu nav a {
