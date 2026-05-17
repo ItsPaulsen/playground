@@ -1,8 +1,8 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "specular": 1,
+  "specular": 0.5,
   "intensity": 1,
   "radius": 0.05,
-  "viscosity": 0.98
+  "viscosity": 0.92
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 

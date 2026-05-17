@@ -6,6 +6,7 @@ function WaterTrail({
   t
 }) {
   const bgRef    = React.useRef(null);
+  const glowRef  = React.useRef(null);
   const specRef  = React.useRef(null);
   const stateRef = React.useRef(null);
   const tRef     = React.useRef(t);
@@ -24,12 +25,16 @@ function WaterTrail({
       simData.data[i + 2] = 128; simData.data[i + 3] = 255;
     }
     simCtx.putImageData(simData, 0, 0);
+    const glowEl  = glowRef.current;
+    glowEl.width  = W; glowEl.height = H;
+    const glowCtx = glowEl.getContext('2d');
     const specEl  = specRef.current;
     specEl.width  = W; specEl.height = H;
     const specCtx  = specEl.getContext('2d');
     const specData = specCtx.createImageData(W, H);
     stateRef.current = {
       simCanvas, simCtx, simData,
+      glowCtx,
       specCtx, specData,
       W, H,
       buf1: new Float32Array(W * H),
@@ -49,6 +54,7 @@ function WaterTrail({
       s.W = nW; s.H = nH;
       s.simCanvas.width = nW; s.simCanvas.height = nH;
       s.simData = s.simCtx.createImageData(nW, nH);
+      glowEl.width = nW; glowEl.height = nH;
       specEl.width = nW; specEl.height = nH;
       s.specData = s.specCtx.createImageData(nW, nH);
       s.buf1 = new Float32Array(nW * nH);
@@ -96,9 +102,9 @@ function WaterTrail({
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
-      const { W, H, simCanvas, simCtx, simData, specCtx, specData } = s;
+      const { W, H, simCanvas, simCtx, simData, glowCtx, specCtx, specData } = s;
       const { viscosity, specular } = tRef.current;
-      const data = simData.data;
+      const data   = simData.data;
       const specPx = specData.data;
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
@@ -138,6 +144,7 @@ function WaterTrail({
         }
       }
       simCtx.putImageData(simData, 0, 0);
+      glowCtx.putImageData(specData, 0, 0);
       specCtx.putImageData(specData, 0, 0);
       if (feImg) feImg.setAttribute('href', simCanvas.toDataURL());
       rafRef.current = requestAnimationFrame(tick);
@@ -182,12 +189,22 @@ function WaterTrail({
       }
     }),
     /*#__PURE__*/React.createElement("canvas", {
+      ref: glowRef,
+      style: {
+        position: 'fixed', inset: 0,
+        width: '100%', height: '100%',
+        mixBlendMode: 'screen',
+        filter: 'blur(24px)',
+        pointerEvents: 'none'
+      }
+    }),
+    /*#__PURE__*/React.createElement("canvas", {
       ref: specRef,
       style: {
         position: 'fixed', inset: 0,
         width: '100%', height: '100%',
         mixBlendMode: 'screen',
-        filter: 'blur(8px)',
+        filter: 'blur(6px)',
         pointerEvents: 'none'
       }
     })
