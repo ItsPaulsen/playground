@@ -81,7 +81,7 @@ const __TWEAKS_STYLE = `
     border:.5px solid var(--bd);border-radius:20px;
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
-  .twk-panel.twk-closing{animation:twk-out .4s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
+  .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:8px 8px 4px 16px}
   .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em}
