@@ -13,9 +13,12 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "spread": 0.32
 }/*EDITMODE-END*/;
 
+const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
+
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [panelOpen, setPanelOpen] = React.useState(true);
+  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
 
   return (
     <>
@@ -68,6 +71,10 @@ function App() {
           <TweakSlider label="Wave"      value={Math.round(t.spread * 100)} min={0} max={100} step={1} unit="%"
                        onChange={(v) => setTweak('spread', v / 100)} />
         </TweakSection>
+
+        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak(TWEAK_DEFAULTS)} />
+        </div>
       </TweaksPanel>
     </>
   );

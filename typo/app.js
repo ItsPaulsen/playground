@@ -11,9 +11,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "speed": 0.49,
   "spread": 0.32
 } /*EDITMODE-END*/;
+const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [panelOpen, setPanelOpen] = React.useState(true);
+  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Typo, {
     t: t,
     panelOpen: panelOpen
@@ -110,6 +112,13 @@ function App() {
     step: 1,
     unit: "%",
     onChange: v => setTweak('spread', v / 100)
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {display:'flex',borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+  }, /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Reset",
+    secondary: true,
+    disabled: !isDirty,
+    onClick: () => setTweak(TWEAK_DEFAULTS)
   }))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
