@@ -71,12 +71,12 @@ const __TWEAKS_STYLE = `
   }
 
   @keyframes twk-in {
-    from { opacity: 0; translate: 10px 0; }
+    from { opacity: 0; translate: 16px 0; }
     to   { opacity: 1; translate: 0 0; }
   }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
-    animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;z-index:9999;width:320px;
+    animation:twk-in .7s cubic-bezier(.16,1,.3,1) both;z-index:9999;width:320px;
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
