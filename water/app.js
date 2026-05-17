@@ -1,7 +1,7 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "strength": 300,
-  "radius": 3,
-  "damping": 0.97
+  "intensity": 1,
+  "radius": 0.05,
+  "viscosity": 0.98
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -15,27 +15,26 @@ function App() {
   }, /*#__PURE__*/React.createElement(TweakSection, {
     label: "Ripple"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
-    label: "Strength",
-    value: t.strength,
-    min: 50,
-    max: 800,
-    step: 50,
-    onChange: v => setTweak('strength', v)
+    label: "Intensity",
+    value: t.intensity,
+    min: 0.1,
+    max: 3,
+    step: 0.1,
+    onChange: v => setTweak('intensity', v)
   }), /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Radius",
     value: t.radius,
-    min: 1,
-    max: 8,
-    step: 1,
-    unit: "px",
+    min: 0.01,
+    max: 0.2,
+    step: 0.01,
     onChange: v => setTweak('radius', v)
   }), /*#__PURE__*/React.createElement(TweakSlider, {
-    label: "Damping",
-    value: t.damping,
-    min: 0.90,
-    max: 0.99,
-    step: 0.01,
-    onChange: v => setTweak('damping', v)
+    label: "Viscosity",
+    value: t.viscosity,
+    min: 0.9,
+    max: 0.999,
+    step: 0.001,
+    onChange: v => setTweak('viscosity', v)
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',

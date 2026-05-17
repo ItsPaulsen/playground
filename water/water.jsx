@@ -60,18 +60,18 @@ function WaterTrail({ t }) {
     const onMove = (e) => {
       const s = stateRef.current;
       if (!s) return;
-      const { strength, radius } = tRef.current;
+      const { intensity, radius } = tRef.current;
       const x = Math.round(e.clientX / SIM_SCALE);
       const y = Math.round(e.clientY / SIM_SCALE);
       const ddx = x - s.lastX, ddy = y - s.lastY;
       if (s.lastX < 0 || ddx * ddx + ddy * ddy >= 1) {
-        const r = Math.round(radius);
+        const r = Math.max(1, Math.round(radius * Math.min(s.W, s.H)));
         for (let dy = -r; dy <= r; dy++) {
           for (let dx = -r; dx <= r; dx++) {
             if (dx * dx + dy * dy <= r * r) {
               const px = Math.max(0, Math.min(s.W - 1, x + dx));
               const py = Math.max(0, Math.min(s.H - 1, y + dy));
-              s.buf1[py * s.W + px] = strength;
+              s.buf1[py * s.W + px] = intensity * 300;
             }
           }
         }
@@ -89,7 +89,7 @@ function WaterTrail({ t }) {
       if (!s) { rafRef.current = requestAnimationFrame(tick); return; }
 
       const { W, H, simCanvas, simCtx, simData } = s;
-      const { damping } = tRef.current;
+      const { viscosity } = tRef.current;
       const data = simData.data;
 
       // Wave propagation
@@ -97,7 +97,7 @@ function WaterTrail({ t }) {
         for (let x = 1; x < W - 1; x++) {
           const i = y * W + x;
           const v = (s.buf1[i - 1] + s.buf1[i + 1] + s.buf1[i - W] + s.buf1[i + W]) / 2 - s.buf2[i];
-          s.buf2[i] = v * damping;
+          s.buf2[i] = v * viscosity;
         }
       }
       const tmp = s.buf1; s.buf1 = s.buf2; s.buf2 = tmp;

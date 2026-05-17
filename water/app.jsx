@@ -1,7 +1,7 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "strength": 300,
-  "radius": 3,
-  "damping": 0.97
+  "intensity": 1,
+  "radius": 0.05,
+  "viscosity": 0.98
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -15,12 +15,12 @@ function App() {
 
       <TweaksPanel title="Water">
         <TweakSection label="Ripple">
-          <TweakSlider label="Strength" value={t.strength} min={50}   max={800}  step={50}
-                       onChange={(v) => setTweak('strength', v)} />
-          <TweakSlider label="Radius"   value={t.radius}   min={1}    max={8}    step={1}   unit="px"
+          <TweakSlider label="Intensity" value={t.intensity} min={0.1}  max={3}     step={0.1}
+                       onChange={(v) => setTweak('intensity', v)} />
+          <TweakSlider label="Radius"    value={t.radius}    min={0.01} max={0.2}   step={0.01}
                        onChange={(v) => setTweak('radius', v)} />
-          <TweakSlider label="Damping"  value={t.damping}  min={0.90} max={0.99} step={0.01}
-                       onChange={(v) => setTweak('damping', v)} />
+          <TweakSlider label="Viscosity" value={t.viscosity} min={0.9}  max={0.999} step={0.001}
+                       onChange={(v) => setTweak('viscosity', v)} />
         </TweakSection>
 
         <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
