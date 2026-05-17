@@ -11,10 +11,8 @@
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
   #root { position: fixed; inset: 0; }
 
-  #site-nav { background: color-mix(in srgb, var(--pg-bg) 80%, transparent); backdrop-filter: blur(12px) saturate(180%); }
-  #site-nav.menu-open { background: var(--pg-bg); backdrop-filter: none; }
-  html[data-theme="dark"] #site-nav { background: color-mix(in srgb, var(--pg-surface) 80%, transparent); }
-  html[data-theme="dark"] #site-nav.menu-open { background: var(--pg-surface); }
+  #site-nav { background: color-mix(in srgb, var(--pg-surface) 80%, transparent); backdrop-filter: blur(12px) saturate(180%); }
+  #site-nav.menu-open { background: var(--pg-surface); backdrop-filter: none; }
 
   @keyframes mesh-orbit {
     0%   { transform: rotate(0turn)  scale(1.00); }
