@@ -78,21 +78,7 @@ function App() {
       label: 'Horizontal'
     }],
     onChange: v => setTweak('direction', v)
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: 8
-    }
-  }, /*#__PURE__*/React.createElement(TweakButton, {
-    label: "Randomize",
-    secondary: true,
-    onClick: randomize
-  }), /*#__PURE__*/React.createElement(TweakButton, {
-    label: "Default",
-    secondary: true,
-    disabled: !isDirty,
-    onClick: () => setTweak(TWEAK_DEFAULTS)
-  }))), /*#__PURE__*/React.createElement(TweakSection, {
+  })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Composition"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Lines",
@@ -182,6 +168,17 @@ function App() {
     max: 2,
     step: 0.5,
     onChange: v => setTweak('pulseSpeed', Number(v))
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {display:'flex',gap:8,borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+  }, /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Randomize",
+    secondary: true,
+    onClick: randomize
+  }), /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Reset",
+    secondary: true,
+    disabled: !isDirty,
+    onClick: () => setTweak(TWEAK_DEFAULTS)
   }))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));

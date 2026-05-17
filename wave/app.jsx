@@ -74,11 +74,6 @@ function App() {
           <TweakRadio value={t.direction}
                       options={[{value:'vertical',label:'Vertical'},{value:'horizontal',label:'Horizontal'}]}
                       onChange={(v) => setTweak('direction', v)} />
-          <div style={{display:'flex', gap:8}}>
-            <TweakButton label="Randomize" secondary onClick={randomize} />
-            <TweakButton label="Default" secondary disabled={!isDirty}
-                         onClick={() => setTweak(TWEAK_DEFAULTS)} />
-          </div>
         </TweakSection>
 
         <TweakSection label="Composition">
@@ -111,6 +106,11 @@ function App() {
           <TweakSlider label="Bulge cadence" value={t.pulseSpeed.toFixed(1)} min={0.5} max={2} step={0.5}
                        onChange={(v) => setTweak('pulseSpeed', Number(v))} />
         </TweakSection>
+
+        <div style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+          <TweakButton label="Randomize" secondary onClick={randomize} />
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak(TWEAK_DEFAULTS)} />
+        </div>
       </TweaksPanel>
     </>
   );
