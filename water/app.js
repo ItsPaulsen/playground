@@ -2,8 +2,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "strength": 300,
   "radius": 3,
   "damping": 0.97,
-  "rate": 6,
-  "resolution": 3
+  "rate": 6
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -48,15 +47,6 @@ function App() {
     step: 1,
     unit: "px",
     onChange: v => setTweak('rate', v)
-  })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Quality"
-  }, /*#__PURE__*/React.createElement(TweakSlider, {
-    label: "Resolution",
-    value: t.resolution,
-    min: 2,
-    max: 5,
-    step: 1,
-    onChange: v => setTweak('resolution', v)
   })), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',

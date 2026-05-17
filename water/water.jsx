@@ -1,3 +1,5 @@
+const RESOLUTION = 2;
+
 function makeBg(W, H) {
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
@@ -24,8 +26,8 @@ function WaterTrail({ t }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const W = Math.ceil(window.innerWidth  / t.resolution);
-    const H = Math.ceil(window.innerHeight / t.resolution);
+    const W = Math.ceil(window.innerWidth  / RESOLUTION);
+    const H = Math.ceil(window.innerHeight / RESOLUTION);
 
     canvas.width  = W;
     canvas.height = H;
@@ -46,8 +48,8 @@ function WaterTrail({ t }) {
     const onResize = () => {
       const s = stateRef.current;
       if (!s) return;
-      const nW = Math.ceil(window.innerWidth  / tRef.current.resolution);
-      const nH = Math.ceil(window.innerHeight / tRef.current.resolution);
+      const nW = Math.ceil(window.innerWidth  / RESOLUTION);
+      const nH = Math.ceil(window.innerHeight / RESOLUTION);
       canvas.width  = nW; canvas.height = nH;
       canvas.style.width  = window.innerWidth  + 'px';
       canvas.style.height = window.innerHeight + 'px';
@@ -71,17 +73,17 @@ function WaterTrail({ t }) {
       window.removeEventListener('resize', onResize);
       if (window._img) window._img.removeEventListener('load', onImgLoad);
     };
-  }, [t.resolution]);
+  }, []);
 
   React.useEffect(() => {
     const onMove = (e) => {
       const s = stateRef.current;
       if (!s) return;
-      const { strength, radius, rate, resolution } = tRef.current;
-      const x = Math.round(e.clientX / resolution);
-      const y = Math.round(e.clientY / resolution);
+      const { strength, radius, rate } = tRef.current;
+      const x = Math.round(e.clientX / RESOLUTION);
+      const y = Math.round(e.clientY / RESOLUTION);
       const dx = x - s.lastX, dy = y - s.lastY;
-      const minDist = rate / resolution;
+      const minDist = rate / RESOLUTION;
       if (s.lastX < 0 || dx * dx + dy * dy >= minDist * minDist) {
         const r = Math.round(radius);
         for (let dy2 = -r; dy2 <= r; dy2++) {
@@ -108,7 +110,6 @@ function WaterTrail({ t }) {
       const { W, H, ctx, bgData, outData } = s;
       const damping = tRef.current.damping;
 
-      // Wave propagation: write new heights into buf2
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
           const i = y * W + x;
@@ -118,12 +119,9 @@ function WaterTrail({ t }) {
       }
       const tmp = s.buf1; s.buf1 = s.buf2; s.buf2 = tmp;
 
-      // Render: sample background with wave-gradient displacement
       const h = s.buf1;
       const src = bgData.data;
       const dst = outData.data;
-
-      // Copy bg to dst first so border pixels show without displacement
       dst.set(src);
 
       for (let y = 1; y < H - 1; y++) {

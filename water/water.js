@@ -1,3 +1,5 @@
+const RESOLUTION = 2;
+
 function makeBg(W, H) {
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
@@ -24,8 +26,8 @@ function WaterTrail({
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const W = Math.ceil(window.innerWidth / t.resolution);
-    const H = Math.ceil(window.innerHeight / t.resolution);
+    const W = Math.ceil(window.innerWidth / RESOLUTION);
+    const H = Math.ceil(window.innerHeight / RESOLUTION);
     canvas.width = W;
     canvas.height = H;
     canvas.style.width = window.innerWidth + 'px';
@@ -34,27 +36,20 @@ function WaterTrail({
     const bgData = makeBg(W, H);
     const outData = ctx.createImageData(W, H);
     stateRef.current = {
-      ctx,
-      W,
-      H,
-      bgData,
-      outData,
+      ctx, W, H, bgData, outData,
       buf1: new Float32Array(W * H),
       buf2: new Float32Array(W * H),
-      lastX: -1,
-      lastY: -1
+      lastX: -1, lastY: -1
     };
     const onResize = () => {
       const s = stateRef.current;
       if (!s) return;
-      const nW = Math.ceil(window.innerWidth / tRef.current.resolution);
-      const nH = Math.ceil(window.innerHeight / tRef.current.resolution);
-      canvas.width = nW;
-      canvas.height = nH;
+      const nW = Math.ceil(window.innerWidth / RESOLUTION);
+      const nH = Math.ceil(window.innerHeight / RESOLUTION);
+      canvas.width = nW; canvas.height = nH;
       canvas.style.width = window.innerWidth + 'px';
       canvas.style.height = window.innerHeight + 'px';
-      s.W = nW;
-      s.H = nH;
+      s.W = nW; s.H = nH;
       s.buf1 = new Float32Array(nW * nH);
       s.buf2 = new Float32Array(nW * nH);
       s.bgData = makeBg(nW, nH);
@@ -72,23 +67,17 @@ function WaterTrail({
       window.removeEventListener('resize', onResize);
       if (window._img) window._img.removeEventListener('load', onImgLoad);
     };
-  }, [t.resolution]);
+  }, []);
 
   React.useEffect(() => {
     const onMove = e => {
       const s = stateRef.current;
       if (!s) return;
-      const {
-        strength,
-        radius,
-        rate,
-        resolution
-      } = tRef.current;
-      const x = Math.round(e.clientX / resolution);
-      const y = Math.round(e.clientY / resolution);
-      const dx = x - s.lastX,
-        dy = y - s.lastY;
-      const minDist = rate / resolution;
+      const { strength, radius, rate } = tRef.current;
+      const x = Math.round(e.clientX / RESOLUTION);
+      const y = Math.round(e.clientY / RESOLUTION);
+      const dx = x - s.lastX, dy = y - s.lastY;
+      const minDist = rate / RESOLUTION;
       if (s.lastX < 0 || dx * dx + dy * dy >= minDist * minDist) {
         const r = Math.round(radius);
         for (let dy2 = -r; dy2 <= r; dy2++) {
@@ -115,13 +104,7 @@ function WaterTrail({
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
-      const {
-        W,
-        H,
-        ctx,
-        bgData,
-        outData
-      } = s;
+      const { W, H, ctx, bgData, outData } = s;
       const damping = tRef.current.damping;
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
@@ -130,9 +113,7 @@ function WaterTrail({
           s.buf2[i] = v * damping;
         }
       }
-      const tmp = s.buf1;
-      s.buf1 = s.buf2;
-      s.buf2 = tmp;
+      const tmp = s.buf1; s.buf1 = s.buf2; s.buf2 = tmp;
       const h = s.buf1;
       const src = bgData.data;
       const dst = outData.data;

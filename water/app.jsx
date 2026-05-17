@@ -2,8 +2,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "strength": 300,
   "radius": 3,
   "damping": 0.97,
-  "rate": 6,
-  "resolution": 3
+  "rate": 6
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -28,11 +27,6 @@ function App() {
         <TweakSection label="Interaction">
           <TweakSlider label="Rate" value={t.rate} min={1} max={30} step={1} unit="px"
                        onChange={(v) => setTweak('rate', v)} />
-        </TweakSection>
-
-        <TweakSection label="Quality">
-          <TweakSlider label="Resolution" value={t.resolution} min={2} max={5} step={1}
-                       onChange={(v) => setTweak('resolution', v)} />
         </TweakSection>
 
         <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
