@@ -191,6 +191,7 @@
     html[data-theme="dark"] .shadow-box {
       background: rgba(41,37,36,.85);
       border-color: rgba(255,255,255,.10);
+      box-shadow: 0 8px 40px rgba(0,0,0,.2);
     }
 
     .shadow-label {
@@ -517,13 +518,19 @@
   </script>
   <script>
     (function () {
-      const SHADOW = '0 8px 40px rgba(0,0,0,.12)';
+      const SHADOW_LIGHT = '0 8px 40px rgba(0,0,0,.12)';
+      const SHADOW_DARK  = '0 8px 40px rgba(0,0,0,.2)';
       const COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`;
       const CHECK = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
 
-      // Shadow label
+      // Shadow label — updates with theme
       var shadowLabel = document.querySelector('.shadow-label--value');
-      if (shadowLabel) shadowLabel.textContent = SHADOW;
+      function updateShadowLabel() {
+        if (shadowLabel) shadowLabel.textContent =
+          document.documentElement.getAttribute('data-theme') === 'dark' ? SHADOW_DARK : SHADOW_LIGHT;
+      }
+      updateShadowLabel();
+      new MutationObserver(updateShadowLabel).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
       // Toast
       var toast = document.createElement('div');
