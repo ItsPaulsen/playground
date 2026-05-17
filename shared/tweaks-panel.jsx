@@ -70,10 +70,8 @@ const __TWEAKS_STYLE = `
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
-  @keyframes twk-in {
-    from { opacity: 0; translate: 16px 0; }
-    to   { opacity: 1; translate: 0 0; }
-  }
+  @keyframes twk-in  { from { opacity:0; translate:16px 0; } to { opacity:1; translate:0 0; } }
+  @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
     animation:twk-in 1s cubic-bezier(.16,1,.3,1) both;z-index:9999;width:320px;
@@ -84,6 +82,7 @@ const __TWEAKS_STYLE = `
     border:.5px solid var(--bd);border-radius:20px;
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+  .twk-panel.twk-closing{animation:twk-out .4s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:8px 8px 4px 16px}
   .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em}
@@ -268,6 +267,7 @@ function useTweaks(defaults) {
 // is what actually hides the panel.
 function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange }) {
   const [open, setOpen] = React.useState(() => window.parent === window);
+  const [closing, setClosing] = React.useState(false);
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
@@ -314,15 +314,18 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   }, []);
 
   const dismiss = () => {
-    setOpen(false);
+    setClosing(true);
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+  const handleAnimEnd = (e) => {
+    if (e.animationName === 'twk-out') { setClosing(false); setOpen(false); }
   };
 
   return (
     <>
       <style>{__TWEAKS_STYLE}</style>
       {open ? (
-        <div className="twk-panel" data-noncommentable="">
+        <div className={`twk-panel${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd">
             <b>{title}</b>
             <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
