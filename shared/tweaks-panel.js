@@ -332,6 +332,7 @@ function TweaksPanel({
   }, []);
   const dismiss = () => {
     setClosing(true);
+    onOpenChange && onOpenChange(false);
     window.parent.postMessage({
       type: '__edit_mode_dismissed'
     }, '*');

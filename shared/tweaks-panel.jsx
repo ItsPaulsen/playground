@@ -315,6 +315,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
 
   const dismiss = () => {
     setClosing(true);
+    onOpenChange && onOpenChange(false);
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
   const handleAnimEnd = (e) => {
