@@ -62,7 +62,7 @@ const __TWEAKS_STYLE = `
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
     --bg:rgba(28,25,23,.8);--text:rgb(253,253,251);--bd:rgba(253,253,251,.1);
-    --label:rgba(253,253,251,.68);--val:rgba(253,253,251,.5);
+    --label:rgba(253,253,251,.7);--val:rgba(253,253,251,.5);
     --sect:rgba(253,253,251,.5);--hov-x:rgba(253,253,251,.08);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --thumb:rgba(253,253,251,.18);
