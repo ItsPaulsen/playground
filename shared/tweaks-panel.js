@@ -61,7 +61,7 @@ const __TWEAKS_STYLE = `
   }
   html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
-    --bg:rgba(41,37,36,.80);--text:rgb(253,253,251);--bd:rgba(253,253,251,.10);
+    --bg:rgba(28,25,23,.80);--text:rgb(253,253,251);--bd:rgba(253,253,251,.10);
     --muted:rgba(253,253,251,.48);--label:rgba(253,253,251,.68);--val:rgba(253,253,251,.44);
     --sect:rgba(253,253,251,.5);--hov-x:rgba(253,253,251,.08);
     --scroll:rgba(253,253,251,.15);--scroll-h:rgba(253,253,251,.25);
