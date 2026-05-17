@@ -66,7 +66,7 @@ function App() {
         </TweakSection>
 
         <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
-          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...FROGSKIS_COLORS] })} />
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...FROGSKIS_COLORS], rainbow: t.rainbow })} />
         </div>
       </TweaksPanel>
     </>

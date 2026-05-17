@@ -112,7 +112,8 @@ function App() {
     disabled: !isDirty,
     onClick: () => setTweak({
       ...TWEAK_DEFAULTS,
-      colors: [...FROGSKIS_COLORS]
+      colors: [...FROGSKIS_COLORS],
+      rainbow: t.rainbow
     })
   }))));
 }
