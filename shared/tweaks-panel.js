@@ -50,13 +50,13 @@ const __TWEAKS_STYLE = `
     --bg:rgba(253,253,251,.8);--text:rgb(28,25,23);--bd:rgba(28,25,23,.1);
     --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.7);--val:rgba(28,25,23,.5);
     --sect:rgba(28,25,23,.5);--hov-x:rgba(28,25,23,.06);
-    --scroll:rgba(28,25,23,.15);--scroll-h:rgba(28,25,23,.25);
     --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.25);--fld-surf:rgba(28,25,23,.05);
-    --track:rgba(28,25,23,.15);--seg:rgba(28,25,23,.15);--thumb:rgba(253,253,251,.92);
-    --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);--num-bg:rgba(28,25,23,.1);
+    --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);
+    --track:var(--fld-bd);--seg:var(--fld-bd);--thumb:rgba(253,253,251,.92);
+    --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);--num-bg:var(--bd);
     --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.42);
     --btn:rgba(28,25,23,.8);--btn-t:rgb(253,253,251);--btn-h:rgba(28,25,23,.9);
-    --sec:rgba(28,25,23,.1);--sec-h:rgba(28,25,23,.15);
+    --sec:var(--bd);--sec-h:var(--fld-bd);
     --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);
   }
   html[data-theme="dark"] .twk-panel,
@@ -64,13 +64,11 @@ const __TWEAKS_STYLE = `
     --bg:rgba(28,25,23,.8);--text:rgb(253,253,251);--bd:rgba(253,253,251,.1);
     --muted:rgba(253,253,251,.48);--label:rgba(253,253,251,.68);--val:rgba(253,253,251,.44);
     --sect:rgba(253,253,251,.5);--hov-x:rgba(253,253,251,.08);
-    --scroll:rgba(253,253,251,.15);--scroll-h:rgba(253,253,251,.25);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
-    --track:rgba(253,253,251,.15);--seg:rgba(253,253,251,.15);--thumb:rgba(253,253,251,.18);
-    --tog-off:rgba(253,253,251,.3);--num-bg:rgba(253,253,251,.1);
+    --thumb:rgba(253,253,251,.18);
+    --tog-off:rgba(253,253,251,.3);
     --num-lbl:rgba(253,253,251,.52);--num-unit:rgba(253,253,251,.38);
-    --btn:rgba(253,253,251,.14);--btn-t:rgb(253,253,251);--btn-h:rgba(253,253,251,.2);
-    --sec:rgba(253,253,251,.1);--sec-h:rgba(253,253,251,.15);
+    --btn:rgba(253,253,251,.14);--btn-h:rgba(253,253,251,.2);
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
