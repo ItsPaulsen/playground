@@ -16,6 +16,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "seed": 19
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
+const COLORS = ['#f87171','#fb923c','#fbbf24','#facc15','#a3e635','#4ade80','#34d399','#2dd4bf','#22d3ee','#38bdf8','#60a5fa','#818cf8','#a78bfa','#c084fc','#e879f9','#f472b6','#fb7185'];
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
@@ -26,6 +27,7 @@ function App() {
     const v = Math.random() * (max - min) + min;
     return Math.round(v / step) * step;
   };
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
   const randomize = () => setTweak({
     seed:        rand(0, 50, 1),
     lineCount:   rand(1, 100, 1),
@@ -38,6 +40,8 @@ function App() {
     pulseAmount: rand(0, 3, 0.25),
     pulseRatio:  rand(0, 1, 0.01),
     pulseSpeed:  rand(0.5, 2, 0.5),
+    lineColor:   pick(COLORS),
+    direction:   pick(['vertical', 'horizontal']),
   });
 
   return (
