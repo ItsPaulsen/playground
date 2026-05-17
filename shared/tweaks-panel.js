@@ -75,7 +75,7 @@ const __TWEAKS_STYLE = `
   }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
-    animation:twk-in .7s cubic-bezier(.16,1,.3,1) both;z-index:9999;width:320px;
+    animation:twk-in 2s cubic-bezier(.16,1,.3,1) both;z-index:9999;width:320px;
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:var(--bg);color:var(--text);
