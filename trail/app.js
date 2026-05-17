@@ -3,7 +3,7 @@ const FROGSKIS_COLORS = ['#ff0000', '#c25900', '#14ba00', '#008aff', '#0000ff', 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "rainbow": true,
   "colorSpeed": 0.5,
-  "numColors": 6,
+  "numColors": 3,
   "colors": ["#ff0000", "#c25900", "#14ba00", "#008aff", "#0000ff", "#9400ff"],
   "glow": true,
   "dotDistance": 3,
@@ -12,8 +12,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "dotSize": 50,
   "alpha": 100
 } /*EDITMODE-END*/;
+const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const setColor = (i, v) => {
     const c = [...t.colors];
     c[i] = v;
@@ -36,7 +38,7 @@ function App() {
     max: 10,
     step: 0.1,
     onChange: v => setTweak('colorSpeed', v)
-  }), !t.rainbow && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakSlider, {
+  }), !t.rainbow && /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Colors",
     value: t.numColors,
     min: 1,
@@ -44,14 +46,14 @@ function App() {
     step: 1,
     onChange: v => setTweak('numColors', v)
   }), Array.from({
-    length: t.numColors
+    length: t.rainbow ? t.colors.length : t.numColors
   }, (_, i) => /*#__PURE__*/React.createElement(TweakColor, {
     key: i,
     label: `Color ${i + 1}`,
     value: t.colors[i],
     onChange: v => setColor(i, v),
     noAlpha: true
-  })))), /*#__PURE__*/React.createElement(TweakSection, {
+  }))), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Shape"
   }, /*#__PURE__*/React.createElement(TweakToggle, {
     label: "Glow",
@@ -99,11 +101,15 @@ function App() {
     onChange: v => setTweak('lifetime', v)
   })), /*#__PURE__*/React.createElement("div", {
     style: {
-      display: 'flex'
+      display: 'flex',
+      borderTop: '1px solid var(--bd)',
+      marginTop: '8px',
+      paddingTop: '16px'
     }
   }, /*#__PURE__*/React.createElement(TweakButton, {
-    label: "Default",
+    label: "Reset",
     secondary: true,
+    disabled: !isDirty,
     onClick: () => setTweak({
       ...TWEAK_DEFAULTS,
       colors: [...FROGSKIS_COLORS]

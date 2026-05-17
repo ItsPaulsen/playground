@@ -15,8 +15,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "pulseSpeed": 0.5,
   "seed": 19
 } /*EDITMODE-END*/;
+const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const [panelOpen, setPanelOpen] = React.useState(true);
   const rand = (min, max, step = 0.01) => {
     const v = Math.random() * (max - min) + min;
@@ -88,6 +90,7 @@ function App() {
   }), /*#__PURE__*/React.createElement(TweakButton, {
     label: "Default",
     secondary: true,
+    disabled: !isDirty,
     onClick: () => setTweak(TWEAK_DEFAULTS)
   }))), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Composition"

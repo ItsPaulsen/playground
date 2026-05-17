@@ -15,9 +15,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "pulseSpeed": 0.5,
   "seed": 19
 }/*EDITMODE-END*/;
+const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const [panelOpen, setPanelOpen] = React.useState(true);
 
   const rand = (min, max, step = 0.01) => {
@@ -74,7 +76,7 @@ function App() {
                       onChange={(v) => setTweak('direction', v)} />
           <div style={{display:'flex', gap:8}}>
             <TweakButton label="Randomize" secondary onClick={randomize} />
-            <TweakButton label="Default" secondary
+            <TweakButton label="Default" secondary disabled={!isDirty}
                          onClick={() => setTweak(TWEAK_DEFAULTS)} />
           </div>
         </TweakSection>

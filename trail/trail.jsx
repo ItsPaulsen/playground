@@ -169,7 +169,7 @@ function CursorTrail({ t }) {
       const len = trail.length;
       if (!len) { raf = requestAnimationFrame(animate); return; }
 
-      const numColors = tc.numColors;
+      const numColors = tc.rainbow ? tc.colors.length : tc.numColors;
       const dotR      = tc.dotSize;
       const denom     = Math.max(1, tc.maxDots - 1);
       const alphaMul  = tc.alpha / 100;

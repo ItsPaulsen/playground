@@ -52,11 +52,11 @@ const __TWEAKS_STYLE = `
     --sect:rgba(28,25,23,.5);--hov-x:rgba(0,0,0,.06);
     --scroll:rgba(0,0,0,.15);--scroll-h:rgba(0,0,0,.25);
     --fld-bg:rgba(0,0,0,.1);--fld-bgf:rgba(0,0,0,.15);
-    --fld-bd:rgba(0,0,0,.1);--fld-bdf:rgba(0,0,0,.24);--fld-surf:var(--pg-surface);
-    --track:rgba(0,0,0,.1);--seg:rgba(0,0,0,.1);--thumb:rgba(255,255,255,.92);
-    --tog-off:rgba(0,0,0,.15);--num-bg:rgba(0,0,0,.1);
+    --fld-bd:rgba(0,0,0,.1);--fld-bdf:rgba(0,0,0,.24);--fld-surf:rgba(255,255,255,.6);
+    --track:rgba(28,25,23,.15);--seg:rgba(28,25,23,.15);--thumb:rgba(255,255,255,.92);
+    --tog-off:rgba(28,25,23,.30);--tog-handle:#fff;--num-bg:rgba(0,0,0,.1);
     --num-lbl:rgba(28,25,23,.6);--num-unit:rgba(28,25,23,.42);
-    --btn:rgba(0,0,0,.80);--btn-t:#fff;--btn-h:rgba(0,0,0,.90);
+    --btn:rgba(28,25,23,.80);--btn-t:#fff;--btn-h:rgba(28,25,23,.90);
     --sec:rgba(0,0,0,.1);--sec-h:rgba(0,0,0,.15);
     --bar-fill:rgba(28,25,23,.85);--bar-val:#fff;
   }
@@ -67,11 +67,11 @@ const __TWEAKS_STYLE = `
     --sect:rgba(250,250,249,.5);--hov-x:rgba(255,255,255,.08);
     --scroll:rgba(255,255,255,.15);--scroll-h:rgba(255,255,255,.25);
     --fld-bg:rgba(255,255,255,.1);--fld-bgf:rgba(255,255,255,.15);
-    --fld-bd:rgba(255,255,255,.10);--fld-bdf:rgba(255,255,255,.24);--fld-surf:var(--pg-surface);
-    --track:rgba(255,255,255,.1);--seg:rgba(255,255,255,.1);--thumb:rgba(255,255,255,.18);
-    --tog-off:rgba(255,255,255,.20);--num-bg:rgba(255,255,255,.1);
+    --fld-bd:rgba(255,255,255,.10);--fld-bdf:rgba(255,255,255,.24);--fld-surf:rgba(255,255,255,.06);
+    --track:rgba(250,250,249,.15);--seg:rgba(250,250,249,.15);--thumb:rgba(255,255,255,.18);
+    --tog-off:rgba(250,250,249,.30);--tog-handle:#fff;--num-bg:rgba(255,255,255,.1);
     --num-lbl:rgba(250,250,249,.52);--num-unit:rgba(250,250,249,.38);
-    --btn:rgba(255,255,255,.14);--btn-t:#fafaf9;--btn-h:rgba(255,255,255,.20);
+    --btn:rgba(250,250,249,.14);--btn-t:#fafaf9;--btn-h:rgba(250,250,249,.20);
     --sec:rgba(255,255,255,.1);--sec-h:rgba(255,255,255,.15);
     --bar-fill:rgba(250,250,249,.85);--bar-val:#1c1917;
   }
@@ -109,7 +109,7 @@ const __TWEAKS_STYLE = `
   .twk-body::-webkit-scrollbar-thumb:hover{background:var(--scroll-h);
     border:2px solid transparent;background-clip:content-box}
   .twk-row{display:flex;flex-direction:column;gap:5px}
-  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;min-height:26px}
   .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
     color:var(--label)}
   .twk-lbl>span:first-child{font-weight:500}
@@ -152,12 +152,12 @@ const __TWEAKS_STYLE = `
     overflow-wrap:anywhere;transition:color .2s ease}
   .twk-seg button[aria-checked="true"]{color:var(--bar-val);transition-delay:.1s}
 
-  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-    background:var(--tog-off);transition:background .15s;cursor:pointer;padding:0}
+  .twk-toggle{position:relative;width:36px;height:20px;border:0;border-radius:999px;
+    background:var(--tog-off);transition:background .25s;cursor:pointer;padding:0}
   .twk-toggle[data-on="1"]{background:#34c759}
-  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
-  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+    background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(16px)}
 
   .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
     border:.5px solid var(--fld-bd);border-radius:8px;background:var(--fld-surf)}
@@ -184,6 +184,8 @@ const __TWEAKS_STYLE = `
   .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;
     background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:pointer}
   .twk-btn:hover{background:var(--btn-h)}
+  .twk-btn:disabled{opacity:.35;cursor:default;pointer-events:none}
+  html[data-theme="dark"] .twk-panel .twk-btn:disabled{opacity:.25}
   .twk-btn.secondary{background:var(--sec);color:inherit}
   .twk-btn.secondary:hover{background:var(--sec-h)}
 
@@ -1100,12 +1102,14 @@ function TweakColor({
 function TweakButton({
   label,
   onClick,
-  secondary = false
+  secondary = false,
+  disabled = false
 }) {
   return /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: secondary ? 'twk-btn secondary' : 'twk-btn',
-    onClick: onClick
+    onClick: onClick,
+    disabled: disabled
   }, label);
 }
 Object.assign(window, {

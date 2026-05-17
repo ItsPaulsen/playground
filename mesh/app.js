@@ -1,11 +1,29 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "color1": "#fca5a5",
-  "color2": "#c4b5fd",
+  "color1": "#f87171",
+  "color2": "#38bdf8",
   "count": 2,
   "speed": 1
 } /*EDITMODE-END*/;
-const PALETTES_LIGHT = [['#fca5a5', '#c4b5fd'], ['#7dd3fc', '#f9a8d4'], ['#6ee7b7', '#a5b4fc'], ['#fcd34d', '#f0abfc'], ['#67e8f9', '#fda4af'], ['#bef264', '#93c5fd']];
-const PALETTES_DARK = [['#dc2626', '#7c3aed'], ['#0284c7', '#db2777'], ['#059669', '#4f46e5'], ['#d97706', '#c026d3'], ['#0891b2', '#e11d48'], ['#65a30d', '#2563eb']];
+const PALETTES = [
+  { light: ['#f87171', '#38bdf8'], dark: ['#dc2626', '#0284c7'] },
+  { light: ['#fb923c', '#a78bfa'], dark: ['#ea580c', '#7c3aed'] },
+  { light: ['#fbbf24', '#2dd4bf'], dark: ['#d97706', '#0d9488'] },
+  { light: ['#facc15', '#818cf8'], dark: ['#ca8a04', '#4f46e5'] },
+  { light: ['#a3e635', '#e879f9'], dark: ['#65a30d', '#c026d3'] },
+  { light: ['#4ade80', '#60a5fa'], dark: ['#16a34a', '#2563eb'] },
+  { light: ['#34d399', '#fb7185'], dark: ['#059669', '#e11d48'] },
+  { light: ['#22d3ee', '#c084fc'], dark: ['#0891b2', '#9333ea'] },
+  { light: ['#38bdf8', '#f472b6'], dark: ['#0284c7', '#db2777'] },
+  { light: ['#60a5fa', '#fbbf24'], dark: ['#2563eb', '#d97706'] },
+  { light: ['#818cf8', '#a3e635'], dark: ['#4f46e5', '#65a30d'] },
+  { light: ['#a78bfa', '#4ade80'], dark: ['#7c3aed', '#16a34a'] },
+  { light: ['#c084fc', '#facc15'], dark: ['#9333ea', '#ca8a04'] },
+  { light: ['#e879f9', '#2dd4bf'], dark: ['#c026d3', '#0d9488'] },
+  { light: ['#f472b6', '#22d3ee'], dark: ['#db2777', '#0891b2'] },
+  { light: ['#fb7185', '#a78bfa'], dark: ['#e11d48', '#7c3aed'] },
+  { light: ['#f87171', '#34d399'], dark: ['#dc2626', '#059669'] },
+  { light: ['#fb923c', '#38bdf8'], dark: ['#ea580c', '#0284c7'] },
+];
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const paletteIdx = React.useRef(0);
@@ -21,26 +39,27 @@ function App() {
     return () => observer.disconnect();
   }, []);
   React.useEffect(() => {
-    const from = isDark ? PALETTES_LIGHT : PALETTES_DARK;
-    const to = isDark ? PALETTES_DARK : PALETTES_LIGHT;
-    const idx = from.findIndex(([c1, c2]) => c1.toLowerCase() === t.color1.toLowerCase() && c2.toLowerCase() === t.color2.toLowerCase());
+    const fromKey = isDark ? 'light' : 'dark';
+    const toKey = isDark ? 'dark' : 'light';
+    const idx = PALETTES.findIndex(p =>
+      p[fromKey][0].toLowerCase() === t.color1.toLowerCase() &&
+      p[fromKey][1].toLowerCase() === t.color2.toLowerCase()
+    );
     if (idx !== -1) {
       paletteIdx.current = idx;
-      const [c1, c2] = to[idx];
-      setTweak({
-        color1: c1,
-        color2: c2
-      });
+      const [c1, c2] = PALETTES[idx][toKey];
+      setTweak({ color1: c1, color2: c2 });
     }
   }, [isDark]);
-  const palettes = isDark ? PALETTES_DARK : PALETTES_LIGHT;
+  const theme = isDark ? 'dark' : 'light';
+  const isDirty = t.count !== TWEAK_DEFAULTS.count ||
+                  t.speed !== TWEAK_DEFAULTS.speed ||
+                  t.color1.toLowerCase() !== PALETTES[0][theme][0] ||
+                  t.color2.toLowerCase() !== PALETTES[0][theme][1];
   const nextPalette = () => {
-    paletteIdx.current = (paletteIdx.current + 1) % palettes.length;
-    const [c1, c2] = palettes[paletteIdx.current];
-    setTweak({
-      color1: c1,
-      color2: c2
-    });
+    paletteIdx.current = (paletteIdx.current % (PALETTES.length - 1)) + 1;
+    const [c1, c2] = PALETTES[paletteIdx.current][theme];
+    setTweak({ color1: c1, color2: c2 });
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Mesh, {
     t: t
@@ -58,10 +77,11 @@ function App() {
   }), /*#__PURE__*/React.createElement(TweakButton, {
     label: "Default",
     secondary: true,
+    disabled: !isDirty,
     onClick: () => setTweak({
       ...TWEAK_DEFAULTS,
-      color1: palettes[0][0],
-      color2: palettes[0][1]
+      color1: PALETTES[0][theme][0],
+      color2: PALETTES[0][theme][1]
     })
   })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Colors"

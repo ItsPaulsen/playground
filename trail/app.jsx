@@ -4,7 +4,7 @@ const FROGSKIS_COLORS = ['#ff0000','#c25900','#14ba00','#008aff','#0000ff','#940
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "rainbow": true,
   "colorSpeed": 0.5,
-  "numColors": 6,
+  "numColors": 3,
   "colors": ["#ff0000","#c25900","#14ba00","#008aff","#0000ff","#9400ff"],
   "glow": true,
   "dotDistance": 3,
@@ -13,9 +13,11 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "dotSize": 50,
   "alpha": 100
 }/*EDITMODE-END*/;
+const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
 
   const setColor = (i, v) => {
     const c = [...t.colors];
@@ -37,15 +39,13 @@ function App() {
                          onChange={(v) => setTweak('colorSpeed', v)} />
           )}
           {!t.rainbow && (
-            <>
-              <TweakSlider label="Colors" value={t.numColors} min={1} max={6} step={1}
-                           onChange={(v) => setTweak('numColors', v)} />
-              {Array.from({ length: t.numColors }, (_, i) => (
-                <TweakColor key={i} label={`Color ${i + 1}`} value={t.colors[i]}
-                            onChange={(v) => setColor(i, v)} noAlpha />
-              ))}
-            </>
+            <TweakSlider label="Colors" value={t.numColors} min={1} max={6} step={1}
+                         onChange={(v) => setTweak('numColors', v)} />
           )}
+          {Array.from({ length: t.rainbow ? t.colors.length : t.numColors }, (_, i) => (
+            <TweakColor key={i} label={`Color ${i + 1}`} value={t.colors[i]}
+                        onChange={(v) => setColor(i, v)} noAlpha />
+          ))}
         </TweakSection>
 
         <TweakSection label="Shape">
@@ -65,8 +65,8 @@ function App() {
                        onChange={(v) => setTweak('lifetime', v)} />
         </TweakSection>
 
-        <div style={{ display: 'flex' }}>
-          <TweakButton label="Default" secondary onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...FROGSKIS_COLORS] })} />
+        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...FROGSKIS_COLORS] })} />
         </div>
       </TweaksPanel>
     </>
