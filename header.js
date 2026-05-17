@@ -20,7 +20,8 @@
 
     #site-nav {
       position: relative; z-index: 2147483647;
-      background: transparent;
+      background: var(--nav-bg, transparent);
+      backdrop-filter: var(--nav-filter, none);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
 
@@ -73,15 +74,15 @@
 
     #site-menu {
       position: fixed; inset: 0; z-index: 2147483646;
-      background: color-mix(in srgb, var(--pg-bg) 80%, transparent);
-      backdrop-filter: blur(12px) saturate(180%);
+      background: var(--nav-bg, color-mix(in srgb, var(--pg-bg) 80%, transparent));
+      backdrop-filter: var(--nav-filter, blur(12px) saturate(180%));
       opacity: 0; pointer-events: none;
       transition: opacity .4s ease, background .4s ease, backdrop-filter .4s ease;
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
     #site-menu.is-open {
       opacity: 1; pointer-events: auto;
-      background: var(--pg-bg);
+      background: var(--nav-bg-open, var(--pg-bg));
       backdrop-filter: none;
     }
 
