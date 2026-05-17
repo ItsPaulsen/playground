@@ -7,7 +7,6 @@
     { label: 'Typo',  href: '/typo/' },
     { label: 'Mesh',  href: '/mesh/' },
     { label: 'Trail', href: '/trail/' },
-    { label: 'Water', href: '/water/' },
   ];
 
   const fontLink = document.createElement('link');
