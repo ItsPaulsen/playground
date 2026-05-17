@@ -52,7 +52,6 @@ const __TWEAKS_STYLE = `
     --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.70);--val:rgba(28,25,23,.50);
     --sect:rgba(28,25,23,.5);--hov-x:rgba(28,25,23,.06);
     --scroll:rgba(28,25,23,.15);--scroll-h:rgba(28,25,23,.25);
-    --fld-bg:rgba(28,25,23,.1);--fld-bgf:rgba(28,25,23,.15);
     --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.25);--fld-surf:rgba(28,25,23,.05);
     --track:rgba(28,25,23,.15);--seg:rgba(28,25,23,.15);--thumb:rgba(253,253,251,.92);
     --tog-off:rgba(28,25,23,.30);--tog-handle:rgb(253,253,251);--num-bg:rgba(28,25,23,.1);
@@ -67,7 +66,6 @@ const __TWEAKS_STYLE = `
     --muted:rgba(250,250,249,.48);--label:rgba(250,250,249,.68);--val:rgba(250,250,249,.44);
     --sect:rgba(250,250,249,.5);--hov-x:rgba(253,253,251,.08);
     --scroll:rgba(253,253,251,.15);--scroll-h:rgba(253,253,251,.25);
-    --fld-bg:rgba(253,253,251,.1);--fld-bgf:rgba(253,253,251,.15);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --track:rgba(250,250,249,.15);--seg:rgba(250,250,249,.15);--thumb:rgba(253,253,251,.18);
     --tog-off:rgba(250,250,249,.30);--num-bg:rgba(253,253,251,.1);
