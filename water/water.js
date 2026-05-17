@@ -2,31 +2,13 @@ function makeBg(W, H) {
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
   const ctx = c.getContext('2d');
-  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  if (dark) {
-    grad.addColorStop(0, '#060e1a');
-    grad.addColorStop(0.5, '#0d1f35');
-    grad.addColorStop(1, '#040b14');
+  const img = window._img;
+  if (img && img.complete && img.naturalWidth) {
+    ctx.drawImage(img, 0, 0, W, H);
   } else {
-    grad.addColorStop(0, '#3a7ab8');
-    grad.addColorStop(0.5, '#5aa0d8');
-    grad.addColorStop(1, '#2a6098');
+    ctx.fillStyle = '#0a1628';
+    ctx.fillRect(0, 0, W, H);
   }
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-  ctx.globalAlpha = dark ? 0.1 : 0.18;
-  for (let i = 0; i < 18; i++) {
-    const y = H / 18 * (i + 0.2 + Math.random() * 0.6);
-    const h = 1 + Math.random() * 2;
-    const s = ctx.createLinearGradient(0, y - h, 0, y + h);
-    s.addColorStop(0, 'transparent');
-    s.addColorStop(0.5, dark ? '#7ac8ff' : '#ffffff');
-    s.addColorStop(1, 'transparent');
-    ctx.fillStyle = s;
-    ctx.fillRect(0, y - h, W, h * 2);
-  }
-  ctx.globalAlpha = 1;
   return ctx.getImageData(0, 0, W, H);
 }
 
@@ -79,7 +61,17 @@ function WaterTrail({
       s.outData = s.ctx.createImageData(nW, nH);
     };
     window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    const onImgLoad = () => {
+      const s = stateRef.current;
+      if (s) s.bgData = makeBg(s.W, s.H);
+    };
+    if (window._img && !window._img.complete) {
+      window._img.addEventListener('load', onImgLoad);
+    }
+    return () => {
+      window.removeEventListener('resize', onResize);
+      if (window._img) window._img.removeEventListener('load', onImgLoad);
+    };
   }, [t.resolution]);
 
   React.useEffect(() => {
