@@ -189,7 +189,6 @@ const __TWEAKS_STYLE = `
   html[data-theme="dark"] .twk-panel .twk-btn:disabled{opacity:.25}
   .twk-btn.secondary{background:var(--sec);color:inherit}
   .twk-btn.secondary:hover{background:var(--sec-h)}
-  .twk-button-row{display:flex;gap:8px;border-top:1px solid var(--bd);margin-top:8px;padding-top:16px}
 
   .twk-swatch{appearance:none;-webkit-appearance:none;width:36px;height:26px;
     border:.5px solid var(--fld-bd);border-radius:8px;padding:0;cursor:pointer;

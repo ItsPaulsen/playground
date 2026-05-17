@@ -109,7 +109,7 @@ function App() {
                        onChange={(v) => setTweak('pulseSpeed', Number(v))} />
         </TweakSection>
 
-        <div className="twk-button-row">
+        <div style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Randomize" secondary onClick={randomize} />
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak(TWEAK_DEFAULTS)} />
         </div>

@@ -65,7 +65,7 @@ function App() {
                        onChange={(v) => setTweak('lifetime', v)} />
         </TweakSection>
 
-        <div className="twk-button-row">
+        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...FROGSKIS_COLORS], rainbow: t.rainbow })} />
         </div>
       </TweaksPanel>

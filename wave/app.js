@@ -171,7 +171,7 @@ function App() {
     step: 0.5,
     onChange: v => setTweak('pulseSpeed', Number(v))
   })), /*#__PURE__*/React.createElement("div", {
-    className: "twk-button-row"
+    style: {display:'flex',gap:8,borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Randomize",
     secondary: true,

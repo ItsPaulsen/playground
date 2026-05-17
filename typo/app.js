@@ -113,7 +113,7 @@ function App() {
     unit: "%",
     onChange: v => setTweak('spread', v / 100)
   })), /*#__PURE__*/React.createElement("div", {
-    className: "twk-button-row"
+    style: {display:'flex',borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Reset",
     secondary: true,
