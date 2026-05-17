@@ -23,7 +23,7 @@ function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(CursorTrail, {
     t: t
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
-    title: "Cursor Trail"
+    title: "Trail"
   }, /*#__PURE__*/React.createElement(TweakSection, {
     label: "Color"
   }, /*#__PURE__*/React.createElement(TweakToggle, {

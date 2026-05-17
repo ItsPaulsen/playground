@@ -28,7 +28,7 @@ function App() {
     <>
       <CursorTrail t={t} />
 
-      <TweaksPanel title="Cursor Trail">
+      <TweaksPanel title="Trail">
         <TweakSection label="Color">
           <TweakToggle label="Rainbow" value={t.rainbow}
                        onChange={(v) => setTweak('rainbow', v)} />
