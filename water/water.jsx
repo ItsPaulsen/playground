@@ -1,77 +1,58 @@
-const RESOLUTION = 2;
-
-function makeBg(W, H) {
-  const c = document.createElement('canvas');
-  c.width = W; c.height = H;
-  const ctx = c.getContext('2d');
-  const img = window._img;
-  if (img && img.complete && img.naturalWidth) {
-    ctx.drawImage(img, 0, 0, W, H);
-  } else {
-    ctx.fillStyle = '#0a1628';
-    ctx.fillRect(0, 0, W, H);
-  }
-  return ctx.getImageData(0, 0, W, H);
-}
+const SIM_SCALE = 4;
 
 function WaterTrail({ t }) {
-  const canvasRef = React.useRef(null);
-  const stateRef  = React.useRef(null);
-  const tRef      = React.useRef(t);
-  const rafRef    = React.useRef(null);
+  const bgRef    = React.useRef(null);
+  const stateRef = React.useRef(null);
+  const tRef     = React.useRef(t);
+  const rafRef   = React.useRef(null);
 
   tRef.current = t;
 
   React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const W = Math.ceil(window.innerWidth  / SIM_SCALE);
+    const H = Math.ceil(window.innerHeight / SIM_SCALE);
 
-    const W = Math.ceil(window.innerWidth  / RESOLUTION);
-    const H = Math.ceil(window.innerHeight / RESOLUTION);
+    const simCanvas = document.createElement('canvas');
+    simCanvas.width = W; simCanvas.height = H;
+    const simCtx  = simCanvas.getContext('2d');
+    const simData = simCtx.createImageData(W, H);
 
-    canvas.width  = W;
-    canvas.height = H;
-    canvas.style.width  = window.innerWidth  + 'px';
-    canvas.style.height = window.innerHeight + 'px';
-
-    const ctx = canvas.getContext('2d');
-    const bgData  = makeBg(W, H);
-    const outData = ctx.createImageData(W, H);
+    // Neutral displacement (128 = no offset in both channels)
+    for (let i = 0; i < W * H * 4; i += 4) {
+      simData.data[i] = 128; simData.data[i + 1] = 128;
+      simData.data[i + 2] = 128; simData.data[i + 3] = 255;
+    }
+    simCtx.putImageData(simData, 0, 0);
 
     stateRef.current = {
-      ctx, W, H, bgData, outData,
+      simCanvas, simCtx, simData, W, H,
       buf1: new Float32Array(W * H),
       buf2: new Float32Array(W * H),
       lastX: -1, lastY: -1,
     };
 
+    const applyBg = () => {
+      if (bgRef.current && window._img) bgRef.current.src = window._img.src;
+    };
+    if (window._img && window._img.complete) applyBg();
+    else if (window._img) window._img.addEventListener('load', applyBg);
+
     const onResize = () => {
       const s = stateRef.current;
       if (!s) return;
-      const nW = Math.ceil(window.innerWidth  / RESOLUTION);
-      const nH = Math.ceil(window.innerHeight / RESOLUTION);
-      canvas.width  = nW; canvas.height = nH;
-      canvas.style.width  = window.innerWidth  + 'px';
-      canvas.style.height = window.innerHeight + 'px';
+      const nW = Math.ceil(window.innerWidth  / SIM_SCALE);
+      const nH = Math.ceil(window.innerHeight / SIM_SCALE);
       s.W = nW; s.H = nH;
-      s.buf1    = new Float32Array(nW * nH);
-      s.buf2    = new Float32Array(nW * nH);
-      s.bgData  = makeBg(nW, nH);
-      s.outData = s.ctx.createImageData(nW, nH);
+      s.simCanvas.width = nW; s.simCanvas.height = nH;
+      s.simData = s.simCtx.createImageData(nW, nH);
+      s.buf1 = new Float32Array(nW * nH);
+      s.buf2 = new Float32Array(nW * nH);
     };
     window.addEventListener('resize', onResize);
 
-    const onImgLoad = () => {
-      const s = stateRef.current;
-      if (s) s.bgData = makeBg(s.W, s.H);
-    };
-    if (window._img && !window._img.complete) {
-      window._img.addEventListener('load', onImgLoad);
-    }
-
     return () => {
       window.removeEventListener('resize', onResize);
-      if (window._img) window._img.removeEventListener('load', onImgLoad);
+      if (window._img) window._img.removeEventListener('load', applyBg);
     };
   }, []);
 
@@ -80,17 +61,17 @@ function WaterTrail({ t }) {
       const s = stateRef.current;
       if (!s) return;
       const { strength, radius, rate } = tRef.current;
-      const x = Math.round(e.clientX / RESOLUTION);
-      const y = Math.round(e.clientY / RESOLUTION);
-      const dx = x - s.lastX, dy = y - s.lastY;
-      const minDist = rate / RESOLUTION;
-      if (s.lastX < 0 || dx * dx + dy * dy >= minDist * minDist) {
+      const x = Math.round(e.clientX / SIM_SCALE);
+      const y = Math.round(e.clientY / SIM_SCALE);
+      const ddx = x - s.lastX, ddy = y - s.lastY;
+      const minDist = rate / SIM_SCALE;
+      if (s.lastX < 0 || ddx * ddx + ddy * ddy >= minDist * minDist) {
         const r = Math.round(radius);
-        for (let dy2 = -r; dy2 <= r; dy2++) {
-          for (let dx2 = -r; dx2 <= r; dx2++) {
-            if (dx2 * dx2 + dy2 * dy2 <= r * r) {
-              const px = Math.max(0, Math.min(s.W - 1, x + dx2));
-              const py = Math.max(0, Math.min(s.H - 1, y + dy2));
+        for (let dy = -r; dy <= r; dy++) {
+          for (let dx = -r; dx <= r; dx++) {
+            if (dx * dx + dy * dy <= r * r) {
+              const px = Math.max(0, Math.min(s.W - 1, x + dx));
+              const py = Math.max(0, Math.min(s.H - 1, y + dy));
               s.buf1[py * s.W + px] = strength;
             }
           }
@@ -103,13 +84,16 @@ function WaterTrail({ t }) {
   }, []);
 
   React.useEffect(() => {
+    const feImg = document.getElementById('water-map');
     const tick = () => {
       const s = stateRef.current;
       if (!s) { rafRef.current = requestAnimationFrame(tick); return; }
 
-      const { W, H, ctx, bgData, outData } = s;
-      const damping = tRef.current.damping;
+      const { W, H, simCanvas, simCtx, simData } = s;
+      const { damping } = tRef.current;
+      const data = simData.data;
 
+      // Wave propagation
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
           const i = y * W + x;
@@ -119,29 +103,21 @@ function WaterTrail({ t }) {
       }
       const tmp = s.buf1; s.buf1 = s.buf2; s.buf2 = tmp;
 
+      // Encode wave gradient as displacement map (R=X, G=Y, neutral=128)
       const h = s.buf1;
-      const src = bgData.data;
-      const dst = outData.data;
-      dst.fill(0);
-
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
           const i = y * W + x;
-          const dx = Math.round((h[i + 1] - h[i - 1]) * 0.08);
-          const dy = Math.round((h[i + W] - h[i - W]) * 0.08);
-          if (dx === 0 && dy === 0) continue;
-          const sx = Math.max(0, Math.min(W - 1, x + dx));
-          const sy = Math.max(0, Math.min(H - 1, y + dy));
-          const si = (sy * W + sx) * 4;
           const di = i * 4;
-          dst[di]     = src[si];
-          dst[di + 1] = src[si + 1];
-          dst[di + 2] = src[si + 2];
-          dst[di + 3] = 255;
+          data[di]     = 128 + Math.round(Math.max(-127, Math.min(127, (h[i + 1] - h[i - 1]) * 0.4)));
+          data[di + 1] = 128 + Math.round(Math.max(-127, Math.min(127, (h[i + W] - h[i - W]) * 0.4)));
+          data[di + 2] = 128;
+          data[di + 3] = 255;
         }
       }
+      simCtx.putImageData(simData, 0, 0);
+      if (feImg) feImg.setAttribute('href', simCanvas.toDataURL());
 
-      ctx.putImageData(outData, 0, 0);
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -149,6 +125,25 @@ function WaterTrail({ t }) {
   }, []);
 
   return (
-    <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, display: 'block' }} />
+    <>
+      <svg style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}>
+        <defs>
+          <filter id="water-filter" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+            <feImage id="water-map" preserveAspectRatio="xMidYMid slice" result="map" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale="60" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
+      <img
+        ref={bgRef}
+        crossOrigin="anonymous"
+        style={{
+          position: 'fixed', inset: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover',
+          filter: 'url(#water-filter)',
+        }}
+      />
+    </>
   );
 }
