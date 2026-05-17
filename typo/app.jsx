@@ -36,7 +36,7 @@ function App() {
               onChange={(e) => { const v = [..._seg.segment(e.target.value)].slice(0, 20).map(s => s.segment).join(''); setTweak('text', v); }}
             />
             <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
-              fontSize: 10, color: 'var(--muted)', pointerEvents: 'none' }}>
+              fontSize: 10, color: 'var(--val)', pointerEvents: 'none' }}>
               {[..._seg.segment(t.text || '')].length}/20
             </span>
           </div>
@@ -72,8 +72,9 @@ function App() {
                        onChange={(v) => setTweak('spread', v / 100)} />
         </TweakSection>
 
-        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, text: t.text })} />
+          <TweakButton label="Primary" />
         </div>
       </TweaksPanel>
     </>
