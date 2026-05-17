@@ -1,3 +1,5 @@
+const SEGMENTER = new Intl.Segmenter();
+
 function hexToRgb(hex) {
   const h = (hex || '#ffffff').replace('#', '');
   const full = h.length === 3 ? h.replace(/./g, c => c + c) : h.padEnd(6, '0');
@@ -9,8 +11,6 @@ function getEffectStyle(effect, color) {
   const [r, g, b] = hexToRgb(color);
   switch (effect) {
     case 'outline':
-      // paint-order: stroke fill covers internal junction overlaps (t crossbar, h arch, etc.)
-      // with the page bg color so only the outer stroke edge stays visible
       return {
         WebkitTextStroke: `0.08em rgba(${r},${g},${b},.9)`,
         WebkitTextFillColor: 'var(--pg-bg)',
@@ -25,8 +25,18 @@ function Typo({
   panelOpen
 }) {
   const containerRef = React.useRef(null);
+  const spansRef = React.useRef([]);
   const timeRef = React.useRef(0);
   const rafRef = React.useRef(null);
+  const chars = React.useMemo(() => {
+    const segs = [...SEGMENTER.segment(t.text || '')].map(s => s.segment).slice(0, 20);
+    return segs.length ? segs : [' '];
+  }, [t.text]);
+  React.useLayoutEffect(() => {
+    if (containerRef.current) {
+      spansRef.current = Array.from(containerRef.current.querySelectorAll('.ty-char'));
+    }
+  }, [chars]);
   React.useEffect(() => {
     let last = null;
     const tick = now => {
@@ -34,16 +44,13 @@ function Typo({
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       timeRef.current += dt * t.speed;
-      const el = containerRef.current;
-      if (el) {
-        const spans = el.querySelectorAll('.ty-char');
-        const n = spans.length;
-        spans.forEach((span, i) => {
-          const phase = n > 1 ? i / (n - 1) * Math.PI * 2 * t.spread : 0;
-          const y = Math.sin(timeRef.current * Math.PI * 2 - phase) * t.amplitude;
-          span.style.transform = `translateY(${y}px)`;
-        });
-      }
+      const spans = spansRef.current;
+      const n = spans.length;
+      spans.forEach((span, i) => {
+        const phase = n > 1 ? i / (n - 1) * Math.PI * 2 * t.spread : 0;
+        const y = Math.sin(timeRef.current * Math.PI * 2 - phase) * t.amplitude;
+        span.style.transform = `translateY(${y}px)`;
+      });
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -51,11 +58,6 @@ function Typo({
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [t.speed, t.amplitude, t.spread]);
-  const segmenter = React.useMemo(() => new Intl.Segmenter(), []);
-  const chars = React.useMemo(() => {
-    const segs = [...segmenter.segment(t.text || '')].map(s => s.segment).slice(0, 20);
-    return segs.length ? segs : [' '];
-  }, [t.text, segmenter]);
   const effectStyle = React.useMemo(() => getEffectStyle(t.fontEffect || 'flat', t.fontColor), [t.fontEffect, t.fontColor]);
   return /*#__PURE__*/React.createElement("div", {
     style: {
@@ -64,7 +66,7 @@ function Typo({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      paddingRight: panelOpen ? '312px' : '0px',
+      paddingRight: panelOpen ? '312px' : 0,
       transition: 'padding-right .3s cubic-bezier(.25,.46,.45,.94)'
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -81,7 +83,7 @@ function Typo({
       lineHeight: 1
     }
   }, chars.map((char, i) => /*#__PURE__*/React.createElement("span", {
-    key: i,
+    key: i + '-' + char,
     className: "ty-char",
     style: {
       display: 'inline-block',
