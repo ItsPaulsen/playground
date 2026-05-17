@@ -187,6 +187,7 @@ function WaterTrail({
         position: 'fixed', inset: 0,
         width: '100%', height: '100%',
         mixBlendMode: 'screen',
+        filter: 'blur(8px)',
         pointerEvents: 'none'
       }
     })
