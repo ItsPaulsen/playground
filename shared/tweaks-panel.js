@@ -54,7 +54,7 @@ const __TWEAKS_STYLE = `
     --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);
     --track:var(--fld-bd);--seg:var(--fld-bd);
     --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);
-    --btn:rgba(28,25,23,.8);--btn-t:rgb(253,253,251);
+    --btn:rgba(28,25,23,.8);--btn-t:rgb(253,253,251);--btn-h:rgba(28,25,23,.9);
     --sec:var(--bd);--sec-h:var(--fld-bd);
     --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);
   }
@@ -64,7 +64,7 @@ const __TWEAKS_STYLE = `
     --label:rgba(253,253,251,.7);--val:rgba(253,253,251,.5);
     --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.25);--fld-surf:rgba(253,253,251,.05);
     --tog-off:rgba(253,253,251,.3);
-    --btn:rgba(253,253,251,.14);
+    --btn:rgba(253,253,251,.14);--btn-h:rgba(253,253,251,.2);
     --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
   }
 
@@ -164,7 +164,8 @@ const __TWEAKS_STYLE = `
 
   .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;
     background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:pointer}
-.twk-btn:disabled{opacity:.35;cursor:default;pointer-events:none}
+  .twk-btn:hover{background:var(--btn-h)}
+  .twk-btn:disabled{opacity:.35;cursor:default;pointer-events:none}
   html[data-theme="dark"] .twk-panel .twk-btn:disabled{opacity:.25}
   .twk-btn.secondary{background:var(--sec);color:inherit}
   .twk-btn.secondary:hover{background:var(--sec-h)}
