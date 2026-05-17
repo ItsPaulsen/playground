@@ -48,7 +48,7 @@
 
 const __TWEAKS_STYLE = `
   .twk-panel,.twk-reopen{
-    --bg:rgba(255,255,255,.80);--text:#1c1917;--bd:rgba(0,0,0,.10);
+    --bg:rgba(253,253,251,.80);--text:#1c1917;--bd:rgba(0,0,0,.10);
     --muted:rgba(28,25,23,.55);--label:rgba(28,25,23,.70);--val:rgba(28,25,23,.50);
     --sect:rgba(28,25,23,.5);--hov-x:rgba(0,0,0,.06);
     --scroll:rgba(0,0,0,.15);--scroll-h:rgba(0,0,0,.25);
