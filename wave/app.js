@@ -50,7 +50,7 @@ function App() {
       turbulence: t.turbulence,
       speed: t.speed,
       opacity: 1,
-      centerOffset: 0,
+      centerOffset: panelOpen && t.direction === 'vertical' ? -0.18 : 0,
       softness: true,
       paused: false,
       direction: t.direction,
