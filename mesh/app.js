@@ -71,11 +71,13 @@ function App() {
     label: "Color 2",
     value: t.color2,
     onChange: v => setTweak('color2', v)
-  }), /*#__PURE__*/React.createElement(TweakButton, {
+  }), /*#__PURE__*/React.createElement("div", {
+    style: { display: 'flex' }
+  }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Randomize",
     secondary: true,
     onClick: nextPalette
-  })), /*#__PURE__*/React.createElement(TweakSection, {
+  }))), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Animation"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Speed",

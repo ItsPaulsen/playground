@@ -69,7 +69,9 @@ function App() {
         <TweakSection label="Colors">
           <TweakColor label="Color 1" value={t.color1} onChange={v => setTweak('color1', v)} />
           <TweakColor label="Color 2" value={t.color2} onChange={v => setTweak('color2', v)} />
-          <TweakButton label="Randomize" secondary onClick={nextPalette} />
+          <div style={{ display: 'flex' }}>
+            <TweakButton label="Randomize" secondary onClick={nextPalette} />
+          </div>
         </TweakSection>
 
         <TweakSection label="Animation">
