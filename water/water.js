@@ -117,12 +117,13 @@ function WaterTrail({
       const h = s.buf1;
       const src = bgData.data;
       const dst = outData.data;
-      dst.set(src);
+      dst.fill(0);
       for (let y = 1; y < H - 1; y++) {
         for (let x = 1; x < W - 1; x++) {
           const i = y * W + x;
           const dx = Math.round((h[i + 1] - h[i - 1]) * 0.08);
           const dy = Math.round((h[i + W] - h[i - W]) * 0.08);
+          if (dx === 0 && dy === 0) continue;
           const sx = Math.max(0, Math.min(W - 1, x + dx));
           const sy = Math.max(0, Math.min(H - 1, y + dy));
           const si = (sy * W + sx) * 4;
