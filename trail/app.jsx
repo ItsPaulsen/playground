@@ -1,10 +1,10 @@
-const DEFAULT_COLORS = ['#b91c1c','#c2410c','#a16207','#15803d','#1d4ed8','#6d28d9'];
+const DEFAULT_COLORS = ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6'];
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "rainbow": true,
   "colorSpeed": 0.5,
   "numColors": 3,
-  "colors": ["#b91c1c","#c2410c","#a16207","#15803d","#1d4ed8","#6d28d9"],
+  "colors": ["#ef4444","#f97316","#eab308","#22c55e","#3b82f6","#8b5cf6"],
   "glow": true,
   "dotDistance": 3,
   "maxDots": 300,
