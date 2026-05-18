@@ -18,6 +18,29 @@
   style.textContent = `
     :root { --header-h: 48px; }
 
+    .skip-link {
+      position: fixed;
+      top: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2147483647;
+      padding: 8px 20px;
+      background: var(--pg-primary);
+      color: var(--pg-bg);
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 10px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: top .2s ease;
+    }
+    .skip-link:focus-visible {
+      top: 12px;
+      outline: 2px solid var(--pg-bg);
+      outline-offset: 2px;
+    }
+
     #site-nav {
       position: relative; z-index: 2147483647;
       background: var(--nav-bg, transparent);
@@ -131,6 +154,17 @@
 
   document.body.prepend(nav);
   document.body.insertBefore(menu, nav.nextSibling);
+
+  const skipLink = document.createElement('a');
+  skipLink.className = 'skip-link';
+  skipLink.href = '#main-content';
+  skipLink.textContent = 'Skip to content';
+  skipLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.getElementById('main-content') || document.getElementById('root');
+    if (target) target.focus();
+  });
+  document.body.prepend(skipLink);
 
   const themeBtn = document.getElementById('theme-toggle');
   const menuBtn  = document.getElementById('menu-toggle');
