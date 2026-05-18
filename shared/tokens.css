@@ -25,3 +25,8 @@ html[data-theme="dark"] {
   --pg-muted:   var(--pg-dark-400);
   --pg-primary: var(--pg-dark-500);
 }
+
+:focus-visible {
+  outline: 2px solid var(--pg-primary);
+  outline-offset: 2px;
+}
