@@ -86,7 +86,7 @@ const __TWEAKS_STYLE = `
   .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
   .twk-hd{display:flex;align-items:center;
     padding:0 44px 0 16px;height:44px;}
-  .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em}
+  .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em;line-height:20px}
   .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);
     width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center;
