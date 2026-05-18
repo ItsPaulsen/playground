@@ -9,11 +9,6 @@
     { label: 'Trail', href: '/trail/' },
   ];
 
-  const fontLink = document.createElement('link');
-  fontLink.rel = 'stylesheet';
-  fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap';
-  document.head.prepend(fontLink);
-
   const style = document.createElement('style');
   style.textContent = `
     :root { --header-h: 48px; }
