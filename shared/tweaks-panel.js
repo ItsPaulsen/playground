@@ -340,10 +340,13 @@ function TweaksPanel({
     }, '*');
   };
   const handleAnimEnd = e => {
-    if (e.animationName === 'twk-out') { setClosing(false); setOpen(false); }
+    if (e.animationName === 'twk-out') {
+      setClosing(false);
+      setOpen(false);
+    }
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), open ? /*#__PURE__*/React.createElement("div", {
-    className: closing ? 'twk-panel twk-closing' : animateIn ? 'twk-panel twk-opening' : 'twk-panel',
+    className: `twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`,
     "data-noncommentable": "",
     onAnimationEnd: handleAnimEnd
   }, /*#__PURE__*/React.createElement("div", {
@@ -377,7 +380,10 @@ function TweaksPanel({
   })))) : /*#__PURE__*/React.createElement("button", {
     className: "twk-reopen",
     "aria-label": "Open tweaks",
-    onClick: () => { setAnimateIn(true); setOpen(true); }
+    onClick: () => {
+      setAnimateIn(true);
+      setOpen(true);
+    }
   }, /*#__PURE__*/React.createElement("svg", {
     width: "18",
     height: "18",

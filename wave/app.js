@@ -16,7 +16,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "seed": 19
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
-const COLORS = ['#f87171','#fb923c','#fbbf24','#facc15','#a3e635','#4ade80','#34d399','#2dd4bf','#22d3ee','#38bdf8','#60a5fa','#818cf8','#a78bfa','#c084fc','#e879f9','#f472b6','#fb7185'];
+const COLORS = ['#f87171', '#fb923c', '#fbbf24', '#facc15', '#a3e635', '#4ade80', '#34d399', '#2dd4bf', '#22d3ee', '#38bdf8', '#60a5fa', '#818cf8', '#a78bfa', '#c084fc', '#e879f9', '#f472b6', '#fb7185'];
 const DIRECTIONS = ['vertical', 'horizontal'];
 const rand = (min, max, step = 0.01) => Math.round((Math.random() * (max - min) + min) / step) * step;
 const pick = arr => arr[Math.floor(Math.random() * arr.length)];
@@ -171,7 +171,13 @@ function App() {
     step: 0.5,
     onChange: v => setTweak('pulseSpeed', Number(v))
   })), /*#__PURE__*/React.createElement("div", {
-    style: {display:'flex',gap:8,borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+    style: {
+      display: 'flex',
+      gap: 8,
+      borderTop: '1px solid var(--bd)',
+      marginTop: '8px',
+      paddingTop: '16px'
+    }
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Randomize",
     secondary: true,

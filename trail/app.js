@@ -1,9 +1,9 @@
-const DEFAULT_COLORS = ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6'];
+const DEFAULT_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6'];
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "rainbow": true,
   "colorSpeed": 0.5,
   "numColors": 3,
-  "colors": ["#ef4444","#f97316","#eab308","#22c55e","#3b82f6","#8b5cf6"],
+  "colors": ["#ef4444", "#f97316", "#eab308", "#22c55e", "#3b82f6", "#8b5cf6"],
   "glow": true,
   "dotDistance": 3,
   "maxDots": 300,
@@ -14,7 +14,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const isDirty = JSON.stringify({ ...t, rainbow: TWEAK_DEFAULTS.rainbow }) !== TWEAK_DEFAULTS_JSON;
+  const isDirty = JSON.stringify({
+    ...t,
+    rainbow: TWEAK_DEFAULTS.rainbow
+  }) !== TWEAK_DEFAULTS_JSON;
   const setColor = (i, v) => {
     const c = [...t.colors];
     c[i] = v;
@@ -99,7 +102,12 @@ function App() {
     unit: "s",
     onChange: v => setTweak('lifetime', v)
   })), /*#__PURE__*/React.createElement("div", {
-    style: {display:'flex',borderTop:'1px solid var(--bd)',marginTop:'8px',paddingTop:'16px'}
+    style: {
+      display: 'flex',
+      borderTop: '1px solid var(--bd)',
+      marginTop: '8px',
+      paddingTop: '16px'
+    }
   }, /*#__PURE__*/React.createElement(TweakButton, {
     label: "Reset",
     secondary: true,

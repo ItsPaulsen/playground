@@ -1,5 +1,4 @@
 const SEGMENTER = new Intl.Segmenter();
-
 function hexToRgb(hex) {
   const h = (hex || '#ffffff').replace('#', '');
   const full = h.length === 3 ? h.replace(/./g, c => c + c) : h.padEnd(6, '0');
