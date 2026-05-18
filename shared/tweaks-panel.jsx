@@ -187,13 +187,11 @@ const __TWEAKS_STYLE = `
   .twk-color-main{display:flex;align-items:center;flex:1;min-width:0;height:26px;
     border:1px solid var(--fld-bd);border-radius:8px;background:var(--fld-surf);box-sizing:border-box}
   .twk-color-preview{flex-shrink:0;cursor:pointer;
-    width:26px;height:calc(100% + 2px);
-    margin:-1px 0;border-radius:7px 0 0 7px;
-    border-right:1px solid var(--fld-bd)}
+    width:26px;height:26px;border-radius:8px 0 0 8px;
+    margin-right:-7px;position:relative;z-index:1}
   .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;padding:0 6px;outline:none}
   .twk-color-main:focus-within{border-color:var(--fld-bdf)}
-  .twk-color-main:focus-within .twk-color-preview{border-right-color:var(--fld-bdf)}
   .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;
     background:var(--fld-surf);font-size:12px;display:flex;align-items:center;gap:1px;
     white-space:nowrap;flex-shrink:0}
@@ -714,9 +712,9 @@ function __TweakColorInput({ label, value, onChange, noAlpha }) {
 
   const row = (
     <div className="twk-color-row">
+      <div ref={swatchRef} className="twk-color-preview" style={{ background: hex }}
+           onClick={() => setShowPicker(v => !v)} />
       <div className="twk-color-main">
-        <div ref={swatchRef} className="twk-color-preview" style={{ background: hex }}
-             onClick={() => setShowPicker(v => !v)} />
         <input className="twk-color-hex" type="text" value={hex}
                onChange={onHexChange} spellCheck={false} />
       </div>
