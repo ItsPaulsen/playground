@@ -126,6 +126,7 @@
   const menu = document.createElement('div');
   menu.id = 'site-menu';
   menu.setAttribute('aria-hidden', 'true');
+  menu.setAttribute('inert', '');
   menu.innerHTML = `<nav>${NAV_ITEMS.map((item, i) => `<a href="${item.href}" style="transition-delay:${((i + 1) * .05).toFixed(2)}s">${item.label}</a>`).join('')}</nav>`;
 
   document.body.prepend(nav);
@@ -149,6 +150,7 @@
     menuIcon.classList.toggle('is-open', open);
     nav.classList.toggle('menu-open', open);
     menu.setAttribute('aria-hidden', !open);
+    menu.toggleAttribute('inert', !open);
     menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     menuBtn.setAttribute('aria-expanded', open);
   }
