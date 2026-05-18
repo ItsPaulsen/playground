@@ -42,7 +42,7 @@
     }
 
     #site-nav {
-      position: relative; z-index: 2147483647;
+      position: relative; z-index: 2147483646;
       background: var(--nav-bg, transparent);
       backdrop-filter: var(--nav-filter, none);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -96,7 +96,7 @@
     .menu-icon.is-open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
     #site-menu {
-      position: fixed; inset: 0; z-index: 2147483646;
+      position: fixed; inset: 0; z-index: 2147483645;
       background: var(--nav-bg, color-mix(in srgb, var(--pg-bg) 80%, transparent));
       backdrop-filter: var(--nav-filter, blur(12px) saturate(180%));
       opacity: 0; pointer-events: none;
