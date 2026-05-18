@@ -37,7 +37,7 @@
     }
     .skip-link:focus-visible {
       top: 12px;
-      outline: 2px solid var(--pg-bg);
+      outline: 2px solid var(--pg-primary);
       outline-offset: 2px;
     }
 
