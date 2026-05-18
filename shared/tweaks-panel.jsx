@@ -421,7 +421,7 @@ function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', on
     if (!(e.key in SLIDER_KEY_DIRS)) return;
     e.preventDefault();
     const decimals = (String(step).split('.')[1] || '').length;
-    const next = Math.max(min, Math.min(max, Number((value + SLIDER_KEY_DIRS[e.key] * step).toFixed(decimals))));
+    const next = Math.max(min, Math.min(max, Number((Number(value) + SLIDER_KEY_DIRS[e.key] * step).toFixed(decimals))));
     onChange(next);
   };
 
