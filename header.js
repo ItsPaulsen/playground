@@ -193,7 +193,9 @@
     menu.toggleAttribute('inert', !open);
     menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     menuBtn.setAttribute('aria-expanded', open);
+    const scrollbarW = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = open ? 'hidden' : '';
+    document.body.style.paddingRight = open ? scrollbarW + 'px' : '';
   }
 
   themeBtn.addEventListener('click', function () {
