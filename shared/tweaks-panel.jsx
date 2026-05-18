@@ -188,10 +188,12 @@ const __TWEAKS_STYLE = `
     border:1px solid var(--fld-bd);border-radius:8px;background:var(--fld-surf);box-sizing:border-box}
   .twk-color-preview{flex-shrink:0;cursor:pointer;
     width:26px;height:calc(100% + 2px);
-    margin:-1px 0 -1px -1px;border-radius:7px 0 0 7px}
+    margin:-1px 0 -1px -1px;border-radius:7px 0 0 7px;
+    border-right:1px solid var(--fld-bd)}
   .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;padding:0 6px;outline:none}
   .twk-color-main:focus-within{border-color:var(--fld-bdf)}
+  .twk-color-main:focus-within .twk-color-preview{border-right-color:var(--fld-bdf)}
   .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;
     background:var(--fld-surf);font-size:12px;display:flex;align-items:center;gap:1px;
     white-space:nowrap;flex-shrink:0}
