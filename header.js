@@ -161,8 +161,17 @@
   skipLink.textContent = 'Skip to content';
   skipLink.addEventListener('click', function (e) {
     e.preventDefault();
-    const target = document.getElementById('main-content') || document.getElementById('root');
-    if (target) target.focus();
+    const main = document.getElementById('main-content');
+    if (main) { main.focus(); return; }
+    const reopenBtn = document.querySelector('.twk-reopen');
+    if (reopenBtn) { reopenBtn.focus(); return; }
+    const tweaksPanel = document.querySelector('.twk-panel');
+    if (tweaksPanel) {
+      const first = tweaksPanel.querySelector('button, input, [tabindex="0"]');
+      if (first) { first.focus(); return; }
+    }
+    const root = document.getElementById('root');
+    if (root) root.focus();
   });
   document.body.prepend(skipLink);
 
