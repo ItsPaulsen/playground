@@ -25,8 +25,8 @@
       transform: translateX(-50%);
       z-index: 2147483647;
       padding: 8px 20px;
-      background: var(--pg-primary);
-      color: var(--pg-bg);
+      background: var(--pg-surface);
+      color: var(--pg-primary);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
       font-size: 14px;
       font-weight: 500;
@@ -37,7 +37,7 @@
     }
     .skip-link:focus-visible {
       top: 12px;
-      outline: 2px solid var(--pg-bg);
+      outline: 2px solid var(--pg-primary);
       outline-offset: 2px;
     }
 
