@@ -185,10 +185,10 @@ const __TWEAKS_STYLE = `
   .twk-color-row{display:flex;align-items:center;gap:6px}
   .twk-bar-row .twk-color-row{width:172px;flex-shrink:0}
   .twk-color-main{display:flex;align-items:center;flex:1;min-width:0;height:26px;
-    border:1px solid var(--fld-bd);border-radius:8px;background:var(--fld-surf);box-sizing:border-box}
+    border:1px solid var(--fld-bd);border-radius:0 8px 8px 0;background:var(--fld-surf);box-sizing:border-box}
   .twk-color-preview{flex-shrink:0;cursor:pointer;
     width:26px;height:26px;border-radius:8px 0 0 8px;
-    margin-right:-7px;position:relative;z-index:1}
+    margin-right:-5px;position:relative;z-index:1}
   .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;padding:0 6px;outline:none}
   .twk-color-main:focus-within{border-color:var(--fld-bdf)}
