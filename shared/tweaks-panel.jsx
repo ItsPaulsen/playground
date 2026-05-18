@@ -392,7 +392,8 @@ function TweakRow({ label, value, children, inline = false }) {
 
 const SLIDER_KEY_DIRS = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 };
 
-function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+function TweakSlider({ label, value: rawValue, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  const value = Number(rawValue);
   const pct = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
   const barRef = React.useRef(null);
   const [dragging, setDragging] = React.useState(false);
@@ -421,7 +422,7 @@ function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', on
     if (!(e.key in SLIDER_KEY_DIRS)) return;
     e.preventDefault();
     const decimals = (String(step).split('.')[1] || '').length;
-    const next = Math.max(min, Math.min(max, Number((Number(value) + SLIDER_KEY_DIRS[e.key] * step).toFixed(decimals))));
+    const next = Math.max(min, Math.min(max, Number((value + SLIDER_KEY_DIRS[e.key] * step).toFixed(decimals))));
     onChange(next);
   };
 
