@@ -94,8 +94,8 @@ const __TWEAKS_STYLE = `
   .twk-x:hover{color:var(--text)}
   html[data-theme="dark"] .twk-x{color:rgba(253,253,251,.8)}
   html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
-  .twk-body{padding:6px 16px 16px;display:flex;flex-direction:column;gap:8px;
-    overflow-y:auto;overflow-x:hidden;min-height:0;scroll-padding-top:6px;
+  .twk-body{padding:4px 16px 16px;display:flex;flex-direction:column;gap:8px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;scroll-padding-top:4px;
     scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}
   .twk-body::-webkit-scrollbar{width:8px}
   .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
