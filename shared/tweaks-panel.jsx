@@ -188,7 +188,7 @@ const __TWEAKS_STYLE = `
     border:1px solid var(--fld-bd);border-radius:0 8px 8px 0;background:var(--fld-surf);box-sizing:border-box}
   .twk-color-preview{flex-shrink:0;cursor:pointer;
     width:26px;height:26px;border-radius:8px 0 0 8px;
-    margin-right:-5px;position:relative;z-index:1}
+    margin-right:-6px;position:relative;z-index:1}
   .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;padding:0 6px;outline:none}
   .twk-color-main:focus-within{border-color:var(--fld-bdf)}
