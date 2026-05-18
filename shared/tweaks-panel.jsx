@@ -84,9 +84,10 @@ const __TWEAKS_STYLE = `
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
   .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
-  .twk-hd{display:flex;align-items:center;
-    padding:4px 44px 4px 16px;min-height:44px;}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:4px 8px 4px 16px;}
   .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em;line-height:20px}
+  .twk-hd-spacer{width:36px;height:36px;flex-shrink:0;}
   .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);
     width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center;
@@ -332,6 +333,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         <div className={`twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd">
             <b>{title}</b>
+            <span className="twk-hd-spacer" aria-hidden="true" />
           </div>
           <div className="twk-body">
             {children}
