@@ -126,6 +126,7 @@ const __TWEAKS_STYLE = `
 
   .twk-bar-row{display:flex;align-items:center;gap:8px}
   .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}
+  .twk-bar:focus-visible{outline:2px solid var(--text);outline-offset:2px;border-radius:8px;}
   .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);
     cursor:pointer;overflow:hidden;user-select:none;touch-action:none}
   .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);
@@ -414,12 +415,24 @@ function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', on
   };
   const onPointerUp = () => setDragging(false);
 
+  const onKeyDown = (e) => {
+    const dirs = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 };
+    if (!(e.key in dirs)) return;
+    e.preventDefault();
+    const decimals = (String(step).split('.')[1] || '').length;
+    const next = Math.max(min, Math.min(max, Number((value + dirs[e.key] * step).toFixed(decimals))));
+    onChange(next);
+  };
+
   return (
     <div className="twk-bar-row">
       <span className="twk-bar-lbl">{label}{unit ? ` (${unit})` : ''}</span>
       <div ref={barRef} className="twk-bar"
+           tabIndex={0} role="slider"
+           aria-label={label} aria-valuemin={min} aria-valuemax={max} aria-valuenow={value}
            style={{ cursor: dragging ? 'grabbing' : 'pointer' }}
-           onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}>
+           onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
+           onKeyDown={onKeyDown}>
         <div className="twk-bar-fill" style={{ width: pct + '%' }} />
         <span className="twk-bar-val twk-bar-val--fill" style={{ clipPath: `inset(0 ${100 - pct}% 0 0)` }}>{value}</span>
         <span className="twk-bar-val twk-bar-val--track" style={{ clipPath: `inset(0 0 0 ${pct}%)` }}>{value}</span>
