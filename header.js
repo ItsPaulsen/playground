@@ -155,27 +155,27 @@
   document.body.prepend(nav);
   document.body.insertBefore(menu, nav.nextSibling);
 
-  if (document.documentElement.dataset.page === 'style') return;
-
-  const skipLink = document.createElement('a');
-  skipLink.className = 'skip-link';
-  skipLink.href = '#main-content';
-  skipLink.textContent = 'Skip to content';
-  skipLink.addEventListener('click', function (e) {
-    e.preventDefault();
-    const main = document.getElementById('main-content');
-    if (main) { main.focus(); return; }
-    const reopenBtn = document.querySelector('.twk-reopen');
-    if (reopenBtn) { reopenBtn.focus(); return; }
-    const tweaksPanel = document.querySelector('.twk-panel');
-    if (tweaksPanel) {
-      const first = tweaksPanel.querySelector('button, input, [tabindex="0"]');
-      if (first) { first.focus(); return; }
-    }
-    const root = document.getElementById('root');
-    if (root) root.focus();
-  });
-  document.body.prepend(skipLink);
+  if (document.documentElement.dataset.page !== 'style') {
+    const skipLink = document.createElement('a');
+    skipLink.className = 'skip-link';
+    skipLink.href = '#main-content';
+    skipLink.textContent = 'Skip to content';
+    skipLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      const main = document.getElementById('main-content');
+      if (main) { main.focus(); return; }
+      const reopenBtn = document.querySelector('.twk-reopen');
+      if (reopenBtn) { reopenBtn.focus(); return; }
+      const tweaksPanel = document.querySelector('.twk-panel');
+      if (tweaksPanel) {
+        const first = tweaksPanel.querySelector('button, input, [tabindex="0"]');
+        if (first) { first.focus(); return; }
+      }
+      const root = document.getElementById('root');
+      if (root) root.focus();
+    });
+    document.body.prepend(skipLink);
+  }
 
   const themeBtn = document.getElementById('theme-toggle');
   const menuBtn  = document.getElementById('menu-toggle');
