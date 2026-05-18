@@ -85,13 +85,13 @@ const __TWEAKS_STYLE = `
   .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
   .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:4px 8px 4px 16px;}
+    padding:8px 8px 0 16px;}
   .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em;line-height:20px}
   .twk-hd-spacer{width:36px;height:36px;flex-shrink:0;}
   .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);
     width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center;
-    position:absolute;top:4px;right:8px;}
+    position:absolute;top:8px;right:8px;}
   .twk-x:hover{color:var(--text)}
   html[data-theme="dark"] .twk-x{color:rgba(253,253,251,.8)}
   html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
