@@ -84,12 +84,13 @@ const __TWEAKS_STYLE = `
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
   .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
-  .twk-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:8px 8px 4px 16px}
+  .twk-hd{display:flex;align-items:center;
+    padding:8px 44px 4px 16px}
   .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em}
   .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);
     width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:13px;line-height:1;
-    display:flex;align-items:center;justify-content:center}
+    display:flex;align-items:center;justify-content:center;
+    position:absolute;top:8px;right:8px;}
   .twk-x:hover{color:var(--text)}
   html[data-theme="dark"] .twk-x{color:rgba(253,253,251,.8)}
   html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
@@ -331,11 +332,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         <div className={`twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd">
             <b>{title}</b>
-            <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-              </svg>
-            </button>
           </div>
           <div className="twk-body">
             {children}
@@ -345,6 +341,11 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
               </TweakSection>
             )}
           </div>
+          <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
         </div>
       ) : (
         <button className="twk-reopen" aria-label="Open tweaks" onClick={() => { setAnimateIn(true); setOpen(true); }}>
