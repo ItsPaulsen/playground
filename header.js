@@ -159,7 +159,11 @@
       if (e.type === 'keydown' && e.key !== 'Enter') return;
       e.preventDefault();
       const main = document.getElementById('main-content');
-      if (main) { main.focus(); return; }
+      if (main) {
+        const first = main.querySelector('a, button, [tabindex="0"]');
+        if (first) { first.focus(); return; }
+        main.focus(); return;
+      }
       const reopenBtn = document.querySelector('.twk-reopen');
       if (reopenBtn) { reopenBtn.focus(); return; }
       const tweaksPanel = document.querySelector('.twk-panel');
