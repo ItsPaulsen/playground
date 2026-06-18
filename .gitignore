@@ -6,3 +6,10 @@ package-lock.json
 
 # Babel-compiled output — edit .jsx source files, not these
 */*.js
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

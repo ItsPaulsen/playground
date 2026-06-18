@@ -3,12 +3,15 @@
   "private": true,
   "scripts": {
     "start": "npx serve . & npm run watch",
-    "build": "babel --presets @babel/preset-react shared/tweaks-panel.jsx -o shared/tweaks-panel.js && babel --presets @babel/preset-react trail/trail.jsx -o trail/trail.js && babel --presets @babel/preset-react trail/app.jsx -o trail/app.js && babel --presets @babel/preset-react wave/wave.jsx -o wave/wave.js && babel --presets @babel/preset-react wave/app.jsx -o wave/app.js && babel --presets @babel/preset-react typo/typo.jsx -o typo/typo.js && babel --presets @babel/preset-react typo/app.jsx -o typo/app.js && babel --presets @babel/preset-react mesh/mesh.jsx -o mesh/mesh.js && babel --presets @babel/preset-react mesh/app.jsx -o mesh/app.js",
-    "watch": "babel --watch --presets @babel/preset-react shared/tweaks-panel.jsx -o shared/tweaks-panel.js & babel --watch --presets @babel/preset-react trail/trail.jsx -o trail/trail.js & babel --watch --presets @babel/preset-react trail/app.jsx -o trail/app.js & babel --watch --presets @babel/preset-react wave/wave.jsx -o wave/wave.js & babel --watch --presets @babel/preset-react wave/app.jsx -o wave/app.js & babel --watch --presets @babel/preset-react typo/typo.jsx -o typo/typo.js & babel --watch --presets @babel/preset-react typo/app.jsx -o typo/app.js & babel --watch --presets @babel/preset-react mesh/mesh.jsx -o mesh/mesh.js & babel --watch --presets @babel/preset-react mesh/app.jsx -o mesh/app.js & wait"
+    "build": "babel --presets @babel/preset-react shared/tweaks-panel.jsx -o shared/tweaks-panel.js && babel --presets @babel/preset-react trail/trail.jsx -o trail/trail.js && babel --presets @babel/preset-react trail/app.jsx -o trail/app.js && babel --presets @babel/preset-react wave/wave.jsx -o wave/wave.js && babel --presets @babel/preset-react wave/app.jsx -o wave/app.js && babel --presets @babel/preset-react typo/typo.jsx -o typo/typo.js && babel --presets @babel/preset-react typo/app.jsx -o typo/app.js && babel --presets @babel/preset-react mesh/mesh.jsx -o mesh/mesh.js && babel --presets @babel/preset-react mesh/app.jsx -o mesh/app.js && babel --presets @babel/preset-react poe2/app.jsx -o poe2/app.js",
+    "watch": "babel --watch --presets @babel/preset-react shared/tweaks-panel.jsx -o shared/tweaks-panel.js & babel --watch --presets @babel/preset-react trail/trail.jsx -o trail/trail.js & babel --watch --presets @babel/preset-react trail/app.jsx -o trail/app.js & babel --watch --presets @babel/preset-react wave/wave.jsx -o wave/wave.js & babel --watch --presets @babel/preset-react wave/app.jsx -o wave/app.js & babel --watch --presets @babel/preset-react typo/typo.jsx -o typo/typo.js & babel --watch --presets @babel/preset-react typo/app.jsx -o typo/app.js & babel --watch --presets @babel/preset-react mesh/mesh.jsx -o mesh/mesh.js & babel --watch --presets @babel/preset-react mesh/app.jsx -o mesh/app.js & babel --watch --presets @babel/preset-react poe2/app.jsx -o poe2/app.js & wait",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.29.0",
-    "@babel/preset-react": "^7.28.5"
+    "@babel/preset-react": "^7.28.5",
+    "wrangler": "^4.102.0"
   }
 }
