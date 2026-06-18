@@ -99,6 +99,11 @@ function ModRow({
     setDragging(false);
   }
   const onKeyDown = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      onToggle();
+      return;
+    }
     const dir = {
       ArrowRight: 1,
       ArrowUp: 1,
@@ -120,7 +125,8 @@ function ModRow({
       onToggle();
     },
     "aria-pressed": active,
-    "aria-label": `Toggle ${mod.name}`
+    "aria-label": `Toggle ${mod.name}`,
+    tabIndex: -1
   }, /*#__PURE__*/React.createElement("svg", {
     width: "16",
     height: "16",

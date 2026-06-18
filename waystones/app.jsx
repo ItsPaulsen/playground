@@ -70,6 +70,7 @@ function ModRow({ mod, value, active, onToggle, onValue, last }) {
   function onPointerUp() { setDragging(false); }
 
   const onKeyDown = (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); onToggle(); return; }
     const dir = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
     if (!dir) return;
     e.preventDefault();
@@ -79,7 +80,7 @@ function ModRow({ mod, value, active, onToggle, onValue, last }) {
 
   return (
     <div className={`poe-row${active ? ' active' : ''}${last ? ' last' : ''}`} onClick={onToggle}>
-      <button className="poe-toggle" onClick={e => { e.stopPropagation(); onToggle(); }} aria-pressed={active} aria-label={`Toggle ${mod.name}`}>
+      <button className="poe-toggle" onClick={e => { e.stopPropagation(); onToggle(); }} aria-pressed={active} aria-label={`Toggle ${mod.name}`} tabIndex={-1}>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8 6.5,12 13,4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
       </button>
       <span className="poe-label">{mod.name}</span>
