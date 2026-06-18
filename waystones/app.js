@@ -309,26 +309,7 @@ function CombinedBox({
     className: "poe-trade-btn",
     onClick: handleTrade,
     disabled: !hasActive || trading || rateLimitSecs > 0
-  }, tradeErr ? /*#__PURE__*/React.createElement("svg", {
-    width: "13",
-    height: "13",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "18",
-    y1: "6",
-    x2: "6",
-    y2: "18"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "6",
-    y1: "6",
-    x2: "18",
-    y2: "18"
-  })) : trading ? /*#__PURE__*/React.createElement("svg", {
+  }, trading ? /*#__PURE__*/React.createElement("svg", {
     width: "13",
     height: "13",
     viewBox: "0 0 24 24",
@@ -358,7 +339,12 @@ function CombinedBox({
     y1: "14",
     x2: "21",
     y2: "3"
-  })), rateLimitSecs > 0 ? `${Math.floor(rateLimitSecs / 60)}:${String(rateLimitSecs % 60).padStart(2, '0')}` : tradeErr ? 'Error' : trading ? 'Opening…' : 'Trade'))));
+  })), rateLimitSecs > 0 ? React.createElement('span', {
+    style: {
+      fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+      fontVariantNumeric: 'tabular-nums'
+    }
+  }, `${Math.floor(rateLimitSecs / 60)}:${String(rateLimitSecs % 60).padStart(2, '0')}`) : tradeErr ? 'Error' : trading ? 'Opening…' : 'Trade'))));
 }
 function App() {
   const [states, setStates] = useState(() => MODS.map(mod => ({
