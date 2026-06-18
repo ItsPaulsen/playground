@@ -36,7 +36,7 @@ export default {
       });
       if (res.ok) {
         const data = await res.json();
-        const found = data.result?.find(l => !l.id.startsWith('HC') && l.realm === 'poe2');
+        const found = data.result?.find(l => l.realm === 'poe2' && !l.id.toLowerCase().includes('hc') && !l.id.toLowerCase().includes('solo'));
         if (found) league = found.id;
       }
     } catch {
