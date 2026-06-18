@@ -54,8 +54,9 @@
     transform: translateX(-50%);
     width: calc(100% - 64px);
     max-width: 836px;
-    background: var(--pg-surface);
+    background: rgba(253,253,251,.8);
     backdrop-filter: blur(20px) saturate(180%);
+    border: .5px solid rgba(28,25,23,.1);
     border-radius: 20px;
     box-shadow: 0 8px 40px rgba(0,0,0,.12);
     padding: 12px 16px 12px 20px;
@@ -301,6 +302,10 @@
   }
 
   html[data-theme="dark"] .poe-bar { background: rgba(253,253,251,.12); }
+  html[data-theme="dark"] .poe-combined {
+    background: rgba(41,37,36,.8);
+    border-color: rgba(253,253,251,.1);
+  }
 
   .poe-demand-warning {
     margin-top: 10px;
