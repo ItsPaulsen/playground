@@ -22,7 +22,7 @@
   .page {
     max-width: 900px;
     margin: 0 auto;
-    padding: 64px 32px 80px;
+    padding: 64px 32px 100px;
   }
 
   .page-header {
@@ -46,12 +46,17 @@
     animation: pg-up .8s cubic-bezier(.22,1,.36,1) .1s both;
   }
 
-  /* Combined box */
+  /* Combined box — fixed bottom bar */
   .poe-combined {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: var(--pg-surface);
-    border-radius: 20px;
-    padding: 14px 16px 14px 20px;
-    margin-bottom: 16px;
+    backdrop-filter: blur(20px) saturate(180%);
+    padding: 12px 24px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 100;
     animation: pg-up .7s cubic-bezier(.22,1,.36,1) .15s both;
   }
   .poe-combined.over { border-color: #ef4444; }
@@ -308,9 +313,10 @@
   .poe-demand-warning svg { flex-shrink: 0; margin-top: 0; }
 
   @media (max-width: 639px) {
-    .page { padding: 40px 16px 60px; }
+    .page { padding: 40px 16px 100px; }
     .page-header h1 { font-size: 32px; }
     .poe-bar { width: 110px; }
+    .poe-combined { padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
   }
 </style>
 </head>
