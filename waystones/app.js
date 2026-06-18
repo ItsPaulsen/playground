@@ -354,7 +354,7 @@ function App() {
     value: s.value
   } : null).filter(Boolean);
   const demand = states.reduce((sum, s, i) => {
-    if (!s.active) return sum;
+    if (!s.active || MODS[i].param === 'dropchance') return sum;
     const mod = MODS[i];
     return sum + Math.max(0, (s.value - mod.defaultVal) / (mod.max - mod.defaultVal));
   }, 0);
@@ -383,7 +383,7 @@ function App() {
     onToggle: () => toggle(i),
     onValue: v => setValue(i, v),
     last: i === MODS.length - 1
-  }))), demand > 1 && /*#__PURE__*/React.createElement("p", {
+  }))), demand > 0.78 && /*#__PURE__*/React.createElement("p", {
     className: "poe-demand-warning"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "14",
@@ -407,7 +407,7 @@ function App() {
     y1: "17",
     x2: "12.01",
     y2: "17"
-  })), "High minimums across multiple mods \u2014 results may be scarce."));
+  })), "Item Rarity, Monster Rarity, and Pack Size share a mod budget \u2014 this combo may return no results."));
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App));
