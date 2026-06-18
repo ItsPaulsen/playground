@@ -309,19 +309,7 @@ function CombinedBox({
     className: "poe-trade-btn",
     onClick: handleTrade,
     disabled: !hasActive || trading || rateLimitSecs > 0
-  }, trading ? /*#__PURE__*/React.createElement("svg", {
-    width: "13",
-    height: "13",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    className: "poe-spin"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M21 12a9 9 0 1 1-6.22-8.56"
-  })) : /*#__PURE__*/React.createElement("svg", {
+  }, /*#__PURE__*/React.createElement("svg", {
     width: "13",
     height: "13",
     viewBox: "0 0 24 24",
@@ -344,7 +332,7 @@ function CombinedBox({
       fontFamily: "'JetBrains Mono', ui-monospace, monospace",
       fontVariantNumeric: 'tabular-nums'
     }
-  }, `${Math.floor(rateLimitSecs / 60)}:${String(rateLimitSecs % 60).padStart(2, '0')}`) : tradeErr ? 'Error' : trading ? 'Opening…' : 'Trade'))));
+  }, `${Math.floor(rateLimitSecs / 60)}:${String(rateLimitSecs % 60).padStart(2, '0')}`) : tradeErr ? 'Error' : 'Trade'))));
 }
 function App() {
   const [states, setStates] = useState(() => MODS.map(mod => ({
