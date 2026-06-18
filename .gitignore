@@ -4,9 +4,6 @@ memory/
 node_modules/
 package-lock.json
 
-# Babel-compiled output — edit .jsx source files, not these
-*/*.js
-
 # wrangler files
 .wrangler
 .dev.vars*
