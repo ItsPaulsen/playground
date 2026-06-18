@@ -155,7 +155,8 @@
     skipLink.className = 'skip-link';
     skipLink.href = '#main-content';
     skipLink.textContent = 'Skip to content';
-    skipLink.addEventListener('click', function (e) {
+    function handleSkip(e) {
+      if (e.type === 'keydown' && e.key !== 'Enter') return;
       e.preventDefault();
       const main = document.getElementById('main-content');
       if (main) { main.focus(); return; }
@@ -166,9 +167,13 @@
         const first = tweaksPanel.querySelector('button, input, [tabindex="0"]');
         if (first) { first.focus(); return; }
       }
+      const firstSlider = document.querySelector('[role="slider"]');
+      if (firstSlider) { firstSlider.focus(); return; }
       const root = document.getElementById('root');
       if (root) root.focus();
-    });
+    }
+    skipLink.addEventListener('keydown', handleSkip);
+    skipLink.addEventListener('click', handleSkip);
     document.body.prepend(skipLink);
   }
 
