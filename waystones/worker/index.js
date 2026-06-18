@@ -57,11 +57,16 @@ export default {
 
     let searchData;
     try {
+      const clientIp = request.headers.get('CF-Connecting-IP');
       const res = await fetch(
         `https://www.pathofexile.com/api/trade2/search/poe2/${encodeURIComponent(league)}`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'User-Agent': 'poe2-waystone-tool/1.0' },
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'poe2-waystone-tool/1.0',
+            ...(clientIp ? { 'X-Forwarded-For': clientIp } : {}),
+          },
           body,
         }
       );
