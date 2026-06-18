@@ -248,6 +248,8 @@ function CombinedBox({
         if (match) {
           let remaining = parseInt(match[1], 10);
           setRateLimitSecs(remaining);
+          const mins = Math.ceil(remaining / 60);
+          showToast(`Trade rate limited — try again in ${mins} min`);
           const interval = setInterval(() => {
             remaining--;
             setRateLimitSecs(remaining);
