@@ -190,7 +190,7 @@ function CombinedBox({ combined, activeMods }) {
     <div className={`poe-combined${over ? ' over' : ''}`}>
       <div className="poe-combined-hd">
         <div className="poe-combined-val">
-          {combined ? highlightModNames(combined) : <span className="poe-combined-placeholder">Toggle mods below to build your search string</span>}
+          {combined ? highlightModNames(combined) : <span className="poe-combined-placeholder">Toggle mods above to build your search string</span>}
         </div>
         <div className="poe-combined-actions">
           <button className="poe-copy-btn" onClick={handleCopy} disabled={!combined}>
