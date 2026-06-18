@@ -174,20 +174,20 @@ function ModRow({
     }
   }, value, "+")));
 }
-function useToast() {
+function useToast(className = 'poe-toast') {
   const ref = React.useRef(null);
   const timer = React.useRef(null);
-  function show(text) {
+  function show(text, duration = 2000) {
     if (!ref.current) {
       const el = document.createElement('div');
-      el.className = 'poe-toast';
+      el.className = className;
       document.body.appendChild(el);
       ref.current = el;
     }
     ref.current.textContent = text;
     ref.current.classList.add('is-visible');
     clearTimeout(timer.current);
-    timer.current = setTimeout(() => ref.current?.classList.remove('is-visible'), 2000);
+    timer.current = setTimeout(() => ref.current?.classList.remove('is-visible'), duration);
   }
   return show;
 }
@@ -207,6 +207,7 @@ function CombinedBox({
   const [trading, setTrading] = useState(false);
   const [tradeErr, setTradeErr] = useState(false);
   const showToast = useToast();
+  const showTradeToast = useToast('poe-trade-toast');
   const len = combined.length;
   const over = len > 250;
   const hasActive = activeMods.length > 0;
@@ -247,15 +248,15 @@ function CombinedBox({
         if (match) {
           const secs = parseInt(match[1], 10);
           const mins = Math.ceil(secs / 60);
-          showToast(`Rate limited — try again in ${mins} min`);
+          showTradeToast(`Rate limited — try again in ${mins} min`, 4000);
         } else {
-          showToast('Trade search failed');
+          showTradeToast('Trade search failed', 3000);
         }
       }
     } catch {
       setTradeErr(true);
       setTimeout(() => setTradeErr(false), 2500);
-      showToast('Trade search failed');
+      showTradeToast('Trade search failed', 3000);
     } finally {
       setTrading(false);
     }
