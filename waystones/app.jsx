@@ -147,10 +147,19 @@ function CombinedBox({ combined, activeMods }) {
 
   function handleCopy() {
     if (!combined) return;
-    navigator.clipboard.writeText(combined);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
     showToast('Copied search string');
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(combined);
+    } else {
+      const el = document.createElement('textarea');
+      el.value = combined;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+    }
   }
 
   async function handleTrade() {
