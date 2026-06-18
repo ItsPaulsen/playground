@@ -246,9 +246,17 @@ function CombinedBox({
         setTimeout(() => setTradeErr(false), 2500);
         const match = typeof data.detail === 'string' && data.detail.match(/wait (\d+) seconds/i);
         if (match) {
-          const secs = parseInt(match[1], 10);
-          const mins = Math.ceil(secs / 60);
-          showTradeToast(`Rate limited — try again in ${mins} min`, 4000);
+          let remaining = parseInt(match[1], 10);
+          const tick = () => {
+            const m = Math.floor(remaining / 60);
+            const s = remaining % 60;
+            showTradeToast(`Rate limited — ${m}:${String(s).padStart(2, '0')} remaining`, remaining * 1000);
+            if (remaining > 0) {
+              remaining--;
+              setTimeout(tick, 1000);
+            }
+          };
+          tick();
         } else {
           showTradeToast('Trade search failed', 3000);
         }
