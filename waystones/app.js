@@ -206,8 +206,8 @@ function CombinedBox({
   const [copied, setCopied] = useState(false);
   const [trading, setTrading] = useState(false);
   const [tradeErr, setTradeErr] = useState(false);
+  const [rateLimitSecs, setRateLimitSecs] = useState(0);
   const showToast = useToast();
-  const showTradeToast = useToast('poe-trade-toast');
   const len = combined.length;
   const over = len > 250;
   const hasActive = activeMods.length > 0;
@@ -247,24 +247,17 @@ function CombinedBox({
         const match = typeof data.detail === 'string' && data.detail.match(/wait (\d+) seconds/i);
         if (match) {
           let remaining = parseInt(match[1], 10);
-          const tick = () => {
-            const m = Math.floor(remaining / 60);
-            const s = remaining % 60;
-            showTradeToast(`Rate limited — ${m}:${String(s).padStart(2, '0')} remaining`, remaining * 1000);
-            if (remaining > 0) {
-              remaining--;
-              setTimeout(tick, 1000);
-            }
-          };
-          tick();
-        } else {
-          showTradeToast('Trade search failed', 3000);
+          setRateLimitSecs(remaining);
+          const interval = setInterval(() => {
+            remaining--;
+            setRateLimitSecs(remaining);
+            if (remaining <= 0) clearInterval(interval);
+          }, 1000);
         }
       }
     } catch {
       setTradeErr(true);
       setTimeout(() => setTradeErr(false), 2500);
-      showTradeToast('Trade search failed', 3000);
     } finally {
       setTrading(false);
     }
@@ -315,7 +308,7 @@ function CombinedBox({
   })), copied ? 'Copied' : 'Copy'), /*#__PURE__*/React.createElement("button", {
     className: "poe-trade-btn",
     onClick: handleTrade,
-    disabled: !hasActive || trading
+    disabled: !hasActive || trading || rateLimitSecs > 0
   }, tradeErr ? /*#__PURE__*/React.createElement("svg", {
     width: "13",
     height: "13",
@@ -365,7 +358,7 @@ function CombinedBox({
     y1: "14",
     x2: "21",
     y2: "3"
-  })), tradeErr ? 'Error' : trading ? 'Opening…' : 'Trade'))));
+  })), rateLimitSecs > 0 ? `${Math.floor(rateLimitSecs / 60)}:${String(rateLimitSecs % 60).padStart(2, '0')}` : tradeErr ? 'Error' : trading ? 'Opening…' : 'Trade'))));
 }
 function App() {
   const [states, setStates] = useState(() => MODS.map(mod => ({

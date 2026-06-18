@@ -301,37 +301,6 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Trade error toast — sits above bottom bar */
-  .poe-trade-toast {
-    position: fixed;
-    bottom: 96px;
-    left: 50%;
-    transform: translateX(-50%) translateY(6px);
-    background: #292524;
-    border: .5px solid rgba(253,253,251,.12);
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-size: 13px;
-    color: #fafaf9;
-    opacity: 0;
-    transition: opacity .2s, transform .2s;
-    pointer-events: none;
-    z-index: 500;
-    white-space: nowrap;
-    box-shadow: none;
-    max-width: calc(100vw - 48px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .poe-trade-toast.is-visible {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  html[data-theme="dark"] .poe-trade-toast {
-    background: #fafaf9;
-    color: #292524;
-    border-color: rgba(28,25,23,.12);
-  }
 
   @keyframes pg-up {
     from { opacity: 0; translate: 0 16px; }
