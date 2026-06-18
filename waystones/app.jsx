@@ -177,10 +177,19 @@ function CombinedBox({ combined, activeMods }) {
       } else {
         setTradeErr(true);
         setTimeout(() => setTradeErr(false), 2500);
+        const match = typeof data.detail === 'string' && data.detail.match(/wait (\d+) seconds/i);
+        if (match) {
+          const secs = parseInt(match[1], 10);
+          const mins = Math.ceil(secs / 60);
+          showToast(`Rate limited — try again in ${mins} min`);
+        } else {
+          showToast('Trade search failed');
+        }
       }
     } catch {
       setTradeErr(true);
       setTimeout(() => setTradeErr(false), 2500);
+      showToast('Trade search failed');
     } finally {
       setTrading(false);
     }
