@@ -97,9 +97,12 @@
     cursor: pointer;
     transition: background .15s;
   }
+  .poe-trade-btn { background: rgba(28,25,23,.15); color: inherit; }
   .poe-trade-btn:not(:disabled) { background: var(--pg-border); }
   .poe-trade-btn:not(:disabled):hover { background: var(--pg-border); filter: brightness(.95); }
-  .poe-trade-btn:disabled { opacity: .35; cursor: default; }
+  .poe-trade-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+  html[data-theme="dark"] .poe-trade-btn { background: rgba(253,253,251,.15); }
+  html[data-theme="dark"] .poe-trade-btn:disabled { opacity: .25; }
 
   @keyframes poe-spin { to { transform: rotate(360deg); } }
   .poe-spin { animation: poe-spin .8s linear infinite; }
@@ -119,8 +122,8 @@
     padding: 0 12px;
     border-radius: 12px;
     border: none;
-    background: var(--pg-bg);
-    color: var(--pg-primary);
+    background: rgba(28,25,23,.15);
+    color: inherit;
     font-family: inherit;
     font-size: 13px;
     font-weight: 500;
@@ -129,7 +132,9 @@
   }
   .poe-copy-btn:not(:disabled) { background: #4f46e5; color: #fff; }
   .poe-copy-btn:not(:disabled):hover { background: #4338ca; }
-  .poe-copy-btn:disabled { opacity: .35; cursor: default; }
+  html[data-theme="dark"] .poe-copy-btn { background: rgba(253,253,251,.15); }
+  .poe-copy-btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+  html[data-theme="dark"] .poe-copy-btn:disabled { opacity: .25; }
 
   .poe-combined-val {
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
