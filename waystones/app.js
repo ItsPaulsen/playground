@@ -353,11 +353,13 @@ function App() {
     param: MODS[i].param,
     value: s.value
   } : null).filter(Boolean);
+  const budgetCount = states.filter((s, i) => s.active && MODS[i].param !== 'dropchance').length;
   const demand = states.reduce((sum, s, i) => {
     if (!s.active || MODS[i].param === 'dropchance') return sum;
     const mod = MODS[i];
     return sum + Math.max(0, (s.value - mod.defaultVal) / (mod.max - mod.defaultVal));
   }, 0);
+  const demandThreshold = budgetCount <= 1 ? Infinity : budgetCount === 2 ? 1.1 : 0.78;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
@@ -383,7 +385,7 @@ function App() {
     onToggle: () => toggle(i),
     onValue: v => setValue(i, v),
     last: i === MODS.length - 1
-  }))), demand > 0.78 && /*#__PURE__*/React.createElement("p", {
+  }))), demand > demandThreshold && /*#__PURE__*/React.createElement("p", {
     className: "poe-demand-warning"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "14",
