@@ -201,21 +201,21 @@ function Step({ step, index, prices }) {
               <CurrencyChip c={c} prices={prices} />
             </React.Fragment>
           ))}
-          {hasLinks && step.tradeLinks.map((t, i) => (
-            i === 0
-              ? <a key={t.label} className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
-                  {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
-                  {t.label}
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </a>
-              : <span key={t.label} className="craft-sep-group">
-                  <span className="craft-sep">or</span>
+          {hasLinks && step.tradeLinks.map((t, i, arr) => (
+            i < arr.length - 1
+              ? <span key={t.label} className="craft-sep-group">
                   <a className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
                     {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
                     {t.label}
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   </a>
+                  <span className="craft-sep">or</span>
                 </span>
+              : <a key={t.label} className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
+                  {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
+                  {t.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
           ))}
         </div>
       </div>

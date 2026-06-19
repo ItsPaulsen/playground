@@ -259,41 +259,10 @@ function Step({
   }, "+"), /*#__PURE__*/React.createElement(CurrencyChip, {
     c: c,
     prices: prices
-  }))), hasLinks && step.tradeLinks.map((t, i) => i === 0 ? /*#__PURE__*/React.createElement("a", {
-    key: t.label,
-    className: "craft-trade-link",
-    href: t.url,
-    target: "_blank",
-    rel: "noopener"
-  }, t.icon && /*#__PURE__*/React.createElement("img", {
-    src: t.icon,
-    className: "craft-chip-icon",
-    alt: "",
-    "aria-hidden": "true"
-  }), t.label, /*#__PURE__*/React.createElement("svg", {
-    width: "10",
-    height: "10",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "3",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "15 3 21 3 21 9"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "10",
-    y1: "14",
-    x2: "21",
-    y2: "3"
-  }))) : /*#__PURE__*/React.createElement("span", {
+  }))), hasLinks && step.tradeLinks.map((t, i, arr) => i < arr.length - 1 ? /*#__PURE__*/React.createElement("span", {
     key: t.label,
     className: "craft-sep-group"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "craft-sep"
-  }, "or"), /*#__PURE__*/React.createElement("a", {
+  }, /*#__PURE__*/React.createElement("a", {
     className: "craft-trade-link",
     href: t.url,
     target: "_blank",
@@ -321,7 +290,38 @@ function Step({
     y1: "14",
     x2: "21",
     y2: "3"
-  }))))))));
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "craft-sep"
+  }, "or")) : /*#__PURE__*/React.createElement("a", {
+    key: t.label,
+    className: "craft-trade-link",
+    href: t.url,
+    target: "_blank",
+    rel: "noopener"
+  }, t.icon && /*#__PURE__*/React.createElement("img", {
+    src: t.icon,
+    className: "craft-chip-icon",
+    alt: "",
+    "aria-hidden": "true"
+  }), t.label, /*#__PURE__*/React.createElement("svg", {
+    width: "10",
+    height: "10",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "3",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+  }), /*#__PURE__*/React.createElement("polyline", {
+    points: "15 3 21 3 21 9"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "10",
+    y1: "14",
+    x2: "21",
+    y2: "3"
+  })))))));
 }
 function Guide({
   guide,
