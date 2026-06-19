@@ -193,7 +193,6 @@ function Step({ step, index, prices }) {
           <span className="craft-step-title">{step.goal}</span>
           {cost && <span className="craft-step-cost">{cost}</span>}
         </div>
-        {step.note && <p className="craft-note">{step.note}</p>}
         <div className="craft-header-items">
           {hasCurrency && step.currency.map((c, i) => (
             <React.Fragment key={c.label}>
@@ -218,6 +217,7 @@ function Step({ step, index, prices }) {
                 </a>
           ))}
         </div>
+        {step.note && <p className="craft-note">{step.note}</p>}
       </div>
     </div>
   );
