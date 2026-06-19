@@ -35,7 +35,7 @@ const GUIDES = [
       {
         title: 'Use Greater Essence of Seeking',
         currency: [{ label: 'Greater Essence of Seeking', ninja: 'Greater Essence of Seeking', desc: 'Upgrades a Magic item to a Rare item, adding a guaranteed Critical Hit Chance modifier.' }],
-        goal: 'Guarantees T3 Critical Hit Chance',
+        goal: 'T3 Critical Hit Chance',
         note: 'This is your one guaranteed craft.',
       },
       {
