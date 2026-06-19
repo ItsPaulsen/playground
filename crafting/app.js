@@ -246,7 +246,13 @@ function Step({
     className: "craft-step-body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "craft-step-header"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-title"
+  }, step.goal), cost && /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-cost"
+  }, cost)), step.note && /*#__PURE__*/React.createElement("p", {
+    className: "craft-note"
+  }, step.note), /*#__PURE__*/React.createElement("div", {
     className: "craft-header-items"
   }, hasCurrency && step.currency.map((c, i) => /*#__PURE__*/React.createElement(React.Fragment, {
     key: c.label
@@ -317,13 +323,7 @@ function Step({
     y1: "14",
     x2: "21",
     y2: "3"
-  })))))), cost && /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-cost"
-  }, cost)), /*#__PURE__*/React.createElement("p", {
-    className: "craft-goal"
-  }, step.goal), step.note && /*#__PURE__*/React.createElement("p", {
-    className: "craft-note"
-  }, step.note)));
+  }))))))));
 }
 function Guide({
   guide,

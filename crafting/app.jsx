@@ -191,34 +191,34 @@ function Step({ step, index, prices }) {
       <span className="craft-step-num">{index + 1}.</span>
       <div className="craft-step-body">
         <div className="craft-step-header">
-          <div className="craft-header-items">
-            {hasCurrency && step.currency.map((c, i) => (
-              <React.Fragment key={c.label}>
-                {i > 0 && <span className="craft-sep">+</span>}
-                <CurrencyChip c={c} prices={prices} />
-              </React.Fragment>
-            ))}
-            {hasLinks && step.tradeLinks.map((t, i) => (
-              i === 0
-                ? <a key={t.label} className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
+          <span className="craft-step-title">{step.goal}</span>
+          {cost && <span className="craft-step-cost">{cost}</span>}
+        </div>
+        {step.note && <p className="craft-note">{step.note}</p>}
+        <div className="craft-header-items">
+          {hasCurrency && step.currency.map((c, i) => (
+            <React.Fragment key={c.label}>
+              {i > 0 && <span className="craft-sep">+</span>}
+              <CurrencyChip c={c} prices={prices} />
+            </React.Fragment>
+          ))}
+          {hasLinks && step.tradeLinks.map((t, i) => (
+            i === 0
+              ? <a key={t.label} className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
+                  {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
+                  {t.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              : <span key={t.label} className="craft-sep-group">
+                  <span className="craft-sep">or</span>
+                  <a className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
                     {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
                     {t.label}
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                   </a>
-                : <span key={t.label} className="craft-sep-group">
-                    <span className="craft-sep">or</span>
-                    <a className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
-                      {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
-                      {t.label}
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                    </a>
-                  </span>
-            ))}
-          </div>
-          {cost && <span className="craft-step-cost">{cost}</span>}
+                </span>
+          ))}
         </div>
-        <p className="craft-goal">{step.goal}</p>
-        {step.note && <p className="craft-note">{step.note}</p>}
       </div>
     </div>
   );
