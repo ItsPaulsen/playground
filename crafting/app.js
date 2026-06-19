@@ -217,6 +217,8 @@ function Step({
   prices
 }) {
   const cost = stepCost(step, prices);
+  const hasCurrency = step.currency.length > 0;
+  const hasLinks = step.tradeLinks && step.tradeLinks.length > 0;
   return /*#__PURE__*/React.createElement("div", {
     className: "craft-step"
   }, /*#__PURE__*/React.createElement("span", {
@@ -225,22 +227,20 @@ function Step({
     className: "craft-step-body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "craft-step-header"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-title"
-  }, step.title), cost && /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-cost"
-  }, cost)), step.currency.length > 0 && /*#__PURE__*/React.createElement("div", {
-    className: "craft-currencies"
-  }, step.currency.map(c => /*#__PURE__*/React.createElement(CurrencyChip, {
-    key: c.label,
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "craft-header-items"
+  }, hasCurrency && step.currency.map((c, i) => /*#__PURE__*/React.createElement(React.Fragment, {
+    key: c.label
+  }, i > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "craft-sep"
+  }, "+"), /*#__PURE__*/React.createElement(CurrencyChip, {
     c: c,
     prices: prices
-  }))), /*#__PURE__*/React.createElement("p", {
-    className: "craft-goal"
-  }, step.goal), step.tradeLinks && step.tradeLinks.length > 0 && /*#__PURE__*/React.createElement("div", {
-    className: "craft-trade-links"
-  }, step.tradeLinks.map(t => /*#__PURE__*/React.createElement("a", {
-    key: t.label,
+  }))), hasLinks && step.tradeLinks.map((t, i) => /*#__PURE__*/React.createElement(React.Fragment, {
+    key: t.label
+  }, i > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "craft-sep"
+  }, "or"), /*#__PURE__*/React.createElement("a", {
     className: "craft-trade-link",
     href: t.url,
     target: "_blank",
@@ -263,7 +263,11 @@ function Step({
     y1: "14",
     x2: "21",
     y2: "3"
-  }))))), step.note && /*#__PURE__*/React.createElement("p", {
+  })))))), cost && /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-cost"
+  }, cost)), /*#__PURE__*/React.createElement("p", {
+    className: "craft-goal"
+  }, step.goal), step.note && /*#__PURE__*/React.createElement("p", {
     className: "craft-note"
   }, step.note)));
 }

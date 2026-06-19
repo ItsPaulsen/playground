@@ -169,32 +169,33 @@ function CurrencyChip({ c, prices }) {
 
 function Step({ step, index, prices }) {
   const cost = stepCost(step, prices);
+  const hasCurrency = step.currency.length > 0;
+  const hasLinks = step.tradeLinks && step.tradeLinks.length > 0;
   return (
     <div className="craft-step">
       <span className="craft-step-num">{index + 1}.</span>
       <div className="craft-step-body">
         <div className="craft-step-header">
-          <span className="craft-step-title">{step.title}</span>
+          <div className="craft-header-items">
+            {hasCurrency && step.currency.map((c, i) => (
+              <React.Fragment key={c.label}>
+                {i > 0 && <span className="craft-sep">+</span>}
+                <CurrencyChip c={c} prices={prices} />
+              </React.Fragment>
+            ))}
+            {hasLinks && step.tradeLinks.map((t, i) => (
+              <React.Fragment key={t.label}>
+                {i > 0 && <span className="craft-sep">or</span>}
+                <a className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
+                  {t.label}
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </React.Fragment>
+            ))}
+          </div>
           {cost && <span className="craft-step-cost">{cost}</span>}
         </div>
-        {step.currency.length > 0 && (
-          <div className="craft-currencies">
-            {step.currency.map(c => (
-              <CurrencyChip key={c.label} c={c} prices={prices} />
-            ))}
-          </div>
-        )}
         <p className="craft-goal">{step.goal}</p>
-        {step.tradeLinks && step.tradeLinks.length > 0 && (
-          <div className="craft-trade-links">
-            {step.tradeLinks.map(t => (
-              <a key={t.label} className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
-                {t.label}
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-            ))}
-          </div>
-        )}
         {step.note && <p className="craft-note">{step.note}</p>}
       </div>
     </div>

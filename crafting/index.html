@@ -172,18 +172,19 @@
     font-variant-numeric: tabular-nums;
   }
 
-  .craft-step-title {
-    font-size: 14px;
-    line-height: 21px;
-    font-weight: 500;
-    color: var(--pg-primary);
-  }
-
-  .craft-currencies {
+  .craft-header-items {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 6px;
-    margin-bottom: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .craft-sep {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--pg-muted);
   }
 
   .craft-chip-wrap { position: relative; display: inline-flex; }
@@ -231,13 +232,6 @@
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     white-space: normal;
     pointer-events: none;
-  }
-
-  .craft-trade-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 8px;
   }
 
   .craft-trade-link {
