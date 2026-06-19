@@ -379,10 +379,10 @@ function App() {
   const iirState = states[MODS.findIndex(m => m.param === 'iir')];
   const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
   const packState = states[MODS.findIndex(m => m.param === 'packsize')];
-  const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
+  const budgetTotal = (iirState.active ? iirState.value * 3 : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
   const allThreeActive = iirState.active && rarityState.active && packState.active;
   const anyRarityActive = iirState.active || rarityState.active;
-  const rarityCapExceeded = packState.active && packState.value >= 60 && anyRarityActive || packState.active && iirState.active && !rarityState.active && iirState.value + packState.value >= 95 || packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95 || allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || budgetTotal > 120;
+  const rarityCapExceeded = packState.active && packState.value >= 60 && anyRarityActive || packState.active && iirState.active && !rarityState.active && iirState.value + packState.value >= 95 || packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95 || allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || budgetTotal > 280;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
