@@ -245,7 +245,7 @@ function Step({
     href: t.url,
     target: "_blank",
     rel: "noopener"
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, t.label, /*#__PURE__*/React.createElement("svg", {
     width: "11",
     height: "11",
     viewBox: "0 0 24 24",
@@ -263,7 +263,7 @@ function Step({
     y1: "14",
     x2: "21",
     y2: "3"
-  })), t.label))), step.note && /*#__PURE__*/React.createElement("p", {
+  }))))), step.note && /*#__PURE__*/React.createElement("p", {
     className: "craft-note"
   }, step.note)));
 }
