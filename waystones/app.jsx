@@ -163,7 +163,7 @@ function highlightModNames(str) {
   );
 }
 
-function CombinedBox({ combined, activeMods }) {
+function CombinedBox({ combined, activeMods, onReset }) {
   const [copied, setCopied] = useState(false);
   const showToast = useToast();
   const len = combined.length;
@@ -196,7 +196,14 @@ function CombinedBox({ combined, activeMods }) {
     <div className={`poe-combined${over ? ' over' : ''}`}>
       <div className="poe-combined-hd">
         <div className="poe-combined-val">
-          {combined ? highlightModNames(combined) : <span className="poe-combined-placeholder">Toggle mods above to build your search string</span>}
+          {combined
+            ? <>
+                <button className="poe-reset-btn" onClick={onReset} aria-label="Reset">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+                {highlightModNames(combined)}
+              </>
+            : <span className="poe-combined-placeholder">Toggle mods above to build your search string</span>}
         </div>
         <div className="poe-combined-actions">
           <button className="poe-copy-btn" onClick={handleCopy} disabled={!combined}>
@@ -230,17 +237,14 @@ function App() {
     .map((s, i) => s.active ? { param: MODS[i].param, value: s.value } : null)
     .filter(Boolean);
 
-  const budgetCount = states.filter((s, i) => s.active && MODS[i].param !== 'dropchance').length;
-  const demand = states.reduce((sum, s, i) => {
-    if (!s.active || MODS[i].param === 'dropchance') return sum;
-    const mod = MODS[i];
-    return sum + Math.max(0, (s.value - mod.defaultVal) / (mod.max - mod.defaultVal));
-  }, 0);
-  const demandThreshold = budgetCount <= 1 ? Infinity : budgetCount === 2 ? 1.1 : 0.78;
 
-  const iirState = states[MODS.findIndex(m => m.param === 'iir')];
+  const iirState   = states[MODS.findIndex(m => m.param === 'iir')];
   const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
-  const rarityCapExceeded = iirState.active && rarityState.active && (iirState.value + rarityState.value) > 120;
+  const packState  = states[MODS.findIndex(m => m.param === 'packsize')];
+  const budgetTotal = (iirState.active ? iirState.value : 0)
+                    + (rarityState.active ? rarityState.value : 0)
+                    + (packState.active ? packState.value : 0);
+  const rarityCapExceeded = budgetTotal >= 120;
 
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? { ...s, active: !s.active } : s));
@@ -250,9 +254,13 @@ function App() {
     setStates(prev => prev.map((s, idx) => idx === i ? { ...s, value: v } : s));
   }
 
+  function reset() {
+    setStates(MODS.map(mod => ({ value: mod.defaultVal, active: false })));
+  }
+
   return (
     <>
-      <CombinedBox combined={combined} activeMods={activeMods} />
+      <CombinedBox combined={combined} activeMods={activeMods} onReset={reset} />
 
       <div className="poe-panel">
         {MODS.map((mod, i) => (
@@ -271,16 +279,10 @@ function App() {
       {rarityCapExceeded && (
         <p className="poe-demand-warning">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Item Rarity and Monster Rarity share a 120% cap — this combo may return no results.
+          Item Rarity, Monster Rarity, and Pack Size share a 120% cap — this combo may return no results.
         </p>
       )}
 
-      {!rarityCapExceeded && demand > demandThreshold && (
-        <p className="poe-demand-warning">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Item Rarity, Monster Rarity, and Pack Size share a mod budget — this combo may return no results.
-        </p>
-      )}
 
     </>
   );

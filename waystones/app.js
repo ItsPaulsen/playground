@@ -246,7 +246,8 @@ function highlightModNames(str) {
 }
 function CombinedBox({
   combined,
-  activeMods
+  activeMods,
+  onReset
 }) {
   const [copied, setCopied] = useState(false);
   const showToast = useToast();
@@ -279,7 +280,30 @@ function CombinedBox({
     className: "poe-combined-hd"
   }, /*#__PURE__*/React.createElement("div", {
     className: "poe-combined-val"
-  }, combined ? highlightModNames(combined) : /*#__PURE__*/React.createElement("span", {
+  }, combined ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "poe-reset-btn",
+    onClick: onReset,
+    "aria-label": "Reset"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "12",
+    height: "12",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: "18",
+    y1: "6",
+    x2: "6",
+    y2: "18"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "6",
+    y1: "6",
+    x2: "18",
+    y2: "18"
+  }))), highlightModNames(combined)) : /*#__PURE__*/React.createElement("span", {
     className: "poe-combined-placeholder"
   }, "Toggle mods above to build your search string")), /*#__PURE__*/React.createElement("div", {
     className: "poe-combined-actions"
@@ -350,16 +374,11 @@ function App() {
     param: MODS[i].param,
     value: s.value
   } : null).filter(Boolean);
-  const budgetCount = states.filter((s, i) => s.active && MODS[i].param !== 'dropchance').length;
-  const demand = states.reduce((sum, s, i) => {
-    if (!s.active || MODS[i].param === 'dropchance') return sum;
-    const mod = MODS[i];
-    return sum + Math.max(0, (s.value - mod.defaultVal) / (mod.max - mod.defaultVal));
-  }, 0);
-  const demandThreshold = budgetCount <= 1 ? Infinity : budgetCount === 2 ? 1.1 : 0.78;
   const iirState = states[MODS.findIndex(m => m.param === 'iir')];
   const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
-  const rarityCapExceeded = iirState.active && rarityState.active && iirState.value + rarityState.value > 120;
+  const packState = states[MODS.findIndex(m => m.param === 'packsize')];
+  const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
+  const rarityCapExceeded = budgetTotal >= 120;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
@@ -372,9 +391,16 @@ function App() {
       value: v
     } : s));
   }
+  function reset() {
+    setStates(MODS.map(mod => ({
+      value: mod.defaultVal,
+      active: false
+    })));
+  }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(CombinedBox, {
     combined: combined,
-    activeMods: activeMods
+    activeMods: activeMods,
+    onReset: reset
   }), /*#__PURE__*/React.createElement("div", {
     className: "poe-panel"
   }, MODS.map((mod, i) => /*#__PURE__*/React.createElement(ModRow, {
@@ -409,31 +435,7 @@ function App() {
     y1: "17",
     x2: "12.01",
     y2: "17"
-  })), "Item Rarity and Monster Rarity share a 120% cap \u2014 this combo may return no results."), !rarityCapExceeded && demand > demandThreshold && /*#__PURE__*/React.createElement("p", {
-    className: "poe-demand-warning"
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "14",
-    height: "14",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "12",
-    y1: "9",
-    x2: "12",
-    y2: "13"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "12",
-    y1: "17",
-    x2: "12.01",
-    y2: "17"
-  })), "Item Rarity, Monster Rarity, and Pack Size share a mod budget \u2014 this combo may return no results."));
+  })), "Item Rarity, Monster Rarity, and Pack Size share a 120% cap \u2014 this combo may return no results."));
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App));

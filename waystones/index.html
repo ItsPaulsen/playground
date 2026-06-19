@@ -150,6 +150,27 @@
   }
 
   .poe-combined-placeholder { color: var(--pg-muted); font-family: inherit; }
+
+  .poe-reset-btn {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(28,25,23,.12);
+    color: var(--pg-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: 6px;
+    vertical-align: middle;
+    transition: background .15s, color .15s;
+  }
+  .poe-reset-btn:hover { background: rgba(28,25,23,.2); color: var(--pg-primary); }
+  html[data-theme="dark"] .poe-reset-btn { background: rgba(253,253,251,.12); }
+  html[data-theme="dark"] .poe-reset-btn:hover { background: rgba(253,253,251,.2); }
   .poe-combined-val { font-weight: 400; }
   .poe-combined-val strong { font-weight: 500; }
 
