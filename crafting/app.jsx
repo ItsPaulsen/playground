@@ -44,8 +44,8 @@ const GUIDES = [
           { label: 'Omen of Sinistral Necromancy', ninja: 'Omen of Sinistral Necromancy', desc: 'While active in your inventory, your next Desecration attempt will add only prefix modifiers.' },
           { label: 'Ancient Jawbone', ninja: 'Ancient Jawbone', desc: 'Desecrates a Rare Weapon or Quiver, adding a new random modifier.' },
         ],
-        goal: 'High flat physical damage — high tier elemental flat also works',
-        note: 'Ancient Jawbone is cheaper early league. Consider Abyssal Echoes depending on prices.',
+        goal: 'High flat physical damage',
+        note: 'High tier elemental flat also works.',
       },
       {
         title: 'Fill remaining affixes',
