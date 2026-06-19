@@ -43,9 +43,11 @@ const GUIDES = [{
     note: 'If the base only has one mod, augment it before using an essence.',
     tradeLinks: [{
       label: 'Obliterator Bow',
+      icon: 'https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV2VhcG9ucy9Ud29IYW5kV2VhcG9ucy9Cb3dzL0Jhc2V0eXBlcy9Cb3cwOSIsInciOjIsImgiOjQsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/e62ea7f094/Bow09.png',
       url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Obliterator%20Bow%22%2C%22stats%22%3A%5B%7B%22type%22%3A%22and%22%2C%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A155%7D%2C%22disabled%22%3Afalse%7D%5D%7D%5D%2C%22filters%22%3A%7B%22type_filters%22%3A%7B%22filters%22%3A%7B%22rarity%22%3A%7B%22option%22%3A%22magic%22%7D%7D%7D%2C%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
     }, {
       label: 'Warmonger Bow',
+      icon: 'https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV2VhcG9ucy9Ud29IYW5kV2VhcG9ucy9Cb3dzL0Jhc2V0eXBlcy9Cb3cwOCIsInciOjIsImgiOjQsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/90f84002ea/Bow08.png',
       url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Warmonger%20Bow%22%2C%22stats%22%3A%5B%7B%22type%22%3A%22and%22%2C%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A155%7D%2C%22disabled%22%3Afalse%7D%5D%7D%5D%2C%22filters%22%3A%7B%22type_filters%22%3A%7B%22filters%22%3A%7B%22rarity%22%3A%7B%22option%22%3A%22magic%22%7D%7D%7D%2C%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
     }]
   }, {
@@ -101,12 +103,23 @@ function usePrices() {
     error
   };
 }
+function getPrice(prices, name) {
+  if (!prices) return null;
+  const p = prices[name];
+  if (p == null) return null;
+  return typeof p === 'object' ? p.price : p;
+}
+function getIcon(prices, name) {
+  if (!prices) return null;
+  const p = prices[name];
+  return p && typeof p === 'object' ? p.icon : null;
+}
 function stepCost(step, prices) {
   if (!prices || !step.currency.length) return null;
   let total = 0,
     found = 0;
   for (const c of step.currency) {
-    const divs = prices[c.ninja];
+    const divs = getPrice(prices, c.ninja);
     if (divs != null) {
       total += divs;
       found++;
@@ -114,7 +127,7 @@ function stepCost(step, prices) {
   }
   if (!found) return null;
   if (total >= 1) return `~${+total.toFixed(1)} div`;
-  const chaosPerDiv = prices['Chaos Orb'] ? 1 / prices['Chaos Orb'] : null;
+  const chaosPerDiv = getPrice(prices, 'Chaos Orb') ? 1 / getPrice(prices, 'Chaos Orb') : null;
   if (chaosPerDiv) {
     const chaos = Math.round(total * chaosPerDiv);
     return chaos < 1 ? `<1c` : `~${chaos}c`;
@@ -183,20 +196,21 @@ function CurrencyChip({
   prices
 }) {
   const [open, setOpen] = React.useState(false);
-  const divs = prices ? prices[c.ninja] : null;
+  const divs = getPrice(prices, c.ninja);
+  const icon = getIcon(prices, c.ninja);
   let price = null;
   if (divs != null) {
     if (divs >= 1) {
       price = `~${+divs.toFixed(1)} div`;
     } else {
-      const chaosPerDiv = prices['Chaos Orb'] ? 1 / prices['Chaos Orb'] : null;
+      const chaosPerDiv = getPrice(prices, 'Chaos Orb') ? 1 / getPrice(prices, 'Chaos Orb') : null;
       if (chaosPerDiv) {
         const chaos = Math.round(divs * chaosPerDiv);
         price = chaos < 1 ? '<1c' : `~${chaos}c`;
       }
     }
   }
-  if (!c.desc && !price) return React.createElement('span', {
+  if (!c.desc && !price && !icon) return React.createElement('span', {
     className: 'craft-currency'
   }, c.label);
   return /*#__PURE__*/React.createElement("span", {
@@ -205,7 +219,12 @@ function CurrencyChip({
     className: "craft-currency craft-currency--tip",
     onMouseEnter: () => setOpen(true),
     onMouseLeave: () => setOpen(false)
-  }, c.label, price && /*#__PURE__*/React.createElement("span", {
+  }, icon && /*#__PURE__*/React.createElement("img", {
+    src: icon,
+    className: "craft-chip-icon",
+    alt: "",
+    "aria-hidden": "true"
+  }), c.label, price && /*#__PURE__*/React.createElement("span", {
     className: "craft-chip-price"
   }, price)), open && c.desc && /*#__PURE__*/React.createElement("span", {
     className: "craft-chip-tooltip"
@@ -245,7 +264,12 @@ function Step({
     href: t.url,
     target: "_blank",
     rel: "noopener"
-  }, t.label, /*#__PURE__*/React.createElement("svg", {
+  }, t.icon && /*#__PURE__*/React.createElement("img", {
+    src: t.icon,
+    className: "craft-chip-icon",
+    alt: "",
+    "aria-hidden": "true"
+  }), t.label, /*#__PURE__*/React.createElement("svg", {
     width: "10",
     height: "10",
     viewBox: "0 0 24 24",

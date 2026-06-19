@@ -31,11 +31,14 @@ jobs:
                   req = urllib.request.Request(url, headers=headers)
                   with urllib.request.urlopen(req, timeout=10) as r:
                       data = json.loads(r.read())
-                  name_by_id = {i['id']: i['name'] for i in data.get('items', [])}
+                  item_by_id = {i['id']: i for i in data.get('items', [])}
                   for line in data.get('lines', []):
-                      name = name_by_id.get(line['id'])
-                      if name and line.get('primaryValue') is not None:
-                          prices[name] = line['primaryValue']
+                      item = item_by_id.get(line['id'])
+                      if item and line.get('primaryValue') is not None:
+                          entry = {'price': line['primaryValue']}
+                          if item.get('image'):
+                              entry['icon'] = 'https://web.poecdn.com' + item['image']
+                          prices[item['name']] = entry
               except Exception as e:
                   print(f'Failed {t}: {e}')
 
