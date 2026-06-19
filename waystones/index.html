@@ -141,12 +141,17 @@
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     font-size: 13px;
     color: var(--pg-primary);
+    min-width: 0;
+    flex: 1;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
+  }
+  .poe-combined-text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 0;
-    flex: 1;
-    padding-right: 8px;
   }
 
   .poe-combined-placeholder { color: var(--pg-muted); font-family: inherit; }

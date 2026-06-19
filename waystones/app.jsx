@@ -201,7 +201,7 @@ function CombinedBox({ combined, activeMods, onReset }) {
                 <button className="poe-reset-btn" onClick={onReset} aria-label="Reset">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
-                {highlightModNames(combined)}
+                <span className="poe-combined-text">{highlightModNames(combined)}</span>
               </>
             : <span className="poe-combined-placeholder">Toggle mods above to build your search string</span>}
         </div>
@@ -244,7 +244,10 @@ function App() {
   const budgetTotal = (iirState.active ? iirState.value : 0)
                     + (rarityState.active ? rarityState.value : 0)
                     + (packState.active ? packState.value : 0);
-  const rarityCapExceeded = budgetTotal >= 120;
+  const rarityCapExceeded =
+    (packState.active && packState.value >= 15)
+    || (packState.active && iirState.active && iirState.value >= 100)
+    || budgetTotal > 120;
 
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? { ...s, active: !s.active } : s));
@@ -260,8 +263,6 @@ function App() {
 
   return (
     <>
-      <CombinedBox combined={combined} activeMods={activeMods} onReset={reset} />
-
       <div className="poe-panel">
         {MODS.map((mod, i) => (
           <ModRow
@@ -283,7 +284,7 @@ function App() {
         </p>
       )}
 
-
+      <CombinedBox combined={combined} activeMods={activeMods} onReset={reset} />
     </>
   );
 }

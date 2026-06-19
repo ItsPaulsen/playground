@@ -303,7 +303,9 @@ function CombinedBox({
     y1: "6",
     x2: "18",
     y2: "18"
-  }))), highlightModNames(combined)) : /*#__PURE__*/React.createElement("span", {
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "poe-combined-text"
+  }, highlightModNames(combined))) : /*#__PURE__*/React.createElement("span", {
     className: "poe-combined-placeholder"
   }, "Toggle mods above to build your search string")), /*#__PURE__*/React.createElement("div", {
     className: "poe-combined-actions"
@@ -378,7 +380,7 @@ function App() {
   const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
   const packState = states[MODS.findIndex(m => m.param === 'packsize')];
   const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
-  const rarityCapExceeded = budgetTotal >= 120;
+  const rarityCapExceeded = packState.active && packState.value >= 15 || packState.active && iirState.active && iirState.value >= 100 || budgetTotal > 120;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
@@ -397,11 +399,7 @@ function App() {
       active: false
     })));
   }
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(CombinedBox, {
-    combined: combined,
-    activeMods: activeMods,
-    onReset: reset
-  }), /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "poe-panel"
   }, MODS.map((mod, i) => /*#__PURE__*/React.createElement(ModRow, {
     key: mod.name,
@@ -435,7 +433,11 @@ function App() {
     y1: "17",
     x2: "12.01",
     y2: "17"
-  })), "Item Rarity, Monster Rarity, and Pack Size share a 120% cap \u2014 this combo may return no results."));
+  })), "Item Rarity, Monster Rarity, and Pack Size share a 120% cap \u2014 this combo may return no results."), /*#__PURE__*/React.createElement(CombinedBox, {
+    combined: combined,
+    activeMods: activeMods,
+    onReset: reset
+  }));
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(App));
