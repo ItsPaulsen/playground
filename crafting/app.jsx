@@ -193,10 +193,12 @@ function Step({ step, index, prices }) {
         <div className="craft-step-header">
           <div className="craft-header-items">
             {hasCurrency && step.currency.map((c, i) => (
-              <React.Fragment key={c.label}>
-                {i > 0 && <span className="craft-sep">+</span>}
-                <CurrencyChip c={c} prices={prices} />
-              </React.Fragment>
+              i === 0
+                ? <CurrencyChip key={c.label} c={c} prices={prices} />
+                : <span key={c.label} className="craft-sep-group">
+                    <span className="craft-sep">+</span>
+                    <CurrencyChip c={c} prices={prices} />
+                  </span>
             ))}
             {hasLinks && step.tradeLinks.map((t, i) => (
               <React.Fragment key={t.label}>

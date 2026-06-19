@@ -248,9 +248,14 @@ function Step({
     className: "craft-step-header"
   }, /*#__PURE__*/React.createElement("div", {
     className: "craft-header-items"
-  }, hasCurrency && step.currency.map((c, i) => /*#__PURE__*/React.createElement(React.Fragment, {
-    key: c.label
-  }, i > 0 && /*#__PURE__*/React.createElement("span", {
+  }, hasCurrency && step.currency.map((c, i) => i === 0 ? /*#__PURE__*/React.createElement(CurrencyChip, {
+    key: c.label,
+    c: c,
+    prices: prices
+  }) : /*#__PURE__*/React.createElement("span", {
+    key: c.label,
+    className: "craft-sep-group"
+  }, /*#__PURE__*/React.createElement("span", {
     className: "craft-sep"
   }, "+"), /*#__PURE__*/React.createElement(CurrencyChip, {
     c: c,
