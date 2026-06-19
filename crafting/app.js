@@ -214,40 +214,18 @@ function CurrencyChip({
 function Step({
   step,
   index,
-  checked,
-  onToggle,
   prices
 }) {
   const cost = stepCost(step, prices);
   return /*#__PURE__*/React.createElement("div", {
-    className: `craft-step${checked ? ' checked' : ''}`,
-    onClick: onToggle
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "craft-check",
-    onClick: e => {
-      e.stopPropagation();
-      onToggle();
-    },
-    "aria-pressed": checked,
-    "aria-label": `Mark step ${index + 1} complete`
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "12",
-    height: "12",
-    viewBox: "0 0 16 16",
-    fill: "none"
-  }, /*#__PURE__*/React.createElement("polyline", {
-    points: "3,8 6.5,12 13,4",
-    stroke: "currentColor",
-    strokeWidth: "1.75",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }))), /*#__PURE__*/React.createElement("div", {
+    className: "craft-step"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-num"
+  }, index + 1), /*#__PURE__*/React.createElement("div", {
     className: "craft-step-body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "craft-step-header"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-num"
-  }, "Step ", index + 1), /*#__PURE__*/React.createElement("span", {
     className: "craft-step-title"
   }, step.title), cost && /*#__PURE__*/React.createElement("span", {
     className: "craft-step-cost"
@@ -293,15 +271,6 @@ function Guide({
   guide,
   prices
 }) {
-  const [checked, setChecked] = useState(() => guide.steps.map(() => false));
-  function toggle(i) {
-    setChecked(prev => prev.map((v, idx) => idx === i ? !v : v));
-  }
-  function reset() {
-    setChecked(guide.steps.map(() => false));
-  }
-  const done = checked.filter(Boolean).length;
-  const total = guide.steps.length;
   return /*#__PURE__*/React.createElement("div", {
     className: "craft-guide"
   }, /*#__PURE__*/React.createElement("div", {
@@ -314,34 +283,7 @@ function Guide({
     className: "craft-meta-sep"
   }, "\xB7"), /*#__PURE__*/React.createElement("span", null, guide.bases.join(' or ')), guide.baseInfo && /*#__PURE__*/React.createElement(BaseTooltip, {
     baseInfo: guide.baseInfo
-  }))), /*#__PURE__*/React.createElement("div", {
-    className: "craft-guide-progress"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "craft-progress-label"
-  }, done, "/", total), done > 0 && /*#__PURE__*/React.createElement("button", {
-    className: "craft-reset-btn",
-    onClick: reset,
-    "aria-label": "Reset steps"
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "11",
-    height: "11",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2.5",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "18",
-    y1: "6",
-    x2: "6",
-    y2: "18"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "6",
-    y1: "6",
-    x2: "18",
-    y2: "18"
-  }))))), guide.intro && /*#__PURE__*/React.createElement("p", {
+  })))), guide.intro && /*#__PURE__*/React.createElement("p", {
     className: "craft-intro"
   }, guide.intro), /*#__PURE__*/React.createElement("div", {
     className: "craft-steps"
@@ -349,8 +291,6 @@ function Guide({
     key: i,
     step: step,
     index: i,
-    checked: checked[i],
-    onToggle: () => toggle(i),
     prices: prices
   }))));
 }

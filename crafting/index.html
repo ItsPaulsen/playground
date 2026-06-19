@@ -117,35 +117,6 @@
   .craft-tooltip-stat-value { font-size: 12px; font-weight: 500; color: var(--pg-primary); font-variant-numeric: tabular-nums; }
   .craft-tooltip-desc { font-size: 12px; color: var(--pg-muted); line-height: 18px; }
 
-  .craft-guide-progress {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    padding-top: 3px;
-  }
-
-  .craft-progress-label {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--pg-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .craft-reset-btn {
-    width: 18px; height: 18px;
-    border: none; border-radius: 50%;
-    background: rgba(28,25,23,.12);
-    color: var(--pg-muted);
-    cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center;
-    padding: 0;
-    transition: background .15s, color .15s;
-  }
-  .craft-reset-btn:hover { background: rgba(28,25,23,.2); color: var(--pg-primary); }
-  html[data-theme="dark"] .craft-reset-btn { background: rgba(253,253,251,.12); }
-  html[data-theme="dark"] .craft-reset-btn:hover { background: rgba(253,253,251,.2); }
-
   .craft-intro {
     font-size: 13px;
     color: var(--pg-muted);
@@ -163,7 +134,6 @@
     align-items: flex-start;
     gap: 12px;
     padding: 14px 0;
-    cursor: pointer;
     position: relative;
   }
   .craft-step:not(:last-child)::after {
@@ -174,21 +144,15 @@
     background: var(--pg-border);
   }
 
-  .craft-check {
+  .craft-step-num {
     flex-shrink: 0;
     width: 20px; height: 20px;
-    border: none;
-    background: none;
-    padding: 0;
-    cursor: pointer;
-    color: var(--pg-primary);
-    opacity: .15;
     display: flex; align-items: center; justify-content: center;
-    transition: opacity .15s;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pg-muted);
     margin-top: 1px;
   }
-  .craft-step.checked .craft-check { opacity: 1; }
-  .craft-step:not(.checked):hover .craft-check { opacity: .4; }
 
   .craft-step-body { flex: 1; min-width: 0; }
 
@@ -197,15 +161,6 @@
     align-items: baseline;
     gap: 8px;
     margin-bottom: 8px;
-  }
-
-  .craft-step-num {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: var(--pg-muted);
-    flex-shrink: 0;
   }
 
   .craft-step-cost {
@@ -222,9 +177,7 @@
     line-height: 21px;
     font-weight: 500;
     color: var(--pg-primary);
-    transition: opacity .15s;
   }
-  .craft-step.checked .craft-step-title { opacity: .4; }
 
   .craft-currencies {
     display: flex;
@@ -310,18 +263,14 @@
     font-size: 13px;
     color: var(--pg-primary);
     line-height: 20px;
-    transition: opacity .15s;
   }
-  .craft-step.checked .craft-goal { opacity: .4; }
 
   .craft-note {
     margin-top: 6px;
     font-size: 12px;
     color: var(--pg-muted);
     line-height: 18px;
-    transition: opacity .15s;
   }
-  .craft-step.checked .craft-note { opacity: .3; }
 
   @keyframes pg-up {
     from { opacity: 0; translate: 0 16px; }

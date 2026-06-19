@@ -167,23 +167,13 @@ function CurrencyChip({ c, prices }) {
   );
 }
 
-function Step({ step, index, checked, onToggle, prices }) {
+function Step({ step, index, prices }) {
   const cost = stepCost(step, prices);
   return (
-    <div className={`craft-step${checked ? ' checked' : ''}`} onClick={onToggle}>
-      <button
-        className="craft-check"
-        onClick={e => { e.stopPropagation(); onToggle(); }}
-        aria-pressed={checked}
-        aria-label={`Mark step ${index + 1} complete`}
-      >
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-          <polyline points="3,8 6.5,12 13,4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
+    <div className="craft-step">
+      <span className="craft-step-num">{index + 1}</span>
       <div className="craft-step-body">
         <div className="craft-step-header">
-          <span className="craft-step-num">Step {index + 1}</span>
           <span className="craft-step-title">{step.title}</span>
           {cost && <span className="craft-step-cost">{cost}</span>}
         </div>
@@ -212,19 +202,6 @@ function Step({ step, index, checked, onToggle, prices }) {
 }
 
 function Guide({ guide, prices }) {
-  const [checked, setChecked] = useState(() => guide.steps.map(() => false));
-
-  function toggle(i) {
-    setChecked(prev => prev.map((v, idx) => idx === i ? !v : v));
-  }
-
-  function reset() {
-    setChecked(guide.steps.map(() => false));
-  }
-
-  const done = checked.filter(Boolean).length;
-  const total = guide.steps.length;
-
   return (
     <div className="craft-guide">
       <div className="craft-guide-header">
@@ -237,21 +214,11 @@ function Guide({ guide, prices }) {
             {guide.baseInfo && <BaseTooltip baseInfo={guide.baseInfo} />}
           </div>
         </div>
-        <div className="craft-guide-progress">
-          <span className="craft-progress-label">{done}/{total}</span>
-          {done > 0 && (
-            <button className="craft-reset-btn" onClick={reset} aria-label="Reset steps">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
-          )}
-        </div>
       </div>
       {guide.intro && <p className="craft-intro">{guide.intro}</p>}
       <div className="craft-steps">
         {guide.steps.map((step, i) => (
-          <Step key={i} step={step} index={i} checked={checked[i]} onToggle={() => toggle(i)} prices={prices} />
+          <Step key={i} step={step} index={i} prices={prices} />
         ))}
       </div>
     </div>
