@@ -50,8 +50,8 @@ const GUIDES = [
       {
         title: 'Fill remaining affixes',
         currency: [
-          { label: 'Greater Exalted Orb', ninja: 'Greater Exalted Orb', desc: 'Augments a Rare item with a new random modifier.' },
           { label: 'Omen of Greater Exaltation', ninja: 'Omen of Greater Exaltation', desc: 'While active in your inventory, your next Exalted Orb will add two random modifiers.' },
+          { label: 'Greater Exalted Orb', ninja: 'Greater Exalted Orb', desc: 'Augments a Rare item with a new random modifier.' },
         ],
         goal: 'Fill out the last 2 affixes',
         note: 'Can also use Perfect Exalted Orb if you prefer.',
@@ -173,7 +173,6 @@ function CurrencyChip({ c, prices }) {
       >
         {icon && <img src={icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
         {c.label}
-        {price && <span className="craft-chip-price">{price}</span>}
       </span>
       {open && c.desc && (
         <span className="craft-chip-tooltip">{c.desc}</span>
