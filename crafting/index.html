@@ -233,6 +233,8 @@
     margin-bottom: 8px;
   }
 
+  .craft-chip-wrap { position: relative; display: inline-flex; }
+
   .craft-currency {
     font-size: 11px;
     font-weight: 500;
@@ -242,8 +244,42 @@
     color: var(--pg-primary);
     white-space: nowrap;
     font-family: 'JetBrains Mono', ui-monospace, monospace;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
   }
   html[data-theme="dark"] .craft-currency { background: rgba(253,253,251,.1); }
+
+  .craft-currency--tip { cursor: default; }
+  .craft-currency--tip:hover { background: rgba(28,25,23,.14); }
+  html[data-theme="dark"] .craft-currency--tip:hover { background: rgba(253,253,251,.16); }
+
+  .craft-chip-price {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--pg-muted);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .craft-chip-tooltip {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: var(--pg-bg);
+    border: .5px solid var(--pg-border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    z-index: 50;
+    width: 260px;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--pg-muted);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    white-space: normal;
+    pointer-events: none;
+  }
 
   .craft-goal {
     font-size: 13px;

@@ -30,15 +30,15 @@ const GUIDES = [
       },
       {
         title: 'Use Greater Essence of Seeking',
-        currency: [{ label: 'Greater Essence of Seeking', ninja: 'Greater Essence of Seeking' }],
+        currency: [{ label: 'Greater Essence of Seeking', ninja: 'Greater Essence of Seeking', desc: 'Upgrades a Magic item to a Rare item, adding a guaranteed Critical Hit Chance modifier.' }],
         goal: 'Guarantees T3 Critical Hit Chance',
         note: 'This is your one guaranteed craft — use it here.',
       },
       {
         title: 'Unveil a Prefix',
         currency: [
-          { label: 'Sinistral Necromancy', ninja: 'Omen of Sinistral Necromancy' },
-          { label: 'Jawbone', ninja: 'Ancient Jawbone' },
+          { label: 'Omen of Sinistral Necromancy', ninja: 'Omen of Sinistral Necromancy', desc: 'While active in your inventory, your next Desecration attempt will add only prefix modifiers.' },
+          { label: 'Ancient Jawbone', ninja: 'Ancient Jawbone', desc: 'Desecrates a Rare Weapon or Quiver, adding a new random modifier.' },
         ],
         goal: 'High flat physical damage — high tier elemental flat also works',
         note: 'Ancient Jawbone is cheaper early league. Consider Abyssal Echoes depending on prices.',
@@ -46,8 +46,8 @@ const GUIDES = [
       {
         title: 'Fill remaining affixes',
         currency: [
-          { label: 'Greater Exalt', ninja: 'Greater Exalted Orb' },
-          { label: 'Omen of Greater Exaltation', ninja: 'Omen of Greater Exaltation' },
+          { label: 'Greater Exalted Orb', ninja: 'Greater Exalted Orb', desc: 'Augments a Rare item with a new random modifier.' },
+          { label: 'Omen of Greater Exaltation', ninja: 'Omen of Greater Exaltation', desc: 'While active in your inventory, your next Exalted Orb will add two random modifiers.' },
         ],
         goal: 'Fill out the last 2 affixes',
         note: 'Pick Exalt tier based on how good your bow is and current prices. Pure RNG from here.',
@@ -130,6 +130,39 @@ function BaseTooltip({ baseInfo }) {
   );
 }
 
+function CurrencyChip({ c, prices }) {
+  const [open, setOpen] = React.useState(false);
+  const divs = prices ? prices[c.ninja] : null;
+  let price = null;
+  if (divs != null) {
+    if (divs >= 1) {
+      price = `~${+divs.toFixed(1)} div`;
+    } else {
+      const chaosPerDiv = prices['Chaos Orb'] ? 1 / prices['Chaos Orb'] : null;
+      if (chaosPerDiv) {
+        const chaos = Math.round(divs * chaosPerDiv);
+        price = chaos < 1 ? '<1c' : `~${chaos}c`;
+      }
+    }
+  }
+  if (!c.desc && !price) return React.createElement('span', { className: 'craft-currency' }, c.label);
+  return (
+    <span className="craft-chip-wrap">
+      <span
+        className="craft-currency craft-currency--tip"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        {c.label}
+        {price && <span className="craft-chip-price">{price}</span>}
+      </span>
+      {open && (c.desc) && (
+        <span className="craft-chip-tooltip">{c.desc}</span>
+      )}
+    </span>
+  );
+}
+
 function Step({ step, index, checked, onToggle, prices }) {
   const cost = stepCost(step, prices);
   return (
@@ -153,7 +186,7 @@ function Step({ step, index, checked, onToggle, prices }) {
         {step.currency.length > 0 && (
           <div className="craft-currencies">
             {step.currency.map(c => (
-              <span key={c.label} className="craft-currency">{c.label}</span>
+              <CurrencyChip key={c.label} c={c} prices={prices} />
             ))}
           </div>
         )}
