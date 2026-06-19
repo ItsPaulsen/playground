@@ -245,10 +245,13 @@ function App() {
                     + (rarityState.active ? rarityState.value : 0)
                     + (packState.active ? packState.value : 0);
   const allThreeActive = iirState.active && rarityState.active && packState.active;
+  const anyRarityActive = iirState.active || rarityState.active;
   const rarityCapExceeded =
-    (allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15)
+    (packState.active && packState.value >= 60 && anyRarityActive)
+    || (packState.active && iirState.active && !rarityState.active && iirState.value + packState.value >= 95)
+    || (packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95)
+    || (allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15)
     || (allThreeActive && packState.value >= 30)
-    || (packState.active && iirState.active && iirState.value >= 100)
     || budgetTotal > 120;
 
   function toggle(i) {
@@ -282,7 +285,7 @@ function App() {
       {rarityCapExceeded && (
         <p className="poe-demand-warning">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          Item Rarity, Monster Rarity, and Pack Size share a 120% cap — this combo may return no results.
+          This combination of mods may return no results.
         </p>
       )}
 

@@ -381,7 +381,8 @@ function App() {
   const packState = states[MODS.findIndex(m => m.param === 'packsize')];
   const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
   const allThreeActive = iirState.active && rarityState.active && packState.active;
-  const rarityCapExceeded = allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || packState.active && iirState.active && iirState.value >= 100 || budgetTotal > 120;
+  const anyRarityActive = iirState.active || rarityState.active;
+  const rarityCapExceeded = packState.active && packState.value >= 60 && anyRarityActive || packState.active && iirState.active && !rarityState.active && iirState.value + packState.value >= 95 || packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95 || allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || budgetTotal > 120;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
@@ -434,7 +435,7 @@ function App() {
     y1: "17",
     x2: "12.01",
     y2: "17"
-  })), "Item Rarity, Monster Rarity, and Pack Size share a 120% cap \u2014 this combo may return no results."), /*#__PURE__*/React.createElement(CombinedBox, {
+  })), "This combination of mods may return no results."), /*#__PURE__*/React.createElement(CombinedBox, {
     combined: combined,
     activeMods: activeMods,
     onReset: reset
