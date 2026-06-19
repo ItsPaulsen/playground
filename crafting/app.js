@@ -246,8 +246,8 @@ function Step({
     target: "_blank",
     rel: "noopener"
   }, t.label, /*#__PURE__*/React.createElement("svg", {
-    width: "11",
-    height: "11",
+    width: "10",
+    height: "10",
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
