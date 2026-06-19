@@ -221,7 +221,7 @@ function Step({
     className: "craft-step"
   }, /*#__PURE__*/React.createElement("span", {
     className: "craft-step-num"
-  }, index + 1), /*#__PURE__*/React.createElement("div", {
+  }, index + 1, "."), /*#__PURE__*/React.createElement("div", {
     className: "craft-step-body"
   }, /*#__PURE__*/React.createElement("div", {
     className: "craft-step-header"

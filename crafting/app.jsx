@@ -171,7 +171,7 @@ function Step({ step, index, prices }) {
   const cost = stepCost(step, prices);
   return (
     <div className="craft-step">
-      <span className="craft-step-num">{index + 1}</span>
+      <span className="craft-step-num">{index + 1}.</span>
       <div className="craft-step-body">
         <div className="craft-step-header">
           <span className="craft-step-title">{step.title}</span>
