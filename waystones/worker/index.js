@@ -48,7 +48,7 @@ export default {
       query: {
         status: { option: 'securable' },
         filters: {
-          map_filters: { filters },
+          map_filters: { filters: { ...filters, map_tier: { min: 15 } } },
           type_filters: { filters: { category: { option: 'map.waystone' } } },
         },
       },

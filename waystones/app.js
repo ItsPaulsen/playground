@@ -6,14 +6,14 @@ const MODS = [{
   name: 'Item Rarity',
   param: 'iir',
   min: 5,
-  max: 80,
+  max: 100,
   step: 5,
   defaultVal: 25
 }, {
   name: 'Monster Rarity',
   param: 'rarity',
   min: 5,
-  max: 80,
+  max: 100,
   step: 5,
   defaultVal: 25
 }, {
@@ -353,6 +353,9 @@ function App() {
     return sum + Math.max(0, (s.value - mod.defaultVal) / (mod.max - mod.defaultVal));
   }, 0);
   const demandThreshold = budgetCount <= 1 ? Infinity : budgetCount === 2 ? 1.1 : 0.78;
+  const iirState = states[MODS.findIndex(m => m.param === 'iir')];
+  const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
+  const rarityCapExceeded = iirState.active && rarityState.active && iirState.value + rarityState.value > 120;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
@@ -378,7 +381,31 @@ function App() {
     onToggle: () => toggle(i),
     onValue: v => setValue(i, v),
     last: i === MODS.length - 1
-  }))), demand > demandThreshold && /*#__PURE__*/React.createElement("p", {
+  }))), rarityCapExceeded && /*#__PURE__*/React.createElement("p", {
+    className: "poe-demand-warning"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "12",
+    y1: "9",
+    x2: "12",
+    y2: "13"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "12",
+    y1: "17",
+    x2: "12.01",
+    y2: "17"
+  })), "Item Rarity and Monster Rarity share a 120% cap \u2014 this combo may return no results."), !rarityCapExceeded && demand > demandThreshold && /*#__PURE__*/React.createElement("p", {
     className: "poe-demand-warning"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "14",
