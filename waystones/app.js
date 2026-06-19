@@ -31,7 +31,52 @@ const MODS = [{
   step: 5,
   defaultVal: 20
 }];
-const WORKER_URL = 'https://poe2-waystone-trade.itspaulsen.workers.dev';
+const LEAGUE = 'Runes of Aldur';
+const TRADE_BASE = 'https://www.pathofexile.com/trade2/search/poe2';
+const FILTER_MAP = {
+  iir: 'map_iir',
+  rarity: 'map_rare_monsters',
+  dropchance: 'map_bonus',
+  packsize: 'map_packsize'
+};
+function buildTradeUrl(activeMods) {
+  const filters = {
+    map_tier: {
+      min: 15
+    }
+  };
+  activeMods.forEach(({
+    param,
+    value
+  }) => {
+    if (FILTER_MAP[param]) filters[FILTER_MAP[param]] = {
+      min: value
+    };
+  });
+  const query = {
+    query: {
+      status: {
+        option: 'securable'
+      },
+      filters: {
+        map_filters: {
+          filters
+        },
+        type_filters: {
+          filters: {
+            category: {
+              option: 'map.waystone'
+            }
+          }
+        }
+      }
+    },
+    sort: {
+      price: 'asc'
+    }
+  };
+  return `${TRADE_BASE}/${encodeURIComponent(LEAGUE)}?q=${encodeURIComponent(JSON.stringify(query))}`;
+}
 function buildRegex(modName, v) {
   const parts = [];
   if (v < 10) {
@@ -204,9 +249,6 @@ function CombinedBox({
   activeMods
 }) {
   const [copied, setCopied] = useState(false);
-  const [trading, setTrading] = useState(false);
-  const [tradeErr, setTradeErr] = useState(false);
-  const [rateLimitSecs, setRateLimitSecs] = useState(0);
   const showToast = useToast();
   const len = combined.length;
   const over = len > 250;
@@ -227,42 +269,9 @@ function CombinedBox({
       document.body.removeChild(el);
     }
   }
-  async function handleTrade() {
-    if (!hasActive || trading) return;
-    setTrading(true);
-    setTradeErr(false);
-    try {
-      const params = new URLSearchParams();
-      activeMods.forEach(({
-        param,
-        value
-      }) => params.set(param, value));
-      const res = await fetch(`${WORKER_URL}?${params}`);
-      const data = await res.json();
-      if (data.url) {
-        window.open(data.url, '_blank', 'noopener');
-      } else {
-        setTradeErr(true);
-        setTimeout(() => setTradeErr(false), 2500);
-        const match = typeof data.detail === 'string' && data.detail.match(/wait (\d+) seconds/i);
-        if (match) {
-          let remaining = parseInt(match[1], 10);
-          setRateLimitSecs(remaining);
-          const mins = Math.ceil(remaining / 60);
-          showToast(`Trade rate limited — try again in ${mins} min`);
-          const interval = setInterval(() => {
-            remaining--;
-            setRateLimitSecs(remaining);
-            if (remaining <= 0) clearInterval(interval);
-          }, 1000);
-        }
-      }
-    } catch {
-      setTradeErr(true);
-      setTimeout(() => setTradeErr(false), 2500);
-    } finally {
-      setTrading(false);
-    }
+  function handleTrade() {
+    if (!hasActive) return;
+    window.open(buildTradeUrl(activeMods), '_blank', 'noopener');
   }
   return /*#__PURE__*/React.createElement("div", {
     className: `poe-combined${over ? ' over' : ''}`
@@ -310,7 +319,7 @@ function CombinedBox({
   })), copied ? 'Copied' : 'Copy'), /*#__PURE__*/React.createElement("button", {
     className: "poe-trade-btn",
     onClick: handleTrade,
-    disabled: !hasActive || trading || rateLimitSecs > 0
+    disabled: !hasActive
   }, /*#__PURE__*/React.createElement("svg", {
     width: "13",
     height: "13",
@@ -329,12 +338,7 @@ function CombinedBox({
     y1: "14",
     x2: "21",
     y2: "3"
-  })), rateLimitSecs > 0 ? React.createElement('span', {
-    style: {
-      fontFamily: "'JetBrains Mono', ui-monospace, monospace",
-      fontVariantNumeric: 'tabular-nums'
-    }
-  }, `${Math.floor(rateLimitSecs / 60)}:${String(rateLimitSecs % 60).padStart(2, '0')}`) : tradeErr ? 'Error' : 'Trade'))));
+  })), "Trade"))));
 }
 function App() {
   const [states, setStates] = useState(() => MODS.map(mod => ({
