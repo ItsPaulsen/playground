@@ -211,14 +211,21 @@
   .craft-currency {
     font-size: 12px;
     font-weight: 500;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 6px;
+    background: rgba(28,25,23,.08);
     color: var(--pg-primary);
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
     gap: 5px;
   }
+  html[data-theme="dark"] .craft-currency { background: rgba(253,253,251,.1); }
 
   .craft-currency--tip { cursor: default; }
+  .craft-currency--tip:hover { background: rgba(28,25,23,.14); }
+  html[data-theme="dark"] .craft-currency--tip:hover { background: rgba(253,253,251,.16); }
 
   .craft-chip-price {
     font-size: 12px;
@@ -252,10 +259,18 @@
     gap: 4px;
     font-size: 12px;
     font-weight: 500;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 6px;
+    background: rgba(28,25,23,.08);
     color: var(--pg-primary);
     text-decoration: none;
     white-space: nowrap;
+    transition: color .15s, background .15s;
   }
+  .craft-trade-link:hover { background: rgba(28,25,23,.14); }
+  html[data-theme="dark"] .craft-trade-link { background: rgba(253,253,251,.1); }
+  html[data-theme="dark"] .craft-trade-link:hover { background: rgba(253,253,251,.16); color: var(--pg-primary); }
 
   .craft-goal {
     font-size: 13px;
