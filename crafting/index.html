@@ -281,6 +281,31 @@
     pointer-events: none;
   }
 
+  .craft-trade-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .craft-trade-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(28,25,23,.08);
+    color: var(--pg-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color .15s, background .15s;
+  }
+  .craft-trade-link:hover { background: rgba(28,25,23,.14); color: var(--pg-primary); }
+  html[data-theme="dark"] .craft-trade-link { background: rgba(253,253,251,.1); }
+  html[data-theme="dark"] .craft-trade-link:hover { background: rgba(253,253,251,.16); color: var(--pg-primary); }
+
   .craft-goal {
     font-size: 13px;
     color: var(--pg-primary);

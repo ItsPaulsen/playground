@@ -6,7 +6,7 @@ const LEAGUE = 'Runes of Aldur';
 const GUIDES = [{
   id: 'crit-bow',
   name: 'Crit Bow',
-  ilvl: 75,
+  ilvl: 82,
   bases: ['Obliterator Bow', 'Warmonger Bow'],
   baseInfo: [{
     name: 'Obliterator Bow',
@@ -37,10 +37,17 @@ const GUIDES = [{
   }],
   intro: null,
   steps: [{
-    title: 'Start with a high %phys base',
+    title: 'Start with a T1 %phys base',
     currency: [],
-    goal: 'Higher is better but any works. Buy or pick up bases and Trans/Aug until you find one.',
-    note: null
+    goal: 'T1 (Merciless) is 170–179% increased Physical Damage, requires ilvl 82. Buy or pick up bases and Trans/Aug until you hit it.',
+    note: null,
+    tradeLinks: [{
+      label: 'Obliterator Bow',
+      url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22online%22%7D%2C%22type%22%3A%22Obliterator%20Bow%22%2C%22filters%22%3A%7B%22equipment_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A82%7D%7D%7D%2C%22stat_filters%22%3A%7B%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A170%7D%2C%22disabled%22%3Afalse%7D%5D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
+    }, {
+      label: 'Warmonger Bow',
+      url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22online%22%7D%2C%22type%22%3A%22Warmonger%20Bow%22%2C%22filters%22%3A%7B%22equipment_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A82%7D%7D%7D%2C%22stat_filters%22%3A%7B%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A170%7D%2C%22disabled%22%3Afalse%7D%5D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
+    }]
   }, {
     title: 'Use Greater Essence of Seeking',
     currency: [{
@@ -252,7 +259,33 @@ function Step({
     prices: prices
   }))), /*#__PURE__*/React.createElement("p", {
     className: "craft-goal"
-  }, step.goal), step.note && /*#__PURE__*/React.createElement("p", {
+  }, step.goal), step.tradeLinks && step.tradeLinks.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "craft-trade-links"
+  }, step.tradeLinks.map(t => /*#__PURE__*/React.createElement("a", {
+    key: t.label,
+    className: "craft-trade-link",
+    href: t.url,
+    target: "_blank",
+    rel: "noopener"
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "11",
+    height: "11",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+  }), /*#__PURE__*/React.createElement("polyline", {
+    points: "15 3 21 3 21 9"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "10",
+    y1: "14",
+    x2: "21",
+    y2: "3"
+  })), t.label))), step.note && /*#__PURE__*/React.createElement("p", {
     className: "craft-note"
   }, step.note)));
 }
