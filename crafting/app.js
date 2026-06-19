@@ -82,7 +82,7 @@ const GUIDES = [{
       desc: 'While active in your inventory, your next Exalted Orb will add two random modifiers.'
     }],
     goal: 'Fill out the last 2 affixes',
-    note: 'Pick Exalt tier based on how good your bow is and current prices. Pure RNG from here.'
+    note: 'Can also use Perfect Exalted Orb if you prefer.'
   }]
 }];
 async function fetchPrices() {
