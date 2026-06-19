@@ -39,7 +39,7 @@ const GUIDES = [{
   steps: [{
     title: 'T2 Phys Base',
     currency: [],
-    goal: '155–169% increased Physical Damage (ilvl 75+)',
+    goal: '155–169% increased Physical Damage',
     note: 'If the base only has one mod, augment it before using an essence.',
     tradeLinks: [{
       label: 'Obliterator Bow',
