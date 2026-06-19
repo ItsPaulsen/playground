@@ -20,7 +20,7 @@ const MODS = [{
   name: 'Waystone Drop Chance',
   param: 'dropchance',
   min: 10,
-  max: 120,
+  max: 160,
   step: 10,
   defaultVal: 40
 }, {

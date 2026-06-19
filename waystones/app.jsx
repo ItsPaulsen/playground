@@ -3,7 +3,7 @@ const { useState, useRef } = React;
 const MODS = [
   { name: 'Item Rarity',          param: 'iir',        min: 5,  max: 100, step: 5,  defaultVal: 25  },
   { name: 'Monster Rarity',       param: 'rarity',     min: 5,  max: 100, step: 5,  defaultVal: 25  },
-  { name: 'Waystone Drop Chance', param: 'dropchance', min: 10, max: 120, step: 10, defaultVal: 40  },
+  { name: 'Waystone Drop Chance', param: 'dropchance', min: 10, max: 160, step: 10, defaultVal: 40  },
   { name: 'Pack Size',            param: 'packsize',   min: 5,  max: 60,  step: 5,  defaultVal: 20  },
 ];
 
