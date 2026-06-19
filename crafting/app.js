@@ -74,24 +74,9 @@ const GUIDES = [{
   }]
 }];
 async function fetchPrices() {
-  const base = `https://poe.ninja/poe2/api/economy/exchange/current/overview`;
-  const league = encodeURIComponent(LEAGUE);
-  const types = ['Currency', 'Essences', 'Ritual', 'Abyss'];
-  const map = {};
-  await Promise.allSettled(types.map(async type => {
-    const res = await fetch(`${base}?league=${league}&type=${type}`);
-    if (!res.ok) return;
-    const data = await res.json();
-    const nameById = {};
-    (data.items || []).forEach(item => {
-      nameById[item.id] = item.name;
-    });
-    (data.lines || []).forEach(line => {
-      const name = nameById[line.id];
-      if (name && line.primaryValue != null) map[name] = line.primaryValue;
-    });
-  }));
-  return map;
+  const res = await fetch('/crafting/prices.json');
+  if (!res.ok) return {};
+  return res.json();
 }
 function usePrices() {
   const [prices, setPrices] = useState(null);
