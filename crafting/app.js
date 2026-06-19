@@ -6,7 +6,7 @@ const LEAGUE = 'Runes of Aldur';
 const GUIDES = [{
   id: 'crit-bow',
   name: 'Crit Bow',
-  ilvl: 82,
+  ilvl: 75,
   bases: ['Obliterator Bow', 'Warmonger Bow'],
   baseInfo: [{
     name: 'Obliterator Bow',
@@ -37,16 +37,16 @@ const GUIDES = [{
   }],
   intro: null,
   steps: [{
-    title: 'Start with a T1 %phys base',
+    title: 'Start with a T2 %phys base',
     currency: [],
-    goal: 'T1 (Merciless) is 170–179% increased Physical Damage, requires ilvl 82. Buy or pick up bases and Trans/Aug until you hit it.',
+    goal: 'T2 (Tyrannical) is 155–169% increased Physical Damage, requires ilvl 75. Buy or pick up bases and Trans/Aug until you hit it.',
     note: null,
     tradeLinks: [{
       label: 'Obliterator Bow',
-      url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Obliterator%20Bow%22%2C%22stats%22%3A%5B%7B%22type%22%3A%22and%22%2C%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A170%7D%2C%22disabled%22%3Afalse%7D%5D%7D%5D%2C%22filters%22%3A%7B%22type_filters%22%3A%7B%22filters%22%3A%7B%22rarity%22%3A%7B%22option%22%3A%22magic%22%7D%7D%7D%2C%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A82%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
+      url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Obliterator%20Bow%22%2C%22stats%22%3A%5B%7B%22type%22%3A%22and%22%2C%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A155%7D%2C%22disabled%22%3Afalse%7D%5D%7D%5D%2C%22filters%22%3A%7B%22type_filters%22%3A%7B%22filters%22%3A%7B%22rarity%22%3A%7B%22option%22%3A%22magic%22%7D%7D%7D%2C%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
     }, {
       label: 'Warmonger Bow',
-      url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Warmonger%20Bow%22%2C%22stats%22%3A%5B%7B%22type%22%3A%22and%22%2C%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A170%7D%2C%22disabled%22%3Afalse%7D%5D%7D%5D%2C%22filters%22%3A%7B%22type_filters%22%3A%7B%22filters%22%3A%7B%22rarity%22%3A%7B%22option%22%3A%22magic%22%7D%7D%7D%2C%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A82%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
+      url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Warmonger%20Bow%22%2C%22stats%22%3A%5B%7B%22type%22%3A%22and%22%2C%22filters%22%3A%5B%7B%22id%22%3A%22explicit.stat_1509134228%22%2C%22value%22%3A%7B%22min%22%3A155%7D%2C%22disabled%22%3Afalse%7D%5D%7D%5D%2C%22filters%22%3A%7B%22type_filters%22%3A%7B%22filters%22%3A%7B%22rarity%22%3A%7B%22option%22%3A%22magic%22%7D%7D%7D%2C%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
     }]
   }, {
     title: 'Use Greater Essence of Seeking',
