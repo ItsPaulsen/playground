@@ -37,8 +37,8 @@ const GUIDES = [
       {
         title: 'Unveil a Prefix',
         currency: [
-          { label: 'Sinistral Necromancy', ninja: 'Sinistral Necromancy' },
-          { label: 'Jawbone', ninja: 'Jawbone' },
+          { label: 'Sinistral Necromancy', ninja: 'Omen of Sinistral Necromancy' },
+          { label: 'Jawbone', ninja: 'Ancient Jawbone' },
         ],
         goal: 'High flat physical damage — high tier elemental flat also works',
         note: 'Ancient Jawbone is cheaper early league. Consider Abyssal Echoes depending on prices.',
@@ -57,24 +57,20 @@ const GUIDES = [
 ];
 
 async function fetchPrices() {
-  const base = `https://poe.ninja/api/data`;
+  const base = `https://poe.ninja/poe2/api/economy/exchange/current/overview`;
   const league = encodeURIComponent(LEAGUE);
-  const endpoints = [
-    `${base}/currencyoverview?league=${league}&type=Currency`,
-    `${base}/itemoverview?league=${league}&type=Essence`,
-    `${base}/itemoverview?league=${league}&type=Omen`,
-    `${base}/itemoverview?league=${league}&type=Scarab`,
-  ];
+  const types = ['Currency', 'Essences', 'Ritual', 'Abyss'];
 
   const map = {};
-  await Promise.allSettled(endpoints.map(async url => {
-    const res = await fetch(url);
+  await Promise.allSettled(types.map(async type => {
+    const res = await fetch(`${base}?league=${league}&type=${type}`);
     if (!res.ok) return;
     const data = await res.json();
-    (data.lines || []).forEach(item => {
-      const name = item.currencyTypeName || item.name;
-      const chaos = item.chaosEquivalent ?? item.chaosValue;
-      if (name && chaos != null) map[name] = chaos;
+    const nameById = {};
+    (data.items || []).forEach(item => { nameById[item.id] = item.name; });
+    (data.lines || []).forEach(line => {
+      const name = nameById[line.id];
+      if (name && line.primaryValue != null) map[name] = line.primaryValue;
     });
   }));
   return map;
@@ -95,18 +91,19 @@ function usePrices() {
 
 function stepCost(step, prices) {
   if (!prices || !step.currency.length) return null;
-  const divine = prices['Divine Orb'];
-  if (!divine) return null;
-
-  let total = 0;
-  let found = 0;
+  let total = 0, found = 0;
   for (const c of step.currency) {
-    const chaos = prices[c.ninja];
-    if (chaos != null) { total += chaos; found++; }
+    const divs = prices[c.ninja];
+    if (divs != null) { total += divs; found++; }
   }
   if (!found) return null;
-  const divs = total / divine;
-  return divs < .1 ? `<0.1 div` : `~${+divs.toFixed(1)} div`;
+  if (total >= 1) return `~${+total.toFixed(1)} div`;
+  const chaosPerDiv = prices['Chaos Orb'] ? 1 / prices['Chaos Orb'] : null;
+  if (chaosPerDiv) {
+    const chaos = Math.round(total * chaosPerDiv);
+    return chaos < 1 ? `<1c` : `~${chaos}c`;
+  }
+  return `~${+total.toFixed(2)} div`;
 }
 
 function BaseTooltip({ baseInfo }) {
