@@ -244,8 +244,10 @@ function App() {
   const budgetTotal = (iirState.active ? iirState.value : 0)
                     + (rarityState.active ? rarityState.value : 0)
                     + (packState.active ? packState.value : 0);
+  const allThreeActive = iirState.active && rarityState.active && packState.active;
   const rarityCapExceeded =
-    (packState.active && packState.value >= 15)
+    (allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15)
+    || (allThreeActive && packState.value >= 30)
     || (packState.active && iirState.active && iirState.value >= 100)
     || budgetTotal > 120;
 

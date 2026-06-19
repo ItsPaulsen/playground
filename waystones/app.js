@@ -380,7 +380,8 @@ function App() {
   const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
   const packState = states[MODS.findIndex(m => m.param === 'packsize')];
   const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
-  const rarityCapExceeded = packState.active && packState.value >= 15 || packState.active && iirState.active && iirState.value >= 100 || budgetTotal > 120;
+  const allThreeActive = iirState.active && rarityState.active && packState.active;
+  const rarityCapExceeded = allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || packState.active && iirState.active && iirState.value >= 100 || budgetTotal > 120;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
