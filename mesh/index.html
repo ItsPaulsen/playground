@@ -6,8 +6,8 @@
 <title>Mesh — Paulsen</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') || 'light');</script>
-<link rel="preload" href="/shared/vendor/react.production.min.js" as="script">
-<link rel="preload" href="/shared/vendor/react-dom.production.min.js" as="script">
+<link rel="preload" href="/shared/vendor/preact.umd.js" as="script"><link rel="preload" href="/shared/vendor/preact-hooks.umd.js" as="script"><link rel="preload" href="/shared/vendor/preact-compat.umd.js" as="script">
+
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,8 +70,8 @@
   }).observe(document.getElementById('root'),{childList:true});
 })();
 </script>
-<script src="/shared/vendor/react.production.min.js"></script>
-<script src="/shared/vendor/react-dom.production.min.js"></script>
+<script src="/shared/vendor/preact.umd.js"></script><script src="/shared/vendor/preact-hooks.umd.js"></script><script src="/shared/vendor/preact-compat.umd.js"></script><script src="/shared/vendor/preact-shim.js"></script>
+
 <script src="../shared/tweaks-panel.js"></script>
 <script src="mesh.js"></script>
 <script src="app.js"></script>
