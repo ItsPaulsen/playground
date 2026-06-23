@@ -252,8 +252,9 @@ function App() {
     || (packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95)
     || (allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15)
     || (allThreeActive && packState.value >= 30)
-    || budgetTotal > 130
-    || (iirState.active && rarityState.active && iirState.value >= 100);
+    || budgetTotal > 135
+    || (iirState.active && rarityState.active && iirState.value >= 100)
+    || (iirState.active && rarityState.active && rarityState.value >= 70 && iirState.value >= 60);
 
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? { ...s, active: !s.active } : s));

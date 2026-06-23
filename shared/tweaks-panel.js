@@ -59,6 +59,9 @@ const __TWEAKS_STYLE = `
     --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);
   }
   html[data-theme="dark"] .twk-panel,
+  html[data-theme="dark"] .twk-reopen{background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,0.1);}
+  html[data-theme="dark"] .twk-cpick{background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,0.1);}
+  html[data-theme="dark"] .twk-panel,
   html[data-theme="dark"] .twk-reopen{
     --bg:rgba(41,37,36,.8);--text:rgb(253,253,251);--bd:rgba(253,253,251,.1);
     --label:rgba(253,253,251,.7);--val:rgba(253,253,251,.5);
@@ -76,9 +79,9 @@ const __TWEAKS_STYLE = `
     z-index:9999;width:320px;
     max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
-    background:var(--bg);color:var(--text);
-    backdrop-filter:blur(12px) saturate(180%);
-    border:.5px solid var(--bd);border-radius:20px;
+    background:rgba(255,255,255,0.6);color:var(--text);
+    backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);border-radius:20px;
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
@@ -157,9 +160,9 @@ const __TWEAKS_STYLE = `
 
 .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:9999;width:36px;height:36px;
     border:0;border-radius:12px;cursor:pointer;padding:0;
-    background:var(--bg);
-    backdrop-filter:blur(12px) saturate(180%);
-    border:.5px solid var(--bd);
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
     display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.8)}
   .twk-reopen:hover{color:var(--text)}
@@ -221,8 +224,8 @@ const __TWEAKS_STYLE = `
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 
   .twk-cpick{position:fixed;z-index:10000;width:212px;
-    background:var(--bg);backdrop-filter:blur(12px) saturate(180%);
-    border:.5px solid var(--bd);border-radius:12px;padding:12px;
+    background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:12px;
     box-shadow:0 8px 40px rgba(0,0,0,.2);
     display:flex;flex-direction:column;gap:8px}
   .twk-cpick-sv{position:relative;width:100%;height:140px;
