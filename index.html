@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Playground — Paulsen</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="prefetch" href="/wave/">
+<link rel="prefetch" href="/typo/">
+<link rel="prefetch" href="/mesh/">
+<link rel="prefetch" href="/waystones/">
+<link rel="prefetch" href="/crafting/">
+<link rel="prefetch" href="/trail/">
+<link rel="prefetch" href="/shared/vendor/preact-bundle.js" as="script">
+<link rel="prefetch" href="/shared/tweaks-panel.js" as="script">
   <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') || 'light');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -101,9 +109,8 @@
                   box-shadow .4s cubic-bezier(.25,.46,.45,.94);
     }
 
-    .card:hover {
-      transform: scale(1.02);
-    }
+    .card:hover { transform: scale(1.02); }
+    .card:active { transform: scale(0.97); opacity: 0.7; transition-duration: .08s; }
 
     .card-icon {
       width: 40px;
