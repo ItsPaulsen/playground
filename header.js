@@ -11,7 +11,7 @@
 
   const style = document.createElement('style');
   style.textContent = `
-    :root { --header-h: 48px; }
+    :root { --header-h: calc(48px + env(safe-area-inset-top, 0px)); }
 
     .skip-link {
       position: fixed;
@@ -46,7 +46,7 @@
     .header-bar {
       height: var(--header-h); box-sizing: border-box;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px;
+      padding: env(safe-area-inset-top, 0px) 24px 0;
     }
     @media (max-width: 639px) {
       .header-bar { padding: 0 16px; }
