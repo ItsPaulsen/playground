@@ -8,8 +8,10 @@
 <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') || 'light');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="/shared/tokens.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
+<style>
+:root{--pg-light-100:#fdfdfb;--pg-light-200:#f4f4f3;--pg-light-300:#e7e5e4;--pg-light-400:#68625d;--pg-light-500:#1c1917;--pg-dark-100:#1c1917;--pg-dark-200:#292524;--pg-dark-300:#44403c;--pg-dark-400:#d6d3d1;--pg-dark-500:#fafaf9;--pg-bg:var(--pg-light-100);--pg-surface:var(--pg-light-200);--pg-border:var(--pg-light-300);--pg-muted:var(--pg-light-400);--pg-primary:var(--pg-light-500)}html[data-theme="dark"]{--pg-bg:var(--pg-dark-100);--pg-surface:var(--pg-dark-200);--pg-border:var(--pg-dark-300);--pg-muted:var(--pg-dark-400);--pg-primary:var(--pg-dark-500)}:focus-visible{outline:2px solid var(--pg-primary);outline-offset:2px;border-radius:4px}
+</style>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -378,7 +380,7 @@
   </div>
   <div id="root"></div>
 </div>
-<script src="/shared/vendor/preact.umd.js"></script><script src="/shared/vendor/preact-hooks.umd.js"></script><script src="/shared/vendor/preact-compat.umd.js"></script><script src="/shared/vendor/preact-shim.js"></script>
+<script src="/shared/vendor/preact-bundle.js"></script>
 
 <script src="app.js"></script>
 <script src="/header.js"></script>
