@@ -46,7 +46,7 @@
   var c=palettes[0][dark?'dark':'light'];
   var d=Math.ceil(Math.hypot(innerWidth,innerHeight)*2)+'px';
   var boot=document.getElementById('mesh-boot');
-  boot.style.cssText='position:fixed;inset:0;overflow:hidden;pointer-events:none;transition:opacity .3s';
+  boot.style.cssText='position:fixed;inset:0;overflow:hidden;pointer-events:none;transition:opacity .15s';
   var wrap=document.createElement('div');
   wrap.style.cssText='position:absolute;inset:-'+E+'px;filter:blur('+B+'px) saturate(120%)';
   var spin=document.createElement('div');
@@ -64,8 +64,8 @@
       obs.disconnect();
       setTimeout(function(){
         boot.style.opacity='0';
-        setTimeout(function(){boot.remove();},300);
-      },150);
+        setTimeout(function(){boot.remove();},150);
+      },50);
     }
   }).observe(document.getElementById('root'),{childList:true});
 })();
