@@ -233,19 +233,20 @@
 
   themeBtn.addEventListener('click', function () {
     const dark = isDark();
+    // Freeze current visuals instantly with old-theme cover, then apply new theme
+    // immediately so theme-color meta (toolbar) updates at t=0 rather than after 150ms.
     const cover = document.createElement('div');
-    cover.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:' + (dark ? '#fdfdfb' : '#1c1917') + ';pointer-events:none;opacity:0;transition:opacity .15s ease';
+    cover.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:' + (dark ? '#1c1917' : '#fdfdfb') + ';pointer-events:none;opacity:1;';
     document.body.appendChild(cover);
+    nav.style.transition = 'none';
+    applyTheme(!dark);
     requestAnimationFrame(function () {
-      requestAnimationFrame(function () { cover.style.opacity = '1'; });
+      requestAnimationFrame(function () {
+        cover.style.transition = 'opacity .5s ease';
+        cover.style.opacity = '0';
+        setTimeout(function () { cover.remove(); nav.style.transition = ''; }, 500);
+      });
     });
-    setTimeout(function () {
-      nav.style.transition = 'none';
-      applyTheme(!dark);
-      cover.style.transition = 'opacity .6s ease';
-      cover.style.opacity = '0';
-      setTimeout(function () { cover.remove(); nav.style.transition = ''; }, 600);
-    }, 150);
   });
 
   menuBtn.addEventListener('click', function () {
