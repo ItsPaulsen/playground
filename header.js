@@ -127,7 +127,28 @@
 
     :root { color-scheme: light; }
     html[data-theme="dark"] { color-scheme: dark; }
-    @media (max-width: 639px) { html[data-page] #theme-toggle { display: none; } }
+    @media (max-width: 639px) { #theme-toggle { display: none; } }
+
+    .pg-theme-fab {
+      display: none;
+      position: fixed;
+      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+      right: 24px;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 1px solid var(--pg-border);
+      background: color-mix(in srgb, var(--pg-bg) 80%, transparent);
+      backdrop-filter: blur(20px) saturate(180%);
+      color: var(--pg-primary);
+      cursor: pointer;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      box-shadow: 0 2px 16px rgba(0,0,0,.1);
+      transition: color .15s;
+    }
+    @media (max-width: 639px) {
+      html:not([data-page]) .pg-theme-fab { display: flex; }
+    }
 
   `;
   document.head.appendChild(style);
@@ -186,6 +207,11 @@
     document.body.prepend(skipLink);
   }
 
+  const fab = document.createElement('button');
+  fab.className = 'pg-theme-fab';
+  fab.setAttribute('aria-label', 'Toggle theme');
+  document.body.appendChild(fab);
+
   const themeBtn = document.getElementById('theme-toggle');
   const menuBtn  = document.getElementById('menu-toggle');
   const menuIcon = menuBtn.querySelector('.menu-icon');
@@ -196,13 +222,19 @@
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
     document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     localStorage.setItem('pg-theme', dark ? 'dark' : 'light');
-    themeBtn.innerHTML = dark ? SUN : MOON;
-    themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    const icon = dark ? SUN : MOON;
+    const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    themeBtn.innerHTML = icon;
+    themeBtn.setAttribute('aria-label', label);
+    fab.innerHTML = icon;
+    fab.setAttribute('aria-label', label);
     const bg = dark ? '#1c1917' : '#fdfdfb';
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
     meta.content = bg;
   }
+
+  fab.addEventListener('click', function () { applyTheme(!isDark()); });
 
   function setMenuOpen(open) {
     menu.classList.toggle('is-open', open);
