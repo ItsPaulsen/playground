@@ -27,9 +27,12 @@
   body { background: var(--pg-bg) center/cover no-repeat; }
   #root { position: relative; }
   :root {
-    --nav-bg: color-mix(in srgb, var(--pg-surface) 80%, transparent);
-    --nav-filter: blur(12px) saturate(180%);
+    --nav-bg: rgba(255,255,255,0.6);
+    --nav-filter: blur(10px);
     --nav-bg-open: var(--pg-surface);
+  }
+  html[data-theme="dark"] {
+    --nav-bg: rgba(41,37,36,0.6);
   }
 </style>
 </head>
