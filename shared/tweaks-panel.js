@@ -255,8 +255,10 @@ const __TWEAKS_STYLE = `
     html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
     .twk-panel{z-index:2147483647!important;}
     .twk-hd{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;}
-    .twk-hd::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:2px;background:rgba(28,25,23,.2);}
+    .twk-hd::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:2px;background:rgba(28,25,23,.2);transition:background .15s;}
+    .twk-hd:active::before{background:rgba(28,25,23,.4);}
     html[data-theme="dark"] .twk-hd::before{background:rgba(253,253,251,.25);}
+    html[data-theme="dark"] .twk-hd:active::before{background:rgba(253,253,251,.5);}
   }
 
   @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
@@ -340,6 +342,7 @@ function TweaksPanel({
   const [closing, setClosing] = React.useState(false);
   const [animateIn, setAnimateIn] = React.useState(true);
   const panelRef = React.useRef(null);
+  const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({
     active: false,
     startY: 0,
@@ -411,39 +414,54 @@ function TweaksPanel({
       lastT: performance.now()
     };
     e.currentTarget.setPointerCapture(e.pointerId);
+    if (panelRef.current) panelRef.current.style.willChange = 'transform';
+    if (backdropRef.current) backdropRef.current.style.willChange = 'opacity';
   };
   const onDragMove = e => {
     if (!dragInfo.current.active) return;
     const raw = Math.max(0, e.clientY - dragInfo.current.startY);
     dragInfo.current.lastY = e.clientY;
     dragInfo.current.lastT = performance.now();
-    // Rubber band: 1:1 up to 80px, then dampen to 40% past that
     const dy = raw <= 80 ? raw : 80 + (raw - 80) * 0.4;
     if (panelRef.current) {
       panelRef.current.style.transition = 'none';
       panelRef.current.style.transform = `translateX(-50%) translateY(${dy}px)`;
     }
+    if (backdropRef.current) {
+      backdropRef.current.style.transition = 'none';
+      backdropRef.current.style.opacity = String(Math.max(0, 1 - raw / 200));
+    }
   };
   const onDragEnd = e => {
     if (!dragInfo.current.active) return;
     dragInfo.current.active = false;
+    if (panelRef.current) panelRef.current.style.willChange = '';
+    if (backdropRef.current) backdropRef.current.style.willChange = '';
     const snapBack = () => {
       if (panelRef.current) {
-        panelRef.current.style.transition = 'transform 0.45s cubic-bezier(.16,1,.3,1)';
+        panelRef.current.style.transition = 'transform 0.5s cubic-bezier(.16,1,.3,1)';
         panelRef.current.style.transform = 'translateX(-50%) translateY(0px)';
+      }
+      if (backdropRef.current) {
+        backdropRef.current.style.transition = 'opacity 0.5s cubic-bezier(.16,1,.3,1)';
+        backdropRef.current.style.opacity = '1';
       }
     };
     if (e.type === 'pointercancel') {
       snapBack();
       return;
     }
-    const dy = Math.max(0, e.clientY - dragInfo.current.startY);
+    const raw = Math.max(0, e.clientY - dragInfo.current.startY);
     const elapsed = performance.now() - dragInfo.current.lastT;
     const vel = elapsed < 100 ? (e.clientY - dragInfo.current.lastY) / elapsed : 0;
-    if (dy > 80 || vel > 0.3) {
+    if (raw > 80 || vel > 0.4) {
       if (panelRef.current) {
-        panelRef.current.style.transition = 'transform 0.28s cubic-bezier(.4,0,1,1)';
+        panelRef.current.style.transition = 'transform 0.3s cubic-bezier(.4,0,1,1)';
         panelRef.current.style.transform = 'translateX(-50%) translateY(120vh)';
+      }
+      if (backdropRef.current) {
+        backdropRef.current.style.transition = 'opacity 0.3s cubic-bezier(.4,0,1,1)';
+        backdropRef.current.style.opacity = '0';
       }
       setTimeout(() => {
         setOpen(false);
@@ -451,7 +469,7 @@ function TweaksPanel({
         window.parent.postMessage({
           type: '__edit_mode_dismissed'
         }, '*');
-      }, 290);
+      }, 310);
     } else {
       snapBack();
     }
@@ -496,6 +514,7 @@ function TweaksPanel({
     d: "M8 12H3"
   }));
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), open ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    ref: backdropRef,
     className: "twk-backdrop",
     onClick: dismiss
   }), /*#__PURE__*/React.createElement("div", {
