@@ -116,9 +116,8 @@ function CursorTrail({ t }) {
   }, []);
 
   React.useEffect(() => {
-    const onMove = (e) => {
+    const addDots = (x, y) => {
       const tc = tRef.current;
-      const x = e.clientX, y = e.clientY;
       const last = lastPosRef.current;
       if (!last) { lastPosRef.current = { x, y }; return; }
 
@@ -141,8 +140,21 @@ function CursorTrail({ t }) {
       }
       lastPosRef.current = { x: last.x + ux * step * n, y: last.y + uy * step * n };
     };
+
+    const onMove  = (e) => addDots(e.clientX, e.clientY);
+    const onTouch = (e) => { e.preventDefault(); addDots(e.touches[0].clientX, e.touches[0].clientY); };
+    const onTouchStart = () => { lastPosRef.current = null; };
+
     window.addEventListener('mousemove', onMove);
-    return () => window.removeEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onTouch, { passive: false });
+    window.addEventListener('touchstart', onTouchStart);
+    window.addEventListener('touchend', onTouchStart);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onTouch);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchStart);
+    };
   }, []);
 
   React.useEffect(() => {
