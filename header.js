@@ -134,17 +134,21 @@
       position: fixed;
       bottom: calc(8px + env(safe-area-inset-bottom, 0px));
       right: 8px;
-      width: 44px; height: 44px;
-      border-radius: 16px;
-      border: 1px solid var(--pg-border);
-      background: color-mix(in srgb, var(--pg-bg) 80%, transparent);
-      backdrop-filter: blur(20px) saturate(180%);
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      border: .5px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
       color: var(--pg-primary);
       cursor: pointer;
       align-items: center; justify-content: center;
       z-index: 9999;
-      box-shadow: 0 2px 16px rgba(0,0,0,.1);
+      box-shadow: rgba(0,0,0,0.18) 0px 0.48px 0.48px -1.25px, rgba(0,0,0,0.16) 0px 1.83px 1.83px -2.5px, rgba(0,0,0,0.06) 0px 8px 8px -3.75px;
       transition: color .15s;
+    }
+    html[data-theme="dark"] .pg-theme-fab {
+      background: rgba(41,37,36,0.6);
+      border-color: rgba(253,253,251,0.1);
     }
     @media (max-width: 639px) {
       html:not([data-page]) .pg-theme-fab { display: flex; }

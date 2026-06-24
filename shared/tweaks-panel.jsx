@@ -263,11 +263,11 @@ const __TWEAKS_STYLE = `
 
   .twk-fab{
     display:none;position:fixed;
-    bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+    bottom:calc(8px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);
     z-index:2147483642;height:36px;padding:0 16px 0 12px;gap:8px;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
     border:.5px solid rgba(0,0,0,0.12);border-radius:12px;
-    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
+    box-shadow:rgba(0,0,0,0.18) 0px 0.48px 0.48px -1.25px, rgba(0,0,0,0.16) 0px 1.83px 1.83px -2.5px, rgba(0,0,0,0.06) 0px 8px 8px -3.75px;
     color:rgba(28,25,23,.8);
     font:500 14px/1 'Inter',ui-sans-serif,system-ui,sans-serif;
     cursor:pointer;align-items:center;white-space:nowrap;
