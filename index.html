@@ -15,7 +15,7 @@
 <link rel="prefetch" href="/trail/">
 <link rel="prefetch" href="/shared/vendor/preact-bundle.js" as="script">
 <link rel="prefetch" href="/shared/tweaks-panel.js" as="script">
-  <script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') || 'light');</script>
+  <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'#1c1917':'#fdfdfb';document.head.appendChild(m);})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>

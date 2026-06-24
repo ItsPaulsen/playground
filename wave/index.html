@@ -7,7 +7,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<script>document.documentElement.setAttribute('data-theme', localStorage.getItem('pg-theme') || 'light');</script>
+<script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'#1c1917':'#fdfdfb';document.head.appendChild(m);})()</script>
 <link rel="preload" href="/shared/vendor/preact-bundle.js" as="script">
 <link rel="preload" href="../shared/tweaks-panel.js" as="script">
 <link rel="preload" href="wave.js" as="script">

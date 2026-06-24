@@ -76,7 +76,7 @@ const __TWEAKS_STYLE = `
   @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
-    z-index:2147483648;width:320px;
+    z-index:2147483643;width:320px;
     max-height:calc(100dvh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:rgba(255,255,255,0.6);color:var(--text);
@@ -158,7 +158,7 @@ const __TWEAKS_STYLE = `
     background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
   .twk-toggle[data-on="1"] i{transform:translateX(16px)}
 
-.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483647;width:36px;height:36px;
+.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483642;width:36px;height:36px;
     border:0;border-radius:12px;cursor:pointer;padding:0;
     background:rgba(255,255,255,0.6);
     backdrop-filter:blur(10px);
@@ -223,7 +223,7 @@ const __TWEAKS_STYLE = `
   .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 
-  .twk-cpick{position:fixed;z-index:2147483649;width:212px;
+  .twk-cpick{position:fixed;z-index:2147483644;width:212px;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
     border:.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:12px;
     box-shadow:0 8px 40px rgba(0,0,0,.2);
@@ -252,8 +252,9 @@ const __TWEAKS_STYLE = `
     .twk-footer{display:flex;padding-bottom:max(12px,env(safe-area-inset-bottom));}
     .twk-desktop-only{display:none!important;}
     .twk-mobile-only{display:flex;}
-    .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,0.1);}
+    .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,0.1);}
     html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
+    .twk-panel{z-index:2147483647!important;}
   }
 
   @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
@@ -262,7 +263,7 @@ const __TWEAKS_STYLE = `
   .twk-fab{
     display:none;position:fixed;
     bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
-    z-index:2147483647;height:36px;padding:0 16px 0 12px;gap:8px;
+    z-index:2147483642;height:36px;padding:0 16px 0 12px;gap:8px;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
     border:.5px solid rgba(0,0,0,0.12);border-radius:12px;
     box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
