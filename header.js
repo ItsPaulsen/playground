@@ -237,17 +237,13 @@
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
     meta.content = bg;
-    // Force Safari to re-sample toolbar colors: briefly remove anchors from layout to
-    // bust the compositor cache, then restore them on the next frame.
-    if (edgeT && edgeB) {
-      edgeT.style.display = 'none';
-      edgeB.style.display = 'none';
-      document.documentElement.offsetHeight;
-      requestAnimationFrame(function () {
-        edgeT.style.display = '';
-        edgeB.style.display = '';
-      });
-    }
+    // Viewport kick: physically shift the html element 1px so Safari re-examines its
+    // "obscured content insets" and re-reads the updated color-scheme on the next frame.
+    document.documentElement.style.transform = 'translateY(-1px)';
+    document.documentElement.offsetHeight;
+    requestAnimationFrame(function () {
+      document.documentElement.style.transform = '';
+    });
   }
 
   function setMenuOpen(open) {
