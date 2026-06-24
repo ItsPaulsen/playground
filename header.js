@@ -49,7 +49,7 @@
       padding: env(safe-area-inset-top, 0px) 24px 0;
     }
     @media (max-width: 639px) {
-      .header-bar { padding: 0 16px; }
+      .header-bar { padding: env(safe-area-inset-top, 0px) 16px 0; }
     }
 
     .site-logo {
