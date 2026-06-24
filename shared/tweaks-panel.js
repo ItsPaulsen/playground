@@ -254,10 +254,16 @@ const __TWEAKS_STYLE = `
     .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,0.1);}
     html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
     .twk-panel{z-index:2147483647!important;}
+    .twk-hd{touch-action:none;-webkit-user-select:none;user-select:none;}
   }
 
   @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
   @keyframes twk-out-mob { from { opacity:1; translate:0 0; } to { opacity:0; translate:0 40px; } }
+
+  .twk-handle{display:none;justify-content:center;align-items:center;padding:10px 0 6px;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;flex-shrink:0;}
+  .twk-handle::after{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(28,25,23,.2);}
+  html[data-theme="dark"] .twk-handle::after{background:rgba(253,253,251,.25);}
+  @media(max-width:639px){.twk-handle{display:flex;}}
 
   .twk-fab{
     display:none;position:fixed;
@@ -336,6 +342,13 @@ function TweaksPanel({
   const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > 639);
   const [closing, setClosing] = React.useState(false);
   const [animateIn, setAnimateIn] = React.useState(true);
+  const panelRef = React.useRef(null);
+  const dragInfo = React.useRef({
+    active: false,
+    startY: 0,
+    lastY: 0,
+    lastT: 0
+  });
   React.useEffect(() => {
     onOpenChange && onOpenChange(open);
   }, [open, onOpenChange]);
@@ -392,6 +405,58 @@ function TweaksPanel({
       type: '__edit_mode_dismissed'
     }, '*');
   };
+  const onDragStart = e => {
+    if (window.innerWidth > 639) return;
+    dragInfo.current = {
+      active: true,
+      startY: e.clientY,
+      lastY: e.clientY,
+      lastT: performance.now()
+    };
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onDragMove = e => {
+    if (!dragInfo.current.active) return;
+    const dy = Math.max(0, e.clientY - dragInfo.current.startY);
+    dragInfo.current.lastY = e.clientY;
+    dragInfo.current.lastT = performance.now();
+    if (panelRef.current) {
+      panelRef.current.style.transition = 'none';
+      panelRef.current.style.transform = `translateX(-50%) translateY(${dy}px)`;
+    }
+  };
+  const onDragEnd = e => {
+    if (!dragInfo.current.active) return;
+    dragInfo.current.active = false;
+    if (e.type === 'pointercancel') {
+      if (panelRef.current) {
+        panelRef.current.style.transition = 'transform 0.4s cubic-bezier(.16,1,.3,1)';
+        panelRef.current.style.transform = 'translateX(-50%) translateY(0px)';
+      }
+      return;
+    }
+    const dy = Math.max(0, e.clientY - dragInfo.current.startY);
+    const elapsed = performance.now() - dragInfo.current.lastT;
+    const vel = elapsed < 100 ? (e.clientY - dragInfo.current.lastY) / elapsed : 0;
+    if (dy > 80 || vel > 0.3) {
+      if (panelRef.current) {
+        panelRef.current.style.transition = 'transform 0.25s cubic-bezier(.4,0,1,1)';
+        panelRef.current.style.transform = 'translateX(-50%) translateY(120vh)';
+      }
+      setTimeout(() => {
+        setOpen(false);
+        onOpenChange && onOpenChange(false);
+        window.parent.postMessage({
+          type: '__edit_mode_dismissed'
+        }, '*');
+      }, 260);
+    } else {
+      if (panelRef.current) {
+        panelRef.current.style.transition = 'transform 0.4s cubic-bezier(.16,1,.3,1)';
+        panelRef.current.style.transform = 'translateX(-50%) translateY(0px)';
+      }
+    }
+  };
   const handleAnimEnd = e => {
     if (e.animationName === 'twk-out' || e.animationName === 'twk-out-mob') {
       setClosing(false);
@@ -435,11 +500,22 @@ function TweaksPanel({
     className: "twk-backdrop",
     onClick: dismiss
   }), /*#__PURE__*/React.createElement("div", {
+    ref: panelRef,
     className: `twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`,
     "data-noncommentable": "",
     onAnimationEnd: handleAnimEnd
   }, /*#__PURE__*/React.createElement("div", {
-    className: "twk-hd"
+    className: "twk-handle",
+    onPointerDown: onDragStart,
+    onPointerMove: onDragMove,
+    onPointerUp: onDragEnd,
+    onPointerCancel: onDragEnd
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "twk-hd",
+    onPointerDown: onDragStart,
+    onPointerMove: onDragMove,
+    onPointerUp: onDragEnd,
+    onPointerCancel: onDragEnd
   }, /*#__PURE__*/React.createElement("b", null, title), /*#__PURE__*/React.createElement("span", {
     className: "twk-hd-spacer",
     "aria-hidden": "true"
