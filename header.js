@@ -134,8 +134,8 @@
       position: fixed;
       bottom: calc(24px + env(safe-area-inset-bottom, 0px));
       right: 24px;
-      width: 48px; height: 48px;
-      border-radius: 50%;
+      width: 44px; height: 44px;
+      border-radius: 16px;
       border: 1px solid var(--pg-border);
       background: color-mix(in srgb, var(--pg-bg) 80%, transparent);
       backdrop-filter: blur(20px) saturate(180%);
