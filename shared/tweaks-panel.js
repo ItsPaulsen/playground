@@ -88,7 +88,7 @@ const __TWEAKS_STYLE = `
   .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
   .twk-hd{display:flex;align-items:center;justify-content:space-between;
     padding:8px 8px 0 16px;}
-  .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em;line-height:20px}
+  .twk-hd b{font-size:15px;font-weight:500;letter-spacing:.01em;line-height:20px}
   .twk-hd-spacer{width:36px;height:36px;flex-shrink:0;}
   .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);
     width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;
@@ -130,7 +130,7 @@ const __TWEAKS_STYLE = `
   .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}
   .twk-bar:focus-visible{outline:2px solid var(--text);outline-offset:2px;border-radius:8px;}
   .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);
-    cursor:pointer;overflow:hidden;user-select:none;touch-action:none}
+    cursor:pointer;overflow:hidden;user-select:none;touch-action:pan-y}
   .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);
     border-radius:8px 0 0 8px;pointer-events:none;min-width:8px}
   .twk-bar-val{position:absolute;inset:0;display:flex;align-items:center;
@@ -258,10 +258,8 @@ const __TWEAKS_STYLE = `
     .twk-hd{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab;}
     .twk-hd:active{cursor:grabbing;}
     .twk-dragging,.twk-dragging *{cursor:grabbing!important;}
-    .twk-hd::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:2px;background:rgba(28,25,23,.2);transition:background .15s;}
-    .twk-hd:active::before{background:rgba(28,25,23,.4);}
+    .twk-hd::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:3px;border-radius:1.5px;background:rgba(28,25,23,.2);}
     html[data-theme="dark"] .twk-hd::before{background:rgba(253,253,251,.25);}
-    html[data-theme="dark"] .twk-hd:active::before{background:rgba(253,253,251,.5);}
   }
 
   @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
@@ -305,6 +303,7 @@ const __TWEAKS_STYLE = `
 // ── useTweaks ───────────────────────────────────────────────────────────────
 // Single source of truth for tweak values. setTweak persists via the host
 // (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+const MOBILE = 639;
 function useTweaks(defaults) {
   const [values, setValues] = React.useState(defaults);
   // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
@@ -338,6 +337,35 @@ function useTweaks(defaults) {
 // The close button posts __edit_mode_dismissed so the host's toolbar toggle
 // flips off in lockstep; the host echoes __deactivate_edit_mode back which
 // is what actually hides the panel.
+const FILTER_ICON = /*#__PURE__*/React.createElement("svg", {
+  width: "18",
+  height: "18",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true"
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M10 5H3"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M12 19H3"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M14 3v4"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M16 17v4"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M21 12h-9"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M21 19h-5"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M21 5h-7"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M8 10v4"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "M8 12H3"
+}));
 function TweaksPanel({
   title = 'Tweaks',
   noDeckControls = false,
@@ -345,9 +373,8 @@ function TweaksPanel({
   onOpenChange,
   renderMobileFooter
 }) {
-  const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > 639);
+  const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > MOBILE);
   const [closing, setClosing] = React.useState(false);
-  const [animateIn, setAnimateIn] = React.useState(true);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({
@@ -404,6 +431,13 @@ function TweaksPanel({
     }, '*');
     return () => window.removeEventListener('message', onMsg);
   }, []);
+  React.useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth <= MOBILE) setOpen(false);
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
   const dismiss = () => {
     setClosing(true);
     setTimeout(() => onOpenChange && onOpenChange(false), 80);
@@ -412,7 +446,7 @@ function TweaksPanel({
     }, '*');
   };
   const onDragStart = e => {
-    if (window.innerWidth > 639) return;
+    if (window.innerWidth > MOBILE) return;
     const now = performance.now();
     dragInfo.current = {
       active: true,
@@ -490,7 +524,6 @@ function TweaksPanel({
       }
       setTimeout(() => {
         setOpen(false);
-        onOpenChange && onOpenChange(false);
         window.parent.postMessage({
           type: '__edit_mode_dismissed'
         }, '*');
@@ -505,46 +538,14 @@ function TweaksPanel({
       setOpen(false);
     }
   };
-  const openPanel = () => {
-    setAnimateIn(true);
-    setOpen(true);
-  };
-  const FILTER_ICON = /*#__PURE__*/React.createElement("svg", {
-    width: "18",
-    height: "18",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M10 5H3"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M12 19H3"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M14 3v4"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M16 17v4"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M21 12h-9"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M21 19h-5"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M21 5h-7"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M8 10v4"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M8 12H3"
-  }));
+  const openPanel = () => setOpen(true);
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), open ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     ref: backdropRef,
     className: "twk-backdrop",
     onClick: dismiss
   }), /*#__PURE__*/React.createElement("div", {
     ref: panelRef,
-    className: `twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`,
+    className: `twk-panel twk-opening${closing ? ' twk-closing' : ''}`,
     "data-noncommentable": "",
     onAnimationEnd: handleAnimEnd
   }, /*#__PURE__*/React.createElement("div", {
@@ -965,7 +966,7 @@ function __ColorPickerDropdown({
   anchorRef,
   onClose
 }) {
-  const isMobile = window.innerWidth <= 639;
+  const isMobile = window.innerWidth <= MOBILE;
   const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
   const [localHex, setLocalHex] = React.useState(hex);
   const svRef = React.useRef(null);
