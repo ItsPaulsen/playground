@@ -37,7 +37,7 @@
     }
 
     #site-nav {
-      position: sticky; top: 0; z-index: 2147483646;
+      position: relative; z-index: 2147483646;
       background: var(--nav-bg, transparent);
       backdrop-filter: var(--nav-filter, none);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
