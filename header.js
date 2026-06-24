@@ -124,6 +124,9 @@
       #site-menu nav a { font-size: 36px; }
       #site-menu.is-open nav a { opacity: 1; }
     }
+
+    .pg-safe-t { position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:2147483646;pointer-events:none; }
+    .pg-safe-b { position:fixed;bottom:0;left:0;right:0;height:env(safe-area-inset-bottom,0px);z-index:2;pointer-events:none; }
   `;
   document.head.appendChild(style);
 
@@ -151,14 +154,13 @@
   document.body.insertBefore(menu, nav.nextSibling);
 
   // Solid strips covering iOS safe areas so Safari samples the right bg color for its toolbars.
-  // safeT: same z-index as nav but later in DOM (above it), only covers the notch — nav content starts below.
-  // safeB: z-index 2, above canvas (auto/0) but below FAB and all UI elements.
+  // Sizing via CSS class so env() is evaluated in a stylesheet (more reliable than inline style.cssText in Safari).
   const safeT = document.createElement('div');
-  safeT.style.cssText = 'position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:2147483646;pointer-events:none;';
+  safeT.className = 'pg-safe-t';
   document.body.appendChild(safeT);
 
   const safeB = document.createElement('div');
-  safeB.style.cssText = 'position:fixed;bottom:0;left:0;right:0;height:env(safe-area-inset-bottom,0px);z-index:2;pointer-events:none;';
+  safeB.className = 'pg-safe-b';
   document.body.appendChild(safeB);
 
   if (document.documentElement.dataset.page !== 'style') {
@@ -275,13 +277,19 @@
   // Blur focus before navigating away — iOS Safari otherwise scrolls to the
   // last-focused element on back navigation instead of restoring scroll position
   if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
-  window.addEventListener('pagehide', function () {
+  window.addEventListener('pagehide', function (e) {
     if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+    // Hide before bfcache capture so the snapshot is invisible — prevents the
+    // one-frame flash of stale theme when another page changed the theme while
+    // this page was cached.
+    if (e.persisted) document.documentElement.style.visibility = 'hidden';
   });
 
-  // Re-sync theme on bfcache restore — Safari preserves the old DOM state including
-  // data-theme and theme-color, so we must re-apply from localStorage.
+  // Re-sync theme on bfcache restore and un-hide.
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted) applyTheme(localStorage.getItem('pg-theme') === 'dark');
+    if (e.persisted) {
+      applyTheme(localStorage.getItem('pg-theme') === 'dark');
+      document.documentElement.style.visibility = '';
+    }
   });
 })();

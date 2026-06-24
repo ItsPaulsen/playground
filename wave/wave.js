@@ -89,9 +89,11 @@ function Wave({
       canvas.width = Math.round(1600 * dpr);
       canvas.height = Math.round(1000 * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const scale = Math.max(window.innerWidth / 1600, window.innerHeight / 1000);
-      const x = Math.round((window.innerWidth - 1600 * scale) / 2);
-      const y = Math.round((window.innerHeight - 1000 * scale) / 2);
+      const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
+      const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
+      const scale = Math.max(stageW / 1600, stageH / 1000);
+      const x = Math.round((stageW - 1600 * scale) / 2);
+      const y = Math.round((stageH - 1000 * scale) / 2);
       canvas.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
     };
     resize();
