@@ -127,10 +127,26 @@
 
     :root { color-scheme: light; }
     html[data-theme="dark"] { color-scheme: dark; }
-    html[data-page="wave"] #theme-toggle,
-    html[data-page="typo"] #theme-toggle,
-    html[data-page="mesh"] #theme-toggle,
-    html[data-page="trail"] #theme-toggle { display: none; }
+
+    /* Edge-anchor containers for Safari iOS toolbar color sampling.
+       Inserted before #root in the DOM so the canvas stacks on top — anchors
+       are visually hidden but Safari reads their background-color CSS property. */
+    .pg-safari-container {
+      position: fixed;
+      top: env(safe-area-inset-top, 0px); left: 0; right: 0;
+      bottom: env(safe-area-inset-bottom, 0px);
+      overflow: hidden; pointer-events: none;
+    }
+    .pg-safari-top, .pg-safari-bottom {
+      position: absolute; left: 0; right: 0; height: 6px;
+      z-index: -1; pointer-events: none;
+    }
+    .pg-safari-top { top: 0; }
+    .pg-safari-bottom { bottom: 0; }
+    html[data-theme="light"] .pg-safari-top,
+    html[data-theme="light"] .pg-safari-bottom { background: #fdfdfb; }
+    html[data-theme="dark"] .pg-safari-top,
+    html[data-theme="dark"] .pg-safari-bottom { background: #1c1917; }
   `;
   document.head.appendChild(style);
 
@@ -188,6 +204,23 @@
     document.body.prepend(skipLink);
   }
 
+  // Safari iOS edge-anchor hack: two 6px strips inside a fixed container at the content-area
+  // boundaries. Inserted BEFORE #root so the animation canvas (later in DOM) stacks on top
+  // and covers them. Safari reads their CSS background-color to determine toolbar shading.
+  var edgeT = null, edgeB = null;
+  if (['wave', 'typo', 'mesh', 'trail'].indexOf(document.documentElement.dataset.page) !== -1) {
+    var edgeCtr = document.createElement('div');
+    edgeCtr.className = 'pg-safari-container';
+    edgeT = document.createElement('div');
+    edgeT.className = 'pg-safari-top';
+    edgeB = document.createElement('div');
+    edgeB.className = 'pg-safari-bottom';
+    edgeCtr.appendChild(edgeT);
+    edgeCtr.appendChild(edgeB);
+    var rootEl = document.getElementById('root');
+    rootEl ? document.body.insertBefore(edgeCtr, rootEl) : document.body.appendChild(edgeCtr);
+  }
+
   const themeBtn = document.getElementById('theme-toggle');
   const menuBtn  = document.getElementById('menu-toggle');
   const menuIcon = menuBtn.querySelector('.menu-icon');
@@ -204,6 +237,17 @@
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
     meta.content = bg;
+    // Force Safari to re-sample toolbar colors: briefly remove anchors from layout to
+    // bust the compositor cache, then restore them on the next frame.
+    if (edgeT && edgeB) {
+      edgeT.style.display = 'none';
+      edgeB.style.display = 'none';
+      document.documentElement.offsetHeight;
+      requestAnimationFrame(function () {
+        edgeT.style.display = '';
+        edgeB.style.display = '';
+      });
+    }
   }
 
   function setMenuOpen(open) {
