@@ -7,6 +7,7 @@ A collection of interactive visual experiments built with Claude.
 - **Wave** — Animated waveform with controls for lines, motion, and pulse
 - **Typo** — Animated typography with font and animation controls
 - **Mesh** — Mesh gradient with tweakable color points
+- **Trail** — Glowing cursor trail with tweakable particles, gravity, and spread
 
 ## Stack
 
