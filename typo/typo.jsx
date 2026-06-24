@@ -70,7 +70,7 @@ function Typo({ t, panelOpen }) {
 
   return (
     <div style={{
-      position: 'fixed', inset: 0,
+      position: 'fixed', top: 'env(safe-area-inset-top,0px)', left: 0, right: 0, bottom: 'env(safe-area-inset-bottom,0px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       paddingRight: panelOpen ? '312px' : 0,
       transition: 'padding-right .3s cubic-bezier(.25,.46,.45,.94)',

@@ -23,7 +23,7 @@
 <style>
   html, body { margin: 0; padding: 0; height: 100dvh; background: var(--pg-bg); overflow: hidden;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
-  #root, .stage { position: fixed; inset: 0; }
+  #root, .stage { position: fixed; top: env(safe-area-inset-top,0px); left: 0; right: 0; bottom: env(safe-area-inset-bottom,0px); }
   .stage { display: block; }
   body::after { content:''; position:fixed; bottom:0; left:0; right:0; height:env(safe-area-inset-bottom,0px); background:var(--pg-bg); pointer-events:none; }
 </style>

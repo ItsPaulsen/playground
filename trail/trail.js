@@ -233,7 +233,10 @@ function CursorTrail({
     ref: canvasRef,
     style: {
       position: 'fixed',
-      inset: 0,
+      top: 'env(safe-area-inset-top,0px)',
+      left: 0,
+      right: 0,
+      bottom: 'env(safe-area-inset-bottom,0px)',
       display: 'block',
       mixBlendMode: 'screen'
     }

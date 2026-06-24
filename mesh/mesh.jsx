@@ -10,7 +10,7 @@ function Mesh({ t }) {
   const colors = Array.from({ length: count }, (_, i) => t[COLOR_KEYS[i]]);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'fixed', top: 'env(safe-area-inset-top,0px)', left: 0, right: 0, bottom: 'env(safe-area-inset-bottom,0px)', overflow: 'hidden' }}>
       <svg
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}
         viewBox="0 0 100 100"
