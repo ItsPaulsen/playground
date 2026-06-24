@@ -128,22 +128,6 @@
     :root { color-scheme: light; }
     html[data-theme="dark"] { color-scheme: dark; }
 
-    /* 1px anchor strips at the absolute viewport edges — on TOP of everything so
-       Safari pixel-samples them (not the canvas behind). Sits in the status-bar /
-       home-indicator area so imperceptible to users. Only injected on anim pages. */
-    .pg-safari-top {
-      position: fixed; top: 0; left: 0; right: 0;
-      height: 1px; z-index: 9999999; pointer-events: none;
-    }
-    .pg-safari-bottom {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      height: max(env(safe-area-inset-bottom, 0px), 1px);
-      z-index: 9999999; pointer-events: none;
-    }
-    html[data-theme="light"] .pg-safari-top,
-    html[data-theme="light"] .pg-safari-bottom { background: #fdfdfb; }
-    html[data-theme="dark"] .pg-safari-top,
-    html[data-theme="dark"] .pg-safari-bottom { background: #1c1917; }
   `;
   document.head.appendChild(style);
 
@@ -201,25 +185,6 @@
     document.body.prepend(skipLink);
   }
 
-  // Safari iOS edge-anchor hack: two 6px strips inside a fixed container at the content-area
-  // boundaries. Inserted BEFORE #root so the animation canvas (later in DOM) stacks on top
-  // and covers them. Safari reads their CSS background-color to determine toolbar shading.
-  var edgeT = null, edgeB = null;
-  if (['wave', 'typo', 'mesh', 'trail'].indexOf(document.documentElement.dataset.page) !== -1) {
-    edgeT = document.createElement('div');
-    edgeT.className = 'pg-safari-top';
-    edgeB = document.createElement('div');
-    edgeB.className = 'pg-safari-bottom';
-    var rootEl = document.getElementById('root');
-    if (rootEl) {
-      document.body.insertBefore(edgeT, rootEl);
-      document.body.insertBefore(edgeB, rootEl);
-    } else {
-      document.body.appendChild(edgeT);
-      document.body.appendChild(edgeB);
-    }
-  }
-
   const themeBtn = document.getElementById('theme-toggle');
   const menuBtn  = document.getElementById('menu-toggle');
   const menuIcon = menuBtn.querySelector('.menu-icon');
@@ -236,18 +201,6 @@
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
     meta.content = bg;
-    // Safari samples the pixel at the top/bottom viewport edge. Hide the anchors,
-    // force a layout reflow so the engine registers the change, then restore on the
-    // next frame — Safari re-samples and picks up the new background-color.
-    if (edgeT && edgeB) {
-      edgeT.style.display = 'none';
-      edgeB.style.display = 'none';
-      document.documentElement.offsetHeight;
-      requestAnimationFrame(function () {
-        edgeT.style.display = '';
-        edgeB.style.display = '';
-      });
-    }
   }
 
   function setMenuOpen(open) {
