@@ -125,10 +125,12 @@
       #site-menu.is-open nav a { opacity: 1; }
     }
 
-    .pg-safe-t { position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:2147483646;pointer-events:none; }
-    .pg-safe-b { position:fixed;bottom:0;left:0;right:0;height:env(safe-area-inset-bottom,0px);z-index:2;pointer-events:none; }
     :root { color-scheme: light; }
     html[data-theme="dark"] { color-scheme: dark; }
+    html[data-page="wave"] #theme-toggle,
+    html[data-page="typo"] #theme-toggle,
+    html[data-page="mesh"] #theme-toggle,
+    html[data-page="trail"] #theme-toggle { display: none; }
   `;
   document.head.appendChild(style);
 
@@ -154,27 +156,6 @@
 
   document.body.prepend(nav);
   document.body.insertBefore(menu, nav.nextSibling);
-
-  // Solid strips covering iOS safe areas so Safari samples the right bg color for its toolbars.
-  // Sizing via CSS class so env() is evaluated in a stylesheet (more reliable than inline style.cssText in Safari).
-  const safeT = document.createElement('div');
-  safeT.className = 'pg-safe-t';
-  document.body.appendChild(safeT);
-
-  const safeB = document.createElement('div');
-  safeB.className = 'pg-safe-b';
-  document.body.appendChild(safeB);
-
-  // Two media-query theme-color metas — Safari on iOS 26+ checks these alongside the plain tag.
-  // We update all instances to the same color on every toggle so system preference doesn't interfere.
-  var mtL = document.createElement('meta');
-  mtL.setAttribute('name', 'theme-color');
-  mtL.setAttribute('media', '(prefers-color-scheme: light)');
-  document.head.appendChild(mtL);
-  var mtD = document.createElement('meta');
-  mtD.setAttribute('name', 'theme-color');
-  mtD.setAttribute('media', '(prefers-color-scheme: dark)');
-  document.head.appendChild(mtD);
 
   if (document.documentElement.dataset.page !== 'style') {
     const skipLink = document.createElement('a');
@@ -220,15 +201,9 @@
     themeBtn.innerHTML = dark ? SUN : MOON;
     themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
     const bg = dark ? '#1c1917' : '#fdfdfb';
-    // Update every theme-color meta (plain + both media-query variants) to the same color.
-    document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.content = bg; });
-    safeT.style.background = bg;
-    safeB.style.background = bg;
-    // Composite-layer repaint: briefly promote the safe strips to their own GPU layer so
-    // Safari re-samples the viewport edges and refreshes top/bottom toolbar colors.
-    safeT.style.transform = 'translateZ(0)';
-    safeB.style.transform = 'translateZ(0)';
-    setTimeout(function () { safeT.style.transform = ''; safeB.style.transform = ''; }, 50);
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
+    meta.content = bg;
   }
 
   function setMenuOpen(open) {
@@ -250,21 +225,7 @@
   }
 
   themeBtn.addEventListener('click', function () {
-    const dark = isDark();
-    // Freeze current visuals instantly with old-theme cover, then apply new theme
-    // immediately so theme-color meta (toolbar) updates at t=0 rather than after 150ms.
-    const cover = document.createElement('div');
-    cover.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:' + (dark ? '#1c1917' : '#fdfdfb') + ';pointer-events:none;opacity:1;';
-    document.body.appendChild(cover);
-    nav.style.transition = 'none';
-    applyTheme(!dark);
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () {
-        cover.style.transition = 'opacity .5s ease';
-        cover.style.opacity = '0';
-        setTimeout(function () { cover.remove(); nav.style.transition = ''; }, 500);
-      });
-    });
+    applyTheme(!isDark());
   });
 
   menuBtn.addEventListener('click', function () {
@@ -294,21 +255,9 @@
   applyTheme(isDark());
 
   // Blur focus before navigating away — iOS Safari otherwise scrolls to the
-  // last-focused element on back navigation instead of restoring scroll position
+  // last-focused element on back navigation instead of restoring scroll position.
   if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
-  window.addEventListener('pagehide', function (e) {
+  window.addEventListener('pagehide', function () {
     if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
-    // Hide before bfcache capture so the snapshot is invisible — prevents the
-    // one-frame flash of stale theme when another page changed the theme while
-    // this page was cached.
-    if (e.persisted) document.documentElement.style.visibility = 'hidden';
-  });
-
-  // Re-sync theme on bfcache restore and un-hide.
-  window.addEventListener('pageshow', function (e) {
-    if (e.persisted) {
-      applyTheme(localStorage.getItem('pg-theme') === 'dark');
-      document.documentElement.style.visibility = '';
-    }
   });
 })();
