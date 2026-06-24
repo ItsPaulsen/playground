@@ -254,7 +254,7 @@ const __TWEAKS_STYLE = `
     .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,0.1);}
     html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
     .twk-panel{z-index:2147483647!important;}
-    .twk-hd{position:relative;padding-top:22px;touch-action:none;-webkit-user-select:none;user-select:none;}
+    .twk-hd{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;}
     .twk-hd::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:2px;background:rgba(28,25,23,.2);}
     html[data-theme="dark"] .twk-hd::before{background:rgba(253,253,251,.25);}
   }
