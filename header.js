@@ -150,6 +150,17 @@
   document.body.prepend(nav);
   document.body.insertBefore(menu, nav.nextSibling);
 
+  // Solid strips covering iOS safe areas so Safari samples the right bg color for its toolbars.
+  // safeT: same z-index as nav but later in DOM (above it), only covers the notch — nav content starts below.
+  // safeB: z-index 2, above canvas (auto/0) but below FAB and all UI elements.
+  const safeT = document.createElement('div');
+  safeT.style.cssText = 'position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:2147483646;pointer-events:none;';
+  document.body.appendChild(safeT);
+
+  const safeB = document.createElement('div');
+  safeB.style.cssText = 'position:fixed;bottom:0;left:0;right:0;height:env(safe-area-inset-bottom,0px);z-index:2;pointer-events:none;';
+  document.body.appendChild(safeB);
+
   if (document.documentElement.dataset.page !== 'style') {
     const skipLink = document.createElement('a');
     skipLink.className = 'skip-link';
@@ -194,7 +205,10 @@
     themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
     let meta = document.querySelector('meta[name="theme-color"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
-    meta.content = dark ? '#1c1917' : '#fdfdfb';
+    const bg = dark ? '#1c1917' : '#fdfdfb';
+    meta.content = bg;
+    safeT.style.background = bg;
+    safeB.style.background = bg;
   }
 
   function setMenuOpen(open) {
