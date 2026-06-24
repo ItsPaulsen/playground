@@ -2,7 +2,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "color1": "#f87171",
   "color2": "#38bdf8",
   "count": 2,
-  "speed": 1
+  "speed": 0.5
 } /*EDITMODE-END*/;
 const PALETTES = [{
   light: ['#f87171', '#38bdf8'],
@@ -114,8 +114,8 @@ function App() {
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Speed",
     value: t.speed,
-    min: 0.5,
-    max: 3,
+    min: 0.1,
+    max: 1,
     step: 0.1,
     onChange: v => setTweak('speed', v)
   })), /*#__PURE__*/React.createElement("div", {
