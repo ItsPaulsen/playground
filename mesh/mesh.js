@@ -11,16 +11,6 @@ function Mesh({
   const colors = Array.from({
     length: count
   }, (_, i) => t[COLOR_KEYS[i]]);
-
-  // Keep html background in sync with mesh colors so iOS safe-area/toolbar
-  // area blends with the animation instead of showing the page background
-  React.useEffect(() => {
-    const root = document.documentElement;
-    root.style.background = `linear-gradient(135deg, ${colors[0]}, ${colors[colors.length - 1]})`;
-    return () => {
-      root.style.background = '';
-    };
-  }, colors);
   return /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
