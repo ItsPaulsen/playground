@@ -25,6 +25,11 @@
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
   #root, .stage { position: fixed; inset: 0; }
   .stage { display: block; }
+  :root {
+    --nav-bg: color-mix(in srgb, var(--pg-surface) 80%, transparent);
+    --nav-filter: blur(12px) saturate(180%);
+    --nav-bg-open: var(--pg-surface);
+  }
 </style>
 </head>
 <body>
