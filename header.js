@@ -127,6 +127,8 @@
 
     .pg-safe-t { position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);z-index:2147483646;pointer-events:none; }
     .pg-safe-b { position:fixed;bottom:0;left:0;right:0;height:env(safe-area-inset-bottom,0px);z-index:2;pointer-events:none; }
+    :root { color-scheme: light; }
+    html[data-theme="dark"] { color-scheme: dark; }
   `;
   document.head.appendChild(style);
 
@@ -202,6 +204,7 @@
 
   function applyTheme(dark) {
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     localStorage.setItem('pg-theme', dark ? 'dark' : 'light');
     themeBtn.innerHTML = dark ? SUN : MOON;
     themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
