@@ -254,4 +254,14 @@
   });
 
   applyTheme(isDark());
+
+  // iOS Safari bfcache doesn't reliably restore scroll position — do it manually
+  window.addEventListener('pagehide', function () {
+    sessionStorage.setItem('_scroll' + location.pathname, window.scrollY);
+  });
+  window.addEventListener('pageshow', function (e) {
+    if (!e.persisted) return;
+    var saved = sessionStorage.getItem('_scroll' + location.pathname);
+    if (saved !== null) requestAnimationFrame(function () { window.scrollTo(0, +saved); });
+  });
 })();
