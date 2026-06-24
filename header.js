@@ -278,4 +278,10 @@
   window.addEventListener('pagehide', function () {
     if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
   });
+
+  // Re-sync theme on bfcache restore — Safari preserves the old DOM state including
+  // data-theme and theme-color, so we must re-apply from localStorage.
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) applyTheme(localStorage.getItem('pg-theme') === 'dark');
+  });
 })();
