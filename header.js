@@ -192,6 +192,9 @@
     localStorage.setItem('pg-theme', dark ? 'dark' : 'light');
     themeBtn.innerHTML = dark ? SUN : MOON;
     themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
+    meta.content = dark ? '#292524' : '#fdfdfb';
   }
 
   function setMenuOpen(open) {
