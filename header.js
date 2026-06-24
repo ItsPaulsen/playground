@@ -165,6 +165,17 @@
   safeB.className = 'pg-safe-b';
   document.body.appendChild(safeB);
 
+  // Two media-query theme-color metas — Safari on iOS 26+ checks these alongside the plain tag.
+  // We update all instances to the same color on every toggle so system preference doesn't interfere.
+  var mtL = document.createElement('meta');
+  mtL.setAttribute('name', 'theme-color');
+  mtL.setAttribute('media', '(prefers-color-scheme: light)');
+  document.head.appendChild(mtL);
+  var mtD = document.createElement('meta');
+  mtD.setAttribute('name', 'theme-color');
+  mtD.setAttribute('media', '(prefers-color-scheme: dark)');
+  document.head.appendChild(mtD);
+
   if (document.documentElement.dataset.page !== 'style') {
     const skipLink = document.createElement('a');
     skipLink.className = 'skip-link';
@@ -208,17 +219,16 @@
     localStorage.setItem('pg-theme', dark ? 'dark' : 'light');
     themeBtn.innerHTML = dark ? SUN : MOON;
     themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-    let meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) { meta = document.createElement('meta'); meta.name = 'theme-color'; document.head.appendChild(meta); }
     const bg = dark ? '#1c1917' : '#fdfdfb';
-    meta.content = bg;
+    // Update every theme-color meta (plain + both media-query variants) to the same color.
+    document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.content = bg; });
     safeT.style.background = bg;
     safeB.style.background = bg;
-    // Force WebKit to re-evaluate the toolbar color when fullscreen elements cover the page.
-    // display:none + offsetHeight read is synchronous — no paint occurs between the lines.
-    document.documentElement.style.display = 'none';
-    document.documentElement.offsetHeight;
-    document.documentElement.style.display = '';
+    // Composite-layer repaint: briefly promote the safe strips to their own GPU layer so
+    // Safari re-samples the viewport edges and refreshes top/bottom toolbar colors.
+    safeT.style.transform = 'translateZ(0)';
+    safeB.style.transform = 'translateZ(0)';
+    setTimeout(function () { safeT.style.transform = ''; safeB.style.transform = ''; }, 50);
   }
 
   function setMenuOpen(open) {
