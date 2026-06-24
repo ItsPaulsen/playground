@@ -54,6 +54,10 @@ function App() {
   }, [isDark]);
 
   const theme = isDark ? 'dark' : 'light';
+  const defaultColors = PALETTES[0][theme];
+  const isDirty = t.color1 !== defaultColors[0] || t.color2 !== defaultColors[1]
+    || t.speed !== TWEAK_DEFAULTS.speed || t.count !== TWEAK_DEFAULTS.count;
+  const resetTweaks = () => setTweak({ ...TWEAK_DEFAULTS, color1: defaultColors[0], color2: defaultColors[1] });
 
   const nextPalette = () => {
     paletteIdx.current = (paletteIdx.current % (PALETTES.length - 1)) + 1;
@@ -65,7 +69,14 @@ function App() {
     <>
       <Mesh t={t} />
 
-      <TweaksPanel title="Mesh">
+      <TweaksPanel title="Mesh"
+        renderMobileFooter={(close) => (
+          <>
+            <TweakButton label="Reset" secondary disabled={!isDirty} onClick={resetTweaks} />
+            <TweakButton label="Show" onClick={close} />
+          </>
+        )}
+      >
         <TweakSection label="Colors">
           <TweakColor label="Color 1" value={t.color1} onChange={v => setTweak('color1', v)} />
           <TweakColor label="Color 2" value={t.color2} onChange={v => setTweak('color2', v)} />
@@ -76,7 +87,11 @@ function App() {
                        onChange={v => setTweak('speed', v)} />
         </TweakSection>
 
-        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div className="twk-desktop-only" style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+          <TweakButton label="Randomize" secondary onClick={nextPalette} />
+          <TweakButton label="Reset" secondary disabled={!isDirty} onClick={resetTweaks} />
+        </div>
+        <div className="twk-mobile-only" style={{ borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Randomize" secondary onClick={nextPalette} />
         </div>
       </TweaksPanel>

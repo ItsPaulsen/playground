@@ -17,14 +17,28 @@ const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [panelOpen, setPanelOpen] = React.useState(true);
+  const [panelOpen, setPanelOpen] = React.useState(() => window.innerWidth > 639);
+  const [isDesktop, setIsDesktop] = React.useState(() => window.innerWidth > 639);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)');
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
   const isDirty = JSON.stringify({ ...t, text: TWEAK_DEFAULTS.text }) !== TWEAK_DEFAULTS_JSON;
 
   return (
     <>
-      <Typo t={t} panelOpen={panelOpen} />
+      <Typo t={t} panelOpen={panelOpen && isDesktop} />
 
-      <TweaksPanel title="Typo" onOpenChange={setPanelOpen}>
+      <TweaksPanel title="Typo" onOpenChange={setPanelOpen}
+        renderMobileFooter={(close) => (
+          <>
+            <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, text: t.text })} />
+            <TweakButton label="Show" onClick={close} />
+          </>
+        )}
+      >
         <TweakSection>
           <div style={{ position: 'relative' }}>
             <input
@@ -72,7 +86,7 @@ function App() {
                        onChange={(v) => setTweak('spread', v / 100)} />
         </TweakSection>
 
-        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div className="twk-desktop-only" style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, text: t.text })} />
         </div>
       </TweaksPanel>

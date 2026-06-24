@@ -77,8 +77,8 @@ const __TWEAKS_STYLE = `
   @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }
 
   .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
-    z-index:9999;width:320px;
-    max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
+    z-index:2147483648;width:320px;
+    max-height:calc(100dvh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:rgba(255,255,255,0.6);color:var(--text);
     backdrop-filter:blur(10px);
@@ -159,7 +159,7 @@ const __TWEAKS_STYLE = `
     background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
   .twk-toggle[data-on="1"] i{transform:translateX(16px)}
 
-.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:9999;width:36px;height:36px;
+.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483647;width:36px;height:36px;
     border:0;border-radius:12px;cursor:pointer;padding:0;
     background:rgba(255,255,255,0.6);
     backdrop-filter:blur(10px);
@@ -224,7 +224,7 @@ const __TWEAKS_STYLE = `
   .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 
-  .twk-cpick{position:fixed;z-index:10000;width:212px;
+  .twk-cpick{position:fixed;z-index:2147483649;width:212px;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
     border:.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:12px;
     box-shadow:0 8px 40px rgba(0,0,0,.2);
@@ -243,6 +243,52 @@ const __TWEAKS_STYLE = `
   .twk-cpick-hue-thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
     background:#fff;border:1.5px solid rgba(0,0,0,.2);box-shadow:0 1px 3px rgba(0,0,0,.2);
     transform:translate(-50%,-50%);pointer-events:none}
+
+  .twk-footer{display:none;flex-shrink:0;padding:12px 16px;gap:8px;border-top:1px solid var(--bd);}
+  .twk-footer .twk-btn{height:36px;border-radius:12px;font-size:14px;}
+  .twk-desktop-only{}
+  .twk-mobile-only{display:none;}
+  .twk-backdrop{display:none;}
+  @media (max-width:639px){
+    .twk-footer{display:flex;padding-bottom:max(12px,env(safe-area-inset-bottom));}
+    .twk-desktop-only{display:none!important;}
+    .twk-mobile-only{display:flex;}
+    .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,0.1);}
+    html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
+  }
+
+  @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
+  @keyframes twk-out-mob { from { opacity:1; translate:0 0; } to { opacity:0; translate:0 40px; } }
+
+  .twk-fab{
+    display:none;position:fixed;
+    bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+    z-index:2147483647;height:36px;padding:0 16px 0 12px;gap:8px;
+    background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);border-radius:12px;
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
+    color:rgba(28,25,23,.8);
+    font:500 14px/1 'Inter',ui-sans-serif,system-ui,sans-serif;
+    cursor:pointer;align-items:center;white-space:nowrap;
+  }
+  html[data-theme="dark"] .twk-fab{
+    background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,.1);color:rgba(253,253,251,.8);
+  }
+
+  @media (max-width:639px){
+    .twk-reopen{display:none!important;}
+    .twk-fab{display:flex;}
+    .twk-panel{
+      right:auto!important;top:auto!important;
+      left:50%!important;bottom:0!important;
+      transform:translateX(-50%)!important;transform-origin:bottom center!important;
+      width:100%!important;max-width:480px!important;
+      max-height:calc(100dvh - 64px)!important;
+      border-radius:20px 20px 0 0!important;
+    }
+    .twk-panel.twk-opening{animation:twk-in-mob .35s cubic-bezier(.16,1,.3,1) both!important;}
+    .twk-panel.twk-closing{animation:twk-out-mob .2s cubic-bezier(.4,0,1,1) both!important;}
+  }
 `;
 
 // ── useTweaks ───────────────────────────────────────────────────────────────
@@ -272,8 +318,8 @@ function useTweaks(defaults) {
 // The close button posts __edit_mode_dismissed so the host's toolbar toggle
 // flips off in lockstep; the host echoes __deactivate_edit_mode back which
 // is what actually hides the panel.
-function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange }) {
-  const [open, setOpen] = React.useState(() => window.parent === window);
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange, renderMobileFooter }) {
+  const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > 639);
   const [closing, setClosing] = React.useState(false);
   const [animateIn, setAnimateIn] = React.useState(true);
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
@@ -327,13 +373,24 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
   const handleAnimEnd = (e) => {
-    if (e.animationName === 'twk-out') { setClosing(false); setOpen(false); }
+    if (e.animationName === 'twk-out' || e.animationName === 'twk-out-mob') { setClosing(false); setOpen(false); }
   };
 
-  return (
+  const openPanel = () => { setAnimateIn(true); setOpen(true); };
+  const FILTER_ICON = (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10 5H3" /><path d="M12 19H3" /><path d="M14 3v4" />
+      <path d="M16 17v4" /><path d="M21 12h-9" /><path d="M21 19h-5" />
+      <path d="M21 5h-7" /><path d="M8 10v4" /><path d="M8 12H3" />
+    </svg>
+  );
+
+  return ReactDOM.createPortal(
     <>
       <style>{__TWEAKS_STYLE}</style>
       {open ? (
+      <>
+        <div className="twk-backdrop" onClick={dismiss} />
         <div className={`twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd">
             <b>{title}</b>
@@ -347,22 +404,31 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
               </TweakSection>
             )}
           </div>
+          {renderMobileFooter && (
+            <div className="twk-footer">
+              {renderMobileFooter(dismiss)}
+            </div>
+          )}
           <button className="twk-x" aria-label="Close tweaks" onClick={dismiss}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
             </svg>
           </button>
         </div>
+      </>
       ) : (
-        <button className="twk-reopen" aria-label="Open tweaks" onClick={() => { setAnimateIn(true); setOpen(true); }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M10 5H3" /><path d="M12 19H3" /><path d="M14 3v4" />
-            <path d="M16 17v4" /><path d="M21 12h-9" /><path d="M21 19h-5" />
-            <path d="M21 5h-7" /><path d="M8 10v4" /><path d="M8 12H3" />
-          </svg>
-        </button>
+        <>
+          <button className="twk-reopen" aria-label="Open tweaks" onClick={openPanel}>
+            {FILTER_ICON}
+          </button>
+          <button className="twk-fab" aria-label="Open tweaks" onClick={openPanel}>
+            {FILTER_ICON}
+            Filter
+          </button>
+        </>
       )}
-    </>
+    </>,
+    document.body
   );
 }
 

@@ -1,1 +1,1159 @@
-const __TWEAKS_STYLE='\n  .twk-panel,.twk-reopen{\n    --bg:rgba(253,253,251,.8);--text:rgb(28,25,23);--bd:rgba(28,25,23,.1);\n    --label:rgba(28,25,23,.7);--val:rgba(28,25,23,.5);\n    --sect:var(--val);\n    --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.35);--fld-surf:rgba(28,25,23,.05);\n    --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);\n    --track:var(--fld-bd);--seg:var(--fld-bd);\n    --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);\n    --btn:rgba(28,25,23,.85);--btn-t:rgb(253,253,251);--btn-h:rgba(28,25,23,.8);\n    --sec:rgba(28,25,23,.15);--sec-h:rgba(28,25,23,.13);\n    --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);\n  }\n  html[data-theme="dark"] .twk-panel,\n  html[data-theme="dark"] .twk-reopen{background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,0.1);}\n  html[data-theme="dark"] .twk-cpick{background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,0.1);}\n  html[data-theme="dark"] .twk-panel,\n  html[data-theme="dark"] .twk-reopen{\n    --bg:rgba(41,37,36,.8);--text:rgb(253,253,251);--bd:rgba(253,253,251,.1);\n    --label:rgba(253,253,251,.7);--val:rgba(253,253,251,.5);\n    --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.35);--fld-surf:rgba(253,253,251,.05);\n    --tog-off:rgba(253,253,251,.3);\n    --btn:rgba(253,253,251,.85);--btn-t:rgb(28,25,23);--btn-h:rgba(253,253,251,.8);\n    --sec:rgba(253,253,251,.15);--sec-h:rgba(253,253,251,.13);\n    --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);\n  }\n\n  @keyframes twk-in  { from { opacity:0; translate:16px 0; } to { opacity:1; translate:0 0; } }\n  @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }\n\n  .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);\n    z-index:9999;width:320px;\n    max-height:calc(100vh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;\n    transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;\n    background:rgba(255,255,255,0.6);color:var(--text);\n    backdrop-filter:blur(10px);\n    border:.5px solid rgba(0,0,0,0.12);border-radius:20px;\n    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);\n    font:12px/1.4 \'Inter\',ui-sans-serif,system-ui,sans-serif;overflow:hidden}\n  .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}\n  .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}\n  .twk-hd{display:flex;align-items:center;justify-content:space-between;\n    padding:8px 8px 0 16px;}\n  .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em;line-height:20px}\n  .twk-hd-spacer{width:36px;height:36px;flex-shrink:0;}\n  .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);\n    width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;\n    display:flex;align-items:center;justify-content:center;\n    position:absolute;top:8px;right:8px;}\n  .twk-x:hover{color:var(--text)}\n  html[data-theme="dark"] .twk-x{color:rgba(253,253,251,.8)}\n  html[data-theme="dark"] .twk-x:hover{color:#fafaf9}\n  .twk-body{padding:4px 16px 16px;display:flex;flex-direction:column;gap:8px;\n    overflow-y:auto;overflow-x:hidden;min-height:0;scroll-padding-top:4px;\n    scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}\n  .twk-body::-webkit-scrollbar{width:8px}\n  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}\n  .twk-body::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:6px;\n    border:2px solid transparent;background-clip:content-box}\n  .twk-body::-webkit-scrollbar-thumb:hover{background:var(--scroll-h);\n    border:2px solid transparent;background-clip:content-box}\n  .twk-row{display:flex;flex-direction:column;gap:5px}\n  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;min-height:26px}\n  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;\n    color:var(--label)}\n  .twk-lbl>span:first-child{font-weight:500}\n  .twk-val{color:var(--val);font-variant-numeric:tabular-nums}\n\n  .twk-sect{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;\n    color:var(--sect);margin-top:-8px}\n  .twk-sect:first-child{margin-top:0}\n  .twk-sect::before{content:\'\';display:block;border-top:1px solid var(--bd);margin:16px 0}\n  .twk-sect:first-child::before{display:none}\n\n  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;\n    border:1px solid var(--fld-bd);border-radius:8px;\n    background:var(--fld-surf);color:inherit;font:inherit;outline:none}\n  select.twk-field{padding-right:22px;\n    background-image:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'><path fill=\'rgba(0,0,0,.5)\' d=\'M0 0h10L5 6z\'/></svg>");\n    background-repeat:no-repeat;background-position:right 8px center}\n\n  .twk-bar-row{display:flex;align-items:center;gap:8px}\n  .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}\n  .twk-bar:focus-visible{outline:2px solid var(--text);outline-offset:2px;border-radius:8px;}\n  .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);\n    cursor:pointer;overflow:hidden;user-select:none;touch-action:none}\n  .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);\n    border-radius:8px 0 0 8px;pointer-events:none;min-width:8px}\n  .twk-bar-val{position:absolute;inset:0;display:flex;align-items:center;\n    justify-content:center;font-size:11px;font-variant-numeric:tabular-nums;\n    pointer-events:none;font-weight:500}\n  .twk-bar-val--fill{color:var(--bar-val)}\n  .twk-bar-val--track{color:var(--text)}\n\n  .twk-seg{position:relative;display:flex;border-radius:10px;\n    background:var(--seg);user-select:none;box-sizing:border-box;height:32px;padding:3px}\n  .twk-seg-thumb{position:absolute;top:3px;bottom:3px;border-radius:8px;\n    background:var(--bar-fill);box-shadow:0 1px 2px rgba(0,0,0,.12);\n    transition:left .4s cubic-bezier(.4,0,.2,1),width .4s cubic-bezier(.4,0,.2,1)}\n  .twk-seg.dragging .twk-seg-thumb{transition:none}\n  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;\n    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;\n    border-radius:8px;cursor:pointer;padding:4px 6px;line-height:1.2;\n    overflow-wrap:anywhere;transition:color .2s ease}\n  .twk-seg button[aria-checked="true"]{color:var(--bar-val);transition-delay:.1s}\n\n  .twk-toggle{position:relative;width:36px;height:20px;border:0;border-radius:999px;\n    background:var(--tog-off);transition:background .25s;cursor:pointer;padding:0}\n  .twk-toggle[data-on="1"]{background:#34c759}\n  .twk-toggle i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;\n    background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}\n  .twk-toggle[data-on="1"] i{transform:translateX(16px)}\n\n.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:9999;width:36px;height:36px;\n    border:0;border-radius:12px;cursor:pointer;padding:0;\n    background:rgba(255,255,255,0.6);\n    backdrop-filter:blur(10px);\n    border:.5px solid rgba(0,0,0,0.12);\n    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);\n    display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.8)}\n  .twk-reopen:hover{color:var(--text)}\n  html[data-theme="dark"] .twk-reopen{color:rgba(253,253,251,.8)}\n  html[data-theme="dark"] .twk-reopen:hover{color:rgba(253,253,251,1)}\n\n  .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;\n    background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:pointer}\n  .twk-btn:hover{background:var(--btn-h)}\n  .twk-btn:disabled{opacity:.35;cursor:default;pointer-events:none}\n  html[data-theme="dark"] .twk-panel .twk-btn:disabled{opacity:.25}\n  .twk-btn.secondary{background:var(--sec);color:inherit}\n  .twk-btn.secondary:hover{background:var(--sec-h)}\n\n  .twk-swatch{appearance:none;-webkit-appearance:none;width:36px;height:26px;\n    border:.5px solid var(--fld-bd);border-radius:8px;padding:0;cursor:pointer;\n    background:transparent;flex-shrink:0}\n  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}\n  .twk-swatch::-webkit-color-swatch{border:0;border-radius:7.5px}\n  .twk-swatch::-moz-color-swatch{border:0;border-radius:7.5px}\n\n  .twk-color-row{display:flex;align-items:center;gap:6px}\n  .twk-bar-row .twk-color-row{width:172px;flex-shrink:0}\n  .twk-color-main{display:flex;align-items:center;flex:1;min-width:0;height:26px;\n    border:1px solid var(--fld-bd);border-radius:0 8px 8px 0;background:var(--fld-surf);box-sizing:border-box}\n  .twk-color-preview{flex-shrink:0;cursor:pointer;\n    width:26px;height:26px;border-radius:8px 0 0 8px;\n    margin-right:-6px;position:relative;z-index:1}\n  .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;\n    font:inherit;font-size:12px;padding:0 6px;outline:none}\n  .twk-color-main:focus-within{border-color:var(--fld-bdf)}\n  .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;\n    background:var(--fld-surf);font-size:12px;display:flex;align-items:center;gap:1px;\n    white-space:nowrap;flex-shrink:0}\n  .twk-color-opacity:focus-within{border-color:var(--fld-bdf)}\n  .twk-color-opacity-input{width:20px;border:0;background:transparent;color:inherit;\n    font:inherit;font-size:12px;text-align:right;padding:0;outline:none;-moz-appearance:textfield}\n  .twk-color-opacity-input::-webkit-inner-spin-button,.twk-color-opacity-input::-webkit-outer-spin-button{-webkit-appearance:none}\n  .twk-color-opacity-pct{color:inherit;font-size:10px}\n  .twk-color-pick{appearance:none;width:26px;height:26px;border:0;\n    border-radius:8px;background:transparent;color:var(--label);cursor:pointer;\n    display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;box-sizing:border-box}\n  .twk-color-pick:hover{color:var(--text)}\n\n  .twk-chips{display:flex;gap:6px}\n  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;\n    padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;\n    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);\n    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}\n  .twk-chip:hover{transform:translateY(-1px);\n    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}\n  .twk-chip[data-on="1"]{border-radius:8px;box-shadow:0 0 0 1.5px rgba(0,0,0,.85),\n    0 2px 6px rgba(0,0,0,.15)}\n  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;\n    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}\n  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}\n  .twk-chip>span>i:first-child{box-shadow:none}\n  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;\n    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}\n\n  .twk-cpick{position:fixed;z-index:10000;width:212px;\n    background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);\n    border:.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:12px;\n    box-shadow:0 8px 40px rgba(0,0,0,.2);\n    display:flex;flex-direction:column;gap:8px}\n  .twk-cpick-sv{position:relative;width:100%;height:140px;\n    border-radius:8px;overflow:hidden;cursor:crosshair;flex-shrink:0}\n  .twk-cpick-sv-white{position:absolute;inset:0;\n    background:linear-gradient(to right,#fff,transparent)}\n  .twk-cpick-sv-black{position:absolute;inset:0;\n    background:linear-gradient(to top,#000,transparent)}\n  .twk-cpick-sv-thumb{position:absolute;width:12px;height:12px;border-radius:50%;\n    border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);\n    transform:translate(-50%,-50%);pointer-events:none}\n  .twk-cpick-hue{position:relative;height:10px;border-radius:5px;cursor:ew-resize;\n    background:linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))}\n  .twk-cpick-hue-thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;\n    background:#fff;border:1.5px solid rgba(0,0,0,.2);box-shadow:0 1px 3px rgba(0,0,0,.2);\n    transform:translate(-50%,-50%);pointer-events:none}\n';function useTweaks(e){const[t,a]=React.useState(e);return[t,React.useCallback((e,t)=>{const n="object"==typeof e&&null!==e?e:{[e]:t};a(e=>({...e,...n})),window.parent.postMessage({type:"__edit_mode_set_keys",edits:n},"*"),window.dispatchEvent(new CustomEvent("tweakchange",{detail:n}))},[])]}function TweaksPanel({title:e="Tweaks",noDeckControls:t=!1,children:a,onOpenChange:n}){const[r,o]=React.useState(()=>window.parent===window),[i,l]=React.useState(!1),[c,s]=React.useState(!0);React.useEffect(()=>{n&&n(r)},[r,n]);const d=React.useMemo(()=>"undefined"!=typeof document&&!!document.querySelector("deck-stage"),[]),[p,b]=React.useState(()=>d&&!!document.querySelector("deck-stage")?._railEnabled);React.useEffect(()=>{if(!d||p)return;const e=e=>{e.data&&"__omelette_rail_enabled"===e.data.type&&b(!0)};return window.addEventListener("message",e),()=>window.removeEventListener("message",e)},[d,p]);const[h,u]=React.useState(()=>{try{return"0"!==localStorage.getItem("deck-stage.railVisible")}catch(e){return!0}});React.useEffect(()=>{const e=e=>{const t=e?.data?.type;"__activate_edit_mode"===t?o(!0):"__deactivate_edit_mode"===t&&o(!1)};return window.addEventListener("message",e),window.parent.postMessage({type:"__edit_mode_available"},"*"),()=>window.removeEventListener("message",e)},[]);return React.createElement(React.Fragment,null,React.createElement("style",null,__TWEAKS_STYLE),r?React.createElement("div",{className:`twk-panel${c?" twk-opening":""}${i?" twk-closing":""}`,"data-noncommentable":"",onAnimationEnd:e=>{"twk-out"===e.animationName&&(l(!1),o(!1))}},React.createElement("div",{className:"twk-hd"},React.createElement("b",null,e),React.createElement("span",{className:"twk-hd-spacer","aria-hidden":"true"})),React.createElement("div",{className:"twk-body"},a,d&&p&&!t&&React.createElement(TweakSection,{label:"Deck"},React.createElement(TweakToggle,{label:"Thumbnail rail",value:h,onChange:e=>{u(e),window.postMessage({type:"__deck_rail_visible",on:e},"*")}}))),React.createElement("button",{className:"twk-x","aria-label":"Close tweaks",onClick:()=>{l(!0),setTimeout(()=>n&&n(!1),80),window.parent.postMessage({type:"__edit_mode_dismissed"},"*")}},React.createElement("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round","aria-hidden":"true"},React.createElement("path",{d:"M18 6 6 18"}),React.createElement("path",{d:"m6 6 12 12"})))):React.createElement("button",{className:"twk-reopen","aria-label":"Open tweaks",onClick:()=>{s(!0),o(!0)}},React.createElement("svg",{width:"18",height:"18",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2",strokeLinecap:"round",strokeLinejoin:"round","aria-hidden":"true"},React.createElement("path",{d:"M10 5H3"}),React.createElement("path",{d:"M12 19H3"}),React.createElement("path",{d:"M14 3v4"}),React.createElement("path",{d:"M16 17v4"}),React.createElement("path",{d:"M21 12h-9"}),React.createElement("path",{d:"M21 19h-5"}),React.createElement("path",{d:"M21 5h-7"}),React.createElement("path",{d:"M8 10v4"}),React.createElement("path",{d:"M8 12H3"}))))}function TweakSection({label:e,children:t}){return React.createElement(React.Fragment,null,e&&React.createElement("div",{className:"twk-sect"},e),t)}function TweakRow({label:e,value:t,children:a,inline:n=!1}){return React.createElement("div",{className:n?"twk-row twk-row-h":"twk-row"},e&&React.createElement("div",{className:"twk-lbl"},React.createElement("span",null,e),null!=t&&React.createElement("span",{className:"twk-val"},t)),a)}const SLIDER_KEY_DIRS={ArrowRight:1,ArrowUp:1,ArrowLeft:-1,ArrowDown:-1};function TweakSlider({label:e,value:t,min:a=0,max:n=100,step:r=1,unit:o="",onChange:i}){const l=Number(t),c=Math.max(0,Math.min(100,(l-a)/(n-a)*100)),s=React.useRef(null),[d,p]=React.useState(!1),b=e=>{const t=s.current.getBoundingClientRect(),o=Math.max(0,Math.min(1,(e-t.left)/t.width)),i=a+o*(n-a),l=Math.round(i/r)*r,c=(String(r).split(".")[1]||"").length;return Number(l.toFixed(c))};return React.createElement("div",{className:"twk-bar-row"},React.createElement("span",{className:"twk-bar-lbl"},e,o?` (${o})`:""),React.createElement("div",{ref:s,className:"twk-bar",tabIndex:0,role:"slider","aria-label":e,"aria-valuemin":a,"aria-valuemax":n,"aria-valuenow":l,style:{cursor:d?"grabbing":"pointer"},onPointerDown:e=>{s.current.setPointerCapture(e.pointerId),p(!0),i(b(e.clientX))},onPointerMove:e=>{0!==e.buttons&&i(b(e.clientX))},onPointerUp:()=>p(!1),onKeyDown:e=>{if(!(e.key in SLIDER_KEY_DIRS))return;e.preventDefault();const t=(String(r).split(".")[1]||"").length,o=Math.max(a,Math.min(n,Number((l+SLIDER_KEY_DIRS[e.key]*r).toFixed(t))));i(o)}},React.createElement("div",{className:"twk-bar-fill",style:{width:c+"%"}}),React.createElement("span",{className:"twk-bar-val twk-bar-val--fill",style:{clipPath:`inset(0 ${100-c}% 0 0)`}},l),React.createElement("span",{className:"twk-bar-val twk-bar-val--track",style:{clipPath:`inset(0 0 0 ${c}%)`}},l)))}function TweakToggle({label:e,value:t,onChange:a}){return React.createElement("div",{className:"twk-row twk-row-h"},React.createElement("div",{className:"twk-lbl"},React.createElement("span",null,e)),React.createElement("button",{type:"button",className:"twk-toggle","data-on":t?"1":"0",role:"switch","aria-checked":!!t,onClick:()=>a(!t)},React.createElement("i",null)))}function TweakRadio({label:e,value:t,options:a,onChange:n}){const r=React.useRef(null),[o,i]=React.useState(!1),l=React.useRef(t);l.current=t;if(!(a.reduce((e,t)=>Math.max(e,(e=>String("object"==typeof e?e.label:e).length)(t)),0)<=({2:16,3:10}[a.length]??0))){const r=e=>{const t=a.find(t=>String("object"==typeof t?t.value:t)===e);return void 0===t?e:"object"==typeof t?t.value:t};return React.createElement(TweakSelect,{label:e,value:t,options:a,onChange:e=>n(r(e))})}const c=a.map(e=>"object"==typeof e?e:{value:e,label:e}),s=Math.max(0,c.findIndex(e=>e.value===t)),d=c.length,p=e=>{const t=r.current.getBoundingClientRect(),a=t.width-6,n=Math.floor((e-t.left-3)/a*d);return c[Math.max(0,Math.min(d-1,n))].value};return React.createElement(TweakRow,{label:e},React.createElement("div",{ref:r,role:"radiogroup",onPointerDown:e=>{r.current.setPointerCapture(e.pointerId);const t=p(e.clientX);t!==l.current&&n(t)},onPointerMove:e=>{if(0===e.buttons)return;i(!0);const t=p(e.clientX);t!==l.current&&n(t)},onPointerUp:()=>i(!1),className:o?"twk-seg dragging":"twk-seg"},React.createElement("div",{className:"twk-seg-thumb",style:{left:`calc(3px + ${s} * (100% - 6px) / ${d})`,width:`calc((100% - 6px) / ${d})`}}),c.map(e=>React.createElement("button",{key:e.value,type:"button",role:"radio","aria-checked":e.value===t},e.label))))}function TweakSelect({label:e,value:t,options:a,onChange:n}){return React.createElement(TweakRow,{label:e},React.createElement("select",{className:"twk-field",value:t,onChange:e=>n(e.target.value)},a.map(e=>{const t="object"==typeof e?e.value:e,a="object"==typeof e?e.label:e;return React.createElement("option",{key:t,value:t},a)})))}function TweakText({label:e,value:t,placeholder:a,onChange:n}){return React.createElement(TweakRow,{label:e},React.createElement("input",{className:"twk-field",type:"text",value:t,placeholder:a,onChange:e=>n(e.target.value)}))}function __twkIsLight(e){const t=String(e).replace("#",""),a=3===t.length?t.replace(/./g,e=>e+e):t.padEnd(6,"0"),n=parseInt(a.slice(0,6),16);if(Number.isNaN(n))return!0;return 299*(n>>16&255)+587*(n>>8&255)+114*(255&n)>148e3}const __TwkCheck=({light:e})=>React.createElement("svg",{viewBox:"0 0 24 24",fill:"none",strokeWidth:"2.5",strokeLinecap:"round",strokeLinejoin:"round","aria-hidden":"true",stroke:e?"rgba(0,0,0,.78)":"#fff"},React.createElement("path",{d:"M20 6 9 17l-5-5"}));function __hexToRgb(e){return{r:parseInt(e.slice(1,3),16),g:parseInt(e.slice(3,5),16),b:parseInt(e.slice(5,7),16)}}function __hexToHsv(e){const{r:t,g:a,b:n}=__hexToRgb(e),r=t/255,o=a/255,i=n/255,l=Math.max(r,o,i),c=l-Math.min(r,o,i);let s=0,d=0===l?0:c/l,p=l;if(c)switch(l){case r:s=((o-i)/c+(o<i?6:0))/6;break;case o:s=((i-r)/c+2)/6;break;case i:s=((r-o)/c+4)/6}return{h:360*s,s:100*d,v:100*p}}function __hsvToHex(e,t,a){e/=360,t/=100,a/=100;const n=Math.floor(6*e),r=6*e-n,o=a*(1-t),i=a*(1-r*t),l=a*(1-(1-r)*t);let c,s,d;switch(n%6){case 0:c=a,s=l,d=o;break;case 1:c=i,s=a,d=o;break;case 2:c=o,s=a,d=l;break;case 3:c=o,s=i,d=a;break;case 4:c=l,s=o,d=a;break;case 5:c=a,s=o,d=i}return"#"+[c,s,d].map(e=>Math.round(255*e).toString(16).padStart(2,"0")).join("")}function __ColorPickerDropdown({hex:e,onHexChange:t,anchorRef:a,onClose:n}){const[r,o]=React.useState(()=>__hexToHsv(e)),i=React.useRef(null),l=React.useRef(null),c=React.useRef(null),[s,d]=React.useState(null);React.useEffect(()=>{if(!a.current)return;const e=a.current.getBoundingClientRect(),t=window.innerHeight-e.bottom<220,n=e.left+e.width/2-106;d({top:t?e.top-220-6:e.bottom+6,left:Math.max(8,Math.min(n,window.innerWidth-212-8))})},[]),React.useEffect(()=>{const e=e=>{c.current&&!c.current.contains(e.target)&&a.current&&!a.current.contains(e.target)&&n()},t=()=>n();return document.addEventListener("pointerdown",e),window.addEventListener("scroll",t,!0),()=>{document.removeEventListener("pointerdown",e),window.removeEventListener("scroll",t,!0)}},[]);const p=(e,a,n)=>{o({h:e,s:a,v:n}),t(__hsvToHex(e,a,n))},b=(e,t)=>{const a=i.current.getBoundingClientRect();p(r.h,Math.max(0,Math.min(100,(e-a.left)/a.width*100)),Math.max(0,Math.min(100,100-(t-a.top)/a.height*100)))},h=e=>{const t=l.current.getBoundingClientRect();p(Math.max(0,Math.min(360,(e-t.left)/t.width*360)),r.s,r.v)};return s?ReactDOM.createPortal(React.createElement("div",{ref:c,className:"twk-cpick twk-panel",style:{top:s.top,left:s.left}},React.createElement("div",{ref:i,className:"twk-cpick-sv",style:{background:`hsl(${r.h},100%,50%)`},onPointerDown:e=>{e.currentTarget.setPointerCapture(e.pointerId),b(e.clientX,e.clientY)},onPointerMove:e=>{e.buttons&&b(e.clientX,e.clientY)}},React.createElement("div",{className:"twk-cpick-sv-white"}),React.createElement("div",{className:"twk-cpick-sv-black"}),React.createElement("div",{className:"twk-cpick-sv-thumb",style:{left:`${r.s}%`,top:100-r.v+"%"}})),React.createElement("div",{ref:l,className:"twk-cpick-hue",onPointerDown:e=>{e.currentTarget.setPointerCapture(e.pointerId),h(e.clientX)},onPointerMove:e=>{e.buttons&&h(e.clientX)}},React.createElement("div",{className:"twk-cpick-hue-thumb",style:{left:r.h/360*100+"%"}}))),document.body):null}function __parseColor(e){if(!e)return{hex:"#000000",opacity:100};const t=String(e).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);if(t){return{hex:"#"+[t[1],t[2],t[3]].map(e=>parseInt(e).toString(16).padStart(2,"0")).join(""),opacity:void 0!==t[4]?Math.round(100*parseFloat(t[4])):100}}return{hex:e,opacity:100}}function __toColorString(e,t){if(t>=100)return e;const{r:a,g:n,b:r}=__hexToRgb(e);return`rgba(${a},${n},${r},${(t/100).toFixed(2)})`}function __TweakColorInput({label:e,value:t,onChange:a,noAlpha:n}){const r=__parseColor(t),[o,i]=React.useState(r.hex),[l,c]=React.useState(r.opacity),[s,d]=React.useState(String(r.opacity)),[p,b]=React.useState(!1),h=React.useRef(null),u=React.useRef(t);React.useEffect(()=>{if(t===u.current)return;u.current=t;const e=__parseColor(t);i(e.hex),c(e.opacity),d(String(e.opacity))},[t]);const w=(e,t)=>{const n=__toColorString(e,t);u.current=n,a(n)},g=React.createElement("div",{className:"twk-color-row"},React.createElement("div",{ref:h,className:"twk-color-preview",style:{background:o},onClick:()=>b(e=>!e)}),React.createElement("div",{className:"twk-color-main"},React.createElement("input",{className:"twk-color-hex",type:"text",value:o,onChange:e=>{const t=e.target.value;i(t),/^#[0-9a-fA-F]{6}$/.test(t)&&w(t,l)},spellCheck:!1})),!n&&React.createElement("div",{className:"twk-color-opacity"},React.createElement("input",{className:"twk-color-opacity-input",type:"text",value:s,onChange:e=>{d(e.target.value);const t=Math.max(0,Math.min(100,parseInt(e.target.value)||0));c(t),/^\d+$/.test(e.target.value)&&w(o,t)},onBlur:()=>d(String(l))}),React.createElement("span",{className:"twk-color-opacity-pct"},"%")),"EyeDropper"in window&&React.createElement("button",{type:"button",className:"twk-color-pick",onClick:()=>{(new window.EyeDropper).open().then(e=>{i(e.sRGBHex),w(e.sRGBHex,l)}).catch(()=>{})}},React.createElement("svg",{width:"14",height:"14",viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:"2.25",strokeLinecap:"round",strokeLinejoin:"round"},React.createElement("path",{d:"m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"}),React.createElement("path",{d:"m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"}),React.createElement("path",{d:"m2 22 .414-.414"}))),p&&React.createElement(__ColorPickerDropdown,{hex:o,onHexChange:e=>{i(e),w(e,l)},anchorRef:h,onClose:()=>b(!1)}));return e?React.createElement("div",{className:"twk-bar-row"},React.createElement("span",{className:"twk-bar-lbl"},e),g):g}function TweakColor({label:e,value:t,options:a,onChange:n,noAlpha:r}){if(!a||!a.length)return React.createElement(__TweakColorInput,{label:e,value:t,onChange:n,noAlpha:r});const o=e=>String(JSON.stringify(e)).toLowerCase(),i=o(t);return React.createElement(TweakRow,{label:e},React.createElement("div",{className:"twk-chips",role:"radiogroup"},a.map((e,t)=>{const a=Array.isArray(e)?e:[e],[r,...l]=a,c=l.slice(0,4),s=o(e)===i;return React.createElement("button",{key:t,type:"button",className:"twk-chip",role:"radio","aria-checked":s,"data-on":s?"1":"0","aria-label":a.join(", "),title:a.join(" · "),style:{background:r},onClick:()=>n(e)},c.length>0&&React.createElement("span",null,c.map((e,t)=>React.createElement("i",{key:t,style:{background:e}}))),s&&React.createElement(__TwkCheck,{light:__twkIsLight(r)}))})))}function TweakButton({label:e,onClick:t,secondary:a=!1,disabled:n=!1}){return React.createElement("button",{type:"button",className:a?"twk-btn secondary":"twk-btn",onClick:t,disabled:n},e)}Object.assign(window,{useTweaks:useTweaks,TweaksPanel:TweaksPanel,TweakSection:TweakSection,TweakRow:TweakRow,TweakSlider:TweakSlider,TweakToggle:TweakToggle,TweakRadio:TweakRadio,TweakSelect:TweakSelect,TweakText:TweakText,TweakColor:TweakColor,TweakButton:TweakButton});
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel,.twk-reopen{
+    --bg:rgba(253,253,251,.8);--text:rgb(28,25,23);--bd:rgba(28,25,23,.1);
+    --label:rgba(28,25,23,.7);--val:rgba(28,25,23,.5);
+    --sect:var(--val);
+    --fld-bd:rgba(28,25,23,.15);--fld-bdf:rgba(28,25,23,.35);--fld-surf:rgba(28,25,23,.05);
+    --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);
+    --track:var(--fld-bd);--seg:var(--fld-bd);
+    --tog-off:rgba(28,25,23,.3);--tog-handle:rgb(253,253,251);
+    --btn:rgba(28,25,23,.85);--btn-t:rgb(253,253,251);--btn-h:rgba(28,25,23,.8);
+    --sec:rgba(28,25,23,.15);--sec-h:rgba(28,25,23,.13);
+    --bar-fill:rgba(28,25,23,.85);--bar-val:rgb(253,253,251);
+  }
+  html[data-theme="dark"] .twk-panel,
+  html[data-theme="dark"] .twk-reopen{background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,0.1);}
+  html[data-theme="dark"] .twk-cpick{background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,0.1);}
+  html[data-theme="dark"] .twk-panel,
+  html[data-theme="dark"] .twk-reopen{
+    --bg:rgba(41,37,36,.8);--text:rgb(253,253,251);--bd:rgba(253,253,251,.1);
+    --label:rgba(253,253,251,.7);--val:rgba(253,253,251,.5);
+    --fld-bd:rgba(253,253,251,.15);--fld-bdf:rgba(253,253,251,.35);--fld-surf:rgba(253,253,251,.05);
+    --tog-off:rgba(253,253,251,.3);
+    --btn:rgba(253,253,251,.85);--btn-t:rgb(28,25,23);--btn-h:rgba(253,253,251,.8);
+    --sec:rgba(253,253,251,.15);--sec-h:rgba(253,253,251,.13);
+    --bar-fill:rgba(253,253,251,.85);--bar-val:rgb(28,25,23);
+  }
+
+  @keyframes twk-in  { from { opacity:0; translate:16px 0; } to { opacity:1; translate:0 0; } }
+  @keyframes twk-out { from { opacity:1; translate:0 0; } to { opacity:0; translate:16px 0; } }
+
+  .twk-panel{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);
+    z-index:2147483648;width:320px;
+    max-height:calc(100dvh - var(--header-h,0px) - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
+    background:rgba(255,255,255,0.6);color:var(--text);
+    backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);border-radius:20px;
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
+    font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+  .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
+  .twk-panel.twk-closing{animation:twk-out .2s cubic-bezier(.4,0,1,1) both;pointer-events:none;}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:8px 8px 0 16px;}
+  .twk-hd b{font-size:14px;font-weight:500;letter-spacing:.01em;line-height:20px}
+  .twk-hd-spacer{width:36px;height:36px;flex-shrink:0;}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(28,25,23,.8);
+    width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    position:absolute;top:8px;right:8px;}
+  .twk-x:hover{color:var(--text)}
+  html[data-theme="dark"] .twk-x{color:rgba(253,253,251,.8)}
+  html[data-theme="dark"] .twk-x:hover{color:#fafaf9}
+  .twk-body{padding:4px 16px 16px;display:flex;flex-direction:column;gap:8px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;scroll-padding-top:4px;
+    scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:6px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:var(--scroll-h);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px;min-height:26px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:var(--label)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:var(--val);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--sect);margin-top:-8px}
+  .twk-sect:first-child{margin-top:0}
+  .twk-sect::before{content:'';display:block;border-top:1px solid var(--bd);margin:16px 0}
+  .twk-sect:first-child::before{display:none}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:1px solid var(--fld-bd);border-radius:8px;
+    background:var(--fld-surf);color:inherit;font:inherit;outline:none}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-bar-row{display:flex;align-items:center;gap:8px}
+  .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}
+  .twk-bar:focus-visible{outline:2px solid var(--text);outline-offset:2px;border-radius:8px;}
+  .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);
+    cursor:pointer;overflow:hidden;user-select:none;touch-action:none}
+  .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);
+    border-radius:8px 0 0 8px;pointer-events:none;min-width:8px}
+  .twk-bar-val{position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;font-size:11px;font-variant-numeric:tabular-nums;
+    pointer-events:none;font-weight:500}
+  .twk-bar-val--fill{color:var(--bar-val)}
+  .twk-bar-val--track{color:var(--text)}
+
+  .twk-seg{position:relative;display:flex;border-radius:10px;
+    background:var(--seg);user-select:none;box-sizing:border-box;height:32px;padding:3px}
+  .twk-seg-thumb{position:absolute;top:3px;bottom:3px;border-radius:8px;
+    background:var(--bar-fill);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .4s cubic-bezier(.4,0,.2,1),width .4s cubic-bezier(.4,0,.2,1)}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:8px;cursor:pointer;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere;transition:color .2s ease}
+  .twk-seg button[aria-checked="true"]{color:var(--bar-val);transition-delay:.1s}
+
+  .twk-toggle{position:relative;width:36px;height:20px;border:0;border-radius:999px;
+    background:var(--tog-off);transition:background .25s;cursor:pointer;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+    background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(16px)}
+
+.twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483647;width:36px;height:36px;
+    border:0;border-radius:12px;cursor:pointer;padding:0;
+    background:rgba(255,255,255,0.6);
+    backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
+    display:flex;align-items:center;justify-content:center;color:rgba(28,25,23,.8)}
+  .twk-reopen:hover{color:var(--text)}
+  html[data-theme="dark"] .twk-reopen{color:rgba(253,253,251,.8)}
+  html[data-theme="dark"] .twk-reopen:hover{color:rgba(253,253,251,1)}
+
+  .twk-btn{appearance:none;flex:1;height:26px;padding:0 12px;border:0;border-radius:8px;
+    background:var(--btn);color:var(--btn-t);font:inherit;font-weight:500;cursor:pointer}
+  .twk-btn:hover{background:var(--btn-h)}
+  .twk-btn:disabled{opacity:.35;cursor:default;pointer-events:none}
+  html[data-theme="dark"] .twk-panel .twk-btn:disabled{opacity:.25}
+  .twk-btn.secondary{background:var(--sec);color:inherit}
+  .twk-btn.secondary:hover{background:var(--sec-h)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:36px;height:26px;
+    border:.5px solid var(--fld-bd);border-radius:8px;padding:0;cursor:pointer;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:7.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:7.5px}
+
+  .twk-color-row{display:flex;align-items:center;gap:6px}
+  .twk-bar-row .twk-color-row{width:172px;flex-shrink:0}
+  .twk-color-main{display:flex;align-items:center;flex:1;min-width:0;height:26px;
+    border:1px solid var(--fld-bd);border-radius:0 8px 8px 0;background:var(--fld-surf);box-sizing:border-box}
+  .twk-color-preview{flex-shrink:0;cursor:pointer;
+    width:26px;height:26px;border-radius:8px 0 0 8px;
+    margin-right:-6px;position:relative;z-index:1}
+  .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
+    font:inherit;font-size:12px;padding:0 6px;outline:none}
+  .twk-color-main:focus-within{border-color:var(--fld-bdf)}
+  .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;
+    background:var(--fld-surf);font-size:12px;display:flex;align-items:center;gap:1px;
+    white-space:nowrap;flex-shrink:0}
+  .twk-color-opacity:focus-within{border-color:var(--fld-bdf)}
+  .twk-color-opacity-input{width:20px;border:0;background:transparent;color:inherit;
+    font:inherit;font-size:12px;text-align:right;padding:0;outline:none;-moz-appearance:textfield}
+  .twk-color-opacity-input::-webkit-inner-spin-button,.twk-color-opacity-input::-webkit-outer-spin-button{-webkit-appearance:none}
+  .twk-color-opacity-pct{color:inherit;font-size:10px}
+  .twk-color-pick{appearance:none;width:26px;height:26px;border:0;
+    border-radius:8px;background:transparent;color:var(--label);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;box-sizing:border-box}
+  .twk-color-pick:hover{color:var(--text)}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{border-radius:8px;box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+
+  .twk-cpick{position:fixed;z-index:2147483649;width:212px;
+    background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);border-radius:12px;padding:12px;
+    box-shadow:0 8px 40px rgba(0,0,0,.2);
+    display:flex;flex-direction:column;gap:8px}
+  .twk-cpick-sv{position:relative;width:100%;height:140px;
+    border-radius:8px;overflow:hidden;cursor:crosshair;flex-shrink:0}
+  .twk-cpick-sv-white{position:absolute;inset:0;
+    background:linear-gradient(to right,#fff,transparent)}
+  .twk-cpick-sv-black{position:absolute;inset:0;
+    background:linear-gradient(to top,#000,transparent)}
+  .twk-cpick-sv-thumb{position:absolute;width:12px;height:12px;border-radius:50%;
+    border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);
+    transform:translate(-50%,-50%);pointer-events:none}
+  .twk-cpick-hue{position:relative;height:10px;border-radius:5px;cursor:ew-resize;
+    background:linear-gradient(to right,hsl(0,100%,50%),hsl(60,100%,50%),hsl(120,100%,50%),hsl(180,100%,50%),hsl(240,100%,50%),hsl(300,100%,50%),hsl(360,100%,50%))}
+  .twk-cpick-hue-thumb{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
+    background:#fff;border:1.5px solid rgba(0,0,0,.2);box-shadow:0 1px 3px rgba(0,0,0,.2);
+    transform:translate(-50%,-50%);pointer-events:none}
+
+  .twk-footer{display:none;flex-shrink:0;padding:12px 16px;gap:8px;border-top:1px solid var(--bd);}
+  .twk-footer .twk-btn{height:36px;border-radius:12px;font-size:14px;}
+  .twk-desktop-only{}
+  .twk-mobile-only{display:none;}
+  .twk-backdrop{display:none;}
+  @media (max-width:639px){
+    .twk-footer{display:flex;padding-bottom:max(12px,env(safe-area-inset-bottom));}
+    .twk-desktop-only{display:none!important;}
+    .twk-mobile-only{display:flex;}
+    .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,0.1);}
+    html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
+  }
+
+  @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
+  @keyframes twk-out-mob { from { opacity:1; translate:0 0; } to { opacity:0; translate:0 40px; } }
+
+  .twk-fab{
+    display:none;position:fixed;
+    bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);
+    z-index:2147483647;height:36px;padding:0 16px 0 12px;gap:8px;
+    background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
+    border:.5px solid rgba(0,0,0,0.12);border-radius:12px;
+    box-shadow:0 8px 40px 0 rgba(0,0,0,0.12);
+    color:rgba(28,25,23,.8);
+    font:500 14px/1 'Inter',ui-sans-serif,system-ui,sans-serif;
+    cursor:pointer;align-items:center;white-space:nowrap;
+  }
+  html[data-theme="dark"] .twk-fab{
+    background:rgba(41,37,36,0.6);border-color:rgba(253,253,251,.1);color:rgba(253,253,251,.8);
+  }
+
+  @media (max-width:639px){
+    .twk-reopen{display:none!important;}
+    .twk-fab{display:flex;}
+    .twk-panel{
+      right:auto!important;top:auto!important;
+      left:50%!important;bottom:0!important;
+      transform:translateX(-50%)!important;transform-origin:bottom center!important;
+      width:100%!important;max-width:480px!important;
+      max-height:calc(100dvh - 64px)!important;
+      border-radius:20px 20px 0 0!important;
+    }
+    .twk-panel.twk-opening{animation:twk-in-mob .35s cubic-bezier(.16,1,.3,1) both!important;}
+    .twk-panel.twk-closing{animation:twk-out-mob .2s cubic-bezier(.4,0,1,1) both!important;}
+  }
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null ? keyOrEdits : {
+      [keyOrEdits]: val
+    };
+    setValues(prev => ({
+      ...prev,
+      ...edits
+    }));
+    window.parent.postMessage({
+      type: '__edit_mode_set_keys',
+      edits
+    }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', {
+      detail: edits
+    }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({
+  title = 'Tweaks',
+  noDeckControls = false,
+  children,
+  onOpenChange,
+  renderMobileFooter
+}) {
+  const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > 639);
+  const [closing, setClosing] = React.useState(false);
+  const [animateIn, setAnimateIn] = React.useState(true);
+  React.useEffect(() => {
+    onOpenChange && onOpenChange(open);
+  }, [open, onOpenChange]);
+  // Auto-inject a rail toggle when a <deck-stage> is on the page. The
+  // toggle drives the deck's per-viewer _railVisible via window message;
+  // state is mirrored from the same localStorage key the deck reads so
+  // the control reflects reality across reloads. The mechanism is the
+  // message — authors who want custom placement can post it directly
+  // and pass noDeckControls to suppress this one.
+  const hasDeckStage = React.useMemo(() => typeof document !== 'undefined' && !!document.querySelector('deck-stage'), []);
+  // Hide the toggle until the host has actually enabled the rail (the
+  // __omelette_rail_enabled window message, posted only when the
+  // omelette_deck_rail_enabled flag is on for this user). The initial read
+  // covers TweaksPanel mounting after the message already arrived; the
+  // listener covers the common case of mounting first.
+  const [railEnabled, setRailEnabled] = React.useState(() => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled);
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = e => {
+      if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try {
+      return localStorage.getItem('deck-stage.railVisible') !== '0';
+    } catch (e) {
+      return true;
+    }
+  });
+  const toggleRail = on => {
+    setRailVisible(on);
+    window.postMessage({
+      type: '__deck_rail_visible',
+      on
+    }, '*');
+  };
+  React.useEffect(() => {
+    const onMsg = e => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({
+      type: '__edit_mode_available'
+    }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  const dismiss = () => {
+    setClosing(true);
+    setTimeout(() => onOpenChange && onOpenChange(false), 80);
+    window.parent.postMessage({
+      type: '__edit_mode_dismissed'
+    }, '*');
+  };
+  const handleAnimEnd = e => {
+    if (e.animationName === 'twk-out' || e.animationName === 'twk-out-mob') {
+      setClosing(false);
+      setOpen(false);
+    }
+  };
+  const openPanel = () => {
+    setAnimateIn(true);
+    setOpen(true);
+  };
+  const FILTER_ICON = /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M10 5H3"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M12 19H3"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M14 3v4"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M16 17v4"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21 12h-9"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21 19h-5"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21 5h-7"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M8 10v4"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M8 12H3"
+  }));
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), open ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "twk-backdrop",
+    onClick: dismiss
+  }), /*#__PURE__*/React.createElement("div", {
+    className: `twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`,
+    "data-noncommentable": "",
+    onAnimationEnd: handleAnimEnd
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-hd"
+  }, /*#__PURE__*/React.createElement("b", null, title), /*#__PURE__*/React.createElement("span", {
+    className: "twk-hd-spacer",
+    "aria-hidden": "true"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-body"
+  }, children, hasDeckStage && railEnabled && !noDeckControls && /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Deck"
+  }, /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Thumbnail rail",
+    value: railVisible,
+    onChange: toggleRail
+  }))), renderMobileFooter && /*#__PURE__*/React.createElement("div", {
+    className: "twk-footer"
+  }, renderMobileFooter(dismiss)), /*#__PURE__*/React.createElement("button", {
+    className: "twk-x",
+    "aria-label": "Close tweaks",
+    onClick: dismiss
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M18 6 6 18"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "m6 6 12 12"
+  }))))) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+    className: "twk-reopen",
+    "aria-label": "Open tweaks",
+    onClick: openPanel
+  }, FILTER_ICON), /*#__PURE__*/React.createElement("button", {
+    className: "twk-fab",
+    "aria-label": "Open tweaks",
+    onClick: openPanel
+  }, FILTER_ICON, "Filter"))), document.body);
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({
+  label,
+  children
+}) {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, label && /*#__PURE__*/React.createElement("div", {
+    className: "twk-sect"
+  }, label), children);
+}
+function TweakRow({
+  label,
+  value,
+  children,
+  inline = false
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: inline ? 'twk-row twk-row-h' : 'twk-row'
+  }, label && /*#__PURE__*/React.createElement("div", {
+    className: "twk-lbl"
+  }, /*#__PURE__*/React.createElement("span", null, label), value != null && /*#__PURE__*/React.createElement("span", {
+    className: "twk-val"
+  }, value)), children);
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+const SLIDER_KEY_DIRS = {
+  ArrowRight: 1,
+  ArrowUp: 1,
+  ArrowLeft: -1,
+  ArrowDown: -1
+};
+function TweakSlider({
+  label,
+  value: rawValue,
+  min = 0,
+  max = 100,
+  step = 1,
+  unit = '',
+  onChange
+}) {
+  const value = Number(rawValue);
+  const pct = Math.max(0, Math.min(100, (value - min) / (max - min) * 100));
+  const barRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const compute = clientX => {
+    const rect = barRef.current.getBoundingClientRect();
+    const p = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    const raw = min + p * (max - min);
+    const snapped = Math.round(raw / step) * step;
+    const decimals = (String(step).split('.')[1] || '').length;
+    return Number(snapped.toFixed(decimals));
+  };
+  const onPointerDown = e => {
+    barRef.current.setPointerCapture(e.pointerId);
+    setDragging(true);
+    onChange(compute(e.clientX));
+  };
+  const onPointerMove = e => {
+    if (e.buttons === 0) return;
+    onChange(compute(e.clientX));
+  };
+  const onPointerUp = () => setDragging(false);
+  const onKeyDown = e => {
+    if (!(e.key in SLIDER_KEY_DIRS)) return;
+    e.preventDefault();
+    const decimals = (String(step).split('.')[1] || '').length;
+    const next = Math.max(min, Math.min(max, Number((value + SLIDER_KEY_DIRS[e.key] * step).toFixed(decimals))));
+    onChange(next);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "twk-bar-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "twk-bar-lbl"
+  }, label, unit ? ` (${unit})` : ''), /*#__PURE__*/React.createElement("div", {
+    ref: barRef,
+    className: "twk-bar",
+    tabIndex: 0,
+    role: "slider",
+    "aria-label": label,
+    "aria-valuemin": min,
+    "aria-valuemax": max,
+    "aria-valuenow": value,
+    style: {
+      cursor: dragging ? 'grabbing' : 'pointer'
+    },
+    onPointerDown: onPointerDown,
+    onPointerMove: onPointerMove,
+    onPointerUp: onPointerUp,
+    onKeyDown: onKeyDown
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-bar-fill",
+    style: {
+      width: pct + '%'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "twk-bar-val twk-bar-val--fill",
+    style: {
+      clipPath: `inset(0 ${100 - pct}% 0 0)`
+    }
+  }, value), /*#__PURE__*/React.createElement("span", {
+    className: "twk-bar-val twk-bar-val--track",
+    style: {
+      clipPath: `inset(0 0 0 ${pct}%)`
+    }
+  }, value)));
+}
+function TweakToggle({
+  label,
+  value,
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "twk-row twk-row-h"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-lbl"
+  }, /*#__PURE__*/React.createElement("span", null, label)), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "twk-toggle",
+    "data-on": value ? '1' : '0',
+    role: "switch",
+    "aria-checked": !!value,
+    onClick: () => onChange(!value)
+  }, /*#__PURE__*/React.createElement("i", null)));
+}
+function TweakRadio({
+  label,
+  value,
+  options,
+  onChange
+}) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = o => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({
+    2: 16,
+    3: 10
+  }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = s => {
+      const m = options.find(o => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return /*#__PURE__*/React.createElement(TweakSelect, {
+      label: label,
+      value: value,
+      options: options,
+      onChange: s => onChange(resolve(s))
+    });
+  }
+  const opts = options.map(o => typeof o === 'object' ? o : {
+    value: o,
+    label: o
+  });
+  const idx = Math.max(0, opts.findIndex(o => o.value === value));
+  const n = opts.length;
+  const segAt = clientX => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 6;
+    const i = Math.floor((clientX - r.left - 3) / inner * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+  const onPointerDown = e => {
+    trackRef.current.setPointerCapture(e.pointerId);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+  };
+  const onPointerMove = e => {
+    if (e.buttons === 0) return;
+    setDragging(true);
+    const v = segAt(e.clientX);
+    if (v !== valueRef.current) onChange(v);
+  };
+  const onPointerUp = () => setDragging(false);
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: trackRef,
+    role: "radiogroup",
+    onPointerDown: onPointerDown,
+    onPointerMove: onPointerMove,
+    onPointerUp: onPointerUp,
+    className: dragging ? 'twk-seg dragging' : 'twk-seg'
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-seg-thumb",
+    style: {
+      left: `calc(3px + ${idx} * (100% - 6px) / ${n})`,
+      width: `calc((100% - 6px) / ${n})`
+    }
+  }), opts.map(o => /*#__PURE__*/React.createElement("button", {
+    key: o.value,
+    type: "button",
+    role: "radio",
+    "aria-checked": o.value === value
+  }, o.label))));
+}
+function TweakSelect({
+  label,
+  value,
+  options,
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("select", {
+    className: "twk-field",
+    value: value,
+    onChange: e => onChange(e.target.value)
+  }, options.map(o => {
+    const v = typeof o === 'object' ? o.value : o;
+    const l = typeof o === 'object' ? o.label : o;
+    return /*#__PURE__*/React.createElement("option", {
+      key: v,
+      value: v
+    }, l);
+  })));
+}
+function TweakText({
+  label,
+  value,
+  placeholder,
+  onChange
+}) {
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "twk-field",
+    type: "text",
+    value: value,
+    placeholder: placeholder,
+    onChange: e => onChange(e.target.value)
+  }));
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, c => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = n >> 16 & 255,
+    g = n >> 8 & 255,
+    b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+const __TwkCheck = ({
+  light
+}) => /*#__PURE__*/React.createElement("svg", {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  strokeWidth: "2.5",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+  stroke: light ? 'rgba(0,0,0,.78)' : '#fff'
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M20 6 9 17l-5-5"
+}));
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function __hexToRgb(hex) {
+  return {
+    r: parseInt(hex.slice(1, 3), 16),
+    g: parseInt(hex.slice(3, 5), 16),
+    b: parseInt(hex.slice(5, 7), 16)
+  };
+}
+function __hexToHsv(hex) {
+  const {
+    r: r255,
+    g: g255,
+    b: b255
+  } = __hexToRgb(hex);
+  const r = r255 / 255,
+    g = g255 / 255,
+    b = b255 / 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b),
+    d = max - min;
+  let h = 0,
+    s = max === 0 ? 0 : d / max,
+    v = max;
+  if (d) switch (max) {
+    case r:
+      h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      break;
+    case g:
+      h = ((b - r) / d + 2) / 6;
+      break;
+    case b:
+      h = ((r - g) / d + 4) / 6;
+      break;
+  }
+  return {
+    h: h * 360,
+    s: s * 100,
+    v: v * 100
+  };
+}
+function __hsvToHex(h, s, v) {
+  h /= 360;
+  s /= 100;
+  v /= 100;
+  const i = Math.floor(h * 6),
+    f = h * 6 - i,
+    p = v * (1 - s),
+    q = v * (1 - f * s),
+    t = v * (1 - (1 - f) * s);
+  let r, g, b;
+  switch (i % 6) {
+    case 0:
+      r = v;
+      g = t;
+      b = p;
+      break;
+    case 1:
+      r = q;
+      g = v;
+      b = p;
+      break;
+    case 2:
+      r = p;
+      g = v;
+      b = t;
+      break;
+    case 3:
+      r = p;
+      g = q;
+      b = v;
+      break;
+    case 4:
+      r = t;
+      g = p;
+      b = v;
+      break;
+    case 5:
+      r = v;
+      g = p;
+      b = q;
+      break;
+  }
+  return '#' + [r, g, b].map(x => Math.round(x * 255).toString(16).padStart(2, '0')).join('');
+}
+function __ColorPickerDropdown({
+  hex,
+  onHexChange,
+  anchorRef,
+  onClose
+}) {
+  const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
+  const svRef = React.useRef(null);
+  const hueRef = React.useRef(null);
+  const dropRef = React.useRef(null);
+  const [pos, setPos] = React.useState(null);
+  React.useEffect(() => {
+    if (!anchorRef.current) return;
+    const rect = anchorRef.current.getBoundingClientRect();
+    const H = 220,
+      W = 212;
+    const above = window.innerHeight - rect.bottom < H;
+    const centeredLeft = rect.left + rect.width / 2 - W / 2;
+    setPos({
+      top: above ? rect.top - H - 6 : rect.bottom + 6,
+      left: Math.max(8, Math.min(centeredLeft, window.innerWidth - W - 8))
+    });
+  }, []);
+  React.useEffect(() => {
+    const close = e => {
+      if (dropRef.current && !dropRef.current.contains(e.target) && anchorRef.current && !anchorRef.current.contains(e.target)) onClose();
+    };
+    const closeScroll = () => onClose();
+    document.addEventListener('pointerdown', close);
+    window.addEventListener('scroll', closeScroll, true);
+    return () => {
+      document.removeEventListener('pointerdown', close);
+      window.removeEventListener('scroll', closeScroll, true);
+    };
+  }, []);
+  const emit = (h, s, v) => {
+    setHsv({
+      h,
+      s,
+      v
+    });
+    onHexChange(__hsvToHex(h, s, v));
+  };
+  const dragSV = (cx, cy) => {
+    const r = svRef.current.getBoundingClientRect();
+    emit(hsv.h, Math.max(0, Math.min(100, (cx - r.left) / r.width * 100)), Math.max(0, Math.min(100, 100 - (cy - r.top) / r.height * 100)));
+  };
+  const dragHue = cx => {
+    const r = hueRef.current.getBoundingClientRect();
+    emit(Math.max(0, Math.min(360, (cx - r.left) / r.width * 360)), hsv.s, hsv.v);
+  };
+  if (!pos) return null;
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement("div", {
+    ref: dropRef,
+    className: "twk-cpick twk-panel",
+    style: {
+      top: pos.top,
+      left: pos.left
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: svRef,
+    className: "twk-cpick-sv",
+    style: {
+      background: `hsl(${hsv.h},100%,50%)`
+    },
+    onPointerDown: e => {
+      e.currentTarget.setPointerCapture(e.pointerId);
+      dragSV(e.clientX, e.clientY);
+    },
+    onPointerMove: e => {
+      if (e.buttons) dragSV(e.clientX, e.clientY);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-cpick-sv-white"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "twk-cpick-sv-black"
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "twk-cpick-sv-thumb",
+    style: {
+      left: `${hsv.s}%`,
+      top: `${100 - hsv.v}%`
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    ref: hueRef,
+    className: "twk-cpick-hue",
+    onPointerDown: e => {
+      e.currentTarget.setPointerCapture(e.pointerId);
+      dragHue(e.clientX);
+    },
+    onPointerMove: e => {
+      if (e.buttons) dragHue(e.clientX);
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-cpick-hue-thumb",
+    style: {
+      left: `${hsv.h / 360 * 100}%`
+    }
+  }))), document.body);
+}
+function __parseColor(value) {
+  if (!value) return {
+    hex: '#000000',
+    opacity: 100
+  };
+  const m = String(value).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+  if (m) {
+    const hex = '#' + [m[1], m[2], m[3]].map(v => parseInt(v).toString(16).padStart(2, '0')).join('');
+    const opacity = m[4] !== undefined ? Math.round(parseFloat(m[4]) * 100) : 100;
+    return {
+      hex,
+      opacity
+    };
+  }
+  return {
+    hex: value,
+    opacity: 100
+  };
+}
+function __toColorString(hex, opacity) {
+  if (opacity >= 100) return hex;
+  const {
+    r,
+    g,
+    b
+  } = __hexToRgb(hex);
+  return `rgba(${r},${g},${b},${(opacity / 100).toFixed(2)})`;
+}
+function __TweakColorInput({
+  label,
+  value,
+  onChange,
+  noAlpha
+}) {
+  const parsed = __parseColor(value);
+  const [hex, setHex] = React.useState(parsed.hex);
+  const [opacity, setOpacity] = React.useState(parsed.opacity);
+  const [opacityStr, setOpacityStr] = React.useState(String(parsed.opacity));
+  const [showPicker, setShowPicker] = React.useState(false);
+  const swatchRef = React.useRef(null);
+  const committedRef = React.useRef(value);
+  React.useEffect(() => {
+    if (value === committedRef.current) return;
+    committedRef.current = value;
+    const p = __parseColor(value);
+    setHex(p.hex);
+    setOpacity(p.opacity);
+    setOpacityStr(String(p.opacity));
+  }, [value]);
+  const commitColor = (h, o) => {
+    const str = __toColorString(h, o);
+    committedRef.current = str;
+    onChange(str);
+  };
+  const onHexChange = e => {
+    const v = e.target.value;
+    setHex(v);
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) commitColor(v, opacity);
+  };
+  const onOpacityChange = e => {
+    setOpacityStr(e.target.value);
+    const n = Math.max(0, Math.min(100, parseInt(e.target.value) || 0));
+    setOpacity(n);
+    if (/^\d+$/.test(e.target.value)) commitColor(hex, n);
+  };
+  const onOpacityBlur = () => setOpacityStr(String(opacity));
+  const row = /*#__PURE__*/React.createElement("div", {
+    className: "twk-color-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    ref: swatchRef,
+    className: "twk-color-preview",
+    style: {
+      background: hex
+    },
+    onClick: () => setShowPicker(v => !v)
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "twk-color-main"
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "twk-color-hex",
+    type: "text",
+    value: hex,
+    onChange: onHexChange,
+    spellCheck: false
+  })), !noAlpha && /*#__PURE__*/React.createElement("div", {
+    className: "twk-color-opacity"
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "twk-color-opacity-input",
+    type: "text",
+    value: opacityStr,
+    onChange: onOpacityChange,
+    onBlur: onOpacityBlur
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "twk-color-opacity-pct"
+  }, "%")), 'EyeDropper' in window && /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "twk-color-pick",
+    onClick: () => {
+      new window.EyeDropper().open().then(r => {
+        setHex(r.sRGBHex);
+        commitColor(r.sRGBHex, opacity);
+      }).catch(() => {});
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.25",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "m12 9-8.414 8.414A2 2 0 0 0 3 18.828v1.344a2 2 0 0 1-.586 1.414A2 2 0 0 1 3.828 21h1.344a2 2 0 0 0 1.414-.586L15 12"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "m18 9 .4.4a1 1 0 1 1-3 3l-3.8-3.8a1 1 0 1 1 3-3l.4.4 3.4-3.4a1 1 0 1 1 3 3z"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "m2 22 .414-.414"
+  }))), showPicker && /*#__PURE__*/React.createElement(__ColorPickerDropdown, {
+    hex: hex,
+    onHexChange: h => {
+      setHex(h);
+      commitColor(h, opacity);
+    },
+    anchorRef: swatchRef,
+    onClose: () => setShowPicker(false)
+  }));
+  if (!label) return row;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "twk-bar-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "twk-bar-lbl"
+  }, label), row);
+}
+function TweakColor({
+  label,
+  value,
+  options,
+  onChange,
+  noAlpha
+}) {
+  if (!options || !options.length) {
+    return /*#__PURE__*/React.createElement(__TweakColorInput, {
+      label: label,
+      value: value,
+      onChange: onChange,
+      noAlpha: noAlpha
+    });
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = o => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return /*#__PURE__*/React.createElement(TweakRow, {
+    label: label
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "twk-chips",
+    role: "radiogroup"
+  }, options.map((o, i) => {
+    const colors = Array.isArray(o) ? o : [o];
+    const [hero, ...rest] = colors;
+    const sup = rest.slice(0, 4);
+    const on = key(o) === cur;
+    return /*#__PURE__*/React.createElement("button", {
+      key: i,
+      type: "button",
+      className: "twk-chip",
+      role: "radio",
+      "aria-checked": on,
+      "data-on": on ? '1' : '0',
+      "aria-label": colors.join(', '),
+      title: colors.join(' · '),
+      style: {
+        background: hero
+      },
+      onClick: () => onChange(o)
+    }, sup.length > 0 && /*#__PURE__*/React.createElement("span", null, sup.map((c, j) => /*#__PURE__*/React.createElement("i", {
+      key: j,
+      style: {
+        background: c
+      }
+    }))), on && /*#__PURE__*/React.createElement(__TwkCheck, {
+      light: __twkIsLight(hero)
+    }));
+  })));
+}
+function TweakButton({
+  label,
+  onClick,
+  secondary = false,
+  disabled = false
+}) {
+  return /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: secondary ? 'twk-btn secondary' : 'twk-btn',
+    onClick: onClick,
+    disabled: disabled
+  }, label);
+}
+Object.assign(window, {
+  useTweaks,
+  TweaksPanel,
+  TweakSection,
+  TweakRow,
+  TweakSlider,
+  TweakToggle,
+  TweakRadio,
+  TweakSelect,
+  TweakText,
+  TweakColor,
+  TweakButton
+});

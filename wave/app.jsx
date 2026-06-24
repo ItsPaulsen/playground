@@ -24,7 +24,14 @@ const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
-  const [panelOpen, setPanelOpen] = React.useState(true);
+  const [panelOpen, setPanelOpen] = React.useState(() => window.innerWidth > 639);
+  const [isDesktop, setIsDesktop] = React.useState(() => window.innerWidth > 639);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)');
+    const handler = (e) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const randomize = () => setTweak({
     seed:        rand(0, 50, 1),
@@ -54,7 +61,7 @@ function App() {
         turbulence: t.turbulence,
         speed: t.speed,
         opacity: 1,
-        centerOffset: panelOpen && t.direction === 'vertical' ? -0.18 : 0,
+        centerOffset: panelOpen && isDesktop && t.direction === 'vertical' ? -0.18 : 0,
         softness: true,
         paused: false,
         direction: t.direction,
@@ -69,7 +76,14 @@ function App() {
         seed: t.seed,
       }} />
 
-      <TweaksPanel title="Wave" onOpenChange={setPanelOpen}>
+      <TweaksPanel title="Wave" onOpenChange={setPanelOpen}
+        renderMobileFooter={(close) => (
+          <>
+            <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak(TWEAK_DEFAULTS)} />
+            <TweakButton label="Show" onClick={close} />
+          </>
+        )}
+      >
         <TweakSection>
           <TweakColor value={t.lineColor}
                       onChange={(v) => setTweak('lineColor', v)} />
@@ -109,9 +123,12 @@ function App() {
                        onChange={(v) => setTweak('pulseSpeed', Number(v))} />
         </TweakSection>
 
-        <div style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div className="twk-desktop-only" style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Randomize" secondary onClick={randomize} />
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak(TWEAK_DEFAULTS)} />
+        </div>
+        <div className="twk-mobile-only" style={{ borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+          <TweakButton label="Randomize" secondary onClick={randomize} />
         </div>
       </TweaksPanel>
     </>

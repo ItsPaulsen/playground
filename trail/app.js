@@ -26,7 +26,20 @@ function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(CursorTrail, {
     t: t
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
-    title: "Trail"
+    title: "Trail",
+    renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Reset",
+      secondary: true,
+      disabled: !isDirty,
+      onClick: () => setTweak({
+        ...TWEAK_DEFAULTS,
+        colors: [...DEFAULT_COLORS],
+        rainbow: t.rainbow
+      })
+    }), /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Show",
+      onClick: close
+    }))
   }, /*#__PURE__*/React.createElement(TweakSection, {
     label: "Color"
   }, /*#__PURE__*/React.createElement(TweakToggle, {
@@ -102,6 +115,7 @@ function App() {
     unit: "s",
     onChange: v => setTweak('lifetime', v)
   })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-desktop-only",
     style: {
       display: 'flex',
       borderTop: '1px solid var(--bd)',

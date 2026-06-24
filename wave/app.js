@@ -23,7 +23,14 @@ const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
-  const [panelOpen, setPanelOpen] = React.useState(true);
+  const [panelOpen, setPanelOpen] = React.useState(() => window.innerWidth > 639);
+  const [isDesktop, setIsDesktop] = React.useState(() => window.innerWidth > 639);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)');
+    const handler = e => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
   const randomize = () => setTweak({
     seed: rand(0, 50, 1),
     lineCount: rand(1, 100, 1),
@@ -50,7 +57,7 @@ function App() {
       turbulence: t.turbulence,
       speed: t.speed,
       opacity: 1,
-      centerOffset: panelOpen && t.direction === 'vertical' ? -0.18 : 0,
+      centerOffset: panelOpen && isDesktop && t.direction === 'vertical' ? -0.18 : 0,
       softness: true,
       paused: false,
       direction: t.direction,
@@ -66,7 +73,16 @@ function App() {
     }
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Wave",
-    onOpenChange: setPanelOpen
+    onOpenChange: setPanelOpen,
+    renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Reset",
+      secondary: true,
+      disabled: !isDirty,
+      onClick: () => setTweak(TWEAK_DEFAULTS)
+    }), /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Show",
+      onClick: close
+    }))
   }, /*#__PURE__*/React.createElement(TweakSection, null, /*#__PURE__*/React.createElement(TweakColor, {
     value: t.lineColor,
     onChange: v => setTweak('lineColor', v)
@@ -171,6 +187,7 @@ function App() {
     step: 0.5,
     onChange: v => setTweak('pulseSpeed', Number(v))
   })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-desktop-only",
     style: {
       display: 'flex',
       gap: 8,
@@ -187,6 +204,17 @@ function App() {
     secondary: true,
     disabled: !isDirty,
     onClick: () => setTweak(TWEAK_DEFAULTS)
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-mobile-only",
+    style: {
+      borderTop: '1px solid var(--bd)',
+      marginTop: '8px',
+      paddingTop: '16px'
+    }
+  }, /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Randomize",
+    secondary: true,
+    onClick: randomize
   }))));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));

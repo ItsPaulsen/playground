@@ -28,7 +28,14 @@ function App() {
     <>
       <CursorTrail t={t} />
 
-      <TweaksPanel title="Trail">
+      <TweaksPanel title="Trail"
+        renderMobileFooter={(close) => (
+          <>
+            <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...DEFAULT_COLORS], rainbow: t.rainbow })} />
+            <TweakButton label="Show" onClick={close} />
+          </>
+        )}
+      >
         <TweakSection label="Color">
           <TweakToggle label="Rainbow" value={t.rainbow}
                        onChange={(v) => setTweak('rainbow', v)} />
@@ -64,7 +71,7 @@ function App() {
                        onChange={(v) => setTweak('lifetime', v)} />
         </TweakSection>
 
-        <div style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
+        <div className="twk-desktop-only" style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>
           <TweakButton label="Reset" secondary disabled={!isDirty} onClick={() => setTweak({ ...TWEAK_DEFAULTS, colors: [...DEFAULT_COLORS], rainbow: t.rainbow })} />
         </div>
       </TweaksPanel>

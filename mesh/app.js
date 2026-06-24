@@ -87,6 +87,13 @@ function App() {
     }
   }, [isDark]);
   const theme = isDark ? 'dark' : 'light';
+  const defaultColors = PALETTES[0][theme];
+  const isDirty = t.color1 !== defaultColors[0] || t.color2 !== defaultColors[1] || t.speed !== TWEAK_DEFAULTS.speed || t.count !== TWEAK_DEFAULTS.count;
+  const resetTweaks = () => setTweak({
+    ...TWEAK_DEFAULTS,
+    color1: defaultColors[0],
+    color2: defaultColors[1]
+  });
   const nextPalette = () => {
     paletteIdx.current = paletteIdx.current % (PALETTES.length - 1) + 1;
     const [c1, c2] = PALETTES[paletteIdx.current][theme];
@@ -98,7 +105,16 @@ function App() {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Mesh, {
     t: t
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
-    title: "Mesh"
+    title: "Mesh",
+    renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Reset",
+      secondary: true,
+      disabled: !isDirty,
+      onClick: resetTweaks
+    }), /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Show",
+      onClick: close
+    }))
   }, /*#__PURE__*/React.createElement(TweakSection, {
     label: "Colors"
   }, /*#__PURE__*/React.createElement(TweakColor, {
@@ -119,8 +135,26 @@ function App() {
     step: 0.1,
     onChange: v => setTweak('speed', v)
   })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-desktop-only",
     style: {
       display: 'flex',
+      gap: 8,
+      borderTop: '1px solid var(--bd)',
+      marginTop: '8px',
+      paddingTop: '16px'
+    }
+  }, /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Randomize",
+    secondary: true,
+    onClick: nextPalette
+  }), /*#__PURE__*/React.createElement(TweakButton, {
+    label: "Reset",
+    secondary: true,
+    disabled: !isDirty,
+    onClick: resetTweaks
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-mobile-only",
+    style: {
       borderTop: '1px solid var(--bd)',
       marginTop: '8px',
       paddingTop: '16px'

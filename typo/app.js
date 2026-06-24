@@ -14,17 +14,36 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [panelOpen, setPanelOpen] = React.useState(true);
+  const [panelOpen, setPanelOpen] = React.useState(() => window.innerWidth > 639);
+  const [isDesktop, setIsDesktop] = React.useState(() => window.innerWidth > 639);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)');
+    const handler = e => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
   const isDirty = JSON.stringify({
     ...t,
     text: TWEAK_DEFAULTS.text
   }) !== TWEAK_DEFAULTS_JSON;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Typo, {
     t: t,
-    panelOpen: panelOpen
+    panelOpen: panelOpen && isDesktop
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Typo",
-    onOpenChange: setPanelOpen
+    onOpenChange: setPanelOpen,
+    renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Reset",
+      secondary: true,
+      disabled: !isDirty,
+      onClick: () => setTweak({
+        ...TWEAK_DEFAULTS,
+        text: t.text
+      })
+    }), /*#__PURE__*/React.createElement(TweakButton, {
+      label: "Show",
+      onClick: close
+    }))
   }, /*#__PURE__*/React.createElement(TweakSection, null, /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'relative'
@@ -116,6 +135,7 @@ function App() {
     unit: "%",
     onChange: v => setTweak('spread', v / 100)
   })), /*#__PURE__*/React.createElement("div", {
+    className: "twk-desktop-only",
     style: {
       display: 'flex',
       borderTop: '1px solid var(--bd)',
