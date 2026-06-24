@@ -3,18 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Playground — Paulsen</title>
+  <title>Path of Exile — Paulsen</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="prefetch" href="/wave/">
-<link rel="prefetch" href="/typo/">
-<link rel="prefetch" href="/mesh/">
 <link rel="prefetch" href="/waystones/">
 <link rel="prefetch" href="/crafting/">
-<link rel="prefetch" href="/trail/">
-<link rel="prefetch" href="/shared/vendor/preact-bundle.js" as="script">
-<link rel="prefetch" href="/shared/tweaks-panel.js" as="script">
   <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'#1c1917':'#fdfdfb';document.head.appendChild(m);})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,7 +72,6 @@
       line-height: 1.5;
     }
 
-    /* Tablet */
     @media (min-width: 640px) and (max-width: 1024px) {
       .page { padding: 48px 24px 64px; }
       .page-header { margin-bottom: 32px; }
@@ -89,7 +82,6 @@
       .grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* Mobile */
     @media (max-width: 639px) {
       .page { padding: 40px 16px 48px; }
       .page-header { margin-bottom: 24px; }
@@ -120,8 +112,6 @@
       width: 40px;
       height: 40px;
       border-radius: 16px;
-      background: var(--card-icon-bg);
-      color: var(--card-icon-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -129,12 +119,6 @@
     }
     .card-icon--indigo { background: rgba(191,219,254,.7); color: #1e40af; }
     html[data-theme="dark"] .card-icon--indigo { background: #1e3a8a; color: #93c5fd; }
-    .card-icon--purple { background: rgba(233,213,255,.7); color: #6b21a8; }
-    html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe; }
-    .card-icon--red { background: rgba(254,202,202,.7); color: #991b1b; }
-    html[data-theme="dark"] .card-icon--red { background: #7f1d1d; color: #fca5a5; }
-    .card-icon--amber { background: rgba(253,215,170,.7); color: #9a3412; }
-    html[data-theme="dark"] .card-icon--amber { background: #7c2d12; color: #fb923c; }
     .card-icon--green { background: rgba(187,247,208,.7); color: #166534; }
     html[data-theme="dark"] .card-icon--green { background: #14532d; color: #86efac; }
 
@@ -142,26 +126,11 @@
       from { opacity: 0; translate: 0 24px; }
       to   { opacity: 1; translate: 0 0; }
     }
-
-    .page-header h1 {
-      animation: pg-up .8s cubic-bezier(.22,1,.36,1) both;
-    }
-
-    .page-header p {
-      animation: pg-up .8s cubic-bezier(.22,1,.36,1) .12s both;
-    }
-
-    .card {
-      animation: pg-up .7s cubic-bezier(.22,1,.36,1) both;
-    }
-
+    .page-header h1 { animation: pg-up .8s cubic-bezier(.22,1,.36,1) both; }
+    .page-header p  { animation: pg-up .8s cubic-bezier(.22,1,.36,1) .12s both; }
+    .card           { animation: pg-up .7s cubic-bezier(.22,1,.36,1) both; }
     .card:nth-child(1) { animation-delay: .2s; }
     .card:nth-child(2) { animation-delay: .3s; }
-    .card:nth-child(3) { animation-delay: .4s; }
-    .card:nth-child(4) { animation-delay: .5s; }
-    .card:nth-child(5) { animation-delay: .6s; }
-    .card:nth-child(6) { animation-delay: .7s; }
-
 
     .style-link {
       font-size: 12px;
@@ -174,64 +143,40 @@
     @media (max-width: 639px) {
       .style-link { display: none; }
     }
-
   </style>
 </head>
 <body>
   <div class="page">
     <div class="page-header">
-<h1>Playground</h1>
-      <p>Vibes with Claude <svg width="16" height="16" viewBox="0 0 28 28" fill="#D97706" aria-hidden="true" style="display:inline-block;vertical-align:-2px"><path d="M14 2.5a1.5 1.5 0 0 1 1.5 1.5v7.63l6.61-3.82a1.5 1.5 0 1 1 1.5 2.6L17 14l6.61 3.82a1.5 1.5 0 1 1-1.5 2.6L15.5 16.37V24a1.5 1.5 0 0 1-3 0v-7.63l-6.61 3.82a1.5 1.5 0 1 1-1.5-2.6L11 14 4.39 10.18a1.5 1.5 0 0 1 1.5-2.6L12.5 11.63V4A1.5 1.5 0 0 1 14 2.5z"/></svg></p>
+      <h1>Path of Exile</h1>
+      <p>Tools that might be useful.</p>
     </div>
 
     <div class="grid" id="main-content">
-      <a class="card" href="wave/">
+      <a class="card" href="/waystones/">
+        <div class="card-icon card-icon--green">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/>
+          </svg>
+        </div>
+        <h2>Waystones</h2>
+        <p>Copy-ready search strings for PoE2 Waystones.</p>
+      </a>
+
+      <a class="card" href="/crafting/">
         <div class="card-icon card-icon--indigo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="transform: rotate(90deg)">
-            <path d="M2 13a2 2 0 0 0 2-2V7a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0V4a2 2 0 0 1 4 0v13a2 2 0 0 0 4 0v-4a2 2 0 0 1 2-2" />
-          </svg>
-        </div>
-        <h2>Wave</h2>
-        <p>Interactive wave animation with tweakable parameters.</p>
-      </a>
-
-      <a class="card" href="typo/">
-        <div class="card-icon card-icon--purple">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M4 5h16"/><path d="M12 5v15"/>
-          </svg>
-        </div>
-        <h2>Typo</h2>
-        <p>Animated typography with tweakable font controls.</p>
-      </a>
-
-      <a class="card" href="mesh/">
-        <div class="card-icon card-icon--red">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/>
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
         </div>
-        <h2>Mesh</h2>
-        <p>Animated mesh gradient with tweakable color points.</p>
+        <h2>Crafting</h2>
+        <p>Step-by-step crafting guides for PoE2.</p>
       </a>
-
-      <a class="card" href="trail/">
-        <div class="card-icon card-icon--amber">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="m4 4 7.07 17 2.51-7.39L21 11.07z"/>
-          </svg>
-        </div>
-        <h2>Trail</h2>
-        <p>Glowing cursor trail with tweakable particles, gravity, and spread.</p>
-      </a>
-
     </div>
   </div>
 
   <footer style="position:fixed;bottom:4px;right:24px;">
-    <a href="poe/" class="style-link">PoE2</a>
-    <span class="style-link" style="padding:0 2px;pointer-events:none">·</span>
-    <a href="style/" class="style-link">Style</a>
+    <a href="/style/" class="style-link">Style</a>
   </footer>
 
   <script src="/header.js"></script>
