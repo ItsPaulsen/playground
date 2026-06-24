@@ -1,85 +1,64 @@
-const BLUR = 100;
-const EXP = BLUR * 2;
-const ORBIT_CONFIGS = {
-  2: [{
-    x: '35vmin',
-    y: '-35vmin'
-  }, {
-    x: '-35vmin',
-    y: '35vmin'
-  }],
-  3: [{
-    x: '0',
-    y: '-40vmin'
-  }, {
-    x: '35vmin',
-    y: '20vmin'
-  }, {
-    x: '-35vmin',
-    y: '20vmin'
-  }],
-  4: [{
-    x: '32vmin',
-    y: '-32vmin'
-  }, {
-    x: '32vmin',
-    y: '32vmin'
-  }, {
-    x: '-32vmin',
-    y: '32vmin'
-  }, {
-    x: '-32vmin',
-    y: '-32vmin'
-  }]
-};
 const COLOR_KEYS = ['color1', 'color2', 'color3', 'color4'];
+
+// Blobs centered AT the corners — half outside the viewport like aidn.no
+// r=120: each blob is 240% of the viewport in diameter, guaranteeing overlap at center
+const POSITIONS = [[0, 0], [100, 100], [0, 100], [100, 0]];
 function Mesh({
   t
 }) {
-  const getDiag = () => `${Math.ceil(Math.hypot(window.innerWidth, window.innerHeight) * 2)}px`;
-  const [blobSize, setBlobSize] = React.useState(getDiag);
-  React.useEffect(() => {
-    const onResize = () => setBlobSize(getDiag());
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-  const blobs = ORBIT_CONFIGS[t.count] || ORBIT_CONFIGS[4];
+  const count = t.count || 2;
   const dur = (45 / t.speed).toFixed(1);
+  const colors = Array.from({
+    length: count
+  }, (_, i) => t[COLOR_KEYS[i]]);
   return /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       inset: 0,
       overflow: 'hidden'
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("svg", {
     style: {
       position: 'absolute',
-      inset: -EXP,
-      filter: `blur(${BLUR}px) saturate(120%)`
-    }
-  }, /*#__PURE__*/React.createElement("div", {
+      inset: 0,
+      width: '100%',
+      height: '100%',
+      overflow: 'visible'
+    },
+    viewBox: "0 0 100 100",
+    preserveAspectRatio: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /*#__PURE__*/React.createElement("defs", null, colors.map((color, i) => /*#__PURE__*/React.createElement("radialGradient", {
+    key: i,
+    id: `mg${i}`,
+    gradientUnits: "objectBoundingBox",
+    cx: "50%",
+    cy: "50%",
+    r: "50%"
+  }, /*#__PURE__*/React.createElement("stop", {
+    offset: "0",
+    stopColor: color
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "0.5",
+    stopColor: color
+  }), /*#__PURE__*/React.createElement("stop", {
+    offset: "1",
+    stopColor: color,
+    stopOpacity: "0"
+  })))), /*#__PURE__*/React.createElement("g", {
     style: {
-      position: 'absolute',
-      left: `calc(50vw + ${EXP}px)`,
-      top: `calc(50vh + ${EXP}px)`,
-      animation: `mesh-orbit ${dur}s linear infinite`,
-      willChange: 'transform'
+      transformBox: 'view-box',
+      transformOrigin: '50% 50%',
+      animation: `mesh-orbit ${dur}s linear infinite`
     }
-  }, blobs.map((b, i) => /*#__PURE__*/React.createElement("div", {
-    key: COLOR_KEYS[i],
-    style: {
-      position: 'absolute',
-      left: b.x,
-      top: b.y,
-      transform: 'translate(-50%, -50%)',
-      mixBlendMode: 'lighten'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: blobSize,
-      height: blobSize,
-      borderRadius: '50%',
-      background: `radial-gradient(ellipse at center, ${t[COLOR_KEYS[i]]} 0%, transparent 80%)`
-    }
-  }))))));
+  }, colors.map((_, i) => {
+    const [cx, cy] = POSITIONS[i % 4];
+    return /*#__PURE__*/React.createElement("circle", {
+      key: i,
+      cx: cx,
+      cy: cy,
+      r: 120,
+      fill: `url(#mg${i})`
+    });
+  }))));
 }
