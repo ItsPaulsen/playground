@@ -249,13 +249,16 @@ const __TWEAKS_STYLE = `
   .twk-mobile-only{display:none;}
   .twk-backdrop{display:none;}
   @media (max-width:639px){
+    .twk-color-pick{display:none!important;}
     .twk-footer{display:flex;padding-bottom:max(12px,env(safe-area-inset-bottom));}
     .twk-desktop-only{display:none!important;}
     .twk-mobile-only{display:flex;}
-    .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,0.1);}
+    .twk-backdrop{display:block;position:fixed;inset:0;z-index:2147483646;background:rgba(0,0,0,0.1);animation:twk-backdrop-in .5s cubic-bezier(.16,1,.3,1) both;}
     html[data-theme="dark"] .twk-backdrop{background:rgba(0,0,0,0.2);}
     .twk-panel{z-index:2147483647!important;}
-    .twk-hd{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;}
+    .twk-hd{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab;}
+    .twk-hd:active{cursor:grabbing;}
+    .twk-dragging,.twk-dragging *{cursor:grabbing!important;}
     .twk-hd::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:2px;background:rgba(28,25,23,.2);transition:background .15s;}
     .twk-hd:active::before{background:rgba(28,25,23,.4);}
     html[data-theme="dark"] .twk-hd::before{background:rgba(253,253,251,.25);}
@@ -264,6 +267,7 @@ const __TWEAKS_STYLE = `
 
   @keyframes twk-in-mob  { from { opacity:0; translate:0 40px; } to { opacity:1; translate:0 0; } }
   @keyframes twk-out-mob { from { opacity:1; translate:0 0; } to { opacity:0; translate:0 40px; } }
+  @keyframes twk-backdrop-in { from { opacity:0; } to { opacity:1; } }
 
   .twk-fab{
     display:none;position:fixed;
@@ -291,8 +295,11 @@ const __TWEAKS_STYLE = `
       max-height:calc(100dvh - 64px)!important;
       border-radius:20px 20px 0 0!important;
     }
-    .twk-panel.twk-opening{animation:twk-in-mob .35s cubic-bezier(.16,1,.3,1) both!important;}
+    .twk-panel.twk-opening{animation:twk-in-mob .5s cubic-bezier(.16,1,.3,1) both!important;}
     .twk-panel.twk-closing{animation:twk-out-mob .2s cubic-bezier(.4,0,1,1) both!important;}
+    .twk-cpick{left:50%!important;top:50%!important;bottom:auto!important;right:auto!important;transform:translate(-50%,-50%)!important;width:calc(100% - 32px)!important;max-width:320px!important;max-height:none!important;border-radius:20px!important;}
+    .twk-cpick .twk-cpick-sv{height:240px!important;}
+    .twk-cpick-overlay{animation:none!important;z-index:2147483647!important;background:rgba(0,0,0,.4)!important;}
   }
 `;
 
@@ -328,7 +335,8 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   const [closing, setClosing] = React.useState(false);
   const [animateIn, setAnimateIn] = React.useState(true);
   const panelRef = React.useRef(null);
-  const dragInfo = React.useRef({ active: false, startY: 0, lastY: 0, lastT: 0 });
+  const backdropRef = React.useRef(null);
+  const dragInfo = React.useRef({ active: false, startY: 0, points: [] });
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
@@ -381,45 +389,72 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   };
   const onDragStart = (e) => {
     if (window.innerWidth > 639) return;
-    dragInfo.current = { active: true, startY: e.clientY, lastY: e.clientY, lastT: performance.now() };
+    const now = performance.now();
+    dragInfo.current = { active: true, startY: e.clientY, points: [{ y: e.clientY, t: now }] };
     e.currentTarget.setPointerCapture(e.pointerId);
-    if (panelRef.current) panelRef.current.style.willChange = 'transform';
+    document.documentElement.classList.add('twk-dragging');
+    if (panelRef.current) {
+      panelRef.current.style.willChange = 'transform';
+      panelRef.current.style.setProperty('transition', 'none', 'important');
+    }
+    if (backdropRef.current) backdropRef.current.style.transition = 'none';
   };
   const onDragMove = (e) => {
     if (!dragInfo.current.active) return;
+    const now = performance.now();
     const raw = Math.max(0, e.clientY - dragInfo.current.startY);
-    dragInfo.current.lastY = e.clientY;
-    dragInfo.current.lastT = performance.now();
-    const dy = raw <= 80 ? raw : 80 + (raw - 80) * 0.4;
+    const pts = dragInfo.current.points;
+    pts.push({ y: e.clientY, t: now });
+    while (pts.length > 1 && now - pts[0].t > 200) pts.shift();
     if (panelRef.current) {
-      panelRef.current.style.transition = 'none';
-      panelRef.current.style.transform = `translateX(-50%) translateY(${dy}px)`;
+      panelRef.current.style.setProperty('transition', 'none', 'important');
+      panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${raw}px)`, 'important');
+    }
+    if (backdropRef.current) {
+      const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
+      backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - raw / sheetH)), 'important');
     }
   };
   const onDragEnd = (e) => {
     if (!dragInfo.current.active) return;
     dragInfo.current.active = false;
+    document.documentElement.classList.remove('twk-dragging');
     if (panelRef.current) panelRef.current.style.willChange = '';
     const snapBack = () => {
       if (panelRef.current) {
-        panelRef.current.style.transition = 'transform 0.5s cubic-bezier(.16,1,.3,1)';
-        panelRef.current.style.transform = 'translateX(-50%) translateY(0px)';
+        panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1)', 'important');
+        panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
+      }
+      if (backdropRef.current) {
+        backdropRef.current.style.transition = 'opacity 0.4s cubic-bezier(.16,1,.3,1)';
+        backdropRef.current.style.setProperty('opacity', '1', 'important');
       }
     };
     if (e.type === 'pointercancel') { snapBack(); return; }
     const raw = Math.max(0, e.clientY - dragInfo.current.startY);
-    const elapsed = performance.now() - dragInfo.current.lastT;
-    const vel = elapsed < 100 ? (e.clientY - dragInfo.current.lastY) / elapsed : 0;
-    if (raw > 80 || vel > 0.4) {
+    const pts = dragInfo.current.points;
+    const cutoff = performance.now() - 100;
+    const recent = pts.filter(p => p.t >= cutoff);
+    let vel = 0;
+    if (recent.length >= 2) {
+      const first = recent[0], last = recent[recent.length - 1];
+      const dt = last.t - first.t;
+      if (dt > 0) vel = (last.y - first.y) / dt;
+    }
+    if (vel > 0.5 || raw > 120) {
       if (panelRef.current) {
-        panelRef.current.style.transition = 'transform 0.3s cubic-bezier(.4,0,1,1)';
-        panelRef.current.style.transform = 'translateX(-50%) translateY(120vh)';
+        panelRef.current.style.setProperty('transition', 'transform 0.25s cubic-bezier(.4,0,1,1)', 'important');
+        panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
+      }
+      if (backdropRef.current) {
+        backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
+        backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
       setTimeout(() => {
         setOpen(false);
         onOpenChange && onOpenChange(false);
         window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
-      }, 310);
+      }, 260);
     } else {
       snapBack();
     }
@@ -442,7 +477,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       <style>{__TWEAKS_STYLE}</style>
       {open ? (
       <>
-        <div className="twk-backdrop" onClick={dismiss} />
+        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} />
         <div ref={panelRef} className={`twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd}>
             <b>{title}</b>
@@ -717,13 +752,16 @@ function __hsvToHex(h,s,v) {
 }
 
 function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
+  const isMobile = window.innerWidth <= 639;
   const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
+  const [localHex, setLocalHex] = React.useState(hex);
   const svRef = React.useRef(null);
   const hueRef = React.useRef(null);
   const dropRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
 
   React.useEffect(() => {
+    if (isMobile) { setPos({}); return; }
     if (!anchorRef.current) return;
     const rect = anchorRef.current.getBoundingClientRect();
     const H = 220, W = 212;
@@ -736,6 +774,7 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
   }, []);
 
   React.useEffect(() => {
+    if (isMobile) return;
     const close = (e) => {
       if (dropRef.current && !dropRef.current.contains(e.target) && anchorRef.current && !anchorRef.current.contains(e.target))
         onClose();
@@ -746,7 +785,12 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
     return () => { document.removeEventListener('pointerdown', close); window.removeEventListener('scroll', closeScroll, true); };
   }, []);
 
-  const emit = (h, s, v) => { setHsv({h,s,v}); onHexChange(__hsvToHex(h,s,v)); };
+  const emit = (h, s, v) => {
+    setHsv({h, s, v});
+    const newHex = __hsvToHex(h, s, v);
+    setLocalHex(newHex);
+    if (!isMobile) onHexChange(newHex);
+  };
   const dragSV = (cx, cy) => {
     const r = svRef.current.getBoundingClientRect();
     emit(hsv.h, Math.max(0,Math.min(100,((cx-r.left)/r.width)*100)), Math.max(0,Math.min(100,100-((cy-r.top)/r.height)*100)));
@@ -757,8 +801,9 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
   };
 
   if (!pos) return null;
-  return ReactDOM.createPortal(
-    <div ref={dropRef} className="twk-cpick twk-panel" style={{top:pos.top, left:pos.left}}>
+
+  const picker = (
+    <div ref={dropRef} className="twk-cpick twk-panel" style={isMobile ? {} : {top:pos.top, left:pos.left}}>
       <div ref={svRef} className="twk-cpick-sv" style={{background:`hsl(${hsv.h},100%,50%)`}}
            onPointerDown={(e)=>{e.currentTarget.setPointerCapture(e.pointerId);dragSV(e.clientX,e.clientY);}}
            onPointerMove={(e)=>{if(e.buttons)dragSV(e.clientX,e.clientY);}}>
@@ -771,7 +816,17 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
            onPointerMove={(e)=>{if(e.buttons)dragHue(e.clientX);}}>
         <div className="twk-cpick-hue-thumb" style={{left:`${hsv.h/360*100}%`}}/>
       </div>
-    </div>,
+      {isMobile && (
+        <div style={{display:'flex',gap:'8px',marginTop:'4px'}}>
+          <button className="twk-btn secondary" style={{height:'32px'}} onClick={onClose}>Close</button>
+          <button className="twk-btn" style={{height:'32px'}} onClick={() => { onHexChange(localHex); onClose(); }}>Update</button>
+        </div>
+      )}
+    </div>
+  );
+
+  return ReactDOM.createPortal(
+    isMobile ? <>{<div className="twk-backdrop twk-cpick-overlay" onClick={onClose} />}{picker}</> : picker,
     document.body
   );
 }
