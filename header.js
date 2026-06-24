@@ -137,7 +137,8 @@
     }
     .pg-safari-bottom {
       position: fixed; bottom: 0; left: 0; right: 0;
-      height: 1px; z-index: 9999999; pointer-events: none;
+      height: max(env(safe-area-inset-bottom, 0px), 1px);
+      z-index: 9999999; pointer-events: none;
     }
     html[data-theme="light"] .pg-safari-top,
     html[data-theme="light"] .pg-safari-bottom { background: #fdfdfb; }
