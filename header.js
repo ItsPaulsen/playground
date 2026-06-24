@@ -214,6 +214,11 @@
     meta.content = bg;
     safeT.style.background = bg;
     safeB.style.background = bg;
+    // Force WebKit to re-evaluate the toolbar color when fullscreen elements cover the page.
+    // display:none + offsetHeight read is synchronous — no paint occurs between the lines.
+    document.documentElement.style.display = 'none';
+    document.documentElement.offsetHeight;
+    document.documentElement.style.display = '';
   }
 
   function setMenuOpen(open) {
