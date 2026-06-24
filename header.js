@@ -132,8 +132,8 @@
     .pg-theme-fab {
       display: none;
       position: fixed;
-      bottom: calc(24px + env(safe-area-inset-bottom, 0px));
-      right: 24px;
+      bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+      right: 8px;
       width: 44px; height: 44px;
       border-radius: 16px;
       border: 1px solid var(--pg-border);
