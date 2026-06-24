@@ -255,13 +255,18 @@
 
   applyTheme(isDark());
 
-  // iOS Safari bfcache doesn't reliably restore scroll position — do it manually
+  // iOS Safari scroll restoration fix:
+  // 1. Take manual control so Safari doesn't do its own (broken) restoration
+  // 2. Blur focus on pagehide — Safari scrolls to the focused element on back nav
+  // 3. Save & restore scroll position ourselves across all pageshow events
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.addEventListener('pagehide', function () {
+    if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
     sessionStorage.setItem('_scroll' + location.pathname, window.scrollY);
   });
-  window.addEventListener('pageshow', function (e) {
-    if (!e.persisted) return;
+  window.addEventListener('pageshow', function () {
     var saved = sessionStorage.getItem('_scroll' + location.pathname);
-    if (saved !== null) requestAnimationFrame(function () { window.scrollTo(0, +saved); });
+    if (saved === null) return;
+    requestAnimationFrame(function () { requestAnimationFrame(function () { window.scrollTo(0, +saved); }); });
   });
 })();
