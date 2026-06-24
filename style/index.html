@@ -23,9 +23,7 @@
     }
 
     .page {
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 64px 32px 64px;
+      padding: 64px max(32px, calc((100vw - 1140px) / 2)) 64px;
     }
 
     .page-header {
@@ -278,7 +276,7 @@
     }
 
     @media (min-width: 640px) and (max-width: 1024px) {
-      .page { padding: 48px 24px 64px; }
+      .page { padding: 48px max(24px, calc((100vw - 1140px) / 2)) 64px; }
       .page-header h1 { font-size: 40px; }
     }
   </style>

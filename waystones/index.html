@@ -26,9 +26,7 @@
   }
 
   .page {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 64px 32px 100px;
+    padding: 64px max(32px, calc((100vw - 800px) / 2)) 100px;
   }
 
   .page-header {
@@ -59,7 +57,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 48px);
-    max-width: 852px;
+    max-width: 816px;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
     border: .5px solid rgba(0,0,0,0.12);
@@ -359,7 +357,7 @@
   .poe-demand-warning svg { flex-shrink: 0; margin-top: 0; }
 
   @media (min-width: 640px) and (max-width: 1024px) {
-    .page { padding: 48px 24px 100px; }
+    .page { padding: 48px max(24px, calc((100vw - 800px) / 2)) 100px; }
     .page-header { margin-bottom: 32px; }
     .page-header h1 { font-size: 40px; }
     .page-header p { font-size: 16px; }

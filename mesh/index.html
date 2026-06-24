@@ -24,6 +24,7 @@
   html, body { margin: 0; padding: 0; height: 100dvh; background: var(--pg-bg); overflow: hidden;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
   #root { position: fixed; inset: 0; }
+  body::after { content:''; position:fixed; bottom:0; left:0; right:0; height:env(safe-area-inset-bottom,0px); background:var(--pg-bg); pointer-events:none; }
   :root {
     --nav-bg: rgba(255,255,255,0.6);
     --nav-filter: blur(10px);
