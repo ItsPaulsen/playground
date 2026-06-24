@@ -151,6 +151,7 @@ function CursorTrail({
     };
     const onMove = e => addDots(e.clientX, e.clientY);
     const onTouch = e => {
+      if (e.target.closest('.twk-panel')) return;
       e.preventDefault();
       addDots(e.touches[0].clientX, e.touches[0].clientY);
     };

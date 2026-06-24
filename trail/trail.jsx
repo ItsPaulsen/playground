@@ -142,7 +142,7 @@ function CursorTrail({ t }) {
     };
 
     const onMove  = (e) => addDots(e.clientX, e.clientY);
-    const onTouch = (e) => { e.preventDefault(); addDots(e.touches[0].clientX, e.touches[0].clientY); };
+    const onTouch = (e) => { if (e.target.closest('.twk-panel')) return; e.preventDefault(); addDots(e.touches[0].clientX, e.touches[0].clientY); };
     const onTouchStart = () => { lastPosRef.current = null; };
 
     window.addEventListener('mousemove', onMove);
