@@ -326,7 +326,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   const [closing, setClosing] = React.useState(false);
   const [animateIn, setAnimateIn] = React.useState(true);
   const panelRef = React.useRef(null);
-  const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({ active: false, startY: 0, lastY: 0, lastT: 0 });
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
@@ -394,10 +393,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       panelRef.current.style.transition = 'none';
       panelRef.current.style.transform = `translateX(-50%) translateY(${dy}px)`;
     }
-    if (backdropRef.current) {
-      backdropRef.current.style.transition = 'none';
-      backdropRef.current.style.opacity = String(Math.max(0, 1 - raw / 160));
-    }
   };
   const onDragEnd = (e) => {
     if (!dragInfo.current.active) return;
@@ -406,10 +401,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       if (panelRef.current) {
         panelRef.current.style.transition = 'transform 0.45s cubic-bezier(.16,1,.3,1)';
         panelRef.current.style.transform = 'translateX(-50%) translateY(0px)';
-      }
-      if (backdropRef.current) {
-        backdropRef.current.style.transition = 'opacity 0.45s cubic-bezier(.16,1,.3,1)';
-        backdropRef.current.style.opacity = '1';
       }
     };
     if (e.type === 'pointercancel') { snapBack(); return; }
@@ -420,10 +411,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       if (panelRef.current) {
         panelRef.current.style.transition = 'transform 0.28s cubic-bezier(.4,0,1,1)';
         panelRef.current.style.transform = 'translateX(-50%) translateY(120vh)';
-      }
-      if (backdropRef.current) {
-        backdropRef.current.style.transition = 'opacity 0.28s cubic-bezier(.4,0,1,1)';
-        backdropRef.current.style.opacity = '0';
       }
       setTimeout(() => {
         setOpen(false);
@@ -452,7 +439,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       <style>{__TWEAKS_STYLE}</style>
       {open ? (
       <>
-        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} />
+        <div className="twk-backdrop" onClick={dismiss} />
         <div ref={panelRef} className={`twk-panel${animateIn ? ' twk-opening' : ''}${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd}>
             <b>{title}</b>

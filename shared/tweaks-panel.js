@@ -340,7 +340,6 @@ function TweaksPanel({
   const [closing, setClosing] = React.useState(false);
   const [animateIn, setAnimateIn] = React.useState(true);
   const panelRef = React.useRef(null);
-  const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({
     active: false,
     startY: 0,
@@ -424,10 +423,6 @@ function TweaksPanel({
       panelRef.current.style.transition = 'none';
       panelRef.current.style.transform = `translateX(-50%) translateY(${dy}px)`;
     }
-    if (backdropRef.current) {
-      backdropRef.current.style.transition = 'none';
-      backdropRef.current.style.opacity = String(Math.max(0, 1 - raw / 160));
-    }
   };
   const onDragEnd = e => {
     if (!dragInfo.current.active) return;
@@ -436,10 +431,6 @@ function TweaksPanel({
       if (panelRef.current) {
         panelRef.current.style.transition = 'transform 0.45s cubic-bezier(.16,1,.3,1)';
         panelRef.current.style.transform = 'translateX(-50%) translateY(0px)';
-      }
-      if (backdropRef.current) {
-        backdropRef.current.style.transition = 'opacity 0.45s cubic-bezier(.16,1,.3,1)';
-        backdropRef.current.style.opacity = '1';
       }
     };
     if (e.type === 'pointercancel') {
@@ -453,10 +444,6 @@ function TweaksPanel({
       if (panelRef.current) {
         panelRef.current.style.transition = 'transform 0.28s cubic-bezier(.4,0,1,1)';
         panelRef.current.style.transform = 'translateX(-50%) translateY(120vh)';
-      }
-      if (backdropRef.current) {
-        backdropRef.current.style.transition = 'opacity 0.28s cubic-bezier(.4,0,1,1)';
-        backdropRef.current.style.opacity = '0';
       }
       setTimeout(() => {
         setOpen(false);
@@ -509,7 +496,6 @@ function TweaksPanel({
     d: "M8 12H3"
   }));
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("style", null, __TWEAKS_STYLE), open ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    ref: backdropRef,
     className: "twk-backdrop",
     onClick: dismiss
   }), /*#__PURE__*/React.createElement("div", {
