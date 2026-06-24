@@ -127,6 +127,7 @@
 
     :root { color-scheme: light; }
     html[data-theme="dark"] { color-scheme: dark; }
+    @media (max-width: 639px) { html[data-page] #theme-toggle { display: none; } }
 
   `;
   document.head.appendChild(style);
