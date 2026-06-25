@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Grid — Playground</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(0.22 0.01 56)':'oklch(0.98 0.00 106)';document.head.appendChild(m);})()</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
+  <link rel="stylesheet" href="/shared/tokens.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--pg-bg);
+      color: var(--pg-primary);
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    }
+
+    /* ── Grid overlay (always on) ── */
+    #grid-overlay.is-hidden { display: none; }
+
+    #grid-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+    }
+
+    #grid-overlay-inner {
+      width: 100%;
+      padding-inline: 16px;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 24px;
+      height: 100%;
+    }
+
+    @media (min-width: 810px) {
+      #grid-overlay-inner { padding-inline: 32px; gap: 32px; }
+    }
+
+    @media (min-width: 1200px) {
+      #grid-overlay-inner { padding-inline: max(96px, calc((100vw - 1200px) / 2)); }
+    }
+
+    @media (max-width: 809px) {
+      #grid-overlay-inner { grid-template-columns: repeat(6, 1fr); }
+      .grid-col:nth-child(n+7) { display: none; }
+    }
+
+    .grid-col {
+      background: rgba(255, 0, 0, 0.15);
+      height: 100%;
+    }
+
+    .margin-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 16px;
+      background: rgba(0, 180, 80, 0.15);
+    }
+
+    .margin-overlay--left  { left: 0; }
+    .margin-overlay--right { right: 0; }
+
+    @media (min-width: 810px) {
+      .margin-overlay { width: 32px; }
+    }
+
+    @media (min-width: 1200px) {
+      .margin-overlay { width: 96px; }
+      .margin-overlay--left  { left: calc(max(96px, calc((100vw - 1200px) / 2)) - 96px); }
+      .margin-overlay--right { right: calc(max(96px, calc((100vw - 1200px) / 2)) - 96px); }
+    }
+
+    /* ── Page content ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      padding: 64px 16px;
+    }
+
+    @media (min-width: 810px) {
+      .page { padding: 64px 32px; }
+    }
+
+    @media (min-width: 1200px) {
+      .page { padding: 64px max(96px, calc((100vw - 1200px) / 2)); }
+    }
+
+    .page-header {
+      margin-bottom: 40px;
+    }
+
+    .page-header h1 {
+      font-size: 48px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .page-header p {
+      margin-top: 12px;
+      font-size: 18px;
+      color: var(--pg-muted);
+      line-height: 1.8;
+    }
+
+    /* ── Box rows ── */
+    .box-row {
+      display: grid;
+      gap: 24px;
+    }
+
+    @media (min-width: 810px) {
+      .box-row { gap: 32px; }
+    }
+
+    .box-rows { display: flex; flex-direction: column; gap: 32px; }
+    .box-row--3col { grid-template-columns: repeat(3, 1fr); }
+    .box-row--2col { grid-template-columns: repeat(2, 1fr); }
+
+    .box {
+      height: 160px;
+      background: var(--pg-border);
+      border-radius: 20px;
+    }
+
+    @media (max-width: 809px) {
+      .box-row--3col, .box-row--2col { grid-template-columns: 1fr; }
+    }
+
+    /* ── Typography — site standard breakpoints ── */
+    @media (min-width: 640px) and (max-width: 1024px) {
+      .page-header h1 { font-size: 40px; }
+      .page-header p  { font-size: 16px; }
+    }
+
+    @media (max-width: 639px) {
+      .page-header h1 { font-size: 32px; }
+      .page-header p  { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="grid-overlay" aria-hidden="true">
+    <div class="margin-overlay margin-overlay--left"></div>
+    <div class="margin-overlay margin-overlay--right"></div>
+    <div id="grid-overlay-inner">
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+      <div class="grid-col"></div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="page-header">
+      <h1>Grid</h1>
+      <p>
+        &lt; 810px — 6 columns, 16px padding, 24px gap<br>
+        ≥ 810px — 12 columns, 32px padding, 32px gap<br>
+        ≥ 1200px — 12 columns, 96px padding, 32px gap
+      </p>
+    </div>
+
+    <div class="box-rows">
+      <div class="box-row box-row--2col">
+        <div class="box"></div>
+        <div class="box"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/header.js"></script>
+  <script>
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'g' && !e.metaKey && !e.ctrlKey && !e.altKey &&
+          !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
+        document.getElementById('grid-overlay').classList.toggle('is-hidden');
+      }
+    });
+  </script>
+</body>
+</html>

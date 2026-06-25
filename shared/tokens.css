@@ -1,15 +1,15 @@
 :root {
-  --pg-light-100: oklch(98.5% 0.001 106.423); /* Stone 50  */
-  --pg-light-200: oklch(97% 0.001 106.424);   /* Stone 100 */
-  --pg-light-300: oklch(92.3% 0.003 48.717);  /* Stone 200 */
-  --pg-light-400: oklch(55.3% 0.013 58.071);  /* Stone 500 */
-  --pg-light-500: oklch(21.6% 0.006 56.043);  /* Stone 900 */
+  --pg-light-100: oklch(0.98 0.00 106); /* Stone 50  */
+  --pg-light-200: oklch(0.96 0.00 106);   /* Stone 100 */
+  --pg-light-300: oklch(0.92 0.00 49);  /* Stone 200 */
+  --pg-light-400: oklch(0.55 0.01 58);  /* Stone 500 */
+  --pg-light-500: oklch(0.22 0.01 56);  /* Stone 900 */
 
-  --pg-dark-100: oklch(21.6% 0.006 56.043);   /* Stone 900 */
-  --pg-dark-200: oklch(26.8% 0.007 34.298);   /* Stone 800 */
-  --pg-dark-300: oklch(37.4% 0.01 67.558);    /* Stone 700 */
-  --pg-dark-400: oklch(86.9% 0.005 56.366);   /* Stone 300 */
-  --pg-dark-500: oklch(98.5% 0.001 106.423);  /* Stone 50  */
+  --pg-dark-100: oklch(0.22 0.01 56);   /* Stone 900 */
+  --pg-dark-200: oklch(0.27 0.01 34);   /* Stone 800 */
+  --pg-dark-300: oklch(0.37 0.01 68);    /* Stone 700 */
+  --pg-dark-400: oklch(0.87 0.00 56);   /* Stone 300 */
+  --pg-dark-500: oklch(0.98 0.00 106);  /* Stone 50  */
 
   --pg-bg:      var(--pg-light-100);
   --pg-surface: var(--pg-light-200);
