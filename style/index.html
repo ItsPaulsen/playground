@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-  <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'#1c1917':'#fdfdfb';document.head.appendChild(m);})()</script>
+  <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(21.6% 0.006 56.043)':'oklch(98.5% 0.001 106.423)';document.head.appendChild(m);})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
@@ -293,37 +293,37 @@
       <div class="color-themes">
         <div class="color-theme-row color-theme-row--light">
           <div class="color-swatches">
-            <div class="swatch" data-color="#1c1917">
-              <div class="swatch-color" style="background:#1c1917"></div>
+            <div class="swatch" data-color="oklch(21.6% 0.006 56.043)">
+              <div class="swatch-color" style="background:oklch(21.6% 0.006 56.043)"></div>
             </div>
-            <div class="swatch" data-color="#68625d">
-              <div class="swatch-color" style="background:#68625d"></div>
+            <div class="swatch" data-color="oklch(55.3% 0.013 58.071)">
+              <div class="swatch-color" style="background:oklch(55.3% 0.013 58.071)"></div>
             </div>
-            <div class="swatch" data-color="#e7e5e4">
-              <div class="swatch-color" style="background:#e7e5e4"></div>
+            <div class="swatch" data-color="oklch(92.3% 0.003 48.717)">
+              <div class="swatch-color" style="background:oklch(92.3% 0.003 48.717)"></div>
             </div>
-            <div class="swatch" data-color="#f4f4f3">
-              <div class="swatch-color" style="background:#f4f4f3"></div>
+            <div class="swatch" data-color="oklch(97% 0.001 106.424)">
+              <div class="swatch-color" style="background:oklch(97% 0.001 106.424)"></div>
             </div>
-            <div class="swatch" data-color="#fdfdfb">
-              <div class="swatch-color" style="background:#fdfdfb"></div>
+            <div class="swatch" data-color="oklch(98.5% 0.001 106.423)">
+              <div class="swatch-color" style="background:oklch(98.5% 0.001 106.423)"></div>
             </div>
           </div>
         </div>
 
         <div class="color-theme-row color-theme-row--dark">
           <div class="color-swatches">
-            <div class="swatch" data-color="#fafaf9">
-              <div class="swatch-color" style="background:#fafaf9"></div>
+            <div class="swatch" data-color="oklch(98.5% 0.001 106.423)">
+              <div class="swatch-color" style="background:oklch(98.5% 0.001 106.423)"></div>
             </div>
-            <div class="swatch" data-color="#d6d3d1">
-              <div class="swatch-color" style="background:#d6d3d1"></div>
+            <div class="swatch" data-color="oklch(86.9% 0.005 56.366)">
+              <div class="swatch-color" style="background:oklch(86.9% 0.005 56.366)"></div>
             </div>
-            <div class="swatch" data-color="#44403c">
-              <div class="swatch-color" style="background:#44403c"></div>
+            <div class="swatch" data-color="oklch(37.4% 0.01 67.558)">
+              <div class="swatch-color" style="background:oklch(37.4% 0.01 67.558)"></div>
             </div>
-            <div class="swatch" data-color="#292524">
-              <div class="swatch-color" style="background:#292524"></div>
+            <div class="swatch" data-color="oklch(26.8% 0.007 34.298)">
+              <div class="swatch-color" style="background:oklch(26.8% 0.007 34.298)"></div>
             </div>
             <div class="swatch" data-color="#131212">
               <div class="swatch-color" style="background:#131212"></div>
@@ -563,7 +563,7 @@
         var btn = document.createElement('button');
         btn.className = 'swatch-copy-btn';
         btn.setAttribute('aria-label', 'Copy color');
-        btn.style.color = isLight(swatch.dataset.color) ? '#1c1917' : '#fafaf9';
+        btn.style.color = isLight(swatch.dataset.color) ? 'oklch(21.6% 0.006 56.043)' : 'oklch(98.5% 0.001 106.423)';
         btn.innerHTML = COPY;
         btn.addEventListener('click', function () {
           var hex = swatch.dataset.color;

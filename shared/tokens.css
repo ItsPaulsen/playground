@@ -1,15 +1,15 @@
 :root {
-  --pg-light-100: #fdfdfb;
-  --pg-light-200: #f4f4f3;
-  --pg-light-300: #e7e5e4;
-  --pg-light-400: #68625d;
-  --pg-light-500: #1c1917;
+  --pg-light-100: oklch(98.5% 0.001 106.423); /* Stone 50  */
+  --pg-light-200: oklch(97% 0.001 106.424);   /* Stone 100 */
+  --pg-light-300: oklch(92.3% 0.003 48.717);  /* Stone 200 */
+  --pg-light-400: oklch(55.3% 0.013 58.071);  /* Stone 500 */
+  --pg-light-500: oklch(21.6% 0.006 56.043);  /* Stone 900 */
 
-  --pg-dark-100: #1c1917;
-  --pg-dark-200: #292524;
-  --pg-dark-300: #44403c;
-  --pg-dark-400: #d6d3d1;
-  --pg-dark-500: #fafaf9;
+  --pg-dark-100: oklch(21.6% 0.006 56.043);   /* Stone 900 */
+  --pg-dark-200: oklch(26.8% 0.007 34.298);   /* Stone 800 */
+  --pg-dark-300: oklch(37.4% 0.01 67.558);    /* Stone 700 */
+  --pg-dark-400: oklch(86.9% 0.005 56.366);   /* Stone 300 */
+  --pg-dark-500: oklch(98.5% 0.001 106.423);  /* Stone 50  */
 
   --pg-bg:      var(--pg-light-100);
   --pg-surface: var(--pg-light-200);
