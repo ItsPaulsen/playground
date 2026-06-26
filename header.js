@@ -74,6 +74,8 @@
     #theme-toggle:hover, #menu-toggle:hover { color: var(--pg-primary); }
     html[data-theme="dark"] #theme-toggle,
     html[data-theme="dark"] #menu-toggle { color: rgba(250,250,249,.80); }
+    html[data-theme="dark"] #theme-toggle:hover,
+    html[data-theme="dark"] #menu-toggle:hover { color: var(--pg-primary); }
 
     .menu-icon {
       width: 16px;
