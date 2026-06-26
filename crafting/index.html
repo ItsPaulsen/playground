@@ -24,7 +24,9 @@
   }
 
   .page {
-    padding: 64px max(32px, calc((100vw - 800px) / 2)) 80px;
+    max-width: 864px;
+    margin: 0 auto;
+    padding: 64px 32px 80px;
   }
 
   .page-header {
@@ -292,7 +294,7 @@
   }
 
   @media (min-width: 640px) and (max-width: 1024px) {
-    .page { padding: 48px max(24px, calc((100vw - 800px) / 2)) 80px; }
+    .page { padding: 48px 24px 80px; }
     .page-header { margin-bottom: 32px; }
     .page-header h1 { font-size: 40px; }
     .page-header p { font-size: 16px; }

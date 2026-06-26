@@ -41,7 +41,7 @@
       max-width: 1392px;
       padding-inline: 16px;
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
+      grid-template-col: repeat(12, 1fr);
       gap: 32px;
       height: 100%;
     }
@@ -55,7 +55,7 @@
     }
 
     @media (max-width: 809px) {
-      #grid-overlay-inner { grid-template-columns: repeat(4, 1fr); }
+      #grid-overlay-inner { grid-template-col: repeat(4, 1fr); }
       .grid-col:nth-child(n+7) { display: none; }
     }
 
@@ -127,10 +127,10 @@
       gap: 32px;
     }
 
-    .box-row--4col { grid-template-columns: repeat(4, 1fr); }
-    .box-row--3col { grid-template-columns: repeat(3, 1fr); }
-    .box-row--2col { grid-template-columns: repeat(2, 1fr); }
-    .box-row--1col { grid-template-columns: 1fr; }
+    .box-row--4col { grid-template-col: repeat(4, 1fr); }
+    .box-row--3col { grid-template-col: repeat(3, 1fr); }
+    .box-row--2col { grid-template-col: repeat(2, 1fr); }
+    .box-row--1col { grid-template-col: 1fr; }
 
     .box {
       height: 240px;
@@ -207,18 +207,18 @@
     }
 
     @media (max-width: 809px) {
-      .box-row--4col { grid-template-columns: repeat(2, 1fr); }
-      .box-row--3col, .box-row--2col { grid-template-columns: 1fr; }
+      .box-row--4col { grid-template-col: repeat(2, 1fr); }
+      .box-row--3col, .box-row--2col { grid-template-col: 1fr; }
     }
 
-    /* ── Typography — site standard breakpoints ── */
-    @media (min-width: 640px) and (max-width: 1024px) {
+    /* ── Page header typography ── */
+    @media (max-width: 1199px) {
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 40px; }
       .page-header p  { font-size: 16px; }
     }
 
-    @media (max-width: 639px) {
+    @media (max-width: 809px) {
       .page-header { margin-bottom: 24px; }
       .page-header h1 { font-size: 32px; }
       .page-header p  { font-size: 14px; }
@@ -250,9 +250,9 @@
     <div class="page-header">
       <h1>Grid</h1>
       <p>
-        &lt; 810px — 4 columns, 32px gutter, 16px margin<br>
-        ≥ 810px — 12 columns, 32px gutter, 32px margin<br>
-        ≥ 1200px — 12 columns, 32px gutter, 96px margin
+        &lt; 810px — 4 col, 32px gutter, 16px margin<br>
+        ≥ 810px — 12 col, 32px gutter, 32px margin<br>
+        ≥ 1200px — 12 col, 32px gutter, 96px margin
       </p>
     </div>
 
@@ -274,7 +274,7 @@
           <div class="box-gradient"></div>
           <div class="box-content">
             <div class="box-title">Wide format</div>
-            <div class="box-body">Two columns span six grid tracks each — ideal for editorial spreads and hero content.</div>
+            <div class="box-body">Two col span six grid tracks each — ideal for editorial spreads and hero content.</div>
           </div>
         </div>
         <div class="box">
