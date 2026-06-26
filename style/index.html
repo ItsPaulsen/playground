@@ -112,7 +112,10 @@
     .color-fmt-dropdown.is-open { opacity: 1; pointer-events: all; transform: translateY(0); }
     html[data-theme="dark"] .color-fmt-dropdown { box-shadow: rgba(0,0,0,0.2) 0px 6px 24px 0px, rgba(255,255,255,0.1) 0px 0px 0px 1px; }
     .color-fmt-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
-    .color-fmt-option:hover { background: var(--pg-border); }
+    .color-fmt-option:hover { background: oklch(0.22 0.01 56 / .1); }
+    html[data-theme="dark"] .color-fmt-option:hover { background: oklch(0.98 0.00 106 / .1); }
+    .color-fmt-dropdown.show-selected .color-fmt-option.is-selected { background: oklch(0.22 0.01 56 / .1); }
+    html[data-theme="dark"] .color-fmt-dropdown.show-selected .color-fmt-option.is-selected { background: oklch(0.98 0.00 106 / .1); }
     .color-fmt-opt-name { flex-shrink: 0; }
     .color-fmt-opt-example { margin-left: 8px; font-size: 12px; font-weight: 400; color: var(--pg-muted); position: relative; top: 1px; }
     .color-fmt-opt-check { opacity: 0; flex-shrink: 0; margin-left: auto; padding-left: 16px; color: var(--pg-primary); display: flex; align-items: center; }
@@ -639,6 +642,7 @@
             if(fmtVal) fmtVal.textContent = fmt;
             try { localStorage.setItem('twk-color-fmt', fmt); } catch(e) {}
             fmtDrop.classList.remove('is-open');
+            fmtDrop.classList.remove('show-selected');
             renderFmtOptions();
           });
         });
@@ -648,10 +652,25 @@
         if(fmtVal) fmtVal.textContent = fmt;
         renderFmtOptions();
         fmtWrap.addEventListener('click', function() {
+          var opening = !fmtDrop.classList.contains('is-open');
           fmtDrop.classList.toggle('is-open');
+          if (opening) {
+            fmtDrop.classList.add('show-selected');
+            fmtDrop.querySelectorAll('.color-fmt-option').forEach(function(opt) {
+              opt.addEventListener('mouseenter', function clearSelected() {
+                if (!opt.classList.contains('is-selected')) {
+                  fmtDrop.classList.remove('show-selected');
+                }
+                opt.removeEventListener('mouseenter', clearSelected);
+              });
+            });
+          }
         });
         document.addEventListener('click', function(e) {
-          if(!fmtWrap.contains(e.target)) fmtDrop.classList.remove('is-open');
+          if(!fmtWrap.contains(e.target)) {
+            fmtDrop.classList.remove('is-open');
+            fmtDrop.classList.remove('show-selected');
+          }
         });
       }
 

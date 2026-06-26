@@ -89,6 +89,49 @@
       .margin-overlay { width: 96px; }
     }
 
+    /* ── 1140 page layout ── */
+    .page.grid--1140 { max-width: 1204px; }
+
+    @media (min-width: 640px) {
+      .page.grid--1140 { padding-inline: 24px; }
+      .page.grid--1140 .page-header { margin-bottom: 32px; }
+      .page.grid--1140 .page-header h1 { font-size: 40px; }
+      .page.grid--1140 .page-header p { font-size: 16px; }
+      .page.grid--1140 .box-row--3col { grid-template-columns: repeat(2, 1fr); }
+      .page.grid--1140 .box-row--2col { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1025px) {
+      .page.grid--1140 { padding-inline: 32px; }
+      .page.grid--1140 .page-header { margin-bottom: 40px; }
+      .page.grid--1140 .page-header h1 { font-size: 48px; }
+      .page.grid--1140 .page-header p { font-size: 18px; }
+      .page.grid--1140 .box-row--3col { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .page.grid--1140 .box-row--3col,
+      .page.grid--1140 .box-row--2col { grid-template-columns: 1fr; }
+    }
+    .page.grid--1140 .box-row { gap: 20px; }
+    .page.grid--1140 .box-rows { gap: 20px; }
+
+    /* 1140 overlay overrides */
+    #grid-overlay.grid--1140 #grid-overlay-inner {
+      max-width: 1204px;
+      gap: 20px;
+    }
+    @media (min-width: 640px) {
+      #grid-overlay.grid--1140 #grid-overlay-inner {
+        grid-template-columns: repeat(12, 1fr);
+        padding-inline: 24px;
+      }
+      #grid-overlay.grid--1140 .grid-col { display: block; }
+      #grid-overlay.grid--1140 .margin-overlay { width: 24px; }
+    }
+    @media (min-width: 1025px) {
+      #grid-overlay.grid--1140 #grid-overlay-inner { padding-inline: 32px; }
+      #grid-overlay.grid--1140 .margin-overlay { width: 32px; }
+    }
+
     /* ── Page content ── */
     .page {
       position: relative;
@@ -297,9 +340,12 @@
       transform: translateY(0);
     }
 
-    .grid-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
-    .grid-select-option:hover { background: var(--pg-border); }
-    .grid-select-opt-check { opacity: 0; flex-shrink: 0; margin-left: auto; padding-left: 16px; color: var(--pg-primary); display: flex; align-items: center; }
+    .grid-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; min-width: 120px; }
+    .grid-select-option:hover { background: oklch(0.22 0.01 56 / .1); }
+    html[data-theme="dark"] .grid-select-option:hover { background: oklch(0.98 0.00 106 / .1); }
+    .grid-select-dropdown.show-selected .grid-select-option.is-selected { background: oklch(0.22 0.01 56 / .1); }
+    html[data-theme="dark"] .grid-select-dropdown.show-selected .grid-select-option.is-selected { background: oklch(0.98 0.00 106 / .1); }
+    .grid-select-opt-check { opacity: 0; flex-shrink: 0; margin-left: auto; padding-left: 8px; color: var(--pg-primary); display: flex; align-items: center; }
     .grid-select-option.is-selected .grid-select-opt-check { opacity: 1; }
 
     /* ── Grid info tooltip ── */
@@ -387,31 +433,36 @@
       <p>Responsive layout grid with live column overlay. Press G to toggle.</p>
     </div>
 
-    <div class="section" data-grid="1200">
-      <div class="section-title">
-        <span class="section-title-left">
-          1200
-          <div class="grid-info">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-            <div class="grid-info-tooltip">
-              &lt;810: 4 col, 32-gutter, 16-margin<br>
-              ≥810: 12 col, 32-gutter, 32-margin<br>
-              ≥1200: 12 col, 32-gutter, 96-margin
-            </div>
+    <div class="section-title">
+      <span class="section-title-left">
+        <span id="grid-name">1200</span>
+        <div class="grid-info">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <div class="grid-info-tooltip" id="grid-info-tooltip">
+            &lt;810: 4 col, 32-gutter, 16-margin<br>
+            ≥810: 12 col, 32-gutter, 32-margin<br>
+            ≥1200: 12 col, 32-gutter, 96-margin
           </div>
-        </span>
-        <div class="grid-select-wrap" id="grid-select-wrap" tabindex="0">
-          <span class="grid-select-label">Grid:</span>
-          <span class="grid-select-val" id="grid-select-label">1200</span>
-          <svg class="grid-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-          <div class="grid-select-dropdown" id="grid-select-dropdown">
-            <div class="grid-select-option is-selected" data-grid="1200">
-              1200
-              <svg class="grid-select-opt-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            </div>
+        </div>
+      </span>
+      <div class="grid-select-wrap" id="grid-select-wrap" tabindex="0">
+        <span class="grid-select-label">Grid:</span>
+        <span class="grid-select-val" id="grid-select-label">1200</span>
+        <svg class="grid-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="grid-select-dropdown" id="grid-select-dropdown">
+          <div class="grid-select-option is-selected" data-grid="1200">
+            1200
+            <span class="grid-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+          </div>
+          <div class="grid-select-option" data-grid="1140">
+            1140
+            <span class="grid-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="section" data-grid="1200">
       <div class="box-rows">
       <div class="box-row box-row--1col">
         <div class="box">
@@ -445,6 +496,65 @@
 
       </div>
     </div>
+
+    <div class="section" data-grid="1140" style="display:none">
+      <div class="box-rows">
+        <div class="box-row box-row--1col">
+          <div class="box">
+            <img src="https://picsum.photos/id/37/1400/800" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Full width</div>
+              <div class="box-body">One column spans all twelve grid tracks — 1140px of content.</div>
+            </div>
+          </div>
+        </div>
+        <div class="box-row box-row--2col">
+          <div class="box">
+            <img src="https://picsum.photos/id/10/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Wide format</div>
+              <div class="box-body">Two columns span six grid tracks each.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/11/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Side by side</div>
+              <div class="box-body">Equal weight, 20px apart.</div>
+            </div>
+          </div>
+        </div>
+        <div class="box-row box-row--3col">
+          <div class="box">
+            <img src="https://picsum.photos/id/12/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Three columns</div>
+              <div class="box-body">The frontpage card layout — four tracks each.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/20/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Equal weight</div>
+              <div class="box-body">Each card spans four of twelve grid tracks.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/21/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">20px gutter</div>
+              <div class="box-body">Tighter than 1200 — keeps the layout compact.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="/header.js"></script>
@@ -457,12 +567,7 @@
     });
 
     (function() {
-      var info = document.querySelector('.grid-info');
-      var tooltip = document.querySelector('.grid-info-tooltip');
-      var PAD = 8;
-      var R = 20; // corner radius
-      var AP = 8; // arrow height / padding
-      var AW = 7; // arrow half-width at base
+      var PAD = 8, R = 20, AP = 8, AW = 7;
 
       function buildPath(W, H, cx, arrowAtTop) {
         if (arrowAtTop) {
@@ -482,43 +587,68 @@
         }
       }
 
-      info.addEventListener('mouseenter', function() {
-        info.classList.remove('is-top');
-        tooltip.style.left = '';
-        tooltip.style.clipPath = '';
+      document.querySelectorAll('.grid-info').forEach(function(info) {
+        var tooltip = info.querySelector('.grid-info-tooltip');
+        info.addEventListener('mouseenter', function() {
+          info.classList.remove('is-top');
+          tooltip.style.left = '';
+          tooltip.style.clipPath = '';
 
-        var infoRect = info.getBoundingClientRect();
-        var tipH = tooltip.getBoundingClientRect().height;
-        if (infoRect.bottom + 2 + tipH > window.innerHeight - PAD &&
-            infoRect.top - 2 - tipH > PAD) {
-          info.classList.add('is-top');
-        }
+          var infoRect = info.getBoundingClientRect();
+          var tipH = tooltip.getBoundingClientRect().height;
+          if (infoRect.bottom + 2 + tipH > window.innerHeight - PAD &&
+              infoRect.top - 2 - tipH > PAD) {
+            info.classList.add('is-top');
+          }
 
-        var rect = tooltip.getBoundingClientRect();
-        var shift = 0;
-        if (rect.left < PAD) shift = PAD - rect.left;
-        else if (rect.right > window.innerWidth - PAD) shift = -(rect.right - (window.innerWidth - PAD));
-        if (shift !== 0) tooltip.style.left = 'calc(50% + ' + shift + 'px)';
+          var rect = tooltip.getBoundingClientRect();
+          var shift = 0;
+          if (rect.left < PAD) shift = PAD - rect.left;
+          else if (rect.right > window.innerWidth - PAD) shift = -(rect.right - (window.innerWidth - PAD));
+          if (shift !== 0) tooltip.style.left = 'calc(50% + ' + shift + 'px)';
 
-        var W = tooltip.offsetWidth;
-        var H = tooltip.offsetHeight;
-        var cx = W / 2 - shift;
-        tooltip.style.clipPath = 'path("' + buildPath(W, H, cx, !info.classList.contains('is-top')) + '")';
+          var W = tooltip.offsetWidth, H = tooltip.offsetHeight;
+          var cx = W / 2 - shift;
+          tooltip.style.clipPath = 'path("' + buildPath(W, H, cx, !info.classList.contains('is-top')) + '")';
+        });
       });
     })();
 
     (function() {
+      var overlay = document.getElementById('grid-overlay');
+      var page = document.querySelector('.page');
       var wrap = document.getElementById('grid-select-wrap');
       var dropdown = document.getElementById('grid-select-dropdown');
       var label = document.getElementById('grid-select-label');
 
+      overlay.classList.add('grid--1200');
+      page.classList.add('grid--1200');
+
+      var GRID_INFO = {
+        '1200': '&lt;810: 4 col, 32-gutter, 16-margin<br>≥810: 12 col, 32-gutter, 32-margin<br>≥1200: 12 col, 32-gutter, 96-margin',
+        '1140': '&lt;640: 4 col, 20-gutter, 16-margin<br>≥640: 12 col, 20-gutter, 24-margin<br>&gt;1024: 12 col, 20-gutter, 32-margin'
+      };
+
       wrap.addEventListener('click', function(e) {
+        var opening = !dropdown.classList.contains('is-open');
         dropdown.classList.toggle('is-open');
+        if (opening) {
+          dropdown.classList.add('show-selected');
+          dropdown.querySelectorAll('.grid-select-option').forEach(function(opt) {
+            opt.addEventListener('mouseenter', function clearSelected() {
+              if (!opt.classList.contains('is-selected')) {
+                dropdown.classList.remove('show-selected');
+              }
+              opt.removeEventListener('mouseenter', clearSelected);
+            });
+          });
+        }
         e.stopPropagation();
       });
 
       document.addEventListener('click', function() {
         dropdown.classList.remove('is-open');
+        dropdown.classList.remove('show-selected');
       });
 
       dropdown.addEventListener('click', function(e) {
@@ -532,7 +662,14 @@
         document.querySelectorAll('.section[data-grid]').forEach(function(s) {
           s.style.display = s.dataset.grid === grid ? '' : 'none';
         });
+        document.getElementById('grid-name').textContent = grid;
+        document.getElementById('grid-info-tooltip').innerHTML = GRID_INFO[grid];
+        overlay.className = overlay.className.replace(/\bgrid--\S+/g, '');
+        overlay.classList.add('grid--' + grid);
+        page.className = page.className.replace(/\bgrid--\S+/g, '');
+        page.classList.add('grid--' + grid);
         dropdown.classList.remove('is-open');
+        dropdown.classList.remove('show-selected');
         e.stopPropagation();
       });
     })();
