@@ -114,7 +114,7 @@ const __TWEAKS_STYLE = `
   .twk-lbl>span:first-child{font-weight:500}
   .twk-val{color:var(--val);font-variant-numeric:tabular-nums}
 
-  .twk-sect{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;
+  .twk-sect{font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;
     color:var(--sect);margin-top:-8px}
   .twk-sect:first-child{margin-top:0}
   .twk-sect::before{content:'';display:block;border-top:1px solid var(--bd);margin:16px 0}
