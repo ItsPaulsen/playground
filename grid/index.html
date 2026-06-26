@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
   <link rel="stylesheet" href="/shared/tokens.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100vh;
@@ -23,7 +23,7 @@
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     }
 
-    /* ── Grid overlay (always on) ── */
+    /* ── Grid overlay ── */
     #grid-overlay.is-hidden { display: none; }
 
     #grid-overlay {
@@ -36,24 +36,26 @@
     }
 
     #grid-overlay-inner {
+      position: relative;
       width: 100%;
-      margin-inline: 16px;
+      max-width: 1392px;
+      padding-inline: 16px;
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 24px;
+      gap: 32px;
       height: 100%;
     }
 
     @media (min-width: 810px) {
-      #grid-overlay-inner { margin-inline: 32px; gap: 32px; }
+      #grid-overlay-inner { padding-inline: 32px; }
     }
 
     @media (min-width: 1200px) {
-      #grid-overlay-inner { margin-inline: max(96px, calc((100vw - 1200px) / 2)); }
+      #grid-overlay-inner { padding-inline: 96px; }
     }
 
     @media (max-width: 809px) {
-      #grid-overlay-inner { grid-template-columns: repeat(6, 1fr); }
+      #grid-overlay-inner { grid-template-columns: repeat(4, 1fr); }
       .grid-col:nth-child(n+7) { display: none; }
     }
 
@@ -79,23 +81,23 @@
 
     @media (min-width: 1200px) {
       .margin-overlay { width: 96px; }
-      .margin-overlay--left  { left: calc(max(96px, calc((100vw - 1200px) / 2)) - 96px); }
-      .margin-overlay--right { right: calc(max(96px, calc((100vw - 1200px) / 2)) - 96px); }
     }
 
     /* ── Page content ── */
     .page {
       position: relative;
       z-index: 1;
-      margin: 64px 16px;
+      max-width: 1392px;
+      margin: 64px auto;
+      padding-inline: 16px;
     }
 
     @media (min-width: 810px) {
-      .page { margin: 64px 32px; }
+      .page { padding-inline: 32px; }
     }
 
     @media (min-width: 1200px) {
-      .page { margin: 64px max(96px, calc((100vw - 1200px) / 2)); }
+      .page { padding-inline: 96px; }
     }
 
     .page-header {
@@ -117,42 +119,93 @@
     }
 
     /* ── Box rows ── */
+    .box-rows { display: flex; flex-direction: column; gap: 32px; }
+
     .box-row {
       display: grid;
-      gap: 24px;
+      gap: 32px;
     }
 
-    @media (min-width: 810px) {
-      .box-row { gap: 32px; }
-    }
-
-    .box-rows { display: flex; flex-direction: column; gap: 32px; }
     .box-row--4col { grid-template-columns: repeat(4, 1fr); }
     .box-row--3col { grid-template-columns: repeat(3, 1fr); }
     .box-row--2col { grid-template-columns: repeat(2, 1fr); }
-
-    .box-row--2col .box { background: oklch(0.88 0.08 163); }
-    .box-row--3col .box { background: oklch(0.89 0.07 203); }
-    .box-row--4col .box { background: oklch(0.86 0.06 256); }
+    .box-row--1col { grid-template-columns: 1fr; }
 
     .box {
-      height: 160px;
-      background: var(--pg-border);
-      border-radius: 20px;
+      height: 240px;
+      background: var(--pg-surface);
+      border-radius: 64px;
+      corner-shape: superellipse(1.7);
+      overflow: hidden;
+      position: relative;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--pg-muted);
+      align-items: flex-start;
+      padding: 32px;
     }
 
-    @media (max-width: 1199px) {
-      .box-row--3col { grid-template-columns: repeat(2, 1fr); }
+    .box-row--1col .box { height: 520px; align-items: flex-end; }
+    .box-row--2col .box { height: 320px; }
+
+    .box img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .box-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(#000 0%, #0000 64%);
+      opacity: 0.8;
+    }
+
+    .box-row--1col .box-gradient {
+      background: radial-gradient(50% 45% at 20% 92%, #000 0%, #0000 100%);
+    }
+
+    .box-content {
+      position: relative;
+      z-index: 1;
+      color: var(--pg-light-100);
+      width: 100%;
+    }
+
+    @media (min-width: 810px) {
+      .box-row--1col .box-content { max-width: 50%; }
     }
 
     @media (max-width: 809px) {
-      .box-rows { gap: 24px; }
+      .box-row--1col .box-gradient {
+        background: radial-gradient(100% 45% at 20% 92%, #000 0%, #0000 100%);
+      }
+    }
+
+    .box-title {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    @media (min-width: 810px) {
+      .box-title { font-size: 24px; }
+    }
+
+    .box-body {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 24px;
+      opacity: 0.72;
+    }
+
+    @media (min-width: 810px) {
+      .box-body { font-size: 20px; line-height: 26px; }
+    }
+
+    @media (max-width: 809px) {
       .box-row--4col { grid-template-columns: repeat(2, 1fr); }
       .box-row--3col, .box-row--2col { grid-template-columns: 1fr; }
     }
@@ -172,9 +225,9 @@
 <body>
 
   <div id="grid-overlay" class="is-hidden" aria-hidden="true">
-    <div class="margin-overlay margin-overlay--left"></div>
-    <div class="margin-overlay margin-overlay--right"></div>
     <div id="grid-overlay-inner">
+      <div class="margin-overlay margin-overlay--left"></div>
+      <div class="margin-overlay margin-overlay--right"></div>
       <div class="grid-col"></div>
       <div class="grid-col"></div>
       <div class="grid-col"></div>
@@ -194,30 +247,43 @@
     <div class="page-header">
       <h1>Grid</h1>
       <p>
-        &lt; 810px — 6 columns, 16px margin, 24px gap<br>
-        ≥ 810px — 12 columns, 32px margin, 32px gap<br>
-        ≥ 1200px — 12 columns, 96px margin, 32px gap
+        &lt; 810px — 4 columns, 32px gutter, 16px margin<br>
+        ≥ 810px — 12 columns, 32px gutter, 32px margin<br>
+        ≥ 1200px — 12 columns, 32px gutter, 96px margin
       </p>
     </div>
 
     <div class="box-rows">
+      <div class="box-row box-row--1col">
+        <div class="box">
+          <img src="https://picsum.photos/id/15/1400/800" alt="" loading="lazy">
+          <div class="box-gradient"></div>
+          <div class="box-content">
+            <div class="box-title">Full width</div>
+            <div class="box-body">One column spans all twelve grid tracks — the full content width.</div>
+          </div>
+        </div>
+      </div>
+
       <div class="box-row box-row--2col">
-        <div class="box">One of two columns</div>
-        <div class="box">One of two columns</div>
+        <div class="box">
+          <img src="https://picsum.photos/id/29/900/600" alt="" loading="lazy">
+          <div class="box-gradient"></div>
+          <div class="box-content">
+            <div class="box-title">Wide format</div>
+            <div class="box-body">Two columns span six grid tracks each — ideal for editorial spreads and hero content.</div>
+          </div>
+        </div>
+        <div class="box">
+          <img src="https://picsum.photos/id/43/900/600" alt="" loading="lazy">
+          <div class="box-gradient"></div>
+          <div class="box-content">
+            <div class="box-title">Side by side</div>
+            <div class="box-body">Parallel layouts let two ideas share equal weight without one dominating.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="box-row box-row--4col">
-        <div class="box">One of four columns</div>
-        <div class="box">One of four columns</div>
-        <div class="box">One of four columns</div>
-        <div class="box">One of four columns</div>
-      </div>
-
-      <div class="box-row box-row--3col">
-        <div class="box">One of three columns</div>
-        <div class="box">One of three columns</div>
-        <div class="box">One of three columns</div>
-      </div>
     </div>
   </div>
 

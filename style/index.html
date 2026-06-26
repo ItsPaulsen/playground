@@ -317,20 +317,20 @@
       <div class="color-themes">
         <div class="color-theme-row color-theme-row--light">
           <div class="color-swatches">
-            <div class="swatch" data-color="--pg-light-500">
-              <div class="swatch-color" style="background:var(--pg-light-500)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-light-400">
-              <div class="swatch-color" style="background:var(--pg-light-400)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-light-300">
-              <div class="swatch-color" style="background:var(--pg-light-300)"></div>
+            <div class="swatch" data-color="--pg-light-100">
+              <div class="swatch-color" style="background:var(--pg-light-100)"></div>
             </div>
             <div class="swatch" data-color="--pg-light-200">
               <div class="swatch-color" style="background:var(--pg-light-200)"></div>
             </div>
-            <div class="swatch" data-color="--pg-light-100">
-              <div class="swatch-color" style="background:var(--pg-light-100)"></div>
+            <div class="swatch" data-color="--pg-light-300">
+              <div class="swatch-color" style="background:var(--pg-light-300)"></div>
+            </div>
+            <div class="swatch" data-color="--pg-light-400">
+              <div class="swatch-color" style="background:var(--pg-light-400)"></div>
+            </div>
+            <div class="swatch" data-color="--pg-light-500">
+              <div class="swatch-color" style="background:var(--pg-light-500)"></div>
             </div>
           </div>
         </div>
@@ -548,8 +548,8 @@
     (function () {
       const SHADOW_LIGHT = 'rgba(0,0,0,.05) 0 6px 24px 0,<br>rgba(0,0,0,.06) 0 0 0 1px';
       const SHADOW_DARK  = 'rgba(0,0,0,.2) 0 6px 24px 0,<br>rgba(255,255,255,.1) 0 0 0 1px';
-      const COPY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`;
-      const CHECK = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+      const COPY = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`;
+      const CHECK = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
 
       function parseOklch(str) {
         var m = str.match(/oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)/);
@@ -619,7 +619,7 @@
       var FMT_OPTS = ['oklch','hex','rgb','hsl'];
       var CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
       var firstSwatch = document.querySelector('.swatch[data-color]');
-      var refColor = firstSwatch ? firstSwatch.dataset.color : 'oklch(0.22 0.01 56)';
+      var refColor = resolveColor(firstSwatch ? firstSwatch.dataset.color : 'oklch(0.22 0.01 56)');
 
       function renderFmtOptions() {
         if(!fmtDrop) return;
@@ -659,7 +659,6 @@
         }
         return color;
       }
-
       // Copy buttons
       document.querySelectorAll('.swatch[data-color]').forEach(function(swatch) {
         var btn = document.createElement('button');
