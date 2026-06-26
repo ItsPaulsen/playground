@@ -21,9 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
-  <style>
-:root{--pg-light-100:oklch(0.98 0.00 106);--pg-light-200:oklch(0.96 0.00 106);--pg-light-300:oklch(0.92 0.00 49);--pg-light-400:oklch(0.55 0.01 58);--pg-light-500:oklch(0.22 0.01 56);--pg-dark-100:oklch(0.22 0.01 56);--pg-dark-200:oklch(0.27 0.01 34);--pg-dark-300:oklch(0.37 0.01 68);--pg-dark-400:oklch(0.87 0.00 56);--pg-dark-500:oklch(0.98 0.00 106);--pg-bg:var(--pg-light-100);--pg-surface:var(--pg-light-200);--pg-border:var(--pg-light-300);--pg-muted:var(--pg-light-400);--pg-primary:var(--pg-light-500)}html[data-theme="dark"]{--pg-bg:var(--pg-dark-100);--pg-surface:var(--pg-dark-200);--pg-border:var(--pg-dark-300);--pg-muted:var(--pg-dark-400);--pg-primary:var(--pg-dark-500)}:focus-visible{outline:2px solid var(--pg-primary);outline-offset:2px;border-radius:4px}
-</style>
+  <link rel="stylesheet" href="/shared/tokens.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -127,17 +125,17 @@
       justify-content: center;
       margin-bottom: 20px;
     }
-    .card-icon--indigo { background: rgba(191,219,254,.7); color: #1e40af; }
+    .card-icon--indigo { background: rgba(191,219,254,.85); color: #1e40af; }
     html[data-theme="dark"] .card-icon--indigo { background: #1e3a8a; color: #93c5fd; }
-    .card-icon--purple { background: rgba(233,213,255,.7); color: #6b21a8; }
+    .card-icon--purple { background: rgba(233,213,255,.85); color: #6b21a8; }
     html[data-theme="dark"] .card-icon--purple { background: #581c87; color: #d8b4fe; }
-    .card-icon--red { background: rgba(254,202,202,.7); color: #991b1b; }
+    .card-icon--red { background: rgba(254,202,202,.85); color: #991b1b; }
     html[data-theme="dark"] .card-icon--red { background: #7f1d1d; color: #fca5a5; }
-    .card-icon--amber { background: rgba(253,215,170,.7); color: #9a3412; }
+    .card-icon--amber { background: rgba(253,215,170,.85); color: #9a3412; }
     html[data-theme="dark"] .card-icon--amber { background: #7c2d12; color: #fb923c; }
-    .card-icon--green { background: rgba(187,247,208,.7); color: #166534; }
+    .card-icon--green { background: rgba(187,247,208,.85); color: #166534; }
     html[data-theme="dark"] .card-icon--green { background: #14532d; color: #86efac; }
-    .card-icon--teal { background: rgba(153,246,228,.7); color: #0f766e; }
+    .card-icon--teal { background: rgba(153,246,228,.85); color: #0f766e; }
     html[data-theme="dark"] .card-icon--teal { background: #134e4a; color: #5eead4; }
 
     @keyframes pg-up {
@@ -146,15 +144,15 @@
     }
 
     .page-header h1 {
-      animation: pg-up .8s cubic-bezier(.22,1,.36,1) both;
+      animation: pg-up .8s cubic-bezier(.22,1,.36,.85) both;
     }
 
     .page-header p {
-      animation: pg-up .8s cubic-bezier(.22,1,.36,1) .12s both;
+      animation: pg-up .8s cubic-bezier(.22,1,.36,.85) .12s both;
     }
 
     .card {
-      animation: pg-up .7s cubic-bezier(.22,1,.36,1) both;
+      animation: pg-up .7s cubic-bezier(.22,1,.36,.85) both;
     }
 
     .card:nth-child(1) { animation-delay: .2s; }
@@ -217,16 +215,6 @@
         <p>Animated mesh gradient with tweakable color points.</p>
       </a>
 
-      <a class="card" href="grid/">
-        <div class="card-icon card-icon--teal">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
-          </svg>
-        </div>
-        <h2>Grid</h2>
-        <p>Responsive 12-column layout grid with live column overlay.</p>
-      </a>
-
       <a class="card" href="trail/">
         <div class="card-icon card-icon--amber">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -235,6 +223,16 @@
         </div>
         <h2>Trail</h2>
         <p>Glowing cursor trail with tweakable particles, gravity, and spread.</p>
+      </a>
+
+      <a class="card" href="grid/">
+        <div class="card-icon card-icon--teal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+          </svg>
+        </div>
+        <h2>Grid</h2>
+        <p>Responsive 12-column layout grid with live column overlay.</p>
       </a>
 
     </div>

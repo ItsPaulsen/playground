@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
   <link rel="stylesheet" href="/shared/tokens.css" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; margin: 0; }
 
     body {
       min-height: 100vh;
@@ -37,7 +37,7 @@
 
     #grid-overlay-inner {
       width: 100%;
-      padding-inline: 16px;
+      margin-inline: 16px;
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 24px;
@@ -45,11 +45,11 @@
     }
 
     @media (min-width: 810px) {
-      #grid-overlay-inner { padding-inline: 32px; gap: 32px; }
+      #grid-overlay-inner { margin-inline: 32px; gap: 32px; }
     }
 
     @media (min-width: 1200px) {
-      #grid-overlay-inner { padding-inline: max(96px, calc((100vw - 1200px) / 2)); }
+      #grid-overlay-inner { margin-inline: max(96px, calc((100vw - 1200px) / 2)); }
     }
 
     @media (max-width: 809px) {
@@ -87,15 +87,15 @@
     .page {
       position: relative;
       z-index: 1;
-      padding: 64px 16px;
+      margin: 64px 16px;
     }
 
     @media (min-width: 810px) {
-      .page { padding: 64px 32px; }
+      .page { margin: 64px 32px; }
     }
 
     @media (min-width: 1200px) {
-      .page { padding: 64px max(96px, calc((100vw - 1200px) / 2)); }
+      .page { margin: 64px max(96px, calc((100vw - 1200px) / 2)); }
     }
 
     .page-header {
@@ -127,16 +127,33 @@
     }
 
     .box-rows { display: flex; flex-direction: column; gap: 32px; }
+    .box-row--4col { grid-template-columns: repeat(4, 1fr); }
     .box-row--3col { grid-template-columns: repeat(3, 1fr); }
     .box-row--2col { grid-template-columns: repeat(2, 1fr); }
+
+    .box-row--2col .box { background: oklch(0.88 0.08 163); }
+    .box-row--3col .box { background: oklch(0.89 0.07 203); }
+    .box-row--4col .box { background: oklch(0.86 0.06 256); }
 
     .box {
       height: 160px;
       background: var(--pg-border);
       border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--pg-muted);
+    }
+
+    @media (max-width: 1199px) {
+      .box-row--3col { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 809px) {
+      .box-rows { gap: 24px; }
+      .box-row--4col { grid-template-columns: repeat(2, 1fr); }
       .box-row--3col, .box-row--2col { grid-template-columns: 1fr; }
     }
 
@@ -154,7 +171,7 @@
 </head>
 <body>
 
-  <div id="grid-overlay" aria-hidden="true">
+  <div id="grid-overlay" class="is-hidden" aria-hidden="true">
     <div class="margin-overlay margin-overlay--left"></div>
     <div class="margin-overlay margin-overlay--right"></div>
     <div id="grid-overlay-inner">
@@ -177,16 +194,29 @@
     <div class="page-header">
       <h1>Grid</h1>
       <p>
-        &lt; 810px — 6 columns, 16px padding, 24px gap<br>
-        ≥ 810px — 12 columns, 32px padding, 32px gap<br>
-        ≥ 1200px — 12 columns, 96px padding, 32px gap
+        &lt; 810px — 6 columns, 16px margin, 24px gap<br>
+        ≥ 810px — 12 columns, 32px margin, 32px gap<br>
+        ≥ 1200px — 12 columns, 96px margin, 32px gap
       </p>
     </div>
 
     <div class="box-rows">
       <div class="box-row box-row--2col">
-        <div class="box"></div>
-        <div class="box"></div>
+        <div class="box">One of two columns</div>
+        <div class="box">One of two columns</div>
+      </div>
+
+      <div class="box-row box-row--4col">
+        <div class="box">One of four columns</div>
+        <div class="box">One of four columns</div>
+        <div class="box">One of four columns</div>
+        <div class="box">One of four columns</div>
+      </div>
+
+      <div class="box-row box-row--3col">
+        <div class="box">One of three columns</div>
+        <div class="box">One of three columns</div>
+        <div class="box">One of three columns</div>
       </div>
     </div>
   </div>

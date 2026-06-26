@@ -317,40 +317,40 @@
       <div class="color-themes">
         <div class="color-theme-row color-theme-row--light">
           <div class="color-swatches">
-            <div class="swatch" data-color="oklch(0.22 0.01 56)">
-              <div class="swatch-color" style="background:oklch(0.22 0.01 56)"></div>
+            <div class="swatch" data-color="--pg-light-500">
+              <div class="swatch-color" style="background:var(--pg-light-500)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.55 0.01 58)">
-              <div class="swatch-color" style="background:oklch(0.55 0.01 58)"></div>
+            <div class="swatch" data-color="--pg-light-400">
+              <div class="swatch-color" style="background:var(--pg-light-400)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.92 0.00 49)">
-              <div class="swatch-color" style="background:oklch(0.92 0.00 49)"></div>
+            <div class="swatch" data-color="--pg-light-300">
+              <div class="swatch-color" style="background:var(--pg-light-300)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.96 0.00 106)">
-              <div class="swatch-color" style="background:oklch(0.96 0.00 106)"></div>
+            <div class="swatch" data-color="--pg-light-200">
+              <div class="swatch-color" style="background:var(--pg-light-200)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.98 0.00 106)">
-              <div class="swatch-color" style="background:oklch(0.98 0.00 106)"></div>
+            <div class="swatch" data-color="--pg-light-100">
+              <div class="swatch-color" style="background:var(--pg-light-100)"></div>
             </div>
           </div>
         </div>
 
         <div class="color-theme-row color-theme-row--dark">
           <div class="color-swatches">
-            <div class="swatch" data-color="oklch(0.98 0.00 106)">
-              <div class="swatch-color" style="background:oklch(0.98 0.00 106)"></div>
+            <div class="swatch" data-color="--pg-dark-500">
+              <div class="swatch-color" style="background:var(--pg-dark-500)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.87 0.00 56)">
-              <div class="swatch-color" style="background:oklch(0.87 0.00 56)"></div>
+            <div class="swatch" data-color="--pg-dark-400">
+              <div class="swatch-color" style="background:var(--pg-dark-400)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.37 0.01 68)">
-              <div class="swatch-color" style="background:oklch(0.37 0.01 68)"></div>
+            <div class="swatch" data-color="--pg-dark-300">
+              <div class="swatch-color" style="background:var(--pg-dark-300)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.27 0.01 34)">
-              <div class="swatch-color" style="background:oklch(0.27 0.01 34)"></div>
+            <div class="swatch" data-color="--pg-dark-200">
+              <div class="swatch-color" style="background:var(--pg-dark-200)"></div>
             </div>
-            <div class="swatch" data-color="oklch(0.15 0.00 49)">
-              <div class="swatch-color" style="background:oklch(0.15 0.00 49)"></div>
+            <div class="swatch" data-color="--pg-dark-100">
+              <div class="swatch-color" style="background:var(--pg-dark-100)"></div>
             </div>
           </div>
         </div>
@@ -653,15 +653,23 @@
         });
       }
 
+      function resolveColor(color) {
+        if (color.startsWith('--')) {
+          return getComputedStyle(document.documentElement).getPropertyValue(color).trim();
+        }
+        return color;
+      }
+
       // Copy buttons
       document.querySelectorAll('.swatch[data-color]').forEach(function(swatch) {
         var btn = document.createElement('button');
         btn.className = 'swatch-copy-btn';
         btn.setAttribute('aria-label', 'Copy color');
-        btn.style.color = isLight(swatch.dataset.color) ? 'oklch(0.22 0.01 56)' : 'oklch(0.98 0.00 106)';
+        var resolved = resolveColor(swatch.dataset.color);
+        btn.style.color = isLight(resolved) ? 'oklch(0.22 0.01 56)' : 'oklch(0.98 0.00 106)';
         btn.innerHTML = COPY;
         btn.addEventListener('click', function() {
-          refColor = swatch.dataset.color;
+          refColor = resolveColor(swatch.dataset.color);
           var value = fmtColor(refColor, fmt);
           navigator.clipboard.writeText(value);
           showToast(value, refColor);
