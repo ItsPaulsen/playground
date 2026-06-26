@@ -102,6 +102,7 @@
 
     .page-header {
       margin-bottom: 40px;
+      padding: 0 8px;
     }
 
     .page-header h1 {
@@ -212,11 +213,13 @@
 
     /* ── Typography — site standard breakpoints ── */
     @media (min-width: 640px) and (max-width: 1024px) {
+      .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 40px; }
       .page-header p  { font-size: 16px; }
     }
 
     @media (max-width: 639px) {
+      .page-header { margin-bottom: 24px; }
       .page-header h1 { font-size: 32px; }
       .page-header p  { font-size: 14px; }
     }
