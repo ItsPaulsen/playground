@@ -185,9 +185,17 @@
 
     .radius-label {
       font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--pg-primary);
+    }
+
+    .radius-sub {
+      font-size: 11px;
       font-weight: 400;
       line-height: 1.4;
       color: var(--pg-muted);
+      margin-top: -6px;
     }
 
     /* ── Shadows ── */
@@ -465,24 +473,24 @@
       <div class="section-title">Border Radius</div>
       <div class="radius-row">
         <div class="radius-item">
-          <div class="radius-box" style="border-radius:8px"></div>
-          <div class="radius-label">8px</div>
+          <div class="radius-box" style="border-radius:var(--radius-sm)"></div>
+          <div class="radius-label">--radius-sm</div>
+          <div class="radius-sub">12px</div>
         </div>
         <div class="radius-item">
-          <div class="radius-box" style="border-radius:12px"></div>
-          <div class="radius-label">12px</div>
+          <div class="radius-box" style="border-radius:var(--radius-md);corner-shape:superellipse(1.7)"></div>
+          <div class="radius-label">--radius-md</div>
+          <div class="radius-sub">32px (1.7)</div>
         </div>
         <div class="radius-item">
-          <div class="radius-box" style="border-radius:16px"></div>
-          <div class="radius-label">16px</div>
+          <div class="radius-box" style="border-radius:var(--radius-lg);corner-shape:superellipse(1.7)"></div>
+          <div class="radius-label">--radius-lg</div>
+          <div class="radius-sub">48px (1.7)</div>
         </div>
         <div class="radius-item">
-          <div class="radius-box" style="border-radius:20px; corner-shape: superellipse(1.7)"></div>
-          <div class="radius-label">20px</div>
-        </div>
-        <div class="radius-item">
-          <div class="radius-box" style="border-radius:28px; corner-shape: superellipse(1.7)"></div>
-          <div class="radius-label">28px</div>
+          <div class="radius-box" style="border-radius:var(--radius-xl);corner-shape:superellipse(1.7)"></div>
+          <div class="radius-label">--radius-xl</div>
+          <div class="radius-sub">64px (1.7)</div>
         </div>
       </div>
     </div>
