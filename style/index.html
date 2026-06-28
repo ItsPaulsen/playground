@@ -276,6 +276,7 @@
     .page-header.pg-anim.is-visible      { transition-delay: 0s; }
     .section-title.pg-anim.is-visible    { transition-delay: 0s; }
     .section-title + .pg-anim.is-visible          { transition-delay: .2s; }
+    .comp-row .comp-item.pg-anim.is-visible        { transition-delay: calc(.2s + var(--stagger-i, 0) * .1s); }
     .type-grid > div.pg-anim.is-visible            { transition-delay: calc(.2s + var(--stagger-i, 0) * .15s); }
     .color-swatches .swatch.pg-anim.is-visible    { transition-delay: calc(.3s + var(--stagger-i, 0) * .08s); }
     .radius-row .radius-item.pg-anim.is-visible    { transition-delay: calc(.2s + var(--stagger-i, 0) * .08s); }
@@ -301,12 +302,12 @@
     }
 
     /* ── Components ── */
-    .comp-row { display: flex; flex-wrap: wrap; gap: 32px; }
+.comp-row { display: flex; flex-wrap: wrap; gap: 32px; }
     .comp-item { display: flex; flex-direction: column; gap: 12px; }
     .comp-label { font-size: 11px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--pg-muted); }
     .comp-item .pg-input { width: 180px; }
+    .comp-item .pg-input--lg { width: 180px; }
     .comp-item .pg-bar { width: 180px; }
-    .switch-row { display: flex; align-items: center; gap: 10px; }
     .switch-label { font-size: 13px; color: var(--pg-primary); }
   </style>
 </head>
@@ -465,14 +466,19 @@
       </div>
     </div>
 
-    <!-- Components -->
+    <!-- Inputs -->
     <div class="section">
-      <div class="section-title">Components</div>
+      <div class="section-title">Inputs</div>
       <div class="comp-row">
 
         <div class="comp-item">
           <div class="comp-label">Text</div>
           <input class="pg-input" type="text" placeholder="Placeholder" />
+        </div>
+
+        <div class="comp-item">
+          <div class="comp-label">Text Large</div>
+          <input class="pg-input pg-input--lg" type="text" placeholder="Placeholder" />
         </div>
 
         <div class="comp-item">
@@ -488,6 +494,14 @@
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="section">
+      <div class="section-title">Controls</div>
+      <div class="comp-row">
+
         <div class="comp-item">
           <div class="comp-label">Slider</div>
           <div class="pg-bar" id="demo-bar-live" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
@@ -499,7 +513,7 @@
 
         <div class="comp-item">
           <div class="comp-label">Toggle</div>
-          <div class="switch-row">
+          <div class="pg-switch-row">
             <button class="pg-switch" data-on="0" id="demo-switch-live" aria-pressed="false"><i></i></button>
             <span class="switch-label" id="demo-switch-live-label">Off</span>
           </div>
@@ -569,9 +583,17 @@
       var radiusEls = Array.from(document.querySelectorAll('.radius-item'));
       radiusEls.forEach(function (el, i) { el.style.setProperty('--stagger-i', i); });
 
+      var compEls = [];
+      document.querySelectorAll('.comp-row').forEach(function (row) {
+        row.querySelectorAll('.comp-item').forEach(function (el, i) {
+          el.style.setProperty('--stagger-i', i);
+          compEls.push(el);
+        });
+      });
+
       var els = Array.from(document.querySelectorAll(
         '.page-header, .section-title, .shadow-row'
-      )).concat(typeEls, swatchEls, radiusEls);
+      )).concat(typeEls, swatchEls, radiusEls, compEls);
       els.forEach(function (el) { el.classList.add('pg-anim'); });
 
       var obs = new IntersectionObserver(function (entries) {

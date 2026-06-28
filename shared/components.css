@@ -13,6 +13,7 @@
   outline: none;
   transition: border-color .15s, box-shadow .15s;
 }
+.pg-input--lg { height: 32px; border-radius: 12px; padding: 0 12px; font-size: 14px; }
 .pg-input::placeholder { color: var(--pg-muted); opacity: .72; }
 .pg-input:focus { border-color: var(--pg-border-focus, oklch(0.22 0.01 56 / .35)); }
 html[data-theme="dark"] .pg-input:focus { border-color: var(--pg-border-focus, oklch(0.98 0.00 106 / .35)); }
@@ -102,6 +103,7 @@ html[data-theme="dark"] .pg-select-dropdown.show-selected .pg-select-option.is-s
 .pg-select-option.is-selected .pg-select-opt-check { opacity: 1; }
 
 /* ── pg-switch: toggle switch ── */
+.pg-switch-row { display: flex; align-items: center; min-height: 26px; gap: 8px; }
 .pg-switch {
   --sw-off: oklch(0.22 0.01 56 / .2);
   position: relative;
