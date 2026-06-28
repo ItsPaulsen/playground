@@ -17,6 +17,13 @@ const MODS = [{
   step: 5,
   defaultVal: 25
 }, {
+  name: 'Monster Effectiveness',
+  param: 'effectiveness',
+  min: 10,
+  max: 70,
+  step: 5,
+  defaultVal: 25
+}, {
   name: 'Waystone Drop Chance',
   param: 'dropchance',
   min: 10,
@@ -36,6 +43,7 @@ const TRADE_BASE = 'https://www.pathofexile.com/trade2/search/poe2';
 const FILTER_MAP = {
   iir: 'map_iir',
   rarity: 'map_rare_monsters',
+  effectiveness: 'map_magic_monsters',
   dropchance: 'map_bonus',
   packsize: 'map_packsize'
 };
@@ -378,11 +386,12 @@ function App() {
   } : null).filter(Boolean);
   const iirState = states[MODS.findIndex(m => m.param === 'iir')];
   const rarityState = states[MODS.findIndex(m => m.param === 'rarity')];
+  const effectivenessState = states[MODS.findIndex(m => m.param === 'effectiveness')];
   const packState = states[MODS.findIndex(m => m.param === 'packsize')];
-  const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (packState.active ? packState.value : 0);
+  const budgetTotal = (iirState.active ? iirState.value : 0) + (rarityState.active ? rarityState.value : 0) + (effectivenessState.active ? effectivenessState.value : 0) + (packState.active ? packState.value : 0);
   const allThreeActive = iirState.active && rarityState.active && packState.active;
   const anyRarityActive = iirState.active || rarityState.active;
-  const rarityCapExceeded = packState.active && packState.value >= 60 && anyRarityActive || packState.active && iirState.active && !rarityState.active && iirState.value + packState.value >= 95 || packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95 || allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || budgetTotal > 135 || iirState.active && rarityState.active && iirState.value >= 100 || iirState.active && rarityState.active && rarityState.value >= 70 && iirState.value >= 60;
+  const rarityCapExceeded = packState.active && packState.value >= 60 && anyRarityActive || packState.active && iirState.active && !rarityState.active && iirState.value + packState.value >= 95 || packState.active && rarityState.active && !iirState.active && rarityState.value + packState.value >= 95 || allThreeActive && iirState.value + rarityState.value >= 100 && packState.value >= 15 || allThreeActive && packState.value >= 30 || budgetTotal > 135 || iirState.active && rarityState.active && iirState.value >= 100 || iirState.active && rarityState.active && rarityState.value >= 70 && iirState.value >= 60 || effectivenessState.active && iirState.active && effectivenessState.value + iirState.value >= 115 || effectivenessState.active && rarityState.active && effectivenessState.value + rarityState.value >= 115;
   function toggle(i) {
     setStates(prev => prev.map((s, idx) => idx === i ? {
       ...s,
