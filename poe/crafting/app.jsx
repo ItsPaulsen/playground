@@ -65,7 +65,7 @@ const GUIDES = [
 ];
 
 async function fetchPrices() {
-  const res = await fetch('/crafting/prices.json');
+  const res = await fetch('/poe/crafting/prices.json');
   if (!res.ok) return {};
   return res.json();
 }

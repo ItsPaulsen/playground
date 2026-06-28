@@ -12,7 +12,7 @@
   --pg-dark-500: oklch(0.98 0.00 106);  /* Stone 50  */
 
   --radius-sm: 24px;
-  --radius-md: 40px;
+  --radius-md: 36px;
   --radius-lg: 48px;
 
   --pg-bg:      var(--pg-light-100);

@@ -8,8 +8,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="prefetch" href="/waystones/">
-<link rel="prefetch" href="/crafting/">
+<link rel="prefetch" href="/poe/waystones/">
+<link rel="prefetch" href="/poe/crafting/">
   <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(0.22 0.01 56)':'oklch(0.98 0.00 106)';document.head.appendChild(m);})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -94,8 +94,9 @@
       text-decoration: none;
       color: inherit;
       background: var(--pg-surface);
-      border-radius: 28px;
-      padding: 28px;
+      border-radius: var(--radius-md);
+      corner-shape: superellipse(1.7);
+      padding: 24px;
       transition: transform .4s cubic-bezier(.25,.46,.45,.94),
                   box-shadow .4s cubic-bezier(.25,.46,.45,.94);
     }
@@ -150,7 +151,7 @@
     </div>
 
     <div class="grid" id="main-content">
-      <a class="card" href="/waystones/">
+      <a class="card" href="/poe/waystones/">
         <div class="card-icon card-icon--green">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="4.5" r="2.5"/><path d="m10.2 6.3-3.9 3.9"/><circle cx="4.5" cy="12" r="2.5"/><path d="M7 12h10"/><circle cx="19.5" cy="12" r="2.5"/><path d="m13.8 17.7 3.9-3.9"/><circle cx="12" cy="19.5" r="2.5"/>
@@ -160,7 +161,7 @@
         <p>Copy-ready search strings for PoE2 Waystones.</p>
       </a>
 
-      <a class="card" href="/crafting/">
+      <a class="card" href="/poe/crafting/">
         <div class="card-icon card-icon--indigo">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
