@@ -11,10 +11,9 @@
   --pg-dark-400: oklch(0.87 0.00 56);   /* Stone 300 */
   --pg-dark-500: oklch(0.98 0.00 106);  /* Stone 50  */
 
-  --radius-sm: 12px;
-  --radius-md: 24px;
-  --radius-lg: 40px;
-  --radius-xl: 48px;
+  --radius-sm: 24px;
+  --radius-md: 40px;
+  --radius-lg: 48px;
 
   --pg-bg:      var(--pg-light-100);
   --pg-surface: var(--pg-light-200);
@@ -33,9 +32,9 @@ html[data-theme="dark"] {
 
 @supports (corner-shape: superellipse(1.7)) {
   :root {
-    --radius-md: 32px;
-    --radius-lg: 48px;
-    --radius-xl: 64px;
+    --radius-sm: 32px;
+    --radius-md: 48px;
+    --radius-lg: 64px;
   }
 }
 
