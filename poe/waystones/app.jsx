@@ -119,7 +119,7 @@ function ModRow({ mod, value, active, onToggle, onValue, last }) {
       <span className="poe-label">{mod.name}</span>
       <div
         ref={barRef}
-        className="poe-bar"
+        className="pg-bar"
         tabIndex={0}
         role="slider"
         aria-label={mod.name}
@@ -133,9 +133,9 @@ function ModRow({ mod, value, active, onToggle, onValue, last }) {
         onClick={e => e.stopPropagation()}
         onKeyDown={onKeyDown}
       >
-        <div className="poe-bar-fill" style={{ width: pct + '%' }} />
-        <span className="poe-bar-val poe-bar-val--fill" style={{ clipPath: `inset(0 ${100 - pct}% 0 0)` }}>{value}+</span>
-        <span className="poe-bar-val poe-bar-val--track" style={{ clipPath: `inset(0 0 0 ${pct}%)` }}>{value}+</span>
+        <div className="pg-bar-fill" style={{ width: pct + '%' }} />
+        <span className="pg-bar-val pg-bar-val--fill" style={{ clipPath: `inset(0 ${100 - pct}% 0 0)` }}>{value}+</span>
+        <span className="pg-bar-val pg-bar-val--track" style={{ clipPath: `inset(0 0 0 ${pct}%)` }}>{value}+</span>
       </div>
     </div>
   );
@@ -149,7 +149,7 @@ function ToggleRow({ label, active, onToggle }) {
       </button>
       <span className="poe-label">{label}</span>
       <button
-        className="poe-switch"
+        className="pg-switch"
         data-on={active ? '1' : '0'}
         role="switch"
         aria-checked={active}

@@ -206,7 +206,7 @@ function ModRow({
     className: "poe-label"
   }, mod.name), /*#__PURE__*/React.createElement("div", {
     ref: barRef,
-    className: "poe-bar",
+    className: "pg-bar",
     tabIndex: 0,
     role: "slider",
     "aria-label": mod.name,
@@ -222,17 +222,17 @@ function ModRow({
     onClick: e => e.stopPropagation(),
     onKeyDown: onKeyDown
   }, /*#__PURE__*/React.createElement("div", {
-    className: "poe-bar-fill",
+    className: "pg-bar-fill",
     style: {
       width: pct + '%'
     }
   }), /*#__PURE__*/React.createElement("span", {
-    className: "poe-bar-val poe-bar-val--fill",
+    className: "pg-bar-val pg-bar-val--fill",
     style: {
       clipPath: `inset(0 ${100 - pct}% 0 0)`
     }
   }, value, "+"), /*#__PURE__*/React.createElement("span", {
-    className: "poe-bar-val poe-bar-val--track",
+    className: "pg-bar-val pg-bar-val--track",
     style: {
       clipPath: `inset(0 0 0 ${pct}%)`
     }
@@ -269,7 +269,7 @@ function ToggleRow({
   }))), /*#__PURE__*/React.createElement("span", {
     className: "poe-label"
   }, label), /*#__PURE__*/React.createElement("button", {
-    className: "poe-switch",
+    className: "pg-switch",
     "data-on": active ? '1' : '0',
     role: "switch",
     "aria-checked": active,

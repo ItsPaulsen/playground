@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
   <link rel="stylesheet" href="/shared/tokens.css" />
+  <link rel="stylesheet" href="/shared/components.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -294,61 +295,6 @@
       gap: 6px;
     }
 
-    /* ── Grid selector ── */
-    .grid-select-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--pg-surface);
-      border: 1px solid var(--pg-border);
-      border-radius: 12px;
-      height: 32px;
-      padding: 0 12px;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .grid-select-label   { font-size: 13px; font-weight: 500; color: var(--pg-primary); }
-    .grid-select-val     { font-size: 13px; font-weight: 400; color: var(--pg-muted); }
-    .grid-select-chevron { color: var(--pg-muted); flex-shrink: 0; display: block; }
-
-    .grid-select-dropdown {
-      position: absolute;
-      top: calc(100% + 6px);
-      right: 0;
-      padding: 6px;
-      border-radius: var(--radius-sm);
-      corner-shape: superellipse(1.7);
-      background: color-mix(in oklch, var(--pg-surface) 80%, transparent);
-      backdrop-filter: blur(20px) saturate(180%);
-      box-shadow: rgba(0,0,0,.05) 0 6px 24px 0, rgba(0,0,0,.06) 0 0 0 1px;
-      z-index: 100;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-4px);
-      transition: opacity .15s, transform .15s;
-      white-space: nowrap;
-    }
-
-    html[data-theme="dark"] .grid-select-dropdown {
-      box-shadow: rgba(0,0,0,.2) 0 6px 24px 0, rgba(255,255,255,.1) 0 0 0 1px;
-    }
-
-    .grid-select-dropdown.is-open {
-      opacity: 1;
-      pointer-events: all;
-      transform: translateY(0);
-    }
-
-    .grid-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; min-width: 120px; }
-    .grid-select-option:hover { background: oklch(0.22 0.01 56 / .1); }
-    html[data-theme="dark"] .grid-select-option:hover { background: oklch(0.98 0.00 106 / .1); }
-    .grid-select-dropdown.show-selected .grid-select-option.is-selected { background: oklch(0.22 0.01 56 / .1); }
-    html[data-theme="dark"] .grid-select-dropdown.show-selected .grid-select-option.is-selected { background: oklch(0.98 0.00 106 / .1); }
-    .grid-select-opt-check { opacity: 0; flex-shrink: 0; margin-left: auto; padding-left: 8px; color: var(--pg-primary); display: flex; align-items: center; }
-    .grid-select-option.is-selected .grid-select-opt-check { opacity: 1; }
-
     /* ── Grid info tooltip ── */
     .grid-info {
       position: relative;
@@ -446,18 +392,18 @@
           </div>
         </div>
       </span>
-      <div class="grid-select-wrap" id="grid-select-wrap" tabindex="0">
-        <span class="grid-select-label">Grid:</span>
-        <span class="grid-select-val" id="grid-select-label">1200</span>
-        <svg class="grid-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-        <div class="grid-select-dropdown" id="grid-select-dropdown">
-          <div class="grid-select-option is-selected" data-grid="1200">
+      <div class="pg-select-wrap" id="pg-select-wrap" tabindex="0">
+        <span class="pg-select-label">Grid:</span>
+        <span class="pg-select-val" id="pg-select-label">1200</span>
+        <svg class="pg-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <div class="pg-select-dropdown" id="pg-select-dropdown">
+          <div class="pg-select-option is-selected" data-grid="1200" data-val="1200">
             1200
-            <span class="grid-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
           </div>
-          <div class="grid-select-option" data-grid="1140">
+          <div class="pg-select-option" data-grid="1140" data-val="1140">
             1140
-            <span class="grid-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
           </div>
         </div>
       </div>
@@ -559,6 +505,7 @@
   </div>
 
   <script src="/header.js"></script>
+  <script src="/shared/components.js"></script>
   <script>
     document.addEventListener('keydown', function(e) {
       if (e.key === 'g' && !e.metaKey && !e.ctrlKey && !e.altKey &&
@@ -618,9 +565,9 @@
     (function() {
       var overlay = document.getElementById('grid-overlay');
       var page = document.querySelector('.page');
-      var wrap = document.getElementById('grid-select-wrap');
-      var dropdown = document.getElementById('grid-select-dropdown');
-      var label = document.getElementById('grid-select-label');
+      var wrap = document.getElementById('pg-select-wrap');
+      var dropdown = document.getElementById('pg-select-dropdown');
+      var label = document.getElementById('pg-select-label');
 
       overlay.classList.add('grid--1200');
       page.classList.add('grid--1200');
@@ -630,36 +577,10 @@
         '1140': '&lt;640: 4 col, 20-gutter, 16-margin<br>≥640: 12 col, 20-gutter, 24-margin<br>&gt;1024: 12 col, 20-gutter, 32-margin'
       };
 
-      wrap.addEventListener('click', function(e) {
-        var opening = !dropdown.classList.contains('is-open');
-        dropdown.classList.toggle('is-open');
-        if (opening) {
-          dropdown.classList.add('show-selected');
-          dropdown.querySelectorAll('.grid-select-option').forEach(function(opt) {
-            opt.addEventListener('mouseenter', function clearSelected() {
-              if (!opt.classList.contains('is-selected')) {
-                dropdown.classList.remove('show-selected');
-              }
-              opt.removeEventListener('mouseenter', clearSelected);
-            });
-          });
-        }
-        e.stopPropagation();
-      });
-
-      document.addEventListener('click', function() {
-        dropdown.classList.remove('is-open');
-        dropdown.classList.remove('show-selected');
-      });
-
-      dropdown.addEventListener('click', function(e) {
-        var opt = e.target.closest('.grid-select-option');
-        if (!opt) return;
-        var grid = opt.dataset.grid;
+      wrap.addEventListener('pg-select', function(e) {
+        var grid = e.detail.option.dataset.grid;
+        if (!grid) return;
         label.textContent = grid;
-        dropdown.querySelectorAll('.grid-select-option').forEach(function(o) {
-          o.classList.toggle('is-selected', o === opt);
-        });
         document.querySelectorAll('.section[data-grid]').forEach(function(s) {
           s.style.display = s.dataset.grid === grid ? '' : 'none';
         });
@@ -669,9 +590,6 @@
         overlay.classList.add('grid--' + grid);
         page.className = page.className.replace(/\bgrid--\S+/g, '');
         page.classList.add('grid--' + grid);
-        dropdown.classList.remove('is-open');
-        dropdown.classList.remove('show-selected');
-        e.stopPropagation();
       });
     })();
   </script>

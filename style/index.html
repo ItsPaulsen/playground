@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
   <link rel="stylesheet" href="/shared/tokens.css" />
+  <link rel="stylesheet" href="/shared/components.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -105,22 +106,8 @@
 
     .swatch:hover .swatch-copy-btn { opacity: 1; }
 
-    .color-fmt-wrap { position: relative; display: inline-flex; align-items: center; gap: 8px; background: var(--pg-surface); border: 1px solid var(--pg-border); border-radius: 12px; height: 32px; padding: 0 12px; cursor: pointer; user-select: none; }
-    .color-fmt-label { font-size: 13px; font-weight: 500; color: var(--pg-primary); }
-    .color-fmt-val { font-size: 13px; font-weight: 400; color: var(--pg-muted); }
-    .color-fmt-chevron { color: var(--pg-muted); flex-shrink: 0; display: block; }
-    .color-fmt-dropdown { position: absolute; top: calc(100% + 6px); right: 0; min-width: 0; padding: 6px; border-radius: var(--radius-sm); corner-shape: superellipse(1.7); background: color-mix(in oklch, var(--pg-surface) 80%, transparent); backdrop-filter: blur(20px) saturate(180%); box-shadow: rgba(0,0,0,0.05) 0px 6px 24px 0px, rgba(0,0,0,0.06) 0px 0px 0px 1px; z-index: 100; opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity .15s, transform .15s; }
-    .color-fmt-dropdown.is-open { opacity: 1; pointer-events: all; transform: translateY(0); }
-    html[data-theme="dark"] .color-fmt-dropdown { box-shadow: rgba(0,0,0,0.2) 0px 6px 24px 0px, rgba(255,255,255,0.1) 0px 0px 0px 1px; }
-    .color-fmt-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
-    .color-fmt-option:hover { background: oklch(0.22 0.01 56 / .1); }
-    html[data-theme="dark"] .color-fmt-option:hover { background: oklch(0.98 0.00 106 / .1); }
-    .color-fmt-dropdown.show-selected .color-fmt-option.is-selected { background: oklch(0.22 0.01 56 / .1); }
-    html[data-theme="dark"] .color-fmt-dropdown.show-selected .color-fmt-option.is-selected { background: oklch(0.98 0.00 106 / .1); }
     .color-fmt-opt-name { flex-shrink: 0; }
     .color-fmt-opt-example { margin-left: 8px; font-size: 12px; font-weight: 400; color: var(--pg-muted); position: relative; top: 1px; }
-    .color-fmt-opt-check { opacity: 0; flex-shrink: 0; margin-left: auto; padding-left: 16px; color: var(--pg-primary); display: flex; align-items: center; }
-    .color-fmt-option.is-selected .color-fmt-opt-check { opacity: 1; }
 
     /* ── Type ── */
     .type-grid {
@@ -312,6 +299,49 @@
       .page { padding: 48px 24px 64px; }
       .page-header h1 { font-size: 40px; }
     }
+
+    /* ── Inputs / Controls ── */
+    .input-row .pg-input { width: 200px; }
+    .inputs-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-group-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--pg-muted);
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* bar width overrides for style page demos */
+    .input-row .pg-bar { width: 200px; }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .switch-label {
+      font-size: 13px;
+      color: var(--pg-primary);
+    }
   </style>
 </head>
 <body>
@@ -324,11 +354,11 @@
     <div class="section">
       <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
         Colors
-        <div class="color-fmt-wrap" id="color-fmt-wrap">
-          <span class="color-fmt-label">Format:</span>
-          <span class="color-fmt-val" id="color-fmt-val">oklch</span>
-          <svg class="color-fmt-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-          <div class="color-fmt-dropdown" id="color-fmt-dropdown"></div>
+        <div class="pg-select-wrap" id="pg-select-wrap" data-pg-init="1">
+          <span class="pg-select-label">Format:</span>
+          <span class="pg-select-val" id="pg-select-val">oklch</span>
+          <svg class="pg-select-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          <div class="pg-select-dropdown" id="pg-select-dropdown"></div>
         </div>
       </div>
       <div class="color-themes">
@@ -491,6 +521,67 @@
       </div>
     </div>
 
+    <!-- Inputs -->
+    <div class="section">
+      <div class="section-title">Inputs</div>
+      <div class="inputs-grid">
+
+        <div class="input-group">
+          <div class="input-group-label">Text</div>
+          <div class="input-row">
+            <input class="pg-input" type="text" placeholder="Placeholder" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-group-label">Dropdown</div>
+          <div class="input-row">
+            <div class="pg-select-wrap" id="demo-select-wrap" tabindex="0">
+              <span class="pg-select-val" id="demo-select-val">Option A</span>
+              <svg class="pg-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              <div class="pg-select-dropdown" id="demo-select-dropdown">
+                <div class="pg-select-option is-selected" data-val="Option A">Option A<span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="pg-select-option" data-val="Option B">Option B<span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+                <div class="pg-select-option" data-val="Option C">Option C<span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="section" id="controls-section">
+      <div class="section-title">Controls</div>
+      <div class="inputs-grid">
+
+        <!-- Slider / pg-bar -->
+        <div class="input-group">
+          <div class="input-group-label">Slider</div>
+          <div class="input-row">
+            <div class="pg-bar" id="demo-bar-live" tabindex="0" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <div class="pg-bar-fill" style="width:50%"></div>
+              <span class="pg-bar-val pg-bar-val--fill" style="clip-path:inset(0 50% 0 0)">50</span>
+              <span class="pg-bar-val pg-bar-val--track" style="clip-path:inset(0 0 0 50%)">50</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Toggle / pg-switch -->
+        <div class="input-group">
+          <div class="input-group-label">Toggle</div>
+          <div class="input-row">
+            <div class="switch-row">
+              <button class="pg-switch" data-on="0" id="demo-switch-live" aria-pressed="false"><i></i></button>
+              <span class="switch-label" id="demo-switch-live-label">Off</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Shadows -->
     <div class="section">
       <div class="section-title">Shadows</div>
@@ -504,6 +595,7 @@
   </div>
 
   <script src="/header.js"></script>
+  <script src="/shared/components.js"></script>
   <script>
     (function () {
       history.scrollRestoration = 'manual';
@@ -554,6 +646,11 @@
           }
         });
       });
+
+      // switch label update (page-specific)
+      var sw = document.getElementById('demo-switch-live');
+      var lbl = document.getElementById('demo-switch-live-label');
+      if (sw && lbl) sw.addEventListener('pg-switch-change', function (e) { lbl.textContent = e.detail.value ? 'On' : 'Off'; });
     })();
   </script>
   <script>
@@ -625,9 +722,9 @@
       }
 
       // Format selector
-      var fmtWrap = document.getElementById('color-fmt-wrap');
-      var fmtVal  = document.getElementById('color-fmt-val');
-      var fmtDrop = document.getElementById('color-fmt-dropdown');
+      var fmtWrap = document.getElementById('pg-select-wrap');
+      var fmtVal  = document.getElementById('pg-select-val');
+      var fmtDrop = document.getElementById('pg-select-dropdown');
       var FMT_OPTS = ['oklch','hex','rgb','hsl'];
       var CHECK_ICON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
       var firstSwatch = document.querySelector('.swatch[data-color]');
@@ -636,13 +733,13 @@
       function renderFmtOptions() {
         if(!fmtDrop) return;
         fmtDrop.innerHTML = FMT_OPTS.map(function(f) {
-          return '<div class="color-fmt-option' + (f===fmt?' is-selected':'') + '" data-fmt="'+f+'">' +
+          return '<div class="pg-select-option' + (f===fmt?' is-selected':'') + '" data-fmt="'+f+'">' +
             '<span class="color-fmt-opt-name">'+f+'</span>' +
             '<span class="color-fmt-opt-example">'+fmtColor(refColor, f)+'</span>' +
-            '<span class="color-fmt-opt-check">'+CHECK_ICON+'</span>' +
+            '<span class="pg-select-opt-check">'+CHECK_ICON+'</span>' +
           '</div>';
         }).join('');
-        fmtDrop.querySelectorAll('.color-fmt-option').forEach(function(opt) {
+        fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
           opt.addEventListener('click', function(e) {
             e.stopPropagation();
             fmt = opt.dataset.fmt;
@@ -663,7 +760,7 @@
           fmtDrop.classList.toggle('is-open');
           if (opening) {
             fmtDrop.classList.add('show-selected');
-            fmtDrop.querySelectorAll('.color-fmt-option').forEach(function(opt) {
+            fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
               opt.addEventListener('mouseenter', function clearSelected() {
                 if (!opt.classList.contains('is-selected')) {
                   fmtDrop.classList.remove('show-selected');

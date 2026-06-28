@@ -51,6 +51,7 @@ const __TWEAKS_STYLE = `
     --label:oklch(0.22 0.01 56 / .7);--val:oklch(0.22 0.01 56 / .5);
     --sect:var(--val);
     --fld-bd:oklch(0.22 0.01 56 / .15);--fld-bdf:oklch(0.22 0.01 56 / .35);--fld-surf:oklch(0.22 0.01 56 / .05);
+    --pg-border:var(--fld-bd);--pg-surface:var(--fld-surf);--pg-border-focus:var(--fld-bdf);
     --scroll:var(--fld-bd);--scroll-h:var(--fld-bdf);
     --track:var(--fld-bd);--seg:var(--fld-bd);
     --tog-off:oklch(0.22 0.01 56 / .3);--tog-handle:oklch(0.98 0.00 106);
@@ -66,6 +67,7 @@ const __TWEAKS_STYLE = `
     --bg:oklch(0.27 0.01 34 / .8);--text:oklch(0.98 0.00 106);--bd:oklch(0.98 0.00 106 / .1);
     --label:oklch(0.98 0.00 106 / .7);--val:oklch(0.98 0.00 106 / .5);
     --fld-bd:oklch(0.98 0.00 106 / .15);--fld-bdf:oklch(0.98 0.00 106 / .35);--fld-surf:oklch(0.98 0.00 106 / .05);
+    --pg-border:var(--fld-bd);--pg-surface:var(--fld-surf);--pg-border-focus:var(--fld-bdf);
     --tog-off:oklch(0.98 0.00 106 / .3);
     --btn:oklch(0.98 0.00 106 / .85);--btn-t:oklch(0.22 0.01 56);--btn-h:oklch(0.98 0.00 106 / .8);
     --sec:oklch(0.98 0.00 106 / .15);--sec-h:oklch(0.98 0.00 106 / .13);
@@ -119,10 +121,8 @@ const __TWEAKS_STYLE = `
   .twk-sect::before{content:'';display:block;border-top:1px solid var(--bd);margin:16px 0}
   .twk-sect:first-child::before{display:none}
 
-  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
-    border:1px solid var(--fld-bd);border-radius:8px;
-    background:var(--fld-surf);color:inherit;font:inherit;outline:none}
-  select.twk-field{padding-right:22px;
+  .pg-input{width:100%;min-width:0;color:inherit;font:inherit}
+  select.pg-input{padding-right:22px;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
     background-repeat:no-repeat;background-position:right 8px center}
 
@@ -822,7 +822,7 @@ function TweakSelect({
   return /*#__PURE__*/React.createElement(TweakRow, {
     label: label
   }, /*#__PURE__*/React.createElement("select", {
-    className: "twk-field",
+    className: "pg-input",
     value: value,
     onChange: e => onChange(e.target.value)
   }, options.map(o => {
@@ -843,7 +843,7 @@ function TweakText({
   return /*#__PURE__*/React.createElement(TweakRow, {
     label: label
   }, /*#__PURE__*/React.createElement("input", {
-    className: "twk-field",
+    className: "pg-input",
     type: "text",
     value: value,
     placeholder: placeholder,
