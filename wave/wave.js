@@ -84,8 +84,9 @@ function Wave({
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     let running = true;
+    const lowEnd = (navigator.hardwareConcurrency || 4) <= 4;
     const resize = () => {
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const dpr = lowEnd ? 1 : Math.min(2, window.devicePixelRatio || 1);
       canvas.width = Math.round(1600 * dpr);
       canvas.height = Math.round(1000 * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -98,10 +99,21 @@ function Wave({
     };
     resize();
     window.addEventListener('resize', resize);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const fpsInterval = 1000 / 60;
     const frame = now => {
       if (!running) return;
-      const dt = Math.min(0.1, (now - lastRef.current) / 1000);
-      lastRef.current = now;
+      const elapsed = now - lastRef.current;
+      if (elapsed < fpsInterval - 1) {
+        rafRef.current = requestAnimationFrame(frame);
+        return;
+      }
+      const dt = Math.min(0.1, elapsed / 1000);
+      lastRef.current = now - elapsed % fpsInterval;
+      if (reducedMotion.matches) {
+        rafRef.current = requestAnimationFrame(frame);
+        return;
+      }
       const tw = tweaksRef.current;
       if (!tw.paused) tRef.current += dt;
       if (tw.direction !== directionRef.current) {
@@ -112,7 +124,8 @@ function Wave({
       centerOffsetAnimRef.current += coDiff * Math.min(1, dt * (coDiff > 0 ? 8 : 5));
       draw(ctx, canvas, tRef.current, {
         ...tw,
-        centerOffset: centerOffsetAnimRef.current
+        centerOffset: centerOffsetAnimRef.current,
+        _dpr: lowEnd ? 1 : Math.min(2, window.devicePixelRatio || 1)
       });
       rafRef.current = requestAnimationFrame(frame);
     };
@@ -135,7 +148,7 @@ function Wave({
   });
 }
 function draw(ctx, canvas, time, t) {
-  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const dpr = t._dpr || Math.min(2, window.devicePixelRatio || 1);
   const W = canvas.width / dpr;
   const H = canvas.height / dpr;
   const vertical = t.direction === 'vertical';
@@ -144,7 +157,7 @@ function draw(ctx, canvas, time, t) {
   const T = vertical ? W : H;
   const ampPx = T * 0.42 * t.amplitude;
   const freq = t.frequency * Math.PI / L;
-  const ds = 3; // sample step along flow axis — small for smooth bends
+  const ds = 4; // sample step along flow axis — small for smooth bends
   const overscan = 80;
   const sStart = -overscan;
   const sEnd = L + overscan;
