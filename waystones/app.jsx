@@ -19,18 +19,23 @@ const FILTER_MAP = {
   packsize:   'map_packsize',
 };
 
-function buildTradeUrl(activeMods) {
+function buildTradeUrl(activeMods, modCountActive) {
   const filters = { map_tier: { min: 15 } };
   activeMods.forEach(({ param, value }) => {
     if (FILTER_MAP[param]) filters[FILTER_MAP[param]] = { min: value };
   });
+  const queryFilters = {
+    map_filters: { filters },
+    type_filters: { filters: { category: { option: 'map.waystone' } } },
+  };
+  const stats = modCountActive
+    ? [{ type: 'and', filters: [{ id: 'pseudo.pseudo_number_of_affix_mods', value: { min: 8 } }] }]
+    : [];
   const query = {
     query: {
       status: { option: 'securable' },
-      filters: {
-        map_filters: { filters },
-        type_filters: { filters: { category: { option: 'map.waystone' } } },
-      },
+      filters: queryFilters,
+      stats,
     },
     sort: { price: 'asc' },
   };
@@ -136,6 +141,25 @@ function ModRow({ mod, value, active, onToggle, onValue, last }) {
   );
 }
 
+function ToggleRow({ label, active, onToggle }) {
+  return (
+    <div className={`poe-row last${active ? ' active' : ''}`} onClick={onToggle}>
+      <button className="poe-toggle" onClick={e => { e.stopPropagation(); onToggle(); }} aria-pressed={active} aria-label={`Toggle ${label}`} tabIndex={-1}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><polyline points="3,8 6.5,12 13,4" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      <span className="poe-label">{label}</span>
+      <button
+        className="poe-switch"
+        data-on={active ? '1' : '0'}
+        role="switch"
+        aria-checked={active}
+        aria-label={label}
+        onClick={e => { e.stopPropagation(); onToggle(); }}
+      ><i /></button>
+    </div>
+  );
+}
+
 function useToast(className = 'poe-toast') {
   const ref = React.useRef(null);
   const timer = React.useRef(null);
@@ -165,12 +189,12 @@ function highlightModNames(str) {
   );
 }
 
-function CombinedBox({ combined, activeMods, onReset }) {
+function CombinedBox({ combined, activeMods, modCountActive, onReset }) {
   const [copied, setCopied] = useState(false);
   const showToast = useToast();
   const len = combined.length;
   const over = len > 250;
-  const hasActive = activeMods.length > 0;
+  const hasActive = activeMods.length > 0 || modCountActive;
 
   function handleCopy() {
     if (!combined) return;
@@ -191,7 +215,7 @@ function CombinedBox({ combined, activeMods, onReset }) {
 
   function handleTrade() {
     if (!hasActive) return;
-    window.open(buildTradeUrl(activeMods), '_blank', 'noopener');
+    window.open(buildTradeUrl(activeMods, modCountActive), '_blank', 'noopener');
   }
 
   return (
@@ -229,6 +253,7 @@ function App() {
   const [states, setStates] = useState(() =>
     MODS.map(mod => ({ value: mod.defaultVal, active: false }))
   );
+  const [modCountActive, setModCountActive] = useState(false);
 
   const combined = states
     .map((s, i) => s.active ? buildRegex(MODS[i].name, s.value) : null)
@@ -272,6 +297,7 @@ function App() {
 
   function reset() {
     setStates(MODS.map(mod => ({ value: mod.defaultVal, active: false })));
+    setModCountActive(false);
   }
 
   return (
@@ -285,9 +311,14 @@ function App() {
             active={states[i].active}
             onToggle={() => toggle(i)}
             onValue={v => setValue(i, v)}
-            last={i === MODS.length - 1}
+            last={false}
           />
         ))}
+        <ToggleRow
+          label="8 Modifiers"
+          active={modCountActive}
+          onToggle={() => setModCountActive(v => !v)}
+        />
       </div>
 
       {rarityCapExceeded && (
@@ -297,7 +328,7 @@ function App() {
         </p>
       )}
 
-      <CombinedBox combined={combined} activeMods={activeMods} onReset={reset} />
+      <CombinedBox combined={combined} activeMods={activeMods} modCountActive={modCountActive} onReset={reset} />
     </>
   );
 }

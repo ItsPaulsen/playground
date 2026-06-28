@@ -47,7 +47,7 @@ const FILTER_MAP = {
   dropchance: 'map_bonus',
   packsize: 'map_packsize'
 };
-function buildTradeUrl(activeMods) {
+function buildTradeUrl(activeMods, modCountActive) {
   const filters = {
     map_tier: {
       min: 15
@@ -61,23 +61,34 @@ function buildTradeUrl(activeMods) {
       min: value
     };
   });
+  const queryFilters = {
+    map_filters: {
+      filters
+    },
+    type_filters: {
+      filters: {
+        category: {
+          option: 'map.waystone'
+        }
+      }
+    }
+  };
+  const stats = modCountActive ? [{
+    type: 'and',
+    filters: [{
+      id: 'pseudo.pseudo_number_of_affix_mods',
+      value: {
+        min: 8
+      }
+    }]
+  }] : [];
   const query = {
     query: {
       status: {
         option: 'securable'
       },
-      filters: {
-        map_filters: {
-          filters
-        },
-        type_filters: {
-          filters: {
-            category: {
-              option: 'map.waystone'
-            }
-          }
-        }
-      }
+      filters: queryFilters,
+      stats
     },
     sort: {
       price: 'asc'
@@ -227,6 +238,48 @@ function ModRow({
     }
   }, value, "+")));
 }
+function ToggleRow({
+  label,
+  active,
+  onToggle
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: `poe-row last${active ? ' active' : ''}`,
+    onClick: onToggle
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "poe-toggle",
+    onClick: e => {
+      e.stopPropagation();
+      onToggle();
+    },
+    "aria-pressed": active,
+    "aria-label": `Toggle ${label}`,
+    tabIndex: -1
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 16 16",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("polyline", {
+    points: "3,8 6.5,12 13,4",
+    stroke: "currentColor",
+    strokeWidth: "1.75",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }))), /*#__PURE__*/React.createElement("span", {
+    className: "poe-label"
+  }, label), /*#__PURE__*/React.createElement("button", {
+    className: "poe-switch",
+    "data-on": active ? '1' : '0',
+    role: "switch",
+    "aria-checked": active,
+    "aria-label": label,
+    onClick: e => {
+      e.stopPropagation();
+      onToggle();
+    }
+  }, /*#__PURE__*/React.createElement("i", null)));
+}
 function useToast(className = 'poe-toast') {
   const ref = React.useRef(null);
   const timer = React.useRef(null);
@@ -255,13 +308,14 @@ function highlightModNames(str) {
 function CombinedBox({
   combined,
   activeMods,
+  modCountActive,
   onReset
 }) {
   const [copied, setCopied] = useState(false);
   const showToast = useToast();
   const len = combined.length;
   const over = len > 250;
-  const hasActive = activeMods.length > 0;
+  const hasActive = activeMods.length > 0 || modCountActive;
   function handleCopy() {
     if (!combined) return;
     setCopied(true);
@@ -280,7 +334,7 @@ function CombinedBox({
   }
   function handleTrade() {
     if (!hasActive) return;
-    window.open(buildTradeUrl(activeMods), '_blank', 'noopener');
+    window.open(buildTradeUrl(activeMods, modCountActive), '_blank', 'noopener');
   }
   return /*#__PURE__*/React.createElement("div", {
     className: `poe-combined${over ? ' over' : ''}`
@@ -379,6 +433,7 @@ function App() {
     value: mod.defaultVal,
     active: false
   })));
+  const [modCountActive, setModCountActive] = useState(false);
   const combined = states.map((s, i) => s.active ? buildRegex(MODS[i].name, s.value) : null).filter(Boolean).join(' ');
   const activeMods = states.map((s, i) => s.active ? {
     param: MODS[i].param,
@@ -409,6 +464,7 @@ function App() {
       value: mod.defaultVal,
       active: false
     })));
+    setModCountActive(false);
   }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "poe-panel"
@@ -419,8 +475,12 @@ function App() {
     active: states[i].active,
     onToggle: () => toggle(i),
     onValue: v => setValue(i, v),
-    last: i === MODS.length - 1
-  }))), rarityCapExceeded && /*#__PURE__*/React.createElement("p", {
+    last: false
+  })), /*#__PURE__*/React.createElement(ToggleRow, {
+    label: "8 Modifiers",
+    active: modCountActive,
+    onToggle: () => setModCountActive(v => !v)
+  })), rarityCapExceeded && /*#__PURE__*/React.createElement("p", {
     className: "poe-demand-warning"
   }, /*#__PURE__*/React.createElement("svg", {
     width: "14",
@@ -447,6 +507,7 @@ function App() {
   })), "This combination of mods may return no results."), /*#__PURE__*/React.createElement(CombinedBox, {
     combined: combined,
     activeMods: activeMods,
+    modCountActive: modCountActive,
     onReset: reset
   }));
 }
