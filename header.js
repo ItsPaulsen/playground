@@ -237,11 +237,8 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenuOpen(false);
 
-    if (e.key === 'Tab') {
-      const focusable = Array.from(document.querySelectorAll(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )).filter(el => !el.closest('[inert]') && el.offsetParent !== null);
-      if (focusable.length < 2) return;
+    if (e.key === 'Tab' && menu.classList.contains('is-open')) {
+      const focusable = [menuBtn, ...Array.from(menu.querySelectorAll('a[href], button:not([disabled])'))];
       const first = focusable[0];
       const last  = focusable[focusable.length - 1];
       if (e.shiftKey && document.activeElement === first) {
