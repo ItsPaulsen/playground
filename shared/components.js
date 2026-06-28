@@ -13,8 +13,15 @@
     }
 
     function open() {
+      dropdown.style.left = '0';
+      dropdown.style.right = '';
       dropdown.classList.add('is-open');
       dropdown.classList.add('show-selected');
+      var rect = dropdown.getBoundingClientRect();
+      if (rect.right > window.innerWidth - 8) {
+        dropdown.style.left = '';
+        dropdown.style.right = '0';
+      }
       dropdown.querySelectorAll('.pg-select-option').forEach(function (o) {
         o.addEventListener('mouseenter', function clearSelected() {
           if (!o.classList.contains('is-selected')) dropdown.classList.remove('show-selected');

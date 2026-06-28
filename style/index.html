@@ -730,8 +730,15 @@
         if(fmtVal) fmtVal.textContent = fmt;
         renderFmtOptions();
         function fmtOpen() {
+          fmtDrop.style.left = '0';
+          fmtDrop.style.right = '';
           fmtDrop.classList.add('is-open');
           fmtDrop.classList.add('show-selected');
+          var rect = fmtDrop.getBoundingClientRect();
+          if (rect.right > window.innerWidth - 8) {
+            fmtDrop.style.left = '';
+            fmtDrop.style.right = '0';
+          }
           fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
             opt.setAttribute('tabindex', '-1');
             opt.addEventListener('mouseenter', function clearSelected() {

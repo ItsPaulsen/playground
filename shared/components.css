@@ -78,7 +78,7 @@ html[data-theme="dark"] .pg-bar { background: rgba(253,253,251,.12); }
 .pg-select-dropdown {
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  left: 0;
   padding: 6px;
   border-radius: var(--radius-sm);
   corner-shape: superellipse(1.7);
