@@ -8,6 +8,10 @@ const GUIDES = [
     name: 'Crit Bow',
     ilvl: 75,
     bases: ['Obliterator Bow', 'Warmonger Bow'],
+    baseLinks: [
+      { label: 'Obliterator Bow', icon: 'https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV2VhcG9ucy9Ud29IYW5kV2VhcG9ucy9Cb3dzL0Jhc2V0eXBlcy9Cb3cwOSIsInciOjIsImgiOjQsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/e62ea7f094/Bow09.png', url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Obliterator%20Bow%22%2C%22filters%22%3A%7B%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D' },
+      { label: 'Warmonger Bow', icon: 'https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV2VhcG9ucy9Ud29IYW5kV2VhcG9ucy9Cb3dzL0Jhc2V0eXBlcy9Cb3cwOCIsInciOjIsImgiOjQsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/90f84002ea/Bow08.png', url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Warmonger%20Bow%22%2C%22filters%22%3A%7B%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D' },
+    ],
     baseInfo: [
       {
         name: 'Obliterator Bow',
@@ -16,7 +20,7 @@ const GUIDES = [
       },
       {
         name: 'Warmonger Bow',
-        stats: [{ label: 'Damage', value: '56–84' }, { label: 'APS', value: '1.20' }, { label: 'Proj. Range', value: '—' }],
+        stats: [{ label: 'Damage', value: '56–84' }, { label: 'APS', value: '1.20' }],
         desc: 'Faster attack speed, slightly lower base damage. Better for rapid-attack playstyles.',
       },
     ],
@@ -181,7 +185,31 @@ function CurrencyChip({ c, prices }) {
   );
 }
 
-function Step({ step, index, prices }) {
+function TradeLink({ t, baseInfo }) {
+  const [open, setOpen] = React.useState(false);
+  const info = baseInfo && baseInfo.find(b => b.name === t.label);
+  return (
+    <span className="craft-chip-wrap"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <a className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
+        {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
+        {t.label}
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+      {open && info && (
+        <div className="craft-tooltip">
+          <div className="craft-tooltip-row">
+            <span className="craft-tooltip-desc">{info.desc}</span>
+          </div>
+        </div>
+      )}
+    </span>
+  );
+}
+
+function Step({ step, index, prices, baseInfo }) {
   const cost = stepCost(step, prices);
   const hasCurrency = step.currency.length > 0;
   const hasLinks = step.tradeLinks && step.tradeLinks.length > 0;
@@ -201,20 +229,10 @@ function Step({ step, index, prices }) {
             </React.Fragment>
           ))}
           {hasLinks && step.tradeLinks.map((t, i, arr) => (
-            i < arr.length - 1
-              ? <span key={t.label} className="craft-sep-group">
-                  <a className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
-                    {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
-                    {t.label}
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  </a>
-                  <span className="craft-sep">or</span>
-                </span>
-              : <a key={t.label} className="craft-trade-link" href={t.url} target="_blank" rel="noopener">
-                  {t.icon && <img src={t.icon} className="craft-chip-icon" alt="" aria-hidden="true" />}
-                  {t.label}
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                </a>
+            <React.Fragment key={t.label}>
+              {i > 0 && <span className="craft-sep">or</span>}
+              <TradeLink t={t} baseInfo={baseInfo} />
+            </React.Fragment>
           ))}
         </div>
         {step.note && <p className="craft-note">{step.note}</p>}
@@ -230,17 +248,16 @@ function Guide({ guide, prices }) {
         <div>
           <h2 className="craft-guide-name">{guide.name}</h2>
           <div className="craft-guide-meta">
-            <span>ilvl {guide.ilvl}+</span>
+            <span className="craft-meta-ilvl">ilvl {guide.ilvl}+</span>
             <span className="craft-meta-sep">·</span>
             <span>{guide.bases.join(' or ')}</span>
-            {guide.baseInfo && <BaseTooltip baseInfo={guide.baseInfo} />}
           </div>
         </div>
       </div>
       {guide.intro && <p className="craft-intro">{guide.intro}</p>}
       <div className="craft-steps">
         {guide.steps.map((step, i) => (
-          <Step key={i} step={step} index={i} prices={prices} />
+          <Step key={i} step={step} index={i} prices={prices} baseInfo={guide.baseInfo} />
         ))}
       </div>
     </div>

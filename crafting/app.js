@@ -8,6 +8,15 @@ const GUIDES = [{
   name: 'Crit Bow',
   ilvl: 75,
   bases: ['Obliterator Bow', 'Warmonger Bow'],
+  baseLinks: [{
+    label: 'Obliterator Bow',
+    icon: 'https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV2VhcG9ucy9Ud29IYW5kV2VhcG9ucy9Cb3dzL0Jhc2V0eXBlcy9Cb3cwOSIsInciOjIsImgiOjQsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/e62ea7f094/Bow09.png',
+    url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Obliterator%20Bow%22%2C%22filters%22%3A%7B%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
+  }, {
+    label: 'Warmonger Bow',
+    icon: 'https://web.poecdn.com/gen/image/WzI1LDE0LHsiZiI6IjJESXRlbXMvV2VhcG9ucy9Ud29IYW5kV2VhcG9ucy9Cb3dzL0Jhc2V0eXBlcy9Cb3cwOCIsInciOjIsImgiOjQsInNjYWxlIjoxLCJyZWFsbSI6InBvZTIifV0/90f84002ea/Bow08.png',
+    url: 'https://www.pathofexile.com/trade2/search/poe2/Runes%20of%20Aldur?q=%7B%22query%22%3A%7B%22status%22%3A%7B%22option%22%3A%22securable%22%7D%2C%22type%22%3A%22Warmonger%20Bow%22%2C%22filters%22%3A%7B%22misc_filters%22%3A%7B%22filters%22%3A%7B%22ilvl%22%3A%7B%22min%22%3A75%7D%7D%7D%7D%7D%2C%22sort%22%3A%7B%22price%22%3A%22asc%22%7D%7D'
+  }],
   baseInfo: [{
     name: 'Obliterator Bow',
     stats: [{
@@ -29,9 +38,6 @@ const GUIDES = [{
     }, {
       label: 'APS',
       value: '1.20'
-    }, {
-      label: 'Proj. Range',
-      value: '—'
     }],
     desc: 'Faster attack speed, slightly lower base damage. Better for rapid-attack playstyles.'
   }],
@@ -228,38 +234,16 @@ function CurrencyChip({
     className: "craft-chip-tooltip"
   }, c.desc));
 }
-function Step({
-  step,
-  index,
-  prices
+function TradeLink({
+  t,
+  baseInfo
 }) {
-  const cost = stepCost(step, prices);
-  const hasCurrency = step.currency.length > 0;
-  const hasLinks = step.tradeLinks && step.tradeLinks.length > 0;
-  return /*#__PURE__*/React.createElement("div", {
-    className: "craft-step"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-num"
-  }, index + 1, "."), /*#__PURE__*/React.createElement("div", {
-    className: "craft-step-body"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "craft-step-header"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-title"
-  }, step.goal), cost && /*#__PURE__*/React.createElement("span", {
-    className: "craft-step-cost"
-  }, cost)), /*#__PURE__*/React.createElement("div", {
-    className: "craft-header-items"
-  }, hasCurrency && step.currency.map((c, i) => /*#__PURE__*/React.createElement(React.Fragment, {
-    key: c.label
-  }, i > 0 && /*#__PURE__*/React.createElement("span", {
-    className: "craft-sep"
-  }, "+"), /*#__PURE__*/React.createElement(CurrencyChip, {
-    c: c,
-    prices: prices
-  }))), hasLinks && step.tradeLinks.map((t, i, arr) => i < arr.length - 1 ? /*#__PURE__*/React.createElement("span", {
-    key: t.label,
-    className: "craft-sep-group"
+  const [open, setOpen] = React.useState(false);
+  const info = baseInfo && baseInfo.find(b => b.name === t.label);
+  return /*#__PURE__*/React.createElement("span", {
+    className: "craft-chip-wrap",
+    onMouseEnter: () => setOpen(true),
+    onMouseLeave: () => setOpen(false)
   }, /*#__PURE__*/React.createElement("a", {
     className: "craft-trade-link",
     href: t.url,
@@ -288,38 +272,52 @@ function Step({
     y1: "14",
     x2: "21",
     y2: "3"
-  }))), /*#__PURE__*/React.createElement("span", {
+  }))), open && info && /*#__PURE__*/React.createElement("div", {
+    className: "craft-tooltip"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "craft-tooltip-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "craft-tooltip-desc"
+  }, info.desc))));
+}
+function Step({
+  step,
+  index,
+  prices,
+  baseInfo
+}) {
+  const cost = stepCost(step, prices);
+  const hasCurrency = step.currency.length > 0;
+  const hasLinks = step.tradeLinks && step.tradeLinks.length > 0;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "craft-step"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-num"
+  }, index + 1, "."), /*#__PURE__*/React.createElement("div", {
+    className: "craft-step-body"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "craft-step-header"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-title"
+  }, step.goal), cost && /*#__PURE__*/React.createElement("span", {
+    className: "craft-step-cost"
+  }, cost)), /*#__PURE__*/React.createElement("div", {
+    className: "craft-header-items"
+  }, hasCurrency && step.currency.map((c, i) => /*#__PURE__*/React.createElement(React.Fragment, {
+    key: c.label
+  }, i > 0 && /*#__PURE__*/React.createElement("span", {
     className: "craft-sep"
-  }, "or")) : /*#__PURE__*/React.createElement("a", {
-    key: t.label,
-    className: "craft-trade-link",
-    href: t.url,
-    target: "_blank",
-    rel: "noopener"
-  }, t.icon && /*#__PURE__*/React.createElement("img", {
-    src: t.icon,
-    className: "craft-chip-icon",
-    alt: "",
-    "aria-hidden": "true"
-  }), t.label, /*#__PURE__*/React.createElement("svg", {
-    width: "10",
-    height: "10",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "3",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "15 3 21 3 21 9"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "10",
-    y1: "14",
-    x2: "21",
-    y2: "3"
-  }))))), step.note && /*#__PURE__*/React.createElement("p", {
+  }, "+"), /*#__PURE__*/React.createElement(CurrencyChip, {
+    c: c,
+    prices: prices
+  }))), hasLinks && step.tradeLinks.map((t, i, arr) => /*#__PURE__*/React.createElement(React.Fragment, {
+    key: t.label
+  }, i > 0 && /*#__PURE__*/React.createElement("span", {
+    className: "craft-sep"
+  }, "or"), /*#__PURE__*/React.createElement(TradeLink, {
+    t: t,
+    baseInfo: baseInfo
+  })))), step.note && /*#__PURE__*/React.createElement("p", {
     className: "craft-note"
   }, step.note)));
 }
@@ -335,11 +333,11 @@ function Guide({
     className: "craft-guide-name"
   }, guide.name), /*#__PURE__*/React.createElement("div", {
     className: "craft-guide-meta"
-  }, /*#__PURE__*/React.createElement("span", null, "ilvl ", guide.ilvl, "+"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "craft-meta-ilvl"
+  }, "ilvl ", guide.ilvl, "+"), /*#__PURE__*/React.createElement("span", {
     className: "craft-meta-sep"
-  }, "\xB7"), /*#__PURE__*/React.createElement("span", null, guide.bases.join(' or ')), guide.baseInfo && /*#__PURE__*/React.createElement(BaseTooltip, {
-    baseInfo: guide.baseInfo
-  })))), guide.intro && /*#__PURE__*/React.createElement("p", {
+  }, "\xB7"), /*#__PURE__*/React.createElement("span", null, guide.bases.join(' or '))))), guide.intro && /*#__PURE__*/React.createElement("p", {
     className: "craft-intro"
   }, guide.intro), /*#__PURE__*/React.createElement("div", {
     className: "craft-steps"
@@ -347,7 +345,8 @@ function Guide({
     key: i,
     step: step,
     index: i,
-    prices: prices
+    prices: prices,
+    baseInfo: guide.baseInfo
   }))));
 }
 function App() {

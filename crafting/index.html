@@ -54,6 +54,7 @@
   .craft-guide {
     background: var(--pg-surface);
     border-radius: var(--radius-md);
+    corner-shape: superellipse(1.7);
     padding: 24px;
     animation: pg-up .7s cubic-bezier(.22,1,.36,1) .2s both;
   }
@@ -78,10 +79,15 @@
     color: var(--pg-muted);
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 6px;
   }
+  .craft-guide-meta > span:first-child { white-space: nowrap; }
 
   .craft-meta-sep {}
+  .craft-meta-ilvl { white-space: nowrap; }
+  .craft-meta-or { color: var(--pg-muted); font-size: 13px; }
+  .craft-meta-base { text-decoration: none; color: var(--pg-primary); }
 
   .craft-tooltip-wrap { position: relative; display: inline-flex; align-items: center; }
 
@@ -99,26 +105,36 @@
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
-    background: var(--pg-bg);
-    border: .5px solid var(--pg-border);
-    border-radius: 12px;
-    padding: 12px 14px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.12);
+    background: color-mix(in oklch, var(--pg-dark-200) 80%, transparent);
+    backdrop-filter: blur(20px) saturate(180%);
+    color: var(--pg-dark-500);
+    border-radius: 16px;
+    padding: 8px 12px;
+    filter: drop-shadow(0 6px 24px rgba(0,0,0,.2));
     z-index: 50;
     width: 280px;
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
+  html[data-theme="dark"] .craft-tooltip {
+    background: color-mix(in oklch, var(--pg-light-200) 80%, transparent);
+    color: var(--pg-light-500);
+    filter: drop-shadow(0 6px 24px rgba(0,0,0,.05));
+  }
 
   .craft-tooltip-row { display: flex; flex-direction: column; gap: 4px; }
-  .craft-tooltip-name { font-size: 12px; font-weight: 600; color: var(--pg-primary); }
+  .craft-tooltip-name { font-size: 12px; font-weight: 600; color: var(--pg-dark-500); }
+  html[data-theme="dark"] .craft-tooltip-name { color: var(--pg-light-500); }
   .craft-tooltip-stats { display: flex; gap: 8px; }
-  .craft-tooltip-stat { display: flex; flex-direction: column; gap: 1px; background: rgba(28,25,23,.06); border-radius: 6px; padding: 4px 8px; }
-  html[data-theme="dark"] .craft-tooltip-stat { background: rgba(253,253,251,.08); }
-  .craft-tooltip-stat-label { font-size: 12px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--pg-muted); }
-  .craft-tooltip-stat-value { font-size: 12px; font-weight: 500; color: var(--pg-primary); font-variant-numeric: tabular-nums; }
-  .craft-tooltip-desc { font-size: 12px; color: var(--pg-muted); line-height: 18px; }
+  .craft-tooltip-stat { display: flex; flex-direction: column; gap: 1px; background: rgba(253,253,251,.1); border-radius: 6px; padding: 4px 8px; }
+  html[data-theme="dark"] .craft-tooltip-stat { background: rgba(28,25,23,.1); }
+  .craft-tooltip-stat-label { font-size: 11px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--pg-dark-400); }
+  html[data-theme="dark"] .craft-tooltip-stat-label { color: var(--pg-light-400); }
+  .craft-tooltip-stat-value { font-size: 12px; font-weight: 500; color: var(--pg-dark-500); font-variant-numeric: tabular-nums; }
+  html[data-theme="dark"] .craft-tooltip-stat-value { color: var(--pg-light-500); }
+  .craft-tooltip-desc { font-size: 12px; color: var(--pg-dark-500); line-height: 1.4; }
+  html[data-theme="dark"] .craft-tooltip-desc { color: var(--pg-light-500); }
 
   .craft-intro {
     font-size: 13px;
@@ -139,6 +155,7 @@
     padding: 16px 0;
     position: relative;
   }
+  .craft-step:last-child { padding-bottom: 0; }
   .craft-step:not(:last-child)::after {
     content: '';
     position: absolute;
@@ -241,19 +258,25 @@
     position: absolute;
     top: calc(100% + 6px);
     left: 0;
-    background: var(--pg-bg);
-    border: .5px solid var(--pg-border);
-    border-radius: 10px;
+    background: color-mix(in oklch, var(--pg-dark-200) 80%, transparent);
+    backdrop-filter: blur(20px) saturate(180%);
+    color: var(--pg-dark-500);
+    border-radius: 16px;
     padding: 8px 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    filter: drop-shadow(0 6px 24px rgba(0,0,0,.2));
     z-index: 50;
     width: 260px;
     font-size: 12px;
-    line-height: 18px;
-    color: var(--pg-muted);
+    line-height: 1.4;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     white-space: normal;
     pointer-events: none;
+  }
+
+  html[data-theme="dark"] .craft-chip-tooltip {
+    background: color-mix(in oklch, var(--pg-light-200) 80%, transparent);
+    color: var(--pg-light-500);
+    filter: drop-shadow(0 6px 24px rgba(0,0,0,.05));
   }
 
   .craft-trade-link {
