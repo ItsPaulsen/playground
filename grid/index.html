@@ -303,6 +303,7 @@
       background: var(--pg-surface);
       border: 1px solid var(--pg-border);
       border-radius: 12px;
+      corner-shape: superellipse(1.7);
       height: 32px;
       padding: 0 12px;
       cursor: pointer;
@@ -319,6 +320,7 @@
       right: 0;
       padding: 6px;
       border-radius: 20px;
+      corner-shape: superellipse(1.7);
       background: color-mix(in oklch, var(--pg-surface) 80%, transparent);
       backdrop-filter: blur(20px) saturate(180%);
       box-shadow: rgba(0,0,0,.05) 0 6px 24px 0, rgba(0,0,0,.06) 0 0 0 1px;
@@ -340,7 +342,7 @@
       transform: translateY(0);
     }
 
-    .grid-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; min-width: 120px; }
+    .grid-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; corner-shape: superellipse(1.7); cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; min-width: 120px; }
     .grid-select-option:hover { background: oklch(0.22 0.01 56 / .1); }
     html[data-theme="dark"] .grid-select-option:hover { background: oklch(0.98 0.00 106 / .1); }
     .grid-select-dropdown.show-selected .grid-select-option.is-selected { background: oklch(0.22 0.01 56 / .1); }
