@@ -5,11 +5,51 @@
     var dropdown = wrap.querySelector('.pg-select-dropdown');
     var valEl = wrap.querySelector('.pg-select-val');
     if (!dropdown) return;
+    dropdown.querySelectorAll('.pg-select-option').forEach(function (o) { o.setAttribute('tabindex', '-1'); });
 
     function close() {
       dropdown.classList.remove('is-open');
       dropdown.classList.remove('show-selected');
     }
+
+    function open() {
+      dropdown.classList.add('is-open');
+      dropdown.classList.add('show-selected');
+      dropdown.querySelectorAll('.pg-select-option').forEach(function (o) {
+        o.addEventListener('mouseenter', function clearSelected() {
+          if (!o.classList.contains('is-selected')) dropdown.classList.remove('show-selected');
+          o.removeEventListener('mouseenter', clearSelected);
+        });
+      });
+    }
+
+    wrap.addEventListener('keydown', function (e) {
+      var opts = Array.from(dropdown.querySelectorAll('.pg-select-option'));
+      var isOpen = dropdown.classList.contains('is-open');
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (isOpen) {
+          var focused = dropdown.querySelector('.pg-select-option:focus');
+          if (focused) { focused.click(); } else { close(); }
+        } else {
+          open();
+        }
+      } else if (e.key === 'Escape') {
+        close(); wrap.focus();
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!isOpen) { open(); }
+        dropdown.classList.remove('show-selected');
+        var focused = dropdown.querySelector('.pg-select-option:focus');
+        var idx = opts.indexOf(focused);
+        if (idx === -1) {
+          var selIdx = opts.indexOf(dropdown.querySelector('.pg-select-option.is-selected'));
+          idx = selIdx !== -1 ? selIdx : (e.key === 'ArrowDown' ? -1 : opts.length);
+        }
+        var next = e.key === 'ArrowDown' ? Math.min(idx + 1, opts.length - 1) : Math.max(idx - 1, 0);
+        opts[next].focus();
+      }
+    });
 
     wrap.addEventListener('click', function (e) {
       var opt = e.target.closest('.pg-select-option');
@@ -22,17 +62,7 @@
         wrap.dispatchEvent(new CustomEvent('pg-select', { detail: { value: opt.dataset.val, option: opt }, bubbles: true }));
         return;
       }
-      var opening = !dropdown.classList.contains('is-open');
-      dropdown.classList.toggle('is-open');
-      if (opening) {
-        dropdown.classList.add('show-selected');
-        dropdown.querySelectorAll('.pg-select-option').forEach(function (o) {
-          o.addEventListener('mouseenter', function clearSelected() {
-            if (!o.classList.contains('is-selected')) dropdown.classList.remove('show-selected');
-            o.removeEventListener('mouseenter', clearSelected);
-          });
-        });
-      }
+      if (dropdown.classList.contains('is-open')) { close(); } else { open(); }
     });
 
     document.addEventListener('click', function (e) {

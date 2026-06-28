@@ -91,6 +91,7 @@
     }
     html[data-theme="dark"] .swatch-color { border-color: rgba(255,255,255,.10); }
 
+    .swatch-copy-btn { outline: none; }
     .swatch-copy-btn {
       position: absolute;
       inset: 0;
@@ -105,6 +106,9 @@
     }
 
     .swatch:hover .swatch-copy-btn { opacity: 1; }
+    .swatch-copy-btn.is-copied { opacity: 1; }
+    .swatch:focus-visible { outline: none; }
+    .swatch:focus-visible .swatch-color { box-shadow: 0 0 0 2px var(--pg-bg), 0 0 0 4px var(--pg-primary); }
 
     .color-fmt-opt-name { flex-shrink: 0; }
     .color-fmt-opt-example { margin-left: 8px; font-size: 12px; font-weight: 400; color: var(--pg-muted); position: relative; top: 1px; }
@@ -321,7 +325,7 @@
     <div class="section">
       <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
         Colors
-        <div class="pg-select-wrap" id="pg-select-wrap" data-pg-init="1">
+        <div class="pg-select-wrap" id="pg-select-wrap" data-pg-init="1" tabindex="0">
           <span class="pg-select-label">Format:</span>
           <span class="pg-select-val" id="pg-select-val">oklch</span>
           <svg class="pg-select-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -725,19 +729,47 @@
       if(fmtWrap && fmtDrop) {
         if(fmtVal) fmtVal.textContent = fmt;
         renderFmtOptions();
-        fmtWrap.addEventListener('click', function() {
-          var opening = !fmtDrop.classList.contains('is-open');
-          fmtDrop.classList.toggle('is-open');
-          if (opening) {
-            fmtDrop.classList.add('show-selected');
-            fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
-              opt.addEventListener('mouseenter', function clearSelected() {
-                if (!opt.classList.contains('is-selected')) {
-                  fmtDrop.classList.remove('show-selected');
-                }
-                opt.removeEventListener('mouseenter', clearSelected);
-              });
+        function fmtOpen() {
+          fmtDrop.classList.add('is-open');
+          fmtDrop.classList.add('show-selected');
+          fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
+            opt.setAttribute('tabindex', '-1');
+            opt.addEventListener('mouseenter', function clearSelected() {
+              if (!opt.classList.contains('is-selected')) fmtDrop.classList.remove('show-selected');
+              opt.removeEventListener('mouseenter', clearSelected);
             });
+          });
+        }
+        function fmtClose() {
+          fmtDrop.classList.remove('is-open');
+          fmtDrop.classList.remove('show-selected');
+        }
+        fmtWrap.addEventListener('click', function() {
+          if (fmtDrop.classList.contains('is-open')) { fmtClose(); } else { fmtOpen(); }
+        });
+        fmtWrap.addEventListener('keydown', function(e) {
+          var opts = Array.from(fmtDrop.querySelectorAll('.pg-select-option'));
+          var isOpen = fmtDrop.classList.contains('is-open');
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (isOpen) {
+              var focused = fmtDrop.querySelector('.pg-select-option:focus');
+              if (focused) { focused.click(); } else { fmtClose(); }
+            } else { fmtOpen(); }
+          } else if (e.key === 'Escape') {
+            fmtClose(); fmtWrap.focus();
+          } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (!isOpen) fmtOpen();
+            fmtDrop.classList.remove('show-selected');
+            var focused = fmtDrop.querySelector('.pg-select-option:focus');
+            var idx = opts.indexOf(focused);
+            if (idx === -1) {
+              var selIdx = opts.indexOf(fmtDrop.querySelector('.pg-select-option.is-selected'));
+              idx = selIdx !== -1 ? selIdx : (e.key === 'ArrowDown' ? -1 : opts.length);
+            }
+            var next = e.key === 'ArrowDown' ? Math.min(idx + 1, opts.length - 1) : Math.max(idx - 1, 0);
+            opts[next].focus();
           }
         });
         document.addEventListener('click', function(e) {
@@ -756,19 +788,26 @@
       }
       // Copy buttons
       document.querySelectorAll('.swatch[data-color]').forEach(function(swatch) {
+        swatch.setAttribute('tabindex', '0');
+        swatch.setAttribute('role', 'button');
         var btn = document.createElement('button');
         btn.className = 'swatch-copy-btn';
         btn.setAttribute('aria-label', 'Copy color');
+        btn.setAttribute('tabindex', '-1');
         var resolved = resolveColor(swatch.dataset.color);
         btn.style.color = isLight(resolved) ? 'oklch(0.22 0.01 56)' : 'oklch(0.98 0.00 106)';
         btn.innerHTML = COPY;
+        swatch.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+        });
         btn.addEventListener('click', function() {
           refColor = resolveColor(swatch.dataset.color);
           var value = fmtColor(refColor, fmt);
           navigator.clipboard.writeText(value);
           showToast(value, refColor);
+          document.querySelectorAll('.swatch-copy-btn').forEach(function(b){ b.innerHTML = COPY; b.classList.remove('is-copied'); });
           btn.innerHTML = CHECK;
-          setTimeout(function(){ btn.innerHTML = COPY; }, 1500);
+          btn.classList.add('is-copied');
           if(fmtDrop && fmtDrop.classList.contains('is-open')) renderFmtOptions();
         });
         swatch.querySelector('.swatch-color').appendChild(btn);
