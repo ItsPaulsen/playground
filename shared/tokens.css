@@ -2,7 +2,7 @@
   --pg-light-100: oklch(0.98 0.00 106); /* Stone 50  */
   --pg-light-200: oklch(0.955 0.00 106);  /* Stone 100 */
   --pg-light-300: oklch(0.92 0.00 49);  /* Stone 200 */
-  --pg-light-400: oklch(0.55 0.01 58);  /* Stone 500 */
+  --pg-light-400: oklch(0.444 0.011 73.639);  /* Stone 600 */
   --pg-light-500: oklch(0.22 0.01 56);  /* Stone 900 */
 
   --pg-dark-100: oklch(0.22 0.01 56);   /* Stone 900 */

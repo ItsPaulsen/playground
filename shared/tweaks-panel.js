@@ -151,12 +151,12 @@ const __TWEAKS_STYLE = `
     overflow-wrap:anywhere;transition:color .2s ease}
   .twk-seg button[aria-checked="true"]{color:var(--bar-val);transition-delay:.1s}
 
-  .twk-toggle{position:relative;width:36px;height:20px;border:0;border-radius:999px;
+  .twk-toggle{position:relative;width:44px;height:24px;border:0;border-radius:999px;
     background:var(--tog-off);transition:background .25s;cursor:pointer;padding:0}
   .twk-toggle[data-on="1"]{background:#34c759}
-  .twk-toggle i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
     background:var(--tog-handle);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
-  .twk-toggle[data-on="1"] i{transform:translateX(16px)}
+  .twk-toggle[data-on="1"] i{transform:translateX(20px)}
 
 .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483642;width:36px;height:36px;
     border:none;border-radius:12px;cursor:pointer;padding:0;

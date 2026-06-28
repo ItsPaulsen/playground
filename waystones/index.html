@@ -242,25 +242,26 @@
   .poe-row.active .poe-label { color: var(--pg-primary); }
 
   .poe-switch {
+    --sw-off: oklch(0.22 0.01 56 / .2);
     position: relative;
-    width: 36px;
-    height: 20px;
+    width: 44px;
+    height: 24px;
     flex-shrink: 0;
     border: 0;
     border-radius: 999px;
-    background: oklch(0.22 0.01 56 / .2);
+    background: var(--sw-off);
     transition: background .25s;
     cursor: pointer;
     padding: 0;
   }
-  html[data-theme="dark"] .poe-switch { background: oklch(0.98 0.00 106 / .2); }
+  html[data-theme="dark"] .poe-switch { --sw-off: oklch(0.98 0.00 106 / .2); }
   .poe-switch[data-on="1"] { background: #34c759; }
   .poe-switch i {
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     background: oklch(0.98 0.00 106);
     box-shadow: 0 1px 2px rgba(0,0,0,.25);
@@ -268,7 +269,7 @@
     pointer-events: none;
     font-style: normal;
   }
-  .poe-switch[data-on="1"] i { transform: translateX(16px); }
+  .poe-switch[data-on="1"] i { transform: translateX(20px); }
 
   .poe-row:not(.active) .poe-bar { opacity: .4; transition: opacity .15s; }
 
