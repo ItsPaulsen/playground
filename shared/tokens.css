@@ -11,6 +11,11 @@
   --pg-dark-400: oklch(0.87 0.00 56);   /* Stone 300 */
   --pg-dark-500: oklch(0.98 0.00 106);  /* Stone 50  */
 
+  --radius-sm: 12px;  /* buttons, options */
+  --radius-md: 20px;  /* dropdowns, panels */
+  --radius-lg: 48px;  /* cards */
+  --radius-xl: 64px;  /* large content boxes */
+
   --pg-bg:      var(--pg-light-100);
   --pg-surface: var(--pg-light-200);
   --pg-border:  var(--pg-light-300);

@@ -81,7 +81,7 @@ const __TWEAKS_STYLE = `
     transform:scale(var(--dc-inv-zoom,1));transform-origin:top right;
     background:rgba(255,255,255,0.6);color:var(--text);
     backdrop-filter:blur(10px);
-    border:none;border-radius:20px;corner-shape:superellipse(1.7);
+    border:none;border-radius:var(--radius-md);corner-shape:superellipse(1.7);
     box-shadow:rgba(0,0,0,0.05) 0px 6px 24px 0px, rgba(0,0,0,0.06) 0px 0px 0px 1px;
     font:12px/1.4 'Inter',ui-sans-serif,system-ui,sans-serif;overflow:hidden}
   .twk-panel.twk-opening{animation:twk-in .5s cubic-bezier(.16,1,.3,1) both;}
@@ -91,7 +91,7 @@ const __TWEAKS_STYLE = `
   .twk-hd b{font-size:15px;font-weight:500;letter-spacing:.01em;line-height:20px}
   .twk-hd-spacer{width:36px;height:36px;flex-shrink:0;}
   .twk-x{appearance:none;border:0;background:transparent;color:oklch(0.22 0.01 56 / .8);
-    width:36px;height:36px;border-radius:12px;corner-shape:superellipse(1.7);cursor:pointer;font-size:13px;line-height:1;
+    width:36px;height:36px;border-radius:12px;cursor:pointer;font-size:13px;line-height:1;
     display:flex;align-items:center;justify-content:center;
     position:absolute;top:8px;right:8px;}
   .twk-x:hover{color:var(--text)}
@@ -159,7 +159,7 @@ const __TWEAKS_STYLE = `
   .twk-toggle[data-on="1"] i{transform:translateX(20px)}
 
 .twk-reopen{position:fixed;right:16px;top:calc(var(--header-h,0px) + 16px);z-index:2147483642;width:36px;height:36px;
-    border:none;border-radius:12px;corner-shape:superellipse(1.7);cursor:pointer;padding:0;
+    border:none;border-radius:var(--radius-sm);cursor:pointer;padding:0;
     background:rgba(255,255,255,0.6);
     backdrop-filter:blur(10px);
     box-shadow:rgba(0,0,0,0.05) 0px 6px 24px 0px, rgba(0,0,0,0.06) 0px 0px 0px 1px;
@@ -231,7 +231,7 @@ const __TWEAKS_STYLE = `
 
   .twk-cpick{position:fixed;z-index:2147483644;width:212px;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
-    border:.5px solid rgba(0,0,0,0.12);border-radius:12px;corner-shape:superellipse(1.7);padding:12px;
+    border:.5px solid rgba(0,0,0,0.12);border-radius:var(--radius-sm);padding:12px;
     box-shadow:0 8px 40px rgba(0,0,0,.2);
     display:flex;flex-direction:column;gap:8px}
   .twk-cpick-sv{position:relative;width:100%;height:140px;
@@ -250,7 +250,7 @@ const __TWEAKS_STYLE = `
     transform:translate(-50%,-50%);pointer-events:none}
 
   .twk-footer{display:none;flex-shrink:0;padding:12px 16px;gap:8px;border-top:1px solid var(--bd);}
-  .twk-footer .twk-btn{height:36px;border-radius:12px;corner-shape:superellipse(1.7);font-size:14px;}
+  .twk-footer .twk-btn{height:36px;border-radius:var(--radius-sm);font-size:14px;}
   .twk-desktop-only{}
   .twk-mobile-only{display:none;}
   .twk-backdrop{display:none;}
@@ -278,7 +278,7 @@ const __TWEAKS_STYLE = `
     bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:50%;transform:translateX(-50%);
     z-index:2147483642;height:36px;padding:0 16px 0 12px;gap:8px;
     background:rgba(255,255,255,0.6);backdrop-filter:blur(10px);
-    border:none;border-radius:12px;corner-shape:superellipse(1.7);
+    border:none;border-radius:var(--radius-sm);
     box-shadow:rgba(0,0,0,0.05) 0px 6px 24px 0px, rgba(0,0,0,0.06) 0px 0px 0px 1px;
     color:oklch(0.22 0.01 56 / .8);
     font:500 14px/1 'Inter',ui-sans-serif,system-ui,sans-serif;
@@ -301,7 +301,7 @@ const __TWEAKS_STYLE = `
     }
     .twk-panel.twk-opening{animation:twk-in-mob .5s cubic-bezier(.16,1,.3,1) both!important;}
     .twk-panel.twk-closing{animation:twk-out-mob .2s cubic-bezier(.4,0,1,1) both!important;}
-    .twk-cpick{left:50%!important;top:50%!important;bottom:auto!important;right:auto!important;transform:translate(-50%,-50%)!important;width:calc(100% - 32px)!important;max-width:320px!important;max-height:none!important;border-radius:20px!important;corner-shape:superellipse(1.7)!important;}
+    .twk-cpick{left:50%!important;top:50%!important;bottom:auto!important;right:auto!important;transform:translate(-50%,-50%)!important;width:calc(100% - 32px)!important;max-width:320px!important;max-height:none!important;border-radius:var(--radius-md)!important;corner-shape:superellipse(1.7)!important;}
     .twk-cpick .twk-cpick-sv{height:240px!important;}
     .twk-cpick-overlay{animation:none!important;z-index:2147483647!important;background:rgba(0,0,0,.4)!important;}
   }

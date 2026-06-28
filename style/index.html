@@ -83,7 +83,7 @@
       aspect-ratio: 1;
       width: 100%;
       position: relative;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       corner-shape: superellipse(1.7);
       overflow: hidden;
       border: 1px solid rgba(0,0,0,.10);
@@ -105,14 +105,14 @@
 
     .swatch:hover .swatch-copy-btn { opacity: 1; }
 
-    .color-fmt-wrap { position: relative; display: inline-flex; align-items: center; gap: 8px; background: var(--pg-surface); border: 1px solid var(--pg-border); border-radius: 12px; corner-shape: superellipse(1.7); height: 32px; padding: 0 12px; cursor: pointer; user-select: none; }
+    .color-fmt-wrap { position: relative; display: inline-flex; align-items: center; gap: 8px; background: var(--pg-surface); border: 1px solid var(--pg-border); border-radius: var(--radius-sm); height: 32px; padding: 0 12px; cursor: pointer; user-select: none; }
     .color-fmt-label { font-size: 13px; font-weight: 500; color: var(--pg-primary); }
     .color-fmt-val { font-size: 13px; font-weight: 400; color: var(--pg-muted); }
     .color-fmt-chevron { color: var(--pg-muted); flex-shrink: 0; display: block; }
-    .color-fmt-dropdown { position: absolute; top: calc(100% + 6px); right: 0; min-width: 0; padding: 6px; border-radius: 20px; corner-shape: superellipse(1.7); background: color-mix(in oklch, var(--pg-surface) 80%, transparent); backdrop-filter: blur(20px) saturate(180%); box-shadow: rgba(0,0,0,0.05) 0px 6px 24px 0px, rgba(0,0,0,0.06) 0px 0px 0px 1px; z-index: 100; opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity .15s, transform .15s; }
+    .color-fmt-dropdown { position: absolute; top: calc(100% + 6px); right: 0; min-width: 0; padding: 6px; border-radius: var(--radius-md); corner-shape: superellipse(1.7); background: color-mix(in oklch, var(--pg-surface) 80%, transparent); backdrop-filter: blur(20px) saturate(180%); box-shadow: rgba(0,0,0,0.05) 0px 6px 24px 0px, rgba(0,0,0,0.06) 0px 0px 0px 1px; z-index: 100; opacity: 0; pointer-events: none; transform: translateY(-4px); transition: opacity .15s, transform .15s; }
     .color-fmt-dropdown.is-open { opacity: 1; pointer-events: all; transform: translateY(0); }
     html[data-theme="dark"] .color-fmt-dropdown { box-shadow: rgba(0,0,0,0.2) 0px 6px 24px 0px, rgba(255,255,255,0.1) 0px 0px 0px 1px; }
-    .color-fmt-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; corner-shape: superellipse(1.7); cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
+    .color-fmt-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
     .color-fmt-option:hover { background: oklch(0.22 0.01 56 / .1); }
     html[data-theme="dark"] .color-fmt-option:hover { background: oklch(0.98 0.00 106 / .1); }
     .color-fmt-dropdown.show-selected .color-fmt-option.is-selected { background: oklch(0.22 0.01 56 / .1); }
@@ -236,7 +236,7 @@
       transform: translateX(-50%) translateY(-6px);
       background: var(--pg-surface);
       border: 1px solid var(--pg-border);
-      border-radius: 12px;
+      border-radius: var(--radius-sm);
       corner-shape: superellipse(1.7);
       padding: 10px 14px;
       display: flex;
@@ -295,7 +295,7 @@
 
       .color-swatches { gap: 16px; }
       .swatch { width: calc((100% - 3 * 16px) / 4); }
-      .swatch-color { border-radius: 16px; corner-shape: superellipse(1.7); }
+      .swatch-color { border-radius: 16px; }
       .radius-row { gap: 16px; }
     }
 
@@ -469,11 +469,11 @@
           <div class="radius-label">8px</div>
         </div>
         <div class="radius-item">
-          <div class="radius-box" style="border-radius:12px; corner-shape: superellipse(1.7)"></div>
+          <div class="radius-box" style="border-radius:12px"></div>
           <div class="radius-label">12px</div>
         </div>
         <div class="radius-item">
-          <div class="radius-box" style="border-radius:16px; corner-shape: superellipse(1.7)"></div>
+          <div class="radius-box" style="border-radius:16px"></div>
           <div class="radius-label">16px</div>
         </div>
         <div class="radius-item">
