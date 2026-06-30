@@ -442,8 +442,11 @@ function TweaksPanel({
     return () => window.removeEventListener('message', onMsg);
   }, []);
   React.useEffect(() => {
+    let wasMobile = window.innerWidth <= MOBILE;
     const onResize = () => {
-      if (window.innerWidth <= MOBILE) setOpen(false);
+      const isMobile = window.innerWidth <= MOBILE;
+      if (!wasMobile && isMobile) setOpen(false);
+      wasMobile = isMobile;
     };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);

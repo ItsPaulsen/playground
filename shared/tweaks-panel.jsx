@@ -397,7 +397,12 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     return () => window.removeEventListener('message', onMsg);
   }, []);
   React.useEffect(() => {
-    const onResize = () => { if (window.innerWidth <= MOBILE) setOpen(false); };
+    let wasMobile = window.innerWidth <= MOBILE;
+    const onResize = () => {
+      const isMobile = window.innerWidth <= MOBILE;
+      if (!wasMobile && isMobile) setOpen(false);
+      wasMobile = isMobile;
+    };
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
