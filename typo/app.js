@@ -49,7 +49,7 @@ function App() {
       position: 'relative'
     }
   }, /*#__PURE__*/React.createElement("input", {
-    className: "twk-field",
+    className: "pg-input",
     type: "text",
     value: t.text,
     placeholder: "Type something\u2026",
@@ -66,7 +66,7 @@ function App() {
       right: 8,
       top: '50%',
       transform: 'translateY(-50%)',
-      fontSize: 10,
+      fontSize: 11,
       color: 'var(--val)',
       pointerEvents: 'none'
     }

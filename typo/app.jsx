@@ -42,7 +42,7 @@ function App() {
         <TweakSection>
           <div style={{ position: 'relative' }}>
             <input
-              className="twk-field"
+              className="pg-input"
               type="text"
               value={t.text}
               placeholder="Type something…"
@@ -50,7 +50,7 @@ function App() {
               onChange={(e) => { const v = [..._seg.segment(e.target.value)].slice(0, 20).map(s => s.segment).join(''); setTweak('text', v); }}
             />
             <span style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
-              fontSize: 10, color: 'var(--val)', pointerEvents: 'none' }}>
+              fontSize: 11, color: 'var(--val)', pointerEvents: 'none' }}>
               {[..._seg.segment(t.text || '')].length}/20
             </span>
           </div>

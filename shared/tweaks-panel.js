@@ -200,7 +200,7 @@ const __TWEAKS_STYLE = `
   .twk-color-opacity-input{width:20px;border:0;background:transparent;color:inherit;
     font:inherit;font-size:12px;text-align:right;padding:0;outline:none;-moz-appearance:textfield}
   .twk-color-opacity-input::-webkit-inner-spin-button,.twk-color-opacity-input::-webkit-outer-spin-button{-webkit-appearance:none}
-  .twk-color-opacity-pct{color:inherit;font-size:10px}
+  .twk-color-opacity-pct{color:inherit;font-size:11px}
   .twk-color-pick{appearance:none;width:26px;height:26px;border:0;
     border-radius:8px;background:transparent;color:var(--label);cursor:pointer;
     display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;box-sizing:border-box}
@@ -384,6 +384,7 @@ function TweaksPanel({
   const [closing, setClosing] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
+  const bodyRef = React.useRef(null);
   const dragInfo = React.useRef({
     active: false,
     startY: 0,
@@ -445,6 +446,97 @@ function TweaksPanel({
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
+  React.useEffect(() => {
+    const body = bodyRef.current;
+    if (!body || !open) return;
+    let startY = 0,
+      intercepting = false,
+      points = [];
+    const onTouchStart = e => {
+      if (window.innerWidth > MOBILE) return;
+      startY = e.touches[0].clientY;
+      intercepting = false;
+      points = [{
+        y: startY,
+        t: performance.now()
+      }];
+    };
+    const onTouchMove = e => {
+      if (window.innerWidth > MOBILE) return;
+      const dy = e.touches[0].clientY - startY;
+      const now = performance.now();
+      points.push({
+        y: e.touches[0].clientY,
+        t: now
+      });
+      while (points.length > 1 && now - points[0].t > 200) points.shift();
+      if (!intercepting) {
+        if (body.scrollTop === 0 && dy > 4) intercepting = true;else return;
+      }
+      e.preventDefault();
+      const raw = dy >= 0 ? dy : dy * 0.25;
+      if (panelRef.current) {
+        panelRef.current.style.setProperty('transition', 'none', 'important');
+        panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${raw}px)`, 'important');
+      }
+      if (backdropRef.current) {
+        const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
+        backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - Math.max(0, dy) / sheetH)), 'important');
+      }
+    };
+    const onTouchEnd = e => {
+      if (!intercepting) return;
+      intercepting = false;
+      const dy = Math.max(0, (e.changedTouches[0]?.clientY || startY) - startY);
+      const cutoff = performance.now() - 100;
+      const recent = points.filter(p => p.t >= cutoff);
+      let vel = 0;
+      if (recent.length >= 2) {
+        const f = recent[0],
+          l = recent[recent.length - 1];
+        if (l.t - f.t > 0) vel = (l.y - f.y) / (l.t - f.t);
+      }
+      if (vel > 0.5 || dy > 120) {
+        if (panelRef.current) {
+          panelRef.current.style.setProperty('transition', 'transform 0.25s cubic-bezier(.4,0,1,1)', 'important');
+          panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
+        }
+        if (backdropRef.current) {
+          backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
+          backdropRef.current.style.setProperty('opacity', '0', 'important');
+        }
+        setTimeout(() => {
+          setOpen(false);
+          window.parent.postMessage({
+            type: '__edit_mode_dismissed'
+          }, '*');
+        }, 260);
+      } else {
+        if (panelRef.current) {
+          panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1)', 'important');
+          panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
+        }
+        if (backdropRef.current) {
+          backdropRef.current.style.transition = 'opacity 0.4s cubic-bezier(.16,1,.3,1)';
+          backdropRef.current.style.setProperty('opacity', '1', 'important');
+        }
+      }
+    };
+    body.addEventListener('touchstart', onTouchStart, {
+      passive: true
+    });
+    body.addEventListener('touchmove', onTouchMove, {
+      passive: false
+    });
+    body.addEventListener('touchend', onTouchEnd, {
+      passive: true
+    });
+    return () => {
+      body.removeEventListener('touchstart', onTouchStart);
+      body.removeEventListener('touchmove', onTouchMove);
+      body.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [open]);
   const dismiss = () => {
     setClosing(true);
     setTimeout(() => onOpenChange && onOpenChange(false), 80);
@@ -474,7 +566,8 @@ function TweaksPanel({
   const onDragMove = e => {
     if (!dragInfo.current.active) return;
     const now = performance.now();
-    const raw = Math.max(0, e.clientY - dragInfo.current.startY);
+    const dy = e.clientY - dragInfo.current.startY;
+    const raw = dy >= 0 ? dy : dy * 0.25;
     const pts = dragInfo.current.points;
     pts.push({
       y: e.clientY,
@@ -565,6 +658,7 @@ function TweaksPanel({
     className: "twk-hd-spacer",
     "aria-hidden": "true"
   })), /*#__PURE__*/React.createElement("div", {
+    ref: bodyRef,
     className: "twk-body"
   }, children, hasDeckStage && railEnabled && !noDeckControls && /*#__PURE__*/React.createElement(TweakSection, {
     label: "Deck"
