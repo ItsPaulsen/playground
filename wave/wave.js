@@ -82,15 +82,112 @@ function Wave({
   const directionRef = useRef(t.direction);
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
     let running = true;
+    const getStage = () => ({
+      w: canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth,
+      h: canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight
+    });
+
+    // OffscreenCanvas: draw on a worker thread so main thread never blocks
+    if (typeof canvas.transferControlToOffscreen === 'function') {
+      const offscreen = canvas.transferControlToOffscreen();
+      const workerSrc = `
+${meander.toString()}
+${lineColor.toString()}
+${withAlpha.toString()}
+${mixHex.toString()}
+${draw.toString()}
+let ctx=null,tAnim=0,lastT=performance.now(),coAnim=0,dirRef=null,tw=null;
+self.onmessage=(e)=>{
+  const d=e.data;
+  if(d.type==='init'){
+    ctx=d.canvas.getContext('2d');
+    ctx.canvas.width=d.w; ctx.canvas.height=d.h;
+    tw=d.tweaks; coAnim=tw.centerOffset; dirRef=tw.direction;
+  } else if(d.type==='resize'){
+    if(ctx){ctx.canvas.width=d.w;ctx.canvas.height=d.h;}
+  } else if(d.type==='frame'){
+    if(!ctx)return;
+    tw=d.tweaks;
+    const now=performance.now();
+    const dt=Math.min(0.1,(now-lastT)/1000);
+    lastT=now;
+    if(!tw.paused)tAnim+=dt;
+    if(tw.direction!==dirRef){dirRef=tw.direction;coAnim=tw.centerOffset;}
+    const coDiff=tw.centerOffset-coAnim;
+    coAnim+=coDiff*Math.min(1,dt*(coDiff>0?8:5));
+    draw(ctx,ctx.canvas,tAnim,{...tw,centerOffset:coAnim});
+    self.postMessage('done');
+  }
+};`;
+      const workerUrl = URL.createObjectURL(new Blob([workerSrc], {
+        type: 'application/javascript'
+      }));
+      const worker = new Worker(workerUrl);
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let workerBusy = false;
+      const resize = () => {
+        const {
+          w,
+          h
+        } = getStage();
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        worker.postMessage({
+          type: 'resize',
+          w,
+          h
+        });
+      };
+      const tick = () => {
+        if (!running) return;
+        if (!workerBusy && !reducedMotion.matches) {
+          workerBusy = true;
+          worker.postMessage({
+            type: 'frame',
+            tweaks: tweaksRef.current
+          });
+        }
+        rafRef.current = requestAnimationFrame(tick);
+      };
+      worker.onmessage = () => {
+        workerBusy = false;
+      };
+      const {
+        w,
+        h
+      } = getStage();
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      worker.postMessage({
+        type: 'init',
+        canvas: offscreen,
+        w,
+        h,
+        tweaks: tweaksRef.current
+      }, [offscreen]);
+      window.addEventListener('resize', resize);
+      rafRef.current = requestAnimationFrame(tick);
+      return () => {
+        running = false;
+        cancelAnimationFrame(rafRef.current);
+        window.removeEventListener('resize', resize);
+        worker.terminate();
+        URL.revokeObjectURL(workerUrl);
+      };
+    }
+
+    // Fallback: main-thread rendering (browsers without OffscreenCanvas)
+    const ctx = canvas.getContext('2d');
     const resize = () => {
-      const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
-      const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      canvas.width = 1600;
-      canvas.height = 1000;
-      canvas.style.width = stageW + 'px';
-      canvas.style.height = stageH + 'px';
+      const {
+        w,
+        h
+      } = getStage();
+      canvas.width = 1920;
+      canvas.height = 1080;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
       ctx.setTransform(1, 0, 0, 1, 0, 0);
     };
     resize();
