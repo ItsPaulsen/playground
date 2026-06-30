@@ -82,138 +82,26 @@ function Wave({
   const directionRef = useRef(t.direction);
   useEffect(() => {
     const canvas = canvasRef.current;
-    let running = true;
-    const getStage = () => ({
-      w: canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth,
-      h: canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight,
-      dpr: Math.min(2, window.devicePixelRatio || 1)
-    });
-
-    // OffscreenCanvas: draw on a worker thread so main thread never blocks
-    if (typeof canvas.transferControlToOffscreen === 'function') {
-      const offscreen = canvas.transferControlToOffscreen();
-      const workerSrc = `
-${meander.toString()}
-${lineColor.toString()}
-${withAlpha.toString()}
-${mixHex.toString()}
-${draw.toString()}
-let ctx=null,tAnim=0,lastT=performance.now(),coAnim=0,dirRef=null,tw=null,dpr=1;
-self.onmessage=(e)=>{
-  const d=e.data;
-  if(d.type==='init'){
-    ctx=d.canvas.getContext('2d');
-    dpr=d.dpr||1;
-    ctx.canvas.width=d.w*dpr; ctx.canvas.height=d.h*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    tw=d.tweaks; coAnim=tw.centerOffset; dirRef=tw.direction;
-  } else if(d.type==='resize'){
-    if(ctx){dpr=d.dpr||dpr;ctx.canvas.width=d.w*dpr;ctx.canvas.height=d.h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
-  } else if(d.type==='frame'){
-    if(!ctx)return;
-    tw=d.tweaks;
-    const now=performance.now();
-    const dt=Math.min(0.1,(now-lastT)/1000);
-    lastT=now;
-    if(!tw.paused)tAnim+=dt;
-    if(tw.direction!==dirRef){dirRef=tw.direction;coAnim=tw.centerOffset;}
-    const coDiff=tw.centerOffset-coAnim;
-    coAnim+=coDiff*Math.min(1,dt*(coDiff>0?8:5));
-    draw(ctx,ctx.canvas,tAnim,{...tw,centerOffset:coAnim});
-    self.postMessage('done');
-  }
-};`;
-      const workerUrl = URL.createObjectURL(new Blob([workerSrc], {
-        type: 'application/javascript'
-      }));
-      const worker = new Worker(workerUrl);
-      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-      let workerBusy = false;
-      const resize = () => {
-        const {
-          w,
-          h,
-          dpr
-        } = getStage();
-        canvas.style.width = w + 'px';
-        canvas.style.height = h + 'px';
-        worker.postMessage({
-          type: 'resize',
-          w,
-          h,
-          dpr
-        });
-      };
-      const tick = () => {
-        if (!running) return;
-        if (!workerBusy && !reducedMotion.matches) {
-          workerBusy = true;
-          worker.postMessage({
-            type: 'frame',
-            tweaks: tweaksRef.current
-          });
-        }
-        rafRef.current = requestAnimationFrame(tick);
-      };
-      worker.onmessage = () => {
-        workerBusy = false;
-      };
-      const {
-        w,
-        h,
-        dpr
-      } = getStage();
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
-      worker.postMessage({
-        type: 'init',
-        canvas: offscreen,
-        w,
-        h,
-        dpr,
-        tweaks: tweaksRef.current
-      }, [offscreen]);
-      window.addEventListener('resize', resize);
-      rafRef.current = requestAnimationFrame(tick);
-      return () => {
-        running = false;
-        cancelAnimationFrame(rafRef.current);
-        window.removeEventListener('resize', resize);
-        worker.terminate();
-        URL.revokeObjectURL(workerUrl);
-      };
-    }
-
-    // Fallback: main-thread rendering (browsers without OffscreenCanvas)
     const ctx = canvas.getContext('2d');
+    let running = true;
     const resize = () => {
-      const {
-        w,
-        h
-      } = getStage();
-      canvas.width = 1920;
-      canvas.height = 1080;
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas.width = Math.round(1600 * dpr);
+      canvas.height = Math.round(1000 * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
+      const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
+      const scale = Math.max(stageW / 1600, stageH / 1000);
+      const x = Math.round((stageW - 1600 * scale) / 2);
+      const y = Math.round((stageH - 1000 * scale) / 2);
+      canvas.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
     };
     resize();
     window.addEventListener('resize', resize);
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const fpsInterval = 1000 / 60;
     const frame = now => {
       if (!running) return;
-      const elapsed = now - lastRef.current;
-      if (elapsed < fpsInterval - 1) {
-        rafRef.current = requestAnimationFrame(frame);
-        return;
-      }
-      const dt = Math.min(0.1, elapsed / 1000);
+      const dt = Math.min(0.1, (now - lastRef.current) / 1000);
       lastRef.current = now;
-      if (reducedMotion.matches) {
-        rafRef.current = requestAnimationFrame(frame);
-        return;
-      }
       const tw = tweaksRef.current;
       if (!tw.paused) tRef.current += dt;
       if (tw.direction !== directionRef.current) {
@@ -238,14 +126,16 @@ self.onmessage=(e)=>{
   return /*#__PURE__*/React.createElement("canvas", {
     ref: canvasRef,
     style: {
+      width: '1600px',
+      height: '1000px',
       display: 'block',
-      position: 'absolute'
+      position: 'absolute',
+      transformOrigin: 'top left'
     }
   });
 }
 function draw(ctx, canvas, time, t) {
-  // canvas.width is physical pixels; divide by dpr to get CSS/logical pixels for drawing
-  const dpr = ctx.getTransform ? ctx.getTransform().a || 1 : 1;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
   const W = canvas.width / dpr;
   const H = canvas.height / dpr;
   const vertical = t.direction === 'vertical';
@@ -254,9 +144,7 @@ function draw(ctx, canvas, time, t) {
   const T = vertical ? W : H;
   const ampPx = T * 0.42 * t.amplitude;
   const freq = t.frequency * Math.PI / L;
-
-  // Scale sample step with canvas width so path op count stays ~constant across resolutions
-  const ds = Math.max(3, Math.round(L / 600));
+  const ds = 3; // sample step along flow axis — small for smooth bends
   const overscan = 80;
   const sStart = -overscan;
   const sEnd = L + overscan;
