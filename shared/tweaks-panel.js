@@ -461,11 +461,11 @@ function TweaksPanel({
   const onDragStart = e => {
     if (window.innerWidth > MOBILE) return;
     const now = performance.now();
-    const baseHeight = panelRef.current ? panelRef.current.offsetHeight : 0;
+    const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
     dragInfo.current = {
       active: true,
       startY: e.clientY,
-      baseHeight,
+      sheetH,
       points: [{
         y: e.clientY,
         t: now
@@ -491,12 +491,10 @@ function TweaksPanel({
     while (pts.length > 1 && now - pts[0].t > 200) pts.shift();
     if (panelRef.current) {
       const raw = dy >= 0 ? dy : dy * 0.25;
-      panelRef.current.style.setProperty('transition', 'none', 'important');
       panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${raw}px)`, 'important');
     }
     if (backdropRef.current) {
-      const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
-      backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - Math.max(0, dy) / sheetH)), 'important');
+      backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - Math.max(0, dy) / dragInfo.current.sheetH)), 'important');
     }
   };
   const onDragEnd = e => {
@@ -514,7 +512,7 @@ function TweaksPanel({
         backdropRef.current.style.setProperty('opacity', '1', 'important');
       }
     };
-    if (e.type === 'pointercancel') {
+    if (e.type === 'pointercancel' || e.type === 'lostpointercapture') {
       snapBack();
       return;
     }
@@ -569,7 +567,8 @@ function TweaksPanel({
     onPointerDown: onDragStart,
     onPointerMove: onDragMove,
     onPointerUp: onDragEnd,
-    onPointerCancel: onDragEnd
+    onPointerCancel: onDragEnd,
+    onLostPointerCapture: onDragEnd
   }, /*#__PURE__*/React.createElement("b", null, title), /*#__PURE__*/React.createElement("span", {
     className: "twk-hd-spacer",
     "aria-hidden": "true"
