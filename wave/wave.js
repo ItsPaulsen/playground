@@ -98,15 +98,10 @@ function Wave({
     };
     resize();
     window.addEventListener('resize', resize);
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const lowEnd = (navigator.hardwareConcurrency || 4) <= 4;
     const fpsInterval = lowEnd ? 1000 / 60 : 0;
     const frame = now => {
       if (!running) return;
-      if (reducedMotion.matches) {
-        rafRef.current = requestAnimationFrame(frame);
-        return;
-      }
       const elapsed = now - lastRef.current;
       if (fpsInterval > 0 && elapsed < fpsInterval - 1) {
         rafRef.current = requestAnimationFrame(frame);
