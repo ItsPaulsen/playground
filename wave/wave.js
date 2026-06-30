@@ -87,20 +87,16 @@ function Wave({
     const resize = () => {
       const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
       const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      const logW = Math.min(stageW, 1920);
-      const logH = Math.min(stageH, 1080);
-      canvas.width = logW;
-      canvas.height = logH;
+      canvas.width = 1600;
+      canvas.height = 1000;
       canvas.style.width = stageW + 'px';
       canvas.style.height = stageH + 'px';
-      ctx.setTransform(stageW / logW, 0, 0, stageH / logH, 0, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // 72fps cap: cleanly divides into 144/240/300Hz (every 2/4/5 RAFs) without jitter.
-    // lastRef is set to `now` with no correction so dt is always true elapsed time.
-    const fpsInterval = 1000 / 72;
+    const fpsInterval = 1000 / 60;
     const frame = now => {
       if (!running) return;
       const elapsed = now - lastRef.current;
