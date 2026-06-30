@@ -85,29 +85,30 @@ function Wave({
     const ctx = canvas.getContext('2d');
     let running = true;
     const lowEnd = (navigator.hardwareConcurrency || 4) <= 4;
+    const dprRef = {
+      current: 1
+    };
     const resize = () => {
       const dpr = lowEnd ? 1 : Math.min(2, window.devicePixelRatio || 1);
+      dprRef.current = dpr;
       const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
       const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      canvas.width = Math.round(stageW * dpr);
-      canvas.height = Math.round(stageH * dpr);
+      // Cap logical size so draw loops don't grow on ultra-wide screens
+      const logW = Math.min(stageW, 1920);
+      const logH = Math.min(stageH, 1080);
+      canvas.width = Math.round(logW * dpr);
+      canvas.height = Math.round(logH * dpr);
       canvas.style.width = stageW + 'px';
       canvas.style.height = stageH + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(dpr * stageW / logW, 0, 0, dpr * stageH / logH, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const fpsInterval = 1000 / 60;
     const frame = now => {
       if (!running) return;
-      const elapsed = now - lastRef.current;
-      if (elapsed < fpsInterval - 1) {
-        rafRef.current = requestAnimationFrame(frame);
-        return;
-      }
-      const dt = Math.min(0.1, elapsed / 1000);
-      lastRef.current = now - elapsed % fpsInterval;
+      const dt = Math.min(0.1, (now - lastRef.current) / 1000);
+      lastRef.current = now;
       if (reducedMotion.matches) {
         rafRef.current = requestAnimationFrame(frame);
         return;
@@ -123,7 +124,7 @@ function Wave({
       draw(ctx, canvas, tRef.current, {
         ...tw,
         centerOffset: centerOffsetAnimRef.current,
-        _dpr: lowEnd ? 1 : Math.min(2, window.devicePixelRatio || 1)
+        _dpr: dprRef.current
       });
       rafRef.current = requestAnimationFrame(frame);
     };
