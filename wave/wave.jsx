@@ -79,15 +79,13 @@ function Wave({ t }) {
     const lowEnd = (navigator.hardwareConcurrency || 4) <= 4;
     const resize = () => {
       const dpr = lowEnd ? 1 : Math.min(2, window.devicePixelRatio || 1);
-      canvas.width  = Math.round(1600 * dpr);
-      canvas.height = Math.round(1000 * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const stageW = canvas.parentElement ? canvas.parentElement.clientWidth  : window.innerWidth;
       const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      const scale = Math.max(stageW / 1600, stageH / 1000);
-      const x = Math.round((stageW - 1600 * scale) / 2);
-      const y = Math.round((stageH - 1000 * scale) / 2);
-      canvas.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      canvas.width  = Math.round(stageW * dpr);
+      canvas.height = Math.round(stageH * dpr);
+      canvas.style.width  = stageW + 'px';
+      canvas.style.height = stageH + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -122,7 +120,7 @@ function Wave({ t }) {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ width: '1600px', height: '1000px', display: 'block', position: 'absolute', transformOrigin: 'top left' }} />;
+  return <canvas ref={canvasRef} style={{ display: 'block', position: 'absolute' }} />;
 }
 
 function draw(ctx, canvas, time, t) {
