@@ -33,7 +33,7 @@ function App() {
   }, []);
   const randomize = () => setTweak({
     seed: rand(0, 50, 1),
-    lineCount: rand(1, 100, 1),
+    lineCount: rand(1, 50, 1),
     thickness: rand(0.25, 2, 0.25),
     spacing: rand(1, 24, 1),
     amplitude: rand(0.05, 1, 0.05),
@@ -102,7 +102,7 @@ function App() {
     label: "Lines",
     value: t.lineCount,
     min: 1,
-    max: 100,
+    max: 50,
     step: 1,
     onChange: v => setTweak('lineCount', v)
   }), /*#__PURE__*/React.createElement(TweakSlider, {
