@@ -293,12 +293,15 @@ const __TWEAKS_STYLE = `
     .twk-fab{display:flex;}
     .twk-panel{
       right:auto!important;top:auto!important;
-      left:50%!important;bottom:0!important;
+      left:50%!important;bottom:-200px!important;
       transform:translateX(-50%)!important;transform-origin:bottom center!important;
       width:100%!important;max-width:480px!important;
-      max-height:calc(100dvh - 64px)!important;
+      box-sizing:border-box!important;
+      max-height:calc(100dvh - 64px + 200px)!important;
+      padding-bottom:200px!important;
       border-radius:20px 20px 0 0!important;corner-shape:superellipse(1.7)!important;
     }
+    .twk-footer{position:sticky!important;bottom:0!important;}
     .twk-panel.twk-opening{animation:twk-in-mob .5s cubic-bezier(.16,1,.3,1) both!important;}
     .twk-panel.twk-closing{animation:twk-out-mob .2s cubic-bezier(.4,0,1,1) both!important;}
     .twk-cpick{left:50%!important;top:50%!important;bottom:auto!important;right:auto!important;transform:translate(-50%,-50%)!important;width:calc(100% - 32px)!important;max-width:320px!important;max-height:none!important;border-radius:var(--radius-sm)!important;corner-shape:superellipse(1.7)!important;}
@@ -384,7 +387,6 @@ function TweaksPanel({
   const [closing, setClosing] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
-  const bodyRef = React.useRef(null);
   const dragInfo = React.useRef({
     active: false,
     startY: 0,
@@ -446,103 +448,6 @@ function TweaksPanel({
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
-  React.useEffect(() => {
-    const body = bodyRef.current;
-    if (!body || !open) return;
-    let startY = 0,
-      intercepting = false,
-      active = false,
-      points = [];
-    const onTouchStart = e => {
-      if (window.innerWidth > MOBILE) return;
-      if (e.target.closest('.twk-hd')) {
-        active = false;
-        return;
-      }
-      active = true;
-      startY = e.touches[0].clientY;
-      intercepting = false;
-      points = [{
-        y: startY,
-        t: performance.now()
-      }];
-    };
-    const onTouchMove = e => {
-      if (window.innerWidth > MOBILE || !active) return;
-      const dy = e.touches[0].clientY - startY;
-      const now = performance.now();
-      points.push({
-        y: e.touches[0].clientY,
-        t: now
-      });
-      while (points.length > 1 && now - points[0].t > 200) points.shift();
-      if (!intercepting) {
-        if (body.scrollTop === 0 && dy > 4) intercepting = true;else return;
-      }
-      e.preventDefault();
-      if (panelRef.current) {
-        const raw = dy >= 0 ? dy : dy * 0.25;
-        panelRef.current.style.setProperty('transition', 'none', 'important');
-        panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${raw}px)`, 'important');
-      }
-      if (backdropRef.current) {
-        const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
-        backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - Math.max(0, dy) / sheetH)), 'important');
-      }
-    };
-    const onTouchEnd = e => {
-      if (!active || !intercepting) return;
-      intercepting = false;
-      const dy = Math.max(0, (e.changedTouches[0]?.clientY || startY) - startY);
-      const cutoff = performance.now() - 100;
-      const recent = points.filter(p => p.t >= cutoff);
-      let vel = 0;
-      if (recent.length >= 2) {
-        const f = recent[0],
-          l = recent[recent.length - 1];
-        if (l.t - f.t > 0) vel = (l.y - f.y) / (l.t - f.t);
-      }
-      if (vel > 0.5 || dy > 120) {
-        if (panelRef.current) {
-          panelRef.current.style.setProperty('transition', 'transform 0.25s cubic-bezier(.4,0,1,1)', 'important');
-          panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
-        }
-        if (backdropRef.current) {
-          backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
-          backdropRef.current.style.setProperty('opacity', '0', 'important');
-        }
-        setTimeout(() => {
-          setOpen(false);
-          window.parent.postMessage({
-            type: '__edit_mode_dismissed'
-          }, '*');
-        }, 260);
-      } else {
-        if (panelRef.current) {
-          panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1)', 'important');
-          panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
-        }
-        if (backdropRef.current) {
-          backdropRef.current.style.transition = 'opacity 0.4s cubic-bezier(.16,1,.3,1)';
-          backdropRef.current.style.setProperty('opacity', '1', 'important');
-        }
-      }
-    };
-    body.addEventListener('touchstart', onTouchStart, {
-      passive: true
-    });
-    body.addEventListener('touchmove', onTouchMove, {
-      passive: false
-    });
-    body.addEventListener('touchend', onTouchEnd, {
-      passive: true
-    });
-    return () => {
-      body.removeEventListener('touchstart', onTouchStart);
-      body.removeEventListener('touchmove', onTouchMove);
-      body.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [open]);
   const dismiss = () => {
     setClosing(true);
     setTimeout(() => onOpenChange && onOpenChange(false), 80);
@@ -553,9 +458,11 @@ function TweaksPanel({
   const onDragStart = e => {
     if (window.innerWidth > MOBILE) return;
     const now = performance.now();
+    const baseHeight = panelRef.current ? panelRef.current.offsetHeight : 0;
     dragInfo.current = {
       active: true,
       startY: e.clientY,
+      baseHeight,
       points: [{
         y: e.clientY,
         t: now
@@ -664,7 +571,6 @@ function TweaksPanel({
     className: "twk-hd-spacer",
     "aria-hidden": "true"
   })), /*#__PURE__*/React.createElement("div", {
-    ref: bodyRef,
     className: "twk-body"
   }, children, hasDeckStage && railEnabled && !noDeckControls && /*#__PURE__*/React.createElement(TweakSection, {
     label: "Deck"
