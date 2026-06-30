@@ -84,23 +84,14 @@ function Wave({
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     let running = true;
-    const lowEnd = (navigator.hardwareConcurrency || 4) <= 4;
-    const dprRef = {
-      current: 1
-    };
     const resize = () => {
-      const dpr = lowEnd ? 1 : Math.min(2, window.devicePixelRatio || 1);
-      dprRef.current = dpr;
       const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
       const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      // Cap logical size so draw loops don't grow on ultra-wide screens
-      const logW = Math.min(stageW, 1920);
-      const logH = Math.min(stageH, 1080);
-      canvas.width = Math.round(logW * dpr);
-      canvas.height = Math.round(logH * dpr);
+      canvas.width = stageW;
+      canvas.height = stageH;
       canvas.style.width = stageW + 'px';
       canvas.style.height = stageH + 'px';
-      ctx.setTransform(dpr * stageW / logW, 0, 0, dpr * stageH / logH, 0, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
@@ -131,8 +122,7 @@ function Wave({
       centerOffsetAnimRef.current += coDiff * Math.min(1, dt * (coDiff > 0 ? 8 : 5));
       draw(ctx, canvas, tRef.current, {
         ...tw,
-        centerOffset: centerOffsetAnimRef.current,
-        _dpr: dprRef.current
+        centerOffset: centerOffsetAnimRef.current
       });
       rafRef.current = requestAnimationFrame(frame);
     };
@@ -152,16 +142,17 @@ function Wave({
   });
 }
 function draw(ctx, canvas, time, t) {
-  const dpr = t._dpr || Math.min(2, window.devicePixelRatio || 1);
-  const W = canvas.width / dpr;
-  const H = canvas.height / dpr;
+  const W = canvas.width;
+  const H = canvas.height;
   const vertical = t.direction === 'vertical';
   ctx.clearRect(0, 0, W, H);
   const L = vertical ? H : W;
   const T = vertical ? W : H;
   const ampPx = T * 0.42 * t.amplitude;
   const freq = t.frequency * Math.PI / L;
-  const ds = 3; // sample step along flow axis — small for smooth bends
+
+  // Scale sample step with canvas width so path op count stays ~constant across resolutions
+  const ds = Math.max(3, Math.round(L / 600));
   const overscan = 80;
   const sStart = -overscan;
   const sEnd = L + overscan;
