@@ -95,7 +95,7 @@ function Wave({ t }) {
 
     const frame = (now) => {
       if (!running) return;
-      if (reducedMotion.matches) { rafRef.current = requestAnimationFrame(frame); return; }
+      if (reducedMotion.matches || document.hidden) { rafRef.current = requestAnimationFrame(frame); return; }
       const elapsed = now - lastRef.current;
       if (elapsed < fpsInterval - 1) { rafRef.current = requestAnimationFrame(frame); return; }
       const dt = Math.min(0.1, elapsed / 1000);

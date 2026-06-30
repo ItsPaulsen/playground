@@ -101,7 +101,7 @@ function Wave({
     const fpsInterval = 1000 / 60;
     const frame = now => {
       if (!running) return;
-      if (reducedMotion.matches) {
+      if (reducedMotion.matches || document.hidden) {
         rafRef.current = requestAnimationFrame(frame);
         return;
       }
