@@ -91,9 +91,16 @@ function Wave({ t }) {
     resize();
     window.addEventListener('resize', resize);
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const lowEnd = (navigator.hardwareConcurrency || 4) <= 4;
+    const fpsInterval = lowEnd ? 1000 / 60 : 0;
+
     const frame = (now) => {
       if (!running) return;
-      const dt = Math.min(0.1, (now - lastRef.current) / 1000);
+      if (reducedMotion.matches) { rafRef.current = requestAnimationFrame(frame); return; }
+      const elapsed = now - lastRef.current;
+      if (fpsInterval > 0 && elapsed < fpsInterval - 1) { rafRef.current = requestAnimationFrame(frame); return; }
+      const dt = Math.min(0.1, elapsed / 1000);
       lastRef.current = now;
       const tw = tweaksRef.current;
       if (!tw.paused) tRef.current += dt;
