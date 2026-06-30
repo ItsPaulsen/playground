@@ -96,10 +96,15 @@ function Wave({ t }) {
     window.addEventListener('resize', resize);
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // 72fps cap: cleanly divides into 144/240/300Hz (every 2/4/5 RAFs) without jitter.
+    // lastRef is set to `now` with no correction so dt is always true elapsed time.
+    const fpsInterval = 1000 / 72;
 
     const frame = (now) => {
       if (!running) return;
-      const dt = Math.min(0.1, (now - lastRef.current) / 1000);
+      const elapsed = now - lastRef.current;
+      if (elapsed < fpsInterval - 1) { rafRef.current = requestAnimationFrame(frame); return; }
+      const dt = Math.min(0.1, elapsed / 1000);
       lastRef.current = now;
       if (reducedMotion.matches) { rafRef.current = requestAnimationFrame(frame); return; }
       const tw = tweaksRef.current;
