@@ -139,7 +139,7 @@ function draw(ctx, canvas, time, t) {
   const ampPx = T * 0.42 * t.amplitude;
   const freq = (t.frequency * Math.PI) / L;
 
-  const ds = 4; // sample step along flow axis — small for smooth bends
+  const ds = 3; // sample step along flow axis — small for smooth bends
   const overscan = 80;
   const sStart = -overscan;
   const sEnd = L + overscan;
