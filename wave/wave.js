@@ -86,26 +86,31 @@ function Wave({
     let running = true;
     const resize = () => {
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      canvas.width = Math.round(1600 * dpr);
-      canvas.height = Math.round(1000 * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
       const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      const scale = Math.max(stageW / 1600, stageH / 1000);
-      const x = Math.round((stageW - 1600 * scale) / 2);
-      const y = Math.round((stageH - 1000 * scale) / 2);
-      canvas.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      canvas.width = Math.round(stageW * dpr);
+      canvas.height = Math.round(stageH * dpr);
+      canvas.style.width = stageW + 'px';
+      canvas.style.height = stageH + 'px';
+      canvas.style.transform = '';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const fpsInterval = 1000 / 60;
     const frame = now => {
       if (!running) return;
       if (reducedMotion.matches) {
         rafRef.current = requestAnimationFrame(frame);
         return;
       }
-      const dt = Math.min(0.1, (now - lastRef.current) / 1000);
+      const elapsed = now - lastRef.current;
+      if (elapsed < fpsInterval - 1) {
+        rafRef.current = requestAnimationFrame(frame);
+        return;
+      }
+      const dt = Math.min(0.1, elapsed / 1000);
       lastRef.current = now;
       const tw = tweaksRef.current;
       if (!tw.paused) tRef.current += dt;
@@ -131,25 +136,22 @@ function Wave({
   return /*#__PURE__*/React.createElement("canvas", {
     ref: canvasRef,
     style: {
-      width: '1600px',
-      height: '1000px',
       display: 'block',
-      position: 'absolute',
-      transformOrigin: 'top left'
+      position: 'absolute'
     }
   });
 }
 function draw(ctx, canvas, time, t) {
-  const dpr = Math.min(2, window.devicePixelRatio || 1);
-  const W = canvas.width / dpr;
-  const H = canvas.height / dpr;
+  const m = ctx.getTransform();
+  const W = canvas.width / (m.a || 1);
+  const H = canvas.height / (m.d || 1);
   const vertical = t.direction === 'vertical';
   ctx.clearRect(0, 0, W, H);
   const L = vertical ? H : W;
   const T = vertical ? W : H;
   const ampPx = T * 0.42 * t.amplitude;
   const freq = t.frequency * Math.PI / L;
-  const ds = 3; // sample step along flow axis — small for smooth bends
+  const ds = Math.max(3, Math.round(L / 600)); // scale with canvas width to keep path ops constant
   const overscan = 80;
   const sStart = -overscan;
   const sEnd = L + overscan;
