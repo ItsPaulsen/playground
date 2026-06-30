@@ -98,7 +98,7 @@ function Wave({
     resize();
     window.addEventListener('resize', resize);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const fpsInterval = 1000 / 60;
+    const fpsInterval = 1000 / 30;
     const frame = now => {
       if (!running) return;
       if (reducedMotion.matches || document.hidden) {
