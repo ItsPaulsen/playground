@@ -59,6 +59,7 @@ html[data-theme="dark"] .pg-bar { background: rgba(253,253,251,.12); }
 /* ── pg-select: custom dropdown ── */
 .pg-select-wrap {
   position: relative;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 8px;
