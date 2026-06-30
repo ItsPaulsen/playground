@@ -149,7 +149,7 @@ function draw(ctx, canvas, time, t) {
   ctx.clearRect(0, 0, W, H);
   const L = vertical ? H : W;
   const T = vertical ? W : H;
-  const ampPx = T * 0.42 * t.amplitude;
+  const ampPx = T * 0.21 * t.amplitude;
   const freq = t.frequency * Math.PI / L;
   const ds = Math.max(3, Math.round(L / 600)); // scale with canvas width to keep path ops constant
   const overscan = 80;

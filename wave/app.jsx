@@ -35,7 +35,7 @@ function App() {
 
   const randomize = () => setTweak({
     seed:        rand(0, 50, 1),
-    lineCount:   rand(1, 50, 1),
+    lineCount:   rand(1, 32, 1),
     thickness:   rand(0.25, 2, 0.25),
     spacing:     rand(1, 24, 1),
     amplitude:   rand(0.05, 1, 0.05),
@@ -93,7 +93,7 @@ function App() {
         </TweakSection>
 
         <TweakSection label="Composition">
-          <TweakSlider label="Lines" value={t.lineCount} min={1} max={50} step={1}
+          <TweakSlider label="Lines" value={t.lineCount} min={1} max={32} step={1}
                        onChange={(v) => setTweak('lineCount', v)} />
           <TweakSlider label="Thickness" value={Number(t.thickness.toFixed(2))} min={0.25} max={2} step={0.25} unit="px"
                        onChange={(v) => setTweak('thickness', v)} />
