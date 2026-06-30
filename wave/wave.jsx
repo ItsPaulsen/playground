@@ -78,6 +78,7 @@ function Wave({ t }) {
     const getStage = () => ({
       w: canvas.parentElement ? canvas.parentElement.clientWidth  : window.innerWidth,
       h: canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight,
+      dpr: Math.min(2, window.devicePixelRatio || 1),
     });
 
     // OffscreenCanvas: draw on a worker thread so main thread never blocks
@@ -89,15 +90,17 @@ ${lineColor.toString()}
 ${withAlpha.toString()}
 ${mixHex.toString()}
 ${draw.toString()}
-let ctx=null,tAnim=0,lastT=performance.now(),coAnim=0,dirRef=null,tw=null;
+let ctx=null,tAnim=0,lastT=performance.now(),coAnim=0,dirRef=null,tw=null,dpr=1;
 self.onmessage=(e)=>{
   const d=e.data;
   if(d.type==='init'){
     ctx=d.canvas.getContext('2d');
-    ctx.canvas.width=d.w; ctx.canvas.height=d.h;
+    dpr=d.dpr||1;
+    ctx.canvas.width=d.w*dpr; ctx.canvas.height=d.h*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
     tw=d.tweaks; coAnim=tw.centerOffset; dirRef=tw.direction;
   } else if(d.type==='resize'){
-    if(ctx){ctx.canvas.width=d.w;ctx.canvas.height=d.h;}
+    if(ctx){dpr=d.dpr||dpr;ctx.canvas.width=d.w*dpr;ctx.canvas.height=d.h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
   } else if(d.type==='frame'){
     if(!ctx)return;
     tw=d.tweaks;
@@ -118,9 +121,9 @@ self.onmessage=(e)=>{
       let workerBusy = false;
 
       const resize = () => {
-        const { w, h } = getStage();
+        const { w, h, dpr } = getStage();
         canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-        worker.postMessage({ type: 'resize', w, h });
+        worker.postMessage({ type: 'resize', w, h, dpr });
       };
       const tick = () => {
         if (!running) return;
@@ -132,9 +135,9 @@ self.onmessage=(e)=>{
       };
       worker.onmessage = () => { workerBusy = false; };
 
-      const { w, h } = getStage();
+      const { w, h, dpr } = getStage();
       canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-      worker.postMessage({ type: 'init', canvas: offscreen, w, h, tweaks: tweaksRef.current }, [offscreen]);
+      worker.postMessage({ type: 'init', canvas: offscreen, w, h, dpr, tweaks: tweaksRef.current }, [offscreen]);
       window.addEventListener('resize', resize);
       rafRef.current = requestAnimationFrame(tick);
 
@@ -189,8 +192,10 @@ self.onmessage=(e)=>{
 }
 
 function draw(ctx, canvas, time, t) {
-  const W = canvas.width;
-  const H = canvas.height;
+  // canvas.width is physical pixels; divide by dpr to get CSS/logical pixels for drawing
+  const dpr = ctx.getTransform ? (ctx.getTransform().a || 1) : 1;
+  const W = canvas.width / dpr;
+  const H = canvas.height / dpr;
   const vertical = t.direction === 'vertical';
 
   ctx.clearRect(0, 0, W, H);
