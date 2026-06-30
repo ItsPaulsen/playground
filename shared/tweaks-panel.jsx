@@ -403,15 +403,18 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   React.useEffect(() => {
     const body = bodyRef.current;
     if (!body || !open) return;
-    let startY = 0, intercepting = false, points = [];
+    let startY = 0, intercepting = false, active = false, initialHeight = 0, points = [];
     const onTouchStart = (e) => {
       if (window.innerWidth > MOBILE) return;
+      if (e.target.closest('.twk-hd')) { active = false; return; }
+      active = true;
       startY = e.touches[0].clientY;
       intercepting = false;
+      initialHeight = panelRef.current ? panelRef.current.offsetHeight : 0;
       points = [{ y: startY, t: performance.now() }];
     };
     const onTouchMove = (e) => {
-      if (window.innerWidth > MOBILE) return;
+      if (window.innerWidth > MOBILE || !active) return;
       const dy = e.touches[0].clientY - startY;
       const now = performance.now();
       points.push({ y: e.touches[0].clientY, t: now });
@@ -421,10 +424,18 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         else return;
       }
       e.preventDefault();
-      const raw = dy >= 0 ? dy : dy * 0.25;
       if (panelRef.current) {
         panelRef.current.style.setProperty('transition', 'none', 'important');
-        panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${raw}px)`, 'important');
+        if (dy >= 0) {
+          panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${dy}px)`, 'important');
+          panelRef.current.style.removeProperty('height');
+          panelRef.current.style.removeProperty('max-height');
+        } else {
+          const newH = initialHeight + Math.abs(dy) * 0.25;
+          panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
+          panelRef.current.style.setProperty('height', `${newH}px`, 'important');
+          panelRef.current.style.setProperty('max-height', `${newH}px`, 'important');
+        }
       }
       if (backdropRef.current) {
         const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
@@ -432,7 +443,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       }
     };
     const onTouchEnd = (e) => {
-      if (!intercepting) return;
+      if (!active || !intercepting) return;
       intercepting = false;
       const dy = Math.max(0, (e.changedTouches[0]?.clientY || startY) - startY);
       const cutoff = performance.now() - 100;
@@ -454,8 +465,17 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         setTimeout(() => { setOpen(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); }, 260);
       } else {
         if (panelRef.current) {
-          panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1)', 'important');
+          panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1), height 0.4s cubic-bezier(.16,1,.3,1)', 'important');
           panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
+          panelRef.current.style.setProperty('height', `${initialHeight}px`, 'important');
+          panelRef.current.style.setProperty('max-height', `${initialHeight}px`, 'important');
+          setTimeout(() => {
+            if (panelRef.current) {
+              panelRef.current.style.removeProperty('height');
+              panelRef.current.style.removeProperty('max-height');
+              panelRef.current.style.removeProperty('transition');
+            }
+          }, 400);
         }
         if (backdropRef.current) {
           backdropRef.current.style.transition = 'opacity 0.4s cubic-bezier(.16,1,.3,1)';
@@ -481,7 +501,8 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   const onDragStart = (e) => {
     if (window.innerWidth > MOBILE) return;
     const now = performance.now();
-    dragInfo.current = { active: true, startY: e.clientY, points: [{ y: e.clientY, t: now }] };
+    const initialHeight = panelRef.current ? panelRef.current.offsetHeight : 0;
+    dragInfo.current = { active: true, startY: e.clientY, points: [{ y: e.clientY, t: now }], initialHeight };
     e.currentTarget.setPointerCapture(e.pointerId);
     document.documentElement.classList.add('twk-dragging');
     if (panelRef.current) {
@@ -494,17 +515,25 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     if (!dragInfo.current.active) return;
     const now = performance.now();
     const dy = e.clientY - dragInfo.current.startY;
-    const raw = dy >= 0 ? dy : dy * 0.25;
     const pts = dragInfo.current.points;
     pts.push({ y: e.clientY, t: now });
     while (pts.length > 1 && now - pts[0].t > 200) pts.shift();
     if (panelRef.current) {
       panelRef.current.style.setProperty('transition', 'none', 'important');
-      panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${raw}px)`, 'important');
+      if (dy >= 0) {
+        panelRef.current.style.setProperty('transform', `translateX(-50%) translateY(${dy}px)`, 'important');
+        panelRef.current.style.removeProperty('height');
+        panelRef.current.style.removeProperty('max-height');
+      } else {
+        const newH = dragInfo.current.initialHeight + Math.abs(dy) * 0.25;
+        panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
+        panelRef.current.style.setProperty('height', `${newH}px`, 'important');
+        panelRef.current.style.setProperty('max-height', `${newH}px`, 'important');
+      }
     }
     if (backdropRef.current) {
       const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
-      backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - raw / sheetH)), 'important');
+      backdropRef.current.style.setProperty('opacity', String(Math.max(0, 1 - Math.max(0, dy) / sheetH)), 'important');
     }
   };
   const onDragEnd = (e) => {
@@ -514,8 +543,18 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     if (panelRef.current) panelRef.current.style.willChange = '';
     const snapBack = () => {
       if (panelRef.current) {
-        panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1)', 'important');
+        const h = dragInfo.current.initialHeight;
+        panelRef.current.style.setProperty('transition', 'transform 0.4s cubic-bezier(.16,1,.3,1), height 0.4s cubic-bezier(.16,1,.3,1)', 'important');
         panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(0px)', 'important');
+        panelRef.current.style.setProperty('height', `${h}px`, 'important');
+        panelRef.current.style.setProperty('max-height', `${h}px`, 'important');
+        setTimeout(() => {
+          if (panelRef.current) {
+            panelRef.current.style.removeProperty('height');
+            panelRef.current.style.removeProperty('max-height');
+            panelRef.current.style.removeProperty('transition');
+          }
+        }, 400);
       }
       if (backdropRef.current) {
         backdropRef.current.style.transition = 'opacity 0.4s cubic-bezier(.16,1,.3,1)';
