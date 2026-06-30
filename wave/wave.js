@@ -87,11 +87,13 @@ function Wave({
     const resize = () => {
       const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
       const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
-      canvas.width = stageW;
-      canvas.height = stageH;
+      const logW = Math.min(stageW, 1920);
+      const logH = Math.min(stageH, 1080);
+      canvas.width = logW;
+      canvas.height = logH;
       canvas.style.width = stageW + 'px';
       canvas.style.height = stageH + 'px';
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.setTransform(stageW / logW, 0, 0, stageH / logH, 0, 0);
     };
     resize();
     window.addEventListener('resize', resize);
