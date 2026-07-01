@@ -141,8 +141,16 @@ function draw(ctx, canvas, time, t) {
 
   ctx.clearRect(0, 0, W, H);
 
-  const L = vertical ? H : W;
-  const T = vertical ? W : H;
+  // Cover-scale a fixed 16:9 virtual canvas so the wave looks identical
+  // on any screen — portrait phone, desktop, etc. Like background-size: cover.
+  const ASPECT = 16 / 9;
+  const vW = W / H > ASPECT ? W : H * ASPECT;
+  const vH = W / H > ASPECT ? W / ASPECT : H;
+  ctx.save();
+  ctx.translate((W - vW) / 2, (H - vH) / 2);
+
+  const L = vertical ? vH : vW;
+  const T = vertical ? vW : vH;
 
   const ampPx = T * 0.21 * t.amplitude;
   const freq = (t.frequency * Math.PI) / L;
@@ -296,6 +304,7 @@ function draw(ctx, canvas, time, t) {
   }
 
   ctx.globalCompositeOperation = 'source-over';
+  ctx.restore();
 }
 
 window.Wave = Wave;
