@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" data-page="card">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Card — Paulsen</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(0.22 0.01 56)':'oklch(0.98 0.00 106)';document.head.appendChild(m);})()</script>
+<link rel="preload" href="/shared/vendor/preact-bundle.js" as="script">
+<link rel="preload" href="card.js" as="script">
+<link rel="preload" href="app.js" as="script">
+<link rel="stylesheet" href="/shared/tokens.css" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100dvh; background: var(--pg-bg); overflow: hidden;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+  #root { position: fixed; inset: 0; }
+</style>
+</head>
+<body>
+<div id="root" tabindex="-1"></div>
+<script src="/shared/vendor/preact-bundle.js"></script>
+<script src="card.js"></script>
+<script src="app.js"></script>
+<script src="/header.js"></script>
+</body>
+</html>

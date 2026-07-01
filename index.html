@@ -14,6 +14,7 @@
 <link rel="prefetch" href="/poe/waystones/">
 <link rel="prefetch" href="/poe/crafting/">
 <link rel="prefetch" href="/trail/">
+<link rel="prefetch" href="/card/">
 <link rel="prefetch" href="/grid/">
 <link rel="prefetch" href="/shared/vendor/preact-bundle.js" as="script">
 <link rel="prefetch" href="/shared/tweaks-panel.js" as="script">
@@ -141,6 +142,8 @@
     html[data-theme="dark"] .card-icon--green { background: #14532d; color: #86efac; }
     .card-icon--teal { background: rgba(153,246,228,.85); color: #0f766e; }
     html[data-theme="dark"] .card-icon--teal { background: #134e4a; color: #5eead4; }
+    .card-icon--rose { background: rgba(253,164,175,.85); color: #9f1239; }
+    html[data-theme="dark"] .card-icon--rose { background: #881337; color: #fda4af; }
 
     @keyframes pg-up {
       from { opacity: 0; translate: 0 24px; }
@@ -165,6 +168,7 @@
     .card:nth-child(4) { animation-delay: .5s; }
     .card:nth-child(5) { animation-delay: .6s; }
     .card:nth-child(6) { animation-delay: .7s; }
+    .card:nth-child(7) { animation-delay: .8s; }
 
 
     .style-link {
@@ -227,6 +231,16 @@
         </div>
         <h2>Trail</h2>
         <p>Glowing cursor trail with tweakable particles, gravity, and spread.</p>
+      </a>
+
+      <a class="card" href="card/">
+        <div class="card-icon card-icon--rose">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+          </svg>
+        </div>
+        <h2>Card</h2>
+        <p>3D credit card with mouse-tracked tilt and specular shine.</p>
       </a>
 
       <a class="card" href="grid/">

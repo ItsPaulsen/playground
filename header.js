@@ -7,6 +7,7 @@
     { label: 'Typo',  href: '/typo/' },
     { label: 'Mesh',  href: '/mesh/' },
     { label: 'Trail', href: '/trail/' },
+    { label: 'Card',  href: '/card/' },
   ];
 
   const style = document.createElement('style');
