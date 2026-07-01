@@ -94,7 +94,7 @@ function Wave({ t }) {
       canvas.style.width  = stageW + 'px';
       canvas.style.height = stageH + 'px';
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(resize, 150);
+      resizeTimer = setTimeout(resize, 200);
     };
     resize();
     window.addEventListener('resize', onResize);
