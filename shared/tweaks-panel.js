@@ -289,25 +289,10 @@ function TweaksPanel({
       if (dt > 0) vel = (last.y - first.y) / dt;
     }
     if (vel > 0.5 || raw > 120) {
-      // display:none bypasses CSS animation-fill-mode (which kept the backdrop
-      // visually opaque at opacity:1 despite inline opacity:0 !important on iOS Safari).
-      // This is synchronous — backdrop is non-interactive before the next paint.
-      if (backdropRef.current) backdropRef.current.style.setProperty('display', 'none', 'important');
-      if (panelRef.current) {
-        panelRef.current.style.setProperty('transition', 'transform 0.25s cubic-bezier(.4,0,1,1)', 'important');
-        panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
-        panelRef.current.style.setProperty('pointer-events', 'none', 'important');
-      }
-      // Block FAB — iOS ghost-clicks can arrive ~300ms after touchend.
-      fabGuardRef.current = true;
-      setTimeout(() => {
-        fabGuardRef.current = false;
-      }, 400);
-      window.parent.postMessage({
-        type: '__edit_mode_dismissed'
-      }, '*');
-      // Let the slide animation finish, then unmount (FAB appears).
-      setTimeout(() => setOpen(false), 260);
+      // Route through dismiss() — identical to the X-button path.
+      // dismiss() sets closing=true, which makes the backdrop pointer-events:none
+      // immediately, so any iOS ghost-click from the drag falls through harmlessly.
+      dismiss();
     } else {
       snapBack();
     }
