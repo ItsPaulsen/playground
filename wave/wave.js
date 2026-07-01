@@ -95,8 +95,17 @@ function Wave({
       canvas.style.transform = '';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
+    let resizeTimer;
+    const onResize = () => {
+      const stageW = canvas.parentElement ? canvas.parentElement.clientWidth : window.innerWidth;
+      const stageH = canvas.parentElement ? canvas.parentElement.clientHeight : window.innerHeight;
+      canvas.style.width = stageW + 'px';
+      canvas.style.height = stageH + 'px';
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    };
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', onResize);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const fpsInterval = 1000 / 30;
     const frame = now => {
@@ -130,7 +139,8 @@ function Wave({
     return () => {
       running = false;
       cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', onResize);
+      clearTimeout(resizeTimer);
     };
   }, []);
   return /*#__PURE__*/React.createElement("canvas", {
