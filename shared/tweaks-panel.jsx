@@ -95,7 +95,7 @@ const FILTER_ICON = (
 function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange, renderMobileFooter }) {
   const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > MOBILE);
   const [closing, setClosing] = React.useState(false);
-  const [panelExiting, setPanelExiting] = React.useState(false);
+  const [openGuard, setOpenGuard] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({ active: false, startY: 0, points: [] });
@@ -230,10 +230,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
-      setOpen(false);
-      setPanelExiting(true);
-      window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
-      setTimeout(() => setPanelExiting(false), 260);
+      dismiss();
     } else {
       snapBack();
     }
@@ -246,13 +243,17 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     }
   };
 
-  const openPanel = () => setOpen(true);
+  const openPanel = () => {
+    setOpen(true);
+    setOpenGuard(true);
+    setTimeout(() => setOpenGuard(false), 350);
+  };
 
   return ReactDOM.createPortal(
     <>
-      {(open || panelExiting) && (
+      {open && (
       <>
-        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing ? {pointerEvents:'none'} : undefined} />
+        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing || openGuard ? {pointerEvents:'none'} : undefined} />
 <div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd} onLostPointerCapture={onDragEnd}>
             <b>{title}</b>
