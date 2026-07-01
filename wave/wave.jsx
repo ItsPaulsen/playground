@@ -164,8 +164,9 @@ function draw(ctx, canvas, time, t) {
     master[k] = meander(s, time * breathe, freq, t.speed * 0.25, t.complexity, 0, t.seed * 13.7);
   }
 
+  const REF = 800; // reference dimension — all absolute params scale relative to this
   const N = t.lineCount;
-  const spacingPx = t.spacing;
+  const spacingPx = t.spacing * T / REF;
 
   // Cross-axis center for the bundle. centerOffset shifts it.
   const cross0 = T * 0.5 + (t.centerOffset ?? 0) * T * 0.5;
@@ -222,7 +223,7 @@ function draw(ctx, canvas, time, t) {
       const indivSeed = t.seed * 13.7 + i * 7.31 + 100;
       const indivFreq = freq * 1.4;
       const indivAmpScale = (1 - bell) * fray + 0.08; // 0..fray+0.08
-      const flow = time * t.speed * 60; // pixels of "water" travel per second
+      const flow = time * t.speed * 60 * L / REF; // normalized to L so speed feels consistent
 
       const pulses = lineHasPulse(i);
       const baseW = t.thickness * widthMul;
@@ -233,7 +234,7 @@ function draw(ctx, canvas, time, t) {
       const xs = new Float32Array(samples);
       const ys = new Float32Array(samples);
       const ws = pulses ? new Float32Array(samples) : null;
-      const pulseFreq = (Math.PI * 2) / Math.max(40, 220 / Math.max(0.3, pulseSpeed));
+      const pulseFreq = (Math.PI * 2) * REF / (L * Math.max(40, 220 / Math.max(0.3, pulseSpeed)));
       const phase = i * 1.7;
       for (let k = 0; k < samples; k++) {
         const s = sStart + k * ds;
