@@ -10,17 +10,24 @@
     function close() {
       dropdown.classList.remove('is-open');
       dropdown.classList.remove('show-selected');
+      dropdown.style.position = '';
+      dropdown.style.top = '';
+      dropdown.style.left = '';
+      dropdown.style.right = '';
     }
 
     function open() {
-      dropdown.style.left = '0';
+      var wrapRect = wrap.getBoundingClientRect();
+      dropdown.style.position = 'fixed';
+      dropdown.style.top = (wrapRect.bottom + 6) + 'px';
+      dropdown.style.left = wrapRect.left + 'px';
       dropdown.style.right = '';
       dropdown.classList.add('is-open');
       dropdown.classList.add('show-selected');
       var rect = dropdown.getBoundingClientRect();
       if (rect.right > window.innerWidth - 8) {
         dropdown.style.left = '';
-        dropdown.style.right = '0';
+        dropdown.style.right = (window.innerWidth - wrapRect.right) + 'px';
       }
       dropdown.querySelectorAll('.pg-select-option').forEach(function (o) {
         o.addEventListener('mouseenter', function clearSelected() {
@@ -29,6 +36,10 @@
         });
       });
     }
+
+    window.addEventListener('scroll', function () {
+      if (dropdown.classList.contains('is-open')) close();
+    }, { passive: true });
 
     wrap.addEventListener('keydown', function (e) {
       var opts = Array.from(dropdown.querySelectorAll('.pg-select-option'));

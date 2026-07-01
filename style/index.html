@@ -729,14 +729,17 @@
         if(fmtVal) fmtVal.textContent = fmt;
         renderFmtOptions();
         function fmtOpen() {
-          fmtDrop.style.left = '0';
+          var wrapRect = fmtWrap.getBoundingClientRect();
+          fmtDrop.style.position = 'fixed';
+          fmtDrop.style.top = (wrapRect.bottom + 6) + 'px';
+          fmtDrop.style.left = wrapRect.left + 'px';
           fmtDrop.style.right = '';
           fmtDrop.classList.add('is-open');
           fmtDrop.classList.add('show-selected');
           var rect = fmtDrop.getBoundingClientRect();
           if (rect.right > window.innerWidth - 8) {
             fmtDrop.style.left = '';
-            fmtDrop.style.right = '0';
+            fmtDrop.style.right = (window.innerWidth - wrapRect.right) + 'px';
           }
           fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
             opt.setAttribute('tabindex', '-1');
@@ -749,6 +752,10 @@
         function fmtClose() {
           fmtDrop.classList.remove('is-open');
           fmtDrop.classList.remove('show-selected');
+          fmtDrop.style.position = '';
+          fmtDrop.style.top = '';
+          fmtDrop.style.left = '';
+          fmtDrop.style.right = '';
         }
         fmtWrap.addEventListener('click', function() {
           if (fmtDrop.classList.contains('is-open')) { fmtClose(); } else { fmtOpen(); }
