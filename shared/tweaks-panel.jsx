@@ -284,17 +284,16 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
           </button>
         </div>
       )}
-      {!open && (
-        <>
-          <button className="twk-reopen" aria-label="Open tweaks" onClick={openPanel}>
-            {FILTER_ICON}
-          </button>
-          <button className="twk-fab" aria-label="Open tweaks" onClick={openPanel}>
-            {FILTER_ICON}
-            Filter
-          </button>
-        </>
-      )}
+      {/* Always in DOM so iOS keeps the touch target registered — visibility toggled, never unmounted */}
+      <button className="twk-reopen" aria-label="Open tweaks" onClick={openPanel}
+        style={open ? {visibility:'hidden',pointerEvents:'none'} : undefined}>
+        {FILTER_ICON}
+      </button>
+      <button className="twk-fab" aria-label="Open tweaks" onClick={openPanel}
+        style={open ? {visibility:'hidden',pointerEvents:'none'} : undefined}>
+        {FILTER_ICON}
+        Filter
+      </button>
     </>,
     document.body
   );

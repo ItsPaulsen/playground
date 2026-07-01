@@ -365,15 +365,23 @@ function TweaksPanel({
     d: "M18 6 6 18"
   }), /*#__PURE__*/React.createElement("path", {
     d: "m6 6 12 12"
-  })))), !open && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  })))), /*#__PURE__*/React.createElement("button", {
     className: "twk-reopen",
     "aria-label": "Open tweaks",
-    onClick: openPanel
+    onClick: openPanel,
+    style: open ? {
+      visibility: 'hidden',
+      pointerEvents: 'none'
+    } : undefined
   }, FILTER_ICON), /*#__PURE__*/React.createElement("button", {
     className: "twk-fab",
     "aria-label": "Open tweaks",
-    onClick: openPanel
-  }, FILTER_ICON, "Filter"))), document.body);
+    onClick: openPanel,
+    style: open ? {
+      visibility: 'hidden',
+      pointerEvents: 'none'
+    } : undefined
+  }, FILTER_ICON, "Filter")), document.body);
 }
 
 // ── Layout helpers ──────────────────────────────────────────────────────────
