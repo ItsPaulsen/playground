@@ -18,7 +18,10 @@ function App() {
   const [isDesktop, setIsDesktop] = React.useState(() => window.innerWidth > 639);
   React.useEffect(() => {
     const mq = window.matchMedia('(min-width: 640px)');
-    const handler = e => setIsDesktop(e.matches);
+    const handler = e => {
+      setIsDesktop(e.matches);
+      setTweak('fontSize', e.matches ? 128 : 72);
+    };
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
