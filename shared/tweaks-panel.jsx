@@ -156,14 +156,12 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-
   const dismiss = () => {
     setClosing(true);
     clearTimeout(closeTimerRef.current);
     closeTimerRef.current = setTimeout(() => {
       setClosing(false);
       setOpen(false);
-      onOpenChange && onOpenChange(false);
     }, 350);
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
@@ -226,11 +224,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       if (dt > 0) vel = (last.y - first.y) / dt;
     }
     if (vel > 0.5 || raw > 120) {
-      // Route through dismiss() so closing=true makes backdrop pointer-events:none.
-      // Also guard the FAB: twk-out-mob is 200ms, so the FAB renders at ~200ms,
-      // and iOS fires a ghost-click from the drag at ~300ms — without the guard
-      // that ghost-click hits the FAB, silently reopens the panel, and the user
-      // has to dismiss it before the FAB works again.
       fabGuardRef.current = true;
       setTimeout(() => { fabGuardRef.current = false; }, 500);
       dismiss();
@@ -252,14 +245,8 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     setOpenGuard(true);
     setTimeout(() => setOpenGuard(false), 350);
   };
-  // iOS synthesises a ghost `click` ~300ms after a drag gesture ends, but does
-  // NOT synthesise a ghost `touchend`. By handling touchend directly and calling
-  // preventDefault() we open on the raw touch (no delay) and suppress the
-  // subsequent click so only one event fires per tap.
-  const openPanelTouch = (e) => {
-    e.preventDefault();
-    openPanel();
-  };
+  // touchend fires before iOS ghost-click synthesis; preventDefault() suppresses the click.
+  const openPanelTouch = (e) => { e.preventDefault(); openPanel(); };
 
   return ReactDOM.createPortal(
     <>
@@ -292,7 +279,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
           </button>
         </div>
       )}
-      {/* Always in DOM so iOS keeps the touch target registered — visibility toggled, never unmounted */}
+      {/* Always in DOM; hidden when panel is open so iOS keeps the touch target registered */}
       <button className="twk-reopen" aria-label="Open tweaks"
         onTouchEnd={openPanelTouch} onClick={openPanel}
         style={open ? {visibility:'hidden',pointerEvents:'none'} : undefined}>
