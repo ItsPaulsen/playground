@@ -214,18 +214,18 @@ function TweaksPanel({
   };
   const onDragStart = e => {
     if (window.innerWidth > MOBILE) return;
+    const touch = e.touches[0];
     const now = performance.now();
     const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
     dragInfo.current = {
       active: true,
-      startY: e.clientY,
+      startY: touch.clientY,
       sheetH,
       points: [{
-        y: e.clientY,
+        y: touch.clientY,
         t: now
       }]
     };
-    e.currentTarget.setPointerCapture(e.pointerId);
     document.documentElement.classList.add('twk-dragging');
     if (panelRef.current) {
       panelRef.current.style.willChange = 'transform';
@@ -235,11 +235,13 @@ function TweaksPanel({
   };
   const onDragMove = e => {
     if (!dragInfo.current.active) return;
+    const touch = e.touches[0];
+    if (!touch) return;
     const now = performance.now();
-    const dy = e.clientY - dragInfo.current.startY;
+    const dy = touch.clientY - dragInfo.current.startY;
     const pts = dragInfo.current.points;
     pts.push({
-      y: e.clientY,
+      y: touch.clientY,
       t: now
     });
     while (pts.length > 1 && now - pts[0].t > 200) pts.shift();
@@ -266,11 +268,16 @@ function TweaksPanel({
         backdropRef.current.style.setProperty('opacity', '1', 'important');
       }
     };
-    if (e.type === 'pointercancel' || e.type === 'lostpointercapture') {
+    if (e.type === 'touchcancel') {
       snapBack();
       return;
     }
-    const raw = Math.max(0, e.clientY - dragInfo.current.startY);
+    const touch = e.changedTouches[0];
+    if (!touch) {
+      snapBack();
+      return;
+    }
+    const raw = Math.max(0, touch.clientY - dragInfo.current.startY);
     const pts = dragInfo.current.points;
     const cutoff = performance.now() - 100;
     const recent = pts.filter(p => p.t >= cutoff);
@@ -328,11 +335,10 @@ function TweaksPanel({
     onAnimationEnd: handleAnimEnd
   }, /*#__PURE__*/React.createElement("div", {
     className: "twk-hd",
-    onPointerDown: onDragStart,
-    onPointerMove: onDragMove,
-    onPointerUp: onDragEnd,
-    onPointerCancel: onDragEnd,
-    onLostPointerCapture: onDragEnd
+    onTouchStart: onDragStart,
+    onTouchMove: onDragMove,
+    onTouchEnd: onDragEnd,
+    onTouchCancel: onDragEnd
   }, /*#__PURE__*/React.createElement("b", null, title), /*#__PURE__*/React.createElement("span", {
     className: "twk-hd-spacer",
     "aria-hidden": "true"

@@ -169,10 +169,10 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   };
   const onDragStart = (e) => {
     if (window.innerWidth > MOBILE) return;
+    const touch = e.touches[0];
     const now = performance.now();
     const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
-    dragInfo.current = { active: true, startY: e.clientY, sheetH, points: [{ y: e.clientY, t: now }] };
-    e.currentTarget.setPointerCapture(e.pointerId);
+    dragInfo.current = { active: true, startY: touch.clientY, sheetH, points: [{ y: touch.clientY, t: now }] };
     document.documentElement.classList.add('twk-dragging');
     if (panelRef.current) {
       panelRef.current.style.willChange = 'transform';
@@ -182,10 +182,12 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   };
   const onDragMove = (e) => {
     if (!dragInfo.current.active) return;
+    const touch = e.touches[0];
+    if (!touch) return;
     const now = performance.now();
-    const dy = e.clientY - dragInfo.current.startY;
+    const dy = touch.clientY - dragInfo.current.startY;
     const pts = dragInfo.current.points;
-    pts.push({ y: e.clientY, t: now });
+    pts.push({ y: touch.clientY, t: now });
     while (pts.length > 1 && now - pts[0].t > 200) pts.shift();
     if (panelRef.current) {
       const raw = dy >= 0 ? dy : dy * 0.25;
@@ -210,8 +212,10 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         backdropRef.current.style.setProperty('opacity', '1', 'important');
       }
     };
-    if (e.type === 'pointercancel' || e.type === 'lostpointercapture') { snapBack(); return; }
-    const raw = Math.max(0, e.clientY - dragInfo.current.startY);
+    if (e.type === 'touchcancel') { snapBack(); return; }
+    const touch = e.changedTouches[0];
+    if (!touch) { snapBack(); return; }
+    const raw = Math.max(0, touch.clientY - dragInfo.current.startY);
     const pts = dragInfo.current.points;
     const cutoff = performance.now() - 100;
     const recent = pts.filter(p => p.t >= cutoff);
@@ -260,7 +264,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       <>
         <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing || openGuard ? {pointerEvents:'none'} : undefined} />
 <div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
-          <div className="twk-hd" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd} onLostPointerCapture={onDragEnd}>
+          <div className="twk-hd" onTouchStart={onDragStart} onTouchMove={onDragMove} onTouchEnd={onDragEnd} onTouchCancel={onDragEnd}>
             <b>{title}</b>
             <span className="twk-hd-spacer" aria-hidden="true" />
           </div>
