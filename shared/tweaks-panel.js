@@ -132,7 +132,6 @@ function TweaksPanel({
   const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > MOBILE);
   const [closing, setClosing] = React.useState(false);
   const [openGuard, setOpenGuard] = React.useState(false);
-  const [panelExiting, setPanelExiting] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({
@@ -290,26 +289,25 @@ function TweaksPanel({
       if (dt > 0) vel = (last.y - first.y) / dt;
     }
     if (vel > 0.5 || raw > 120) {
-      // Animate panel off-screen via inline styles
+      // display:none bypasses CSS animation-fill-mode (which kept the backdrop
+      // visually opaque at opacity:1 despite inline opacity:0 !important on iOS Safari).
+      // This is synchronous — backdrop is non-interactive before the next paint.
+      if (backdropRef.current) backdropRef.current.style.setProperty('display', 'none', 'important');
       if (panelRef.current) {
         panelRef.current.style.setProperty('transition', 'transform 0.25s cubic-bezier(.4,0,1,1)', 'important');
         panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
+        panelRef.current.style.setProperty('pointer-events', 'none', 'important');
       }
-      // Unmount backdrop immediately — don't wait for animation.
-      // Keeping the backdrop in the DOM (even opacity:0) leaves an invisible
-      // full-screen overlay that blocks the FAB on iOS Safari.
-      setOpen(false);
-      // Keep panel element alive briefly so the slide-out animation completes.
-      setPanelExiting(true);
-      setTimeout(() => setPanelExiting(false), 260);
-      // Block FAB for 1000ms — iOS ghost-clicks can arrive up to ~700ms after touchend.
+      // Block FAB — iOS ghost-clicks can arrive ~300ms after touchend.
       fabGuardRef.current = true;
       setTimeout(() => {
         fabGuardRef.current = false;
-      }, 1000);
+      }, 400);
       window.parent.postMessage({
         type: '__edit_mode_dismissed'
       }, '*');
+      // Let the slide animation finish, then unmount (FAB appears).
+      setTimeout(() => setOpen(false), 260);
     } else {
       snapBack();
     }
@@ -334,7 +332,7 @@ function TweaksPanel({
     style: closing || openGuard ? {
       pointerEvents: 'none'
     } : undefined
-  }), (open || panelExiting) && /*#__PURE__*/React.createElement("div", {
+  }), open && /*#__PURE__*/React.createElement("div", {
     ref: panelRef,
     className: `twk-panel twk-opening${closing ? ' twk-closing' : ''}`,
     "data-noncommentable": "",
