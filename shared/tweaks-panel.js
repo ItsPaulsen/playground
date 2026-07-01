@@ -492,6 +492,10 @@ function TweakRadio({
 }) {
   const trackRef = React.useRef(null);
   const [dragging, setDragging] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   // The active value is read by pointer-move handlers attached for the lifetime
   // of a drag — ref it so a stale closure doesn't fire onChange for every move.
   const valueRef = React.useRef(value);
@@ -554,7 +558,7 @@ function TweakRadio({
     onPointerDown: onPointerDown,
     onPointerMove: onPointerMove,
     onPointerUp: onPointerUp,
-    className: dragging ? 'twk-seg dragging' : 'twk-seg'
+    className: `twk-seg${dragging ? ' dragging' : ''}${mounted ? ' mounted' : ''}`
   }, /*#__PURE__*/React.createElement("div", {
     className: "twk-seg-thumb",
     style: {
