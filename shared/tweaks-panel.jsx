@@ -551,17 +551,10 @@ const FMT_CYCLE = ['oklch','hex','rgb','hsl'];
 function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
   const isMobile = window.innerWidth <= MOBILE;
   const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
-  const [localHex, setLocalHex] = React.useState(hex);
-  const [fmt, setFmt] = React.useState(() => { try{return localStorage.getItem('twk-color-fmt')||'oklch';}catch(e){return 'oklch';} });
   const svRef = React.useRef(null);
   const hueRef = React.useRef(null);
   const dropRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
-  const cycleFmt = () => {
-    const next = FMT_CYCLE[(FMT_CYCLE.indexOf(fmt)+1)%FMT_CYCLE.length];
-    setFmt(next);
-    try{localStorage.setItem('twk-color-fmt',next);}catch(e){}
-  };
 
   React.useEffect(() => {
     if (isMobile) { setPos({}); return; }
@@ -590,9 +583,7 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
 
   const emit = (h, s, v) => {
     setHsv({h, s, v});
-    const newHex = __hsvToHex(h, s, v);
-    setLocalHex(newHex);
-    if (!isMobile) onHexChange(newHex);
+    onHexChange(__hsvToHex(h, s, v));
   };
   const dragSV = (cx, cy) => {
     const r = svRef.current.getBoundingClientRect();
@@ -619,18 +610,6 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
            onPointerMove={(e)=>{if(e.buttons)dragHue(e.clientX);}}>
         <div className="twk-cpick-hue-thumb" style={{left:`${hsv.h/360*100}%`}}/>
       </div>
-      <div className="twk-cpick-fmt">
-        <button className="twk-cpick-fmt-tag" onClick={cycleFmt}>{fmt}</button>
-        <button className="twk-cpick-fmt-val" onClick={() => navigator.clipboard.writeText(__fmtColor(localHex,fmt)).catch(()=>{})}>
-          {__fmtColor(localHex,fmt)}
-        </button>
-      </div>
-      {isMobile && (
-        <div style={{display:'flex',gap:'8px',marginTop:'4px'}}>
-          <button className="twk-btn secondary" style={{height:'32px'}} onClick={onClose}>Close</button>
-          <button className="twk-btn" style={{height:'32px'}} onClick={() => { onHexChange(localHex); onClose(); }}>Update</button>
-        </div>
-      )}
     </div>
   );
 

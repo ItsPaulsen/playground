@@ -112,7 +112,7 @@ function CreditCard({ t }) {
   const H         = Math.round(baseH * fitScale);
   const shineSize = Math.round(156 * fitScale);
 
-  const colors   = Array.from({ length: t.colorCount }, (_, i) => t['color' + i]);
+  const colors   = Array.from({ length: t.gradient ? 2 : 1 }, (_, i) => t['color' + i]);
   const gradient = colors.length === 1
     ? colors[0]
     : `linear-gradient(to bottom right, ${colors.join(', ')})`;

@@ -59,7 +59,7 @@ html[data-theme="dark"] {
   border-radius: 4px;
 }
 
-@media (max-width: 639px) {
+@media (hover: none) and (pointer: coarse) {
   input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]) {
     font-size: 16px !important;
   }

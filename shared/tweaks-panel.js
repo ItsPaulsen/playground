@@ -813,25 +813,10 @@ function __ColorPickerDropdown({
 }) {
   const isMobile = window.innerWidth <= MOBILE;
   const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
-  const [localHex, setLocalHex] = React.useState(hex);
-  const [fmt, setFmt] = React.useState(() => {
-    try {
-      return localStorage.getItem('twk-color-fmt') || 'oklch';
-    } catch (e) {
-      return 'oklch';
-    }
-  });
   const svRef = React.useRef(null);
   const hueRef = React.useRef(null);
   const dropRef = React.useRef(null);
   const [pos, setPos] = React.useState(null);
-  const cycleFmt = () => {
-    const next = FMT_CYCLE[(FMT_CYCLE.indexOf(fmt) + 1) % FMT_CYCLE.length];
-    setFmt(next);
-    try {
-      localStorage.setItem('twk-color-fmt', next);
-    } catch (e) {}
-  };
   React.useEffect(() => {
     if (isMobile) {
       setPos({});
@@ -867,9 +852,7 @@ function __ColorPickerDropdown({
       s,
       v
     });
-    const newHex = __hsvToHex(h, s, v);
-    setLocalHex(newHex);
-    if (!isMobile) onHexChange(newHex);
+    onHexChange(__hsvToHex(h, s, v));
   };
   const dragSV = (cx, cy) => {
     const r = svRef.current.getBoundingClientRect();
@@ -925,36 +908,7 @@ function __ColorPickerDropdown({
     style: {
       left: `${hsv.h / 360 * 100}%`
     }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "twk-cpick-fmt"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "twk-cpick-fmt-tag",
-    onClick: cycleFmt
-  }, fmt), /*#__PURE__*/React.createElement("button", {
-    className: "twk-cpick-fmt-val",
-    onClick: () => navigator.clipboard.writeText(__fmtColor(localHex, fmt)).catch(() => {})
-  }, __fmtColor(localHex, fmt))), isMobile && /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: 'flex',
-      gap: '8px',
-      marginTop: '4px'
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "twk-btn secondary",
-    style: {
-      height: '32px'
-    },
-    onClick: onClose
-  }, "Close"), /*#__PURE__*/React.createElement("button", {
-    className: "twk-btn",
-    style: {
-      height: '32px'
-    },
-    onClick: () => {
-      onHexChange(localHex);
-      onClose();
-    }
-  }, "Update")));
+  })));
   return ReactDOM.createPortal(isMobile ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "twk-backdrop twk-cpick-overlay",
     onClick: onClose

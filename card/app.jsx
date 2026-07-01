@@ -3,7 +3,7 @@ const TWEAK_DEFAULTS = {
   orientation: 'landscape',
   title:       'Lorem Ipsum',
   subtitle:    'Dolor sit amet consectetur adipiscing elit',
-  colorCount:  2,
+  gradient:    true,
   color0:      '#6366f1',
   color1:      '#d946ef',
 };
@@ -56,11 +56,10 @@ function App() {
         </TweakSection>
 
         <TweakSection label="Color">
-          <TweakSlider label="Colors" value={t.colorCount} min={1} max={2} step={1}
-                       onChange={(v) => setTweak('colorCount', v)} />
-          {Array.from({ length: t.colorCount }, (_, i) => (
+          <TweakToggle label="Gradient" value={t.gradient} onChange={(v) => setTweak('gradient', v)} />
+          {Array.from({ length: t.gradient ? 2 : 1 }, (_, i) => (
             <TweakColor key={i} label={`Color ${i + 1}`} value={t['color' + i]}
-                        onChange={(v) => setTweak('color' + i, v)} />
+                        onChange={(v) => setTweak('color' + i, v)} noAlpha />
           ))}
         </TweakSection>
 
