@@ -1,6 +1,6 @@
 (function () {
-  const MOON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>`;
-  const SUN  = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+  const MOON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/></svg>`;
+  const SUN  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
 
   const NAV_ITEMS = [
     { label: 'Wave',  href: '/wave/' },
@@ -61,7 +61,7 @@
     #site-nav.menu-open #theme-toggle { opacity: 0; pointer-events: none; }
 
     .header-right {
-      display: flex; align-items: center;
+      display: flex; align-items: center; gap: 4px;
       margin-right: -10px;
     }
 
@@ -78,19 +78,18 @@
     html[data-theme="dark"] #menu-toggle:hover { color: var(--pg-primary); }
 
     .menu-icon {
-      width: 16px;
-      display: flex; flex-direction: column; gap: 4px;
+      width: 20px; height: 20px;
+      display: flex; flex-direction: column; gap: 6px; justify-content: center;
       pointer-events: none;
     }
     .menu-icon span {
-      display: block; width: 100%; height: 1.5px;
+      display: block; width: 100%; height: 2px;
       background: currentColor; border-radius: 1px;
-      transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .2s ease;
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
       transform-origin: center;
     }
-    .menu-icon.is-open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
-    .menu-icon.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .menu-icon.is-open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+    .menu-icon.is-open span:nth-child(1) { transform: translateY(4px) rotate(45deg); }
+    .menu-icon.is-open span:nth-child(2) { transform: translateY(-4px) rotate(-45deg); }
 
     #site-menu {
       position: fixed; inset: 0; z-index: calc(var(--z-header) - 2);
@@ -142,7 +141,7 @@
       <div class="header-right">
         <button id="theme-toggle"></button>
         <button id="menu-toggle" aria-label="Open menu" aria-expanded="false">
-          <span class="menu-icon"><span></span><span></span><span></span></span>
+          <span class="menu-icon"><span></span><span></span></span>
         </button>
       </div>
     </div>
