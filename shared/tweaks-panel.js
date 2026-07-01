@@ -316,6 +316,14 @@ function TweaksPanel({
     setOpenGuard(true);
     setTimeout(() => setOpenGuard(false), 350);
   };
+  // iOS synthesises a ghost `click` ~300ms after a drag gesture ends, but does
+  // NOT synthesise a ghost `touchend`. By handling touchend directly and calling
+  // preventDefault() we open on the raw touch (no delay) and suppress the
+  // subsequent click so only one event fires per tap.
+  const openPanelTouch = e => {
+    e.preventDefault();
+    openPanel();
+  };
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, open && /*#__PURE__*/React.createElement("div", {
     ref: backdropRef,
     className: "twk-backdrop",
@@ -368,6 +376,7 @@ function TweaksPanel({
   })))), /*#__PURE__*/React.createElement("button", {
     className: "twk-reopen",
     "aria-label": "Open tweaks",
+    onTouchEnd: openPanelTouch,
     onClick: openPanel,
     style: open ? {
       visibility: 'hidden',
@@ -376,6 +385,7 @@ function TweaksPanel({
   }, FILTER_ICON), /*#__PURE__*/React.createElement("button", {
     className: "twk-fab",
     "aria-label": "Open tweaks",
+    onTouchEnd: openPanelTouch,
     onClick: openPanel,
     style: open ? {
       visibility: 'hidden',
