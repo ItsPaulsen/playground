@@ -300,7 +300,10 @@ function TweaksPanel({
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, open ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     ref: backdropRef,
     className: "twk-backdrop",
-    onClick: dismiss
+    onClick: dismiss,
+    style: closing ? {
+      pointerEvents: 'none'
+    } : undefined
   }), /*#__PURE__*/React.createElement("div", {
     ref: panelRef,
     className: `twk-panel twk-opening${closing ? ' twk-closing' : ''}`,

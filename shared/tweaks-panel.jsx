@@ -238,7 +238,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     <>
       {open ? (
       <>
-        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} />
+        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing ? {pointerEvents:'none'} : undefined} />
 <div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd" onPointerDown={onDragStart} onPointerMove={onDragMove} onPointerUp={onDragEnd} onPointerCancel={onDragEnd} onLostPointerCapture={onDragEnd}>
             <b>{title}</b>
