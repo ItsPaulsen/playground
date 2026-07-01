@@ -18,7 +18,7 @@
       top: -100%;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 2147483647;
+      z-index: var(--z-header);
       padding: 8px 20px;
       background: var(--pg-primary);
       color: var(--pg-bg);
@@ -37,7 +37,7 @@
     }
 
     #site-nav {
-      position: relative; z-index: 2147483646;
+      position: relative; z-index: calc(var(--z-header) - 1);
       background: var(--nav-bg, transparent);
       backdrop-filter: var(--nav-filter, none);
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -93,7 +93,7 @@
     .menu-icon.is-open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
     #site-menu {
-      position: fixed; inset: 0; z-index: 2147483645;
+      position: fixed; inset: 0; z-index: calc(var(--z-header) - 2);
       background: var(--nav-bg, color-mix(in srgb, var(--pg-bg) 80%, transparent));
       backdrop-filter: var(--nav-filter, blur(12px) saturate(180%));
       opacity: 0; pointer-events: none;

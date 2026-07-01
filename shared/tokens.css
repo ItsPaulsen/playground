@@ -15,6 +15,21 @@
   --radius-md: 36px;
   --radius-lg: 48px;
 
+  /* Semantic tints — computed from --pg-primary so they auto-switch with theme */
+  --pg-tint:          color-mix(in oklch, var(--pg-primary) 10%, transparent);
+  --pg-tint-20:       color-mix(in oklch, var(--pg-primary) 20%, transparent);
+  --pg-border-focus:  color-mix(in oklch, var(--pg-primary) 35%, transparent);
+  --pg-bar-track:     color-mix(in oklch, var(--pg-primary) 12%, transparent);
+  --pg-surface-glass: color-mix(in oklch, var(--pg-surface) 80%, transparent);
+
+  /* Z-index layers */
+  --z-dropdown:  100;
+  --z-panel:     200;
+  --z-picker:    300;
+  --z-overlay:   400;
+  --z-header:    500;
+  --z-modal:     600;
+
   --pg-bg:      var(--pg-light-100);
   --pg-surface: var(--pg-light-200);
   --pg-border:  var(--pg-light-300);
