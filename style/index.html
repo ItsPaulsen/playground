@@ -314,21 +314,6 @@
     .comp-item .pg-switch-row { align-self: flex-start; }
     .comp-item .pg-bar { width: 180px; }
     .switch-label { font-size: 13px; color: var(--pg-primary); }
-
-    /* ── Usage ── */
-    .usage-code {
-      margin: 0;
-      padding: 16px 20px;
-      background: var(--pg-surface);
-      border: 1px solid var(--pg-border);
-      border-radius: 12px;
-      font-family: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
-      font-size: 12.5px;
-      line-height: 1.65;
-      color: var(--pg-primary);
-      overflow-x: auto;
-      white-space: pre;
-    }
   </style>
 </head>
 <body>
@@ -494,13 +479,11 @@
         <div class="comp-item">
           <div class="comp-label">Text</div>
           <input class="pg-input" type="text" placeholder="Placeholder" />
-          <pre class="usage-code"><code>&lt;input class="pg-input" type="text" placeholder="…" /&gt;</code></pre>
         </div>
 
         <div class="comp-item">
           <div class="comp-label">Text Large</div>
           <input class="pg-input pg-input--lg" type="text" placeholder="Placeholder" />
-          <pre class="usage-code"><code>&lt;input class="pg-input pg-input--lg" type="text" placeholder="…" /&gt;</code></pre>
         </div>
 
         <div class="comp-item">
@@ -514,14 +497,6 @@
               <div class="pg-select-option" data-val="Option C">Option C<span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
             </div>
           </div>
-          <pre class="usage-code"><code>&lt;div class="pg-select-wrap" tabindex="0"&gt;
-  &lt;span class="pg-select-val"&gt;Option A&lt;/span&gt;
-  &lt;svg class="pg-select-chevron" …&gt;…&lt;/svg&gt;
-  &lt;div class="pg-select-dropdown"&gt;
-    &lt;div class="pg-select-option is-selected" data-val="A"&gt;A&lt;/div&gt;
-    &lt;div class="pg-select-option" data-val="B"&gt;B&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
         </div>
 
       </div>
@@ -539,14 +514,6 @@
             <span class="pg-bar-val pg-bar-val--fill" style="clip-path:inset(0 50% 0 0)">50</span>
             <span class="pg-bar-val pg-bar-val--track" style="clip-path:inset(0 0 0 50%)">50</span>
           </div>
-          <pre class="usage-code"><code>&lt;div class="pg-bar" tabindex="0" role="slider"
-     aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"&gt;
-  &lt;div class="pg-bar-fill" style="width:50%"&gt;&lt;/div&gt;
-  &lt;span class="pg-bar-val pg-bar-val--fill"
-        style="clip-path:inset(0 50% 0 0)"&gt;50&lt;/span&gt;
-  &lt;span class="pg-bar-val pg-bar-val--track"
-        style="clip-path:inset(0 0 0 50%)"&gt;50&lt;/span&gt;
-&lt;/div&gt;</code></pre>
         </div>
 
         <div class="comp-item">
@@ -555,10 +522,6 @@
             <button class="pg-switch" data-on="0" id="demo-switch-live" aria-pressed="false"><i></i></button>
             <span class="switch-label" id="demo-switch-live-label">Off</span>
           </div>
-          <pre class="usage-code"><code>&lt;div class="pg-switch-row"&gt;
-  &lt;button class="pg-switch" data-on="0" aria-pressed="false"&gt;&lt;i&gt;&lt;/i&gt;&lt;/button&gt;
-  &lt;span&gt;Label&lt;/span&gt;
-&lt;/div&gt;</code></pre>
         </div>
 
       </div>
