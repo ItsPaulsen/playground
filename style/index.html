@@ -599,10 +599,20 @@
       )).concat(typeEls, swatchEls, radiusEls, compEls);
       els.forEach(function (el) { el.classList.add('pg-anim'); });
 
+      function animateIn(el) {
+        el.classList.add('is-visible');
+        el.addEventListener('transitionend', function done(ev) {
+          if (ev.target === el && ev.propertyName === 'opacity') {
+            el.classList.remove('pg-anim', 'is-visible');
+            el.removeEventListener('transitionend', done);
+          }
+        });
+      }
+
       var obs = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
+            animateIn(e.target);
             obs.unobserve(e.target);
           }
         });
@@ -613,7 +623,7 @@
       requestAnimationFrame(function () {
         els.forEach(function (el) {
           if (el.getBoundingClientRect().bottom <= 0) {
-            el.classList.add('is-visible');
+            animateIn(el);
           } else {
             obs.observe(el);
           }
@@ -729,17 +739,14 @@
         if(fmtVal) fmtVal.textContent = fmt;
         renderFmtOptions();
         function fmtOpen() {
-          var wrapRect = fmtWrap.getBoundingClientRect();
-          fmtDrop.style.position = 'fixed';
-          fmtDrop.style.top = (wrapRect.bottom + 6) + 'px';
-          fmtDrop.style.left = wrapRect.left + 'px';
+          fmtDrop.style.left = '0';
           fmtDrop.style.right = '';
           fmtDrop.classList.add('is-open');
           fmtDrop.classList.add('show-selected');
           var rect = fmtDrop.getBoundingClientRect();
           if (rect.right > window.innerWidth - 8) {
             fmtDrop.style.left = '';
-            fmtDrop.style.right = (window.innerWidth - wrapRect.right) + 'px';
+            fmtDrop.style.right = '0';
           }
           fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
             opt.setAttribute('tabindex', '-1');
@@ -752,10 +759,6 @@
         function fmtClose() {
           fmtDrop.classList.remove('is-open');
           fmtDrop.classList.remove('show-selected');
-          fmtDrop.style.position = '';
-          fmtDrop.style.top = '';
-          fmtDrop.style.left = '';
-          fmtDrop.style.right = '';
         }
         fmtWrap.addEventListener('click', function() {
           if (fmtDrop.classList.contains('is-open')) { fmtClose(); } else { fmtOpen(); }
