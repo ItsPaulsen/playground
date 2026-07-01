@@ -9,3 +9,4 @@ At the start of every session, run `npm start` as a background process. This sta
 - Edit `.jsx` files only — `.js` files are Babel-compiled output and are gitignored.
 - `npm start` (or `npm run watch`) compiles all `.jsx` files immediately on startup, so no manual build step is needed after a fresh clone.
 - Run `npm run build` only if you need a one-shot compile without the watcher.
+- Adding a new `.jsx` file is automatically picked up — no changes to `package.json` needed. The build and watch scripts use `scripts/compile.js`, which discovers all `.jsx` files in the project at runtime.
