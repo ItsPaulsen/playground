@@ -235,10 +235,22 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
-      // Block FAB for 500ms so iOS ghost-click from the drag gesture can't reopen
+      // Block FAB for 500ms to absorb iOS ghost-click from the drag gesture
       fabGuardRef.current = true;
       setTimeout(() => { fabGuardRef.current = false; }, 500);
-      dismiss();
+      // Close via transitionend on the slide-out — more reliable than animationend
+      // on off-screen elements in iOS Safari (which silently skips CSS animations).
+      window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+      const panelEl = panelRef.current;
+      let fallbackId;
+      const finalize = () => {
+        clearTimeout(fallbackId);
+        if (panelEl) panelEl.removeEventListener('transitionend', onTEnd);
+        setOpen(false);
+      };
+      const onTEnd = (ev) => { if (ev.propertyName === 'transform') finalize(); };
+      if (panelEl) panelEl.addEventListener('transitionend', onTEnd);
+      fallbackId = setTimeout(finalize, 300);
     } else {
       snapBack();
     }
