@@ -14,9 +14,6 @@
   transition: border-color .15s, box-shadow .15s;
 }
 .pg-input--lg { height: 32px; border-radius: 12px; padding: 0 12px; font-size: 14px; }
-@media (max-width: 639px) {
-  .pg-input, .pg-input--lg { font-size: 16px; }
-}
 .pg-input::placeholder { color: var(--pg-muted); opacity: .72; }
 .pg-input:focus { border-color: var(--pg-border-focus); }
 

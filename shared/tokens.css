@@ -58,3 +58,9 @@ html[data-theme="dark"] {
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+@media (max-width: 639px) {
+  input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="color"]) {
+    font-size: 16px !important;
+  }
+}
