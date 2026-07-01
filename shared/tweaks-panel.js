@@ -45,6 +45,8 @@
 //
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Fallback for pages that omit the <link data-twk-css> tag in <head>.
+// Consumer pages should include it statically to avoid a flash on first paint.
 (function () {
   if (document.querySelector('link[data-twk-css]')) return;
   var link = document.createElement('link');
@@ -492,10 +494,6 @@ function TweakRadio({
 }) {
   const trackRef = React.useRef(null);
   const [dragging, setDragging] = React.useState(false);
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
   // The active value is read by pointer-move handlers attached for the lifetime
   // of a drag — ref it so a stale closure doesn't fire onChange for every move.
   const valueRef = React.useRef(value);
@@ -558,7 +556,7 @@ function TweakRadio({
     onPointerDown: onPointerDown,
     onPointerMove: onPointerMove,
     onPointerUp: onPointerUp,
-    className: `twk-seg${dragging ? ' dragging' : ''}${mounted ? ' mounted' : ''}`
+    className: dragging ? 'twk-seg dragging' : 'twk-seg'
   }, /*#__PURE__*/React.createElement("div", {
     className: "twk-seg-thumb",
     style: {
