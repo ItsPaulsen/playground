@@ -27,6 +27,13 @@ function Typo({ t, panelOpen }) {
   const spansRef     = React.useRef([]);
   const timeRef      = React.useRef(0);
   const rafRef       = React.useRef(null);
+  const [isMobile, setIsMobile] = React.useState(() => window.innerWidth <= 640);
+  React.useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const chars = React.useMemo(() => {
     const segs = [...SEGMENTER.segment(t.text || '')].map(s => s.segment).slice(0, 20);
@@ -79,7 +86,7 @@ function Typo({ t, panelOpen }) {
         ref={containerRef}
         style={{
           display: 'flex', alignItems: 'center',
-          fontSize:   t.fontSize + 'px',
+          fontSize:   (isMobile ? Math.min(t.fontSize, 72) : t.fontSize) + 'px',
           fontWeight: t.fontWeight,
           fontStyle:  t.fontStyle,
           fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
