@@ -138,6 +138,7 @@ function TweaksPanel({
     startY: 0,
     points: []
   });
+  const closeTimerRef = React.useRef(null);
   React.useEffect(() => {
     onOpenChange && onOpenChange(open);
   }, [open, onOpenChange]);
@@ -199,7 +200,12 @@ function TweaksPanel({
   }, []);
   const dismiss = () => {
     setClosing(true);
-    setTimeout(() => onOpenChange && onOpenChange(false), 80);
+    clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => {
+      setClosing(false);
+      setOpen(false);
+      onOpenChange && onOpenChange(false);
+    }, 350);
     window.parent.postMessage({
       type: '__edit_mode_dismissed'
     }, '*');
@@ -295,6 +301,7 @@ function TweaksPanel({
   };
   const handleAnimEnd = e => {
     if (e.animationName === 'twk-out' || e.animationName === 'twk-out-mob') {
+      clearTimeout(closeTimerRef.current);
       setClosing(false);
       setOpen(false);
     }

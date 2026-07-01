@@ -98,6 +98,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({ active: false, startY: 0, points: [] });
+  const closeTimerRef = React.useRef(null);
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
@@ -156,7 +157,12 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
 
   const dismiss = () => {
     setClosing(true);
-    setTimeout(() => onOpenChange && onOpenChange(false), 80);
+    clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => {
+      setClosing(false);
+      setOpen(false);
+      onOpenChange && onOpenChange(false);
+    }, 350);
     window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
   };
   const onDragStart = (e) => {
@@ -232,7 +238,11 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     }
   };
   const handleAnimEnd = (e) => {
-    if (e.animationName === 'twk-out' || e.animationName === 'twk-out-mob') { setClosing(false); setOpen(false); }
+    if (e.animationName === 'twk-out' || e.animationName === 'twk-out-mob') {
+      clearTimeout(closeTimerRef.current);
+      setClosing(false);
+      setOpen(false);
+    }
   };
 
   const openPanel = () => setOpen(true);
