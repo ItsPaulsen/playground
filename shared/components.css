@@ -15,8 +15,8 @@
 }
 .pg-input--lg { height: 32px; border-radius: 12px; padding: 0 12px; font-size: 14px; }
 @media (max-width: 639px) {
-  .pg-input { height: 32px; }
-  .pg-input--lg { height: 38px; }
+  .pg-input { padding: 0 14px; }
+  .pg-input--lg { padding: 0 18px; }
 }
 .pg-input::placeholder { color: var(--pg-muted); opacity: .72; }
 .pg-input:focus { border-color: var(--pg-border-focus); }
