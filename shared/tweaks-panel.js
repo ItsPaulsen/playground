@@ -131,6 +131,7 @@ function TweaksPanel({
 }) {
   const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > MOBILE);
   const [closing, setClosing] = React.useState(false);
+  const [panelExiting, setPanelExiting] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({
@@ -289,12 +290,12 @@ function TweaksPanel({
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
-      setTimeout(() => {
-        setOpen(false);
-        window.parent.postMessage({
-          type: '__edit_mode_dismissed'
-        }, '*');
-      }, 260);
+      setOpen(false);
+      setPanelExiting(true);
+      window.parent.postMessage({
+        type: '__edit_mode_dismissed'
+      }, '*');
+      setTimeout(() => setPanelExiting(false), 260);
     } else {
       snapBack();
     }
@@ -307,7 +308,7 @@ function TweaksPanel({
     }
   };
   const openPanel = () => setOpen(true);
-  return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, open ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, (open || panelExiting) && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     ref: backdropRef,
     className: "twk-backdrop",
     onClick: dismiss,
@@ -357,7 +358,7 @@ function TweaksPanel({
     d: "M18 6 6 18"
   }), /*#__PURE__*/React.createElement("path", {
     d: "m6 6 12 12"
-  }))))) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
+  }))))), !open && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("button", {
     className: "twk-reopen",
     "aria-label": "Open tweaks",
     onClick: openPanel

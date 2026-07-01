@@ -95,6 +95,7 @@ const FILTER_ICON = (
 function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpenChange, renderMobileFooter }) {
   const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > MOBILE);
   const [closing, setClosing] = React.useState(false);
+  const [panelExiting, setPanelExiting] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({ active: false, startY: 0, points: [] });
@@ -229,10 +230,10 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
-      setTimeout(() => {
-        setOpen(false);
-        window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
-      }, 260);
+      setOpen(false);
+      setPanelExiting(true);
+      window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+      setTimeout(() => setPanelExiting(false), 260);
     } else {
       snapBack();
     }
@@ -249,7 +250,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
 
   return ReactDOM.createPortal(
     <>
-      {open ? (
+      {(open || panelExiting) && (
       <>
         <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing ? {pointerEvents:'none'} : undefined} />
 <div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
@@ -277,7 +278,8 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
           </button>
         </div>
       </>
-      ) : (
+      )}
+      {!open && (
         <>
           <button className="twk-reopen" aria-label="Open tweaks" onClick={openPanel}>
             {FILTER_ICON}

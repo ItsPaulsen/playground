@@ -746,7 +746,7 @@
           fmtDrop.classList.add('show-selected');
           var rect = fmtDrop.getBoundingClientRect();
           if (rect.right > window.innerWidth - 8) {
-            fmtDrop.style.left = '';
+            fmtDrop.style.left = 'auto';
             fmtDrop.style.right = '0';
           }
           fmtDrop.querySelectorAll('.pg-select-option').forEach(function(opt) {
