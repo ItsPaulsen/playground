@@ -16,6 +16,12 @@ function CreditCard({
     ry: 0,
     scale: 1
   });
+  const [vw, setVw] = React.useState(() => window.innerWidth);
+  React.useEffect(() => {
+    const onResize = () => setVw(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
   React.useEffect(() => {
     const wrapper = wrapperRef.current;
     const card = cardRef.current;
@@ -51,10 +57,20 @@ function CreditCard({
     const resume = () => {
       if (!rafRef.current) rafRef.current = requestAnimationFrame(tick);
     };
-    const onMove = e => {
+    const getPos = (clientX, clientY) => {
       const r = wrapper.getBoundingClientRect();
-      const dx = (e.clientX - r.left - r.width / 2) / (r.width / 2);
-      const dy = (e.clientY - r.top - r.height / 2) / (r.height / 2);
+      const dx = (clientX - r.left - r.width / 2) / (r.width / 2);
+      const dy = (clientY - r.top - r.height / 2) / (r.height / 2);
+      return {
+        dx,
+        dy
+      };
+    };
+    const onMove = e => {
+      const {
+        dx,
+        dy
+      } = getPos(e.clientX, e.clientY);
       targetRef.current = {
         rx: dy * -18,
         ry: dx * 22,
@@ -70,18 +86,49 @@ function CreditCard({
       };
       resume();
     };
+    const onTouchMove = e => {
+      e.preventDefault();
+      const {
+        dx,
+        dy
+      } = getPos(e.touches[0].clientX, e.touches[0].clientY);
+      targetRef.current = {
+        rx: dy * -18,
+        ry: dx * 22,
+        scale: 1.04
+      };
+      resume();
+    };
+    const onTouchEnd = () => {
+      targetRef.current = {
+        rx: 0,
+        ry: 0,
+        scale: 1
+      };
+      resume();
+    };
     wrapper.addEventListener('mousemove', onMove);
     wrapper.addEventListener('mouseleave', onLeave);
+    wrapper.addEventListener('touchmove', onTouchMove, {
+      passive: false
+    });
+    wrapper.addEventListener('touchend', onTouchEnd);
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       wrapper.removeEventListener('mousemove', onMove);
       wrapper.removeEventListener('mouseleave', onLeave);
+      wrapper.removeEventListener('touchmove', onTouchMove);
+      wrapper.removeEventListener('touchend', onTouchEnd);
       cancelAnimationFrame(rafRef.current);
     };
   }, []);
-  const W = t.orientation === 'portrait' ? 240 : 380;
-  const H = t.orientation === 'portrait' ? 380 : 240;
-  const shineSize = 156;
+  const portrait = t.orientation === 'portrait';
+  const baseW = portrait ? 240 : 380;
+  const baseH = portrait ? 380 : 240;
+  const fitScale = Math.min(1, (vw - 48) / baseW);
+  const W = Math.round(baseW * fitScale);
+  const H = Math.round(baseH * fitScale);
+  const shineSize = Math.round(156 * fitScale);
   const colors = Array.from({
     length: t.colorCount
   }, (_, i) => t['color' + i]);
