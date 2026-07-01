@@ -1,7 +1,7 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "lineCount": 16,
+  "lineCount": 12,
   "thickness": 1,
-  "spacing": 8,
+  "spacing": 4,
   "amplitude": 0.25,
   "frequency": 4,
   "turbulence": 0.2,
