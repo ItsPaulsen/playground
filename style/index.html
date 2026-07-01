@@ -305,7 +305,7 @@
     }
 
     /* ── Components ── */
-.comp-row { display: flex; flex-wrap: wrap; gap: 32px; }
+.comp-row { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
     .comp-item { display: flex; flex-direction: column; gap: 12px; }
     .comp-label { font-size: 11px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--pg-muted); }
     .comp-item .pg-input { width: 180px; }
@@ -314,10 +314,6 @@
     .switch-label { font-size: 13px; color: var(--pg-primary); }
 
     /* ── Usage ── */
-    .usage-intro { font-size: 14px; color: var(--pg-muted); margin-bottom: 32px; line-height: 1.6; }
-    .usage-intro code { font-family: ui-monospace, monospace; font-size: 13px; color: var(--pg-primary); }
-    .usage-group { margin-bottom: 24px; }
-    .usage-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--pg-muted); margin-bottom: 8px; }
     .usage-code {
       margin: 0;
       padding: 16px 20px;
@@ -496,11 +492,13 @@
         <div class="comp-item">
           <div class="comp-label">Text</div>
           <input class="pg-input" type="text" placeholder="Placeholder" />
+          <pre class="usage-code"><code>&lt;input class="pg-input" type="text" placeholder="…" /&gt;</code></pre>
         </div>
 
         <div class="comp-item">
           <div class="comp-label">Text Large</div>
           <input class="pg-input pg-input--lg" type="text" placeholder="Placeholder" />
+          <pre class="usage-code"><code>&lt;input class="pg-input pg-input--lg" type="text" placeholder="…" /&gt;</code></pre>
         </div>
 
         <div class="comp-item">
@@ -514,6 +512,14 @@
               <div class="pg-select-option" data-val="Option C">Option C<span class="pg-select-opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
             </div>
           </div>
+          <pre class="usage-code"><code>&lt;div class="pg-select-wrap" tabindex="0"&gt;
+  &lt;span class="pg-select-val"&gt;Option A&lt;/span&gt;
+  &lt;svg class="pg-select-chevron" …&gt;…&lt;/svg&gt;
+  &lt;div class="pg-select-dropdown"&gt;
+    &lt;div class="pg-select-option is-selected" data-val="A"&gt;A&lt;/div&gt;
+    &lt;div class="pg-select-option" data-val="B"&gt;B&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
         </div>
 
       </div>
@@ -531,6 +537,14 @@
             <span class="pg-bar-val pg-bar-val--fill" style="clip-path:inset(0 50% 0 0)">50</span>
             <span class="pg-bar-val pg-bar-val--track" style="clip-path:inset(0 0 0 50%)">50</span>
           </div>
+          <pre class="usage-code"><code>&lt;div class="pg-bar" tabindex="0" role="slider"
+     aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"&gt;
+  &lt;div class="pg-bar-fill" style="width:50%"&gt;&lt;/div&gt;
+  &lt;span class="pg-bar-val pg-bar-val--fill"
+        style="clip-path:inset(0 50% 0 0)"&gt;50&lt;/span&gt;
+  &lt;span class="pg-bar-val pg-bar-val--track"
+        style="clip-path:inset(0 0 0 50%)"&gt;50&lt;/span&gt;
+&lt;/div&gt;</code></pre>
         </div>
 
         <div class="comp-item">
@@ -539,51 +553,12 @@
             <button class="pg-switch" data-on="0" id="demo-switch-live" aria-pressed="false"><i></i></button>
             <span class="switch-label" id="demo-switch-live-label">Off</span>
           </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Usage -->
-    <div class="section">
-      <div class="section-title">Usage</div>
-      <p class="usage-intro">Include <code>/shared/components.js</code> and <code>/shared/components.css</code> on any page. Elements are auto-initialized on load.</p>
-
-      <div class="usage-group">
-        <div class="usage-label">Text input</div>
-        <pre class="usage-code"><code>&lt;input class="pg-input" type="text" placeholder="…" /&gt;
-&lt;input class="pg-input pg-input--lg" type="text" placeholder="…" /&gt;</code></pre>
-      </div>
-
-      <div class="usage-group">
-        <div class="usage-label">Dropdown</div>
-        <pre class="usage-code"><code>&lt;div class="pg-select-wrap" tabindex="0"&gt;
-  &lt;span class="pg-select-label"&gt;Label:&lt;/span&gt;
-  &lt;span class="pg-select-val"&gt;Option A&lt;/span&gt;
-  &lt;svg class="pg-select-chevron" …&gt;…&lt;/svg&gt;
-  &lt;div class="pg-select-dropdown"&gt;
-    &lt;div class="pg-select-option is-selected" data-val="Option A"&gt;Option A&lt;/div&gt;
-    &lt;div class="pg-select-option" data-val="Option B"&gt;Option B&lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-      </div>
-
-      <div class="usage-group">
-        <div class="usage-label">Slider</div>
-        <pre class="usage-code"><code>&lt;div class="pg-bar" tabindex="0" role="slider"
-     aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"&gt;
-  &lt;div class="pg-bar-fill" style="width:50%"&gt;&lt;/div&gt;
-  &lt;span class="pg-bar-val pg-bar-val--fill" style="clip-path:inset(0 50% 0 0)"&gt;50&lt;/span&gt;
-  &lt;span class="pg-bar-val pg-bar-val--track" style="clip-path:inset(0 0 0 50%)"&gt;50&lt;/span&gt;
-&lt;/div&gt;</code></pre>
-      </div>
-
-      <div class="usage-group">
-        <div class="usage-label">Toggle</div>
-        <pre class="usage-code"><code>&lt;div class="pg-switch-row"&gt;
+          <pre class="usage-code"><code>&lt;div class="pg-switch-row"&gt;
   &lt;button class="pg-switch" data-on="0" aria-pressed="false"&gt;&lt;i&gt;&lt;/i&gt;&lt;/button&gt;
   &lt;span&gt;Label&lt;/span&gt;
 &lt;/div&gt;</code></pre>
+        </div>
+
       </div>
     </div>
 
