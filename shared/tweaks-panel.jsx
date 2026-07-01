@@ -96,6 +96,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   const [open, setOpen] = React.useState(() => window.parent === window && window.innerWidth > MOBILE);
   const [closing, setClosing] = React.useState(false);
   const [openGuard, setOpenGuard] = React.useState(false);
+  const [panelExiting, setPanelExiting] = React.useState(false);
   const panelRef = React.useRef(null);
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({ active: false, startY: 0, points: [] });
@@ -226,31 +227,22 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       if (dt > 0) vel = (last.y - first.y) / dt;
     }
     if (vel > 0.5 || raw > 120) {
+      // Animate panel off-screen via inline styles
       if (panelRef.current) {
         panelRef.current.style.setProperty('transition', 'transform 0.25s cubic-bezier(.4,0,1,1)', 'important');
         panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
       }
-      if (backdropRef.current) {
-        backdropRef.current.style.pointerEvents = 'none';
-        backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
-        backdropRef.current.style.setProperty('opacity', '0', 'important');
-      }
-      // Block FAB for 500ms to absorb iOS ghost-click from the drag gesture
+      // Unmount backdrop immediately — don't wait for animation.
+      // Keeping the backdrop in the DOM (even opacity:0) leaves an invisible
+      // full-screen overlay that blocks the FAB on iOS Safari.
+      setOpen(false);
+      // Keep panel element alive briefly so the slide-out animation completes.
+      setPanelExiting(true);
+      setTimeout(() => setPanelExiting(false), 260);
+      // Block FAB for 1000ms — iOS ghost-clicks can arrive up to ~700ms after touchend.
       fabGuardRef.current = true;
-      setTimeout(() => { fabGuardRef.current = false; }, 500);
-      // Close via transitionend on the slide-out — more reliable than animationend
-      // on off-screen elements in iOS Safari (which silently skips CSS animations).
+      setTimeout(() => { fabGuardRef.current = false; }, 1000);
       window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
-      const panelEl = panelRef.current;
-      let fallbackId;
-      const finalize = () => {
-        clearTimeout(fallbackId);
-        if (panelEl) panelEl.removeEventListener('transitionend', onTEnd);
-        setOpen(false);
-      };
-      const onTEnd = (ev) => { if (ev.propertyName === 'transform') finalize(); };
-      if (panelEl) panelEl.addEventListener('transitionend', onTEnd);
-      fallbackId = setTimeout(finalize, 300);
     } else {
       snapBack();
     }
@@ -273,9 +265,10 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   return ReactDOM.createPortal(
     <>
       {open && (
-      <>
         <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing || openGuard ? {pointerEvents:'none'} : undefined} />
-<div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
+      )}
+      {(open || panelExiting) && (
+        <div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
           <div className="twk-hd" onTouchStart={onDragStart} onTouchMove={onDragMove} onTouchEnd={onDragEnd} onTouchCancel={onDragEnd}>
             <b>{title}</b>
             <span className="twk-hd-spacer" aria-hidden="true" />
@@ -299,7 +292,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
             </svg>
           </button>
         </div>
-      </>
       )}
       {!open && (
         <>
