@@ -100,6 +100,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   const backdropRef = React.useRef(null);
   const dragInfo = React.useRef({ active: false, startY: 0, points: [] });
   const closeTimerRef = React.useRef(null);
+  const fabGuardRef = React.useRef(false);
   React.useEffect(() => { onOpenChange && onOpenChange(open); }, [open, onOpenChange]);
   // Auto-inject a rail toggle when a <deck-stage> is on the page. The
   // toggle drives the deck's per-viewer _railVisible via window message;
@@ -230,6 +231,9 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
+      // Block FAB for 500ms so iOS ghost-click from the drag gesture can't reopen
+      fabGuardRef.current = true;
+      setTimeout(() => { fabGuardRef.current = false; }, 500);
       dismiss();
     } else {
       snapBack();
@@ -244,6 +248,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   };
 
   const openPanel = () => {
+    if (fabGuardRef.current) return;
     setOpen(true);
     setOpenGuard(true);
     setTimeout(() => setOpenGuard(false), 350);

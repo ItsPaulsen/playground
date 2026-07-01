@@ -140,6 +140,7 @@ function TweaksPanel({
     points: []
   });
   const closeTimerRef = React.useRef(null);
+  const fabGuardRef = React.useRef(false);
   React.useEffect(() => {
     onOpenChange && onOpenChange(open);
   }, [open, onOpenChange]);
@@ -290,6 +291,11 @@ function TweaksPanel({
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
+      // Block FAB for 500ms so iOS ghost-click from the drag gesture can't reopen
+      fabGuardRef.current = true;
+      setTimeout(() => {
+        fabGuardRef.current = false;
+      }, 500);
       dismiss();
     } else {
       snapBack();
@@ -303,6 +309,7 @@ function TweaksPanel({
     }
   };
   const openPanel = () => {
+    if (fabGuardRef.current) return;
     setOpen(true);
     setOpenGuard(true);
     setTimeout(() => setOpenGuard(false), 350);
