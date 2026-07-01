@@ -552,6 +552,7 @@ const FMT_CYCLE = ['oklch','hex','rgb','hsl'];
 function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
   const isMobile = window.innerWidth <= MOBILE;
   const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
+  const [localHex, setLocalHex] = React.useState(hex);
   const svRef = React.useRef(null);
   const hueRef = React.useRef(null);
   const dropRef = React.useRef(null);
@@ -584,7 +585,9 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
 
   const emit = (h, s, v) => {
     setHsv({h, s, v});
-    onHexChange(__hsvToHex(h, s, v));
+    const newHex = __hsvToHex(h, s, v);
+    setLocalHex(newHex);
+    if (!isMobile) onHexChange(newHex);
   };
   const dragSV = (cx, cy) => {
     const r = svRef.current.getBoundingClientRect();
@@ -611,6 +614,12 @@ function __ColorPickerDropdown({ hex, onHexChange, anchorRef, onClose }) {
            onPointerMove={(e)=>{if(e.buttons)dragHue(e.clientX);}}>
         <div className="twk-cpick-hue-thumb" style={{left:`${hsv.h/360*100}%`}}/>
       </div>
+      {isMobile && (
+        <div style={{display:'flex',gap:'8px',marginTop:'8px'}}>
+          <button className="twk-btn secondary" onClick={onClose}>Cancel</button>
+          <button className="twk-btn" onClick={() => { onHexChange(localHex); onClose(); }}>Save</button>
+        </div>
+      )}
     </div>
   );
 

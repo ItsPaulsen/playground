@@ -814,6 +814,7 @@ function __ColorPickerDropdown({
 }) {
   const isMobile = window.innerWidth <= MOBILE;
   const [hsv, setHsv] = React.useState(() => __hexToHsv(hex));
+  const [localHex, setLocalHex] = React.useState(hex);
   const svRef = React.useRef(null);
   const hueRef = React.useRef(null);
   const dropRef = React.useRef(null);
@@ -853,7 +854,9 @@ function __ColorPickerDropdown({
       s,
       v
     });
-    onHexChange(__hsvToHex(h, s, v));
+    const newHex = __hsvToHex(h, s, v);
+    setLocalHex(newHex);
+    if (!isMobile) onHexChange(newHex);
   };
   const dragSV = (cx, cy) => {
     const r = svRef.current.getBoundingClientRect();
@@ -909,7 +912,22 @@ function __ColorPickerDropdown({
     style: {
       left: `${hsv.h / 360 * 100}%`
     }
-  })));
+  })), isMobile && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: '8px',
+      marginTop: '8px'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "twk-btn secondary",
+    onClick: onClose
+  }, "Cancel"), /*#__PURE__*/React.createElement("button", {
+    className: "twk-btn",
+    onClick: () => {
+      onHexChange(localHex);
+      onClose();
+    }
+  }, "Save")));
   return ReactDOM.createPortal(isMobile ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "twk-backdrop twk-cpick-overlay",
     onClick: onClose
