@@ -148,7 +148,7 @@ function CreditCard({
       position: 'absolute',
       inset: 0,
       borderRadius: t.radius,
-      background: 'rgba(0,0,0,.6)',
+      background: 'var(--card-back)',
       willChange: 'transform'
     }
   }), /*#__PURE__*/React.createElement("div", {

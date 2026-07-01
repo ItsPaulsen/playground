@@ -279,6 +279,7 @@ function TweaksPanel({
         panelRef.current.style.setProperty('transform', 'translateX(-50%) translateY(120vh)', 'important');
       }
       if (backdropRef.current) {
+        backdropRef.current.style.pointerEvents = 'none';
         backdropRef.current.style.transition = 'opacity 0.25s cubic-bezier(.4,0,1,1)';
         backdropRef.current.style.setProperty('opacity', '0', 'important');
       }
