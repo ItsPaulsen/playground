@@ -226,9 +226,13 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
       if (dt > 0) vel = (last.y - first.y) / dt;
     }
     if (vel > 0.5 || raw > 120) {
-      // Route through dismiss() — identical to the X-button path.
-      // dismiss() sets closing=true, which makes the backdrop pointer-events:none
-      // immediately, so any iOS ghost-click from the drag falls through harmlessly.
+      // Route through dismiss() so closing=true makes backdrop pointer-events:none.
+      // Also guard the FAB: twk-out-mob is 200ms, so the FAB renders at ~200ms,
+      // and iOS fires a ghost-click from the drag at ~300ms — without the guard
+      // that ghost-click hits the FAB, silently reopens the panel, and the user
+      // has to dismiss it before the FAB works again.
+      fabGuardRef.current = true;
+      setTimeout(() => { fabGuardRef.current = false; }, 500);
       dismiss();
     } else {
       snapBack();
