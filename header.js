@@ -8,7 +8,7 @@
     { label: 'Mesh',  href: '/mesh/' },
     { label: 'Trail', href: '/trail/' },
     { label: 'Card',  href: '/card/' },
-    { label: 'Button', href: '/agent/' },
+    { label: 'Button', href: '/button/' },
   ];
 
   const style = document.createElement('style');
