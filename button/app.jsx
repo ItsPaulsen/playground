@@ -129,7 +129,7 @@ function SVGButton({ label, color, dur, onHoverChange }) {
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",
   "color": "#1d4ed8",
-  "speed": 5
+  "speed": 6
 }/*EDITMODE-END*/;
 
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
@@ -138,7 +138,7 @@ function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [hovered, setHovered] = React.useState(false);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
-  const baseDur = 5.5 - t.speed * 0.5;
+  const baseDur = 6 - t.speed * 0.5;
   const dur = hovered ? baseDur * 2 : baseDur;
 
   return (
@@ -171,7 +171,7 @@ function App() {
         </TweakSection>
 
         <TweakSection label="Spark">
-          <TweakSlider label="Speed" value={t.speed} min={1} max={7} step={1}
+          <TweakSlider label="Speed" value={t.speed} min={1} max={8} step={1}
                        onChange={(v) => setTweak('speed', v)} />
         </TweakSection>
 
