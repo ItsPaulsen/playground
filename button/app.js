@@ -254,7 +254,7 @@ function App() {
     onChange: v => setTweak('color', v),
     noAlpha: true
   })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Border"
+    label: "Spark"
   }, /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Speed",
     value: t.speed,

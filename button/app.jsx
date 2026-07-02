@@ -170,7 +170,7 @@ function App() {
           <TweakColor value={t.color} onChange={(v) => setTweak('color', v)} noAlpha />
         </TweakSection>
 
-        <TweakSection label="Border">
+        <TweakSection label="Spark">
           <TweakSlider label="Speed" value={t.speed} min={1} max={4} step={1}
                        onChange={(v) => setTweak('speed', v)} />
         </TweakSection>
