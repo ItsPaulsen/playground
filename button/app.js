@@ -39,7 +39,7 @@ function SVGButton({
     w,
     h
   } = size;
-  const r = h > 0 ? Math.floor(h / 2) : 20;
+  const r = h > 0 ? h / 2 : 20;
   const ins = sw / 2;
   const pr = r - ins;
   const perim = w > 0 ? 2 * (w - 2 * r) + 2 * (h - 2 * r) + 2 * Math.PI * pr : 0;
