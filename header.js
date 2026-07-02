@@ -258,5 +258,11 @@
   if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
   window.addEventListener('pagehide', function () {
     if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();
+    setMenuOpen(false);
+  });
+  // iOS BFCache restores the frozen DOM on back-navigation, including any open
+  // menu state. Reset it so the page is always clean when returning.
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) setMenuOpen(false);
   });
 })();
