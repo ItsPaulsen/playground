@@ -129,7 +129,7 @@ function SVGButton({ label, color, dur, onHoverChange }) {
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",
   "color": "#1d4ed8",
-  "speed": 6
+  "speed": 4
 }/*EDITMODE-END*/;
 
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
