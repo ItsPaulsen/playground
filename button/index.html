@@ -19,14 +19,6 @@
 <link rel="stylesheet" href="/shared/components.css" />
 <link rel="stylesheet" href="/shared/tweaks-panel.css" data-twk-css="1" />
 <style>
-  @property --angle {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: true;
-  }
-
-  @keyframes spin { to { --angle: 360deg; } }
-
   html, body {
     margin: 0; padding: 0; height: 100dvh; overflow: hidden;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -38,8 +30,10 @@
     position: fixed;
     inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 48px;
   }
 
   /* Dot-grid backdrop */
@@ -50,82 +44,40 @@
   }
 
   /* ── Button outer wrapper — animation lives here ── */
-  .btn-outer {
+  .btn-svg-wrap {
     position: relative;
-    display: inline-flex;
-    border-radius: 22px;
-    animation: spin var(--dur, 2.5s) linear infinite;
     z-index: 1;
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94);
   }
-
-  /* Glow — masked to just the border ring so it doesn't bleed behind the button */
-  .btn-outer::after {
-    content: ''; position: absolute; inset: -3px; border-radius: 25px;
-    padding: calc(var(--thick, 2px) + 9px);
-    pointer-events: none;
-    background: conic-gradient(from var(--angle),
-      transparent 0%, transparent 70%,
-      var(--spark, #818cf8) 83%, var(--spark, #818cf8) 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    filter: blur(8px);
-    opacity: var(--glow-op, .7);
-    transition: opacity .4s, filter .4s;
+  @media (hover: hover) {
+    .btn-svg-wrap:hover { transform: scale(1.02); }
   }
-
-  /* Border shell — overflow:hidden clips the inner gradient to just the padding strip */
-  .btn-shell {
-    position: relative; z-index: 1;
-    display: inline-flex;
-    border-radius: 22px;
-    padding: var(--thick, 2px);
-    overflow: hidden;
-  }
-
-  /* Spinning gradient — large square so it covers the element at all angles */
-  .btn-shell::before {
-    content: ''; position: absolute; pointer-events: none;
-    width: 400%; aspect-ratio: 1;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: conic-gradient(from var(--angle),
-      transparent 0%, transparent 70%,
-      var(--spark, #818cf8) 83%, var(--spark, #818cf8) 100%);
-  }
+  .btn-svg-wrap:active { transform: scale(0.97); transition-duration: .08s; }
 
   /* The actual button */
   .agent-btn {
     position: relative; z-index: 1;
-    padding: 22px 56px;
-    background: var(--pg-surface);
-    color: var(--pg-primary);
-    border: none; border-radius: 20px; outline: none;
-    font-family: inherit; font-size: 20px; font-weight: 600;
-    letter-spacing: .07em; text-transform: uppercase;
+    padding: 16px 40px;
+    background: #fff;
+    color: #000;
+    border: none; border-radius: 9999px; outline: none;
+    font-family: inherit; font-size: 24px; font-weight: 500;
+    letter-spacing: .07em;
     cursor: pointer;
+    overflow: hidden;
     transition: none;
+    box-shadow: none;
+  }
+  html[data-theme="dark"] .agent-btn {
+    background: #0d0d0d;
+    color: #fff;
   }
 
-  /* Hover/active overlay */
-  .agent-btn::after {
-    content: ''; position: absolute; inset: 0; border-radius: inherit;
-    background: var(--pg-primary);
-    opacity: 0; pointer-events: none;
-    transition: opacity .15s;
-  }
+  :root { --btn-ring: rgba(0, 0, 0, 0.08); }
+  html[data-theme="dark"] { --btn-ring: rgba(255, 255, 255, 0.08); }
 
-  .agent-btn:hover::after { opacity: .04; }
-  .agent-btn:active::after { opacity: .04; }
   .agent-btn:focus-visible { outline: 2px solid var(--spark, #818cf8); outline-offset: 6px; }
 
-/* Hover-only mode */
-  .btn-outer.hover-only { animation: none; }
-  .btn-outer.hover-only .btn-shell::before { opacity: 0; }
-  .btn-outer.hover-only::after { opacity: 0 !important; transition: none; }
-  .btn-outer.hover-only:hover { animation: spin calc(var(--dur, 2.5s) / 1.5) linear infinite; }
-  .btn-outer.hover-only:hover .btn-shell::before { opacity: 1; }
-  .btn-outer.hover-only:hover::after { opacity: var(--glow-op, .7) !important; transition: opacity .35s; }
 </style>
 </head>
 <body>
