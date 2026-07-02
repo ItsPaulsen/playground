@@ -29,21 +29,23 @@
 
   /* Dark theme (default) */
   :root {
-    --stage-bg:   oklch(0.09 0.025 265);
-    --btn-bg-a:   oklch(0.17 0.04 265);
-    --btn-bg-b:   oklch(0.12 0.025 265);
-    --btn-color:  oklch(0.93 0.015 265);
-    --spark-peak: #ffffff;
-    --dot-color:  rgba(129,140,248,.08);
+    --stage-bg:     oklch(0.09 0.025 265);
+    --btn-bg-a:     oklch(0.17 0.04 265);
+    --btn-bg-b:     oklch(0.12 0.025 265);
+    --btn-color:    oklch(0.93 0.015 265);
+    --btn-overlay:  rgba(255,255,255,.4);
+    --spark-peak:   #ffffff;
+    --dot-color:    rgba(129,140,248,.08);
   }
   /* Light theme */
   html:not([data-theme="dark"]) {
-    --stage-bg:   oklch(0.96 0.01 265);
-    --btn-bg-a:   oklch(0.99 0.006 265);
-    --btn-bg-b:   oklch(0.94 0.02 265);
-    --btn-color:  oklch(0.2 0.05 265);
-    --spark-peak: color-mix(in oklch, var(--spark, #818cf8) 40%, white);
-    --dot-color:  rgba(99,102,241,.1);
+    --stage-bg:     oklch(0.96 0.01 265);
+    --btn-bg-a:     oklch(0.99 0.006 265);
+    --btn-bg-b:     oklch(0.94 0.02 265);
+    --btn-color:    oklch(0.2 0.05 265);
+    --btn-overlay:  rgba(0,0,0,.4);
+    --spark-peak:   color-mix(in oklch, var(--spark, #818cf8) 40%, white);
+    --dot-color:    rgba(99,102,241,.1);
   }
 
   html, body {
@@ -128,28 +130,19 @@
     font-family: inherit; font-size: 20px; font-weight: 600;
     letter-spacing: .07em; text-transform: uppercase;
     cursor: pointer;
-    transition: transform .2s cubic-bezier(.22,1,.36,1);
+    transition: none;
   }
 
-  /* Glass top-edge highlight */
-  .agent-btn::before {
-    content: ''; position: absolute;
-    top: 0; left: 15%; right: 15%; height: 1px;
-    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--btn-color) 15%, transparent), transparent);
-    pointer-events: none;
-  }
-
-  /* Hover shimmer */
+  /* Hover/active overlay */
   .agent-btn::after {
     content: ''; position: absolute; inset: 0; border-radius: inherit;
-    background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,.06) 50%, transparent 80%);
+    background: var(--btn-overlay, rgba(255,255,255,.4));
     opacity: 0; pointer-events: none;
-    transition: opacity .3s;
+    transition: opacity .15s;
   }
 
-  .agent-btn:hover { transform: scale(1.04); }
   .agent-btn:hover::after { opacity: 1; }
-  .agent-btn:active { transform: scale(0.97); transition-duration: .08s; }
+  .agent-btn:active::after { opacity: 1; }
   .agent-btn:focus-visible { outline: 2px solid var(--spark, #818cf8); outline-offset: 6px; }
 
   /* Hover: 3× faster spin + brighter glow */
