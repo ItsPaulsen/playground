@@ -263,3 +263,8 @@
     .twk-cpick{z-index:calc(var(--z-modal) + 3)!important;}
     .twk-color-opacity-input{width:30px;}
   }
+
+  @media (pointer: coarse) {
+    .twk-panel .pg-input { height: 32px; border-radius: 12px; padding: 0 12px; font-size: 16px; }
+    .twk-panel select.pg-input { padding-right: 22px; }
+  }
