@@ -1,3 +1,82 @@
+// Returns {x, y} at distance pos along a rounded-rect perimeter.
+// Segments: top-edge, tr-arc, right-edge, br-arc, bottom-edge, bl-arc, left-edge, tl-arc.
+function pointAtPerim(pos, w, h, ins, pr) {
+  const segH = w - 2 * ins - 2 * pr;
+  const segV = h - 2 * ins - 2 * pr;
+  const arcL = Math.PI * pr / 2;
+  const PI2 = Math.PI / 2;
+  const segs = [segH, arcL, segV, arcL, segH, arcL, segV, arcL];
+  let i = 0;
+  for (const len of segs) {
+    if (pos < len || len <= 0 && i < 7) {
+      if (len <= 0) {
+        i++;
+        continue;
+      }
+      const t = pos / len;
+      switch (i) {
+        case 0:
+          return {
+            x: ins + pr + t * segH,
+            y: ins
+          };
+        case 1:
+          {
+            const a = -PI2 + t * PI2;
+            return {
+              x: w - ins - pr + pr * Math.cos(a),
+              y: ins + pr + pr * Math.sin(a)
+            };
+          }
+        case 2:
+          return {
+            x: w - ins,
+            y: ins + pr + t * segV
+          };
+        case 3:
+          {
+            const a = t * PI2;
+            return {
+              x: w - ins - pr + pr * Math.cos(a),
+              y: h - ins - pr + pr * Math.sin(a)
+            };
+          }
+        case 4:
+          return {
+            x: w - ins - pr - t * segH,
+            y: h - ins
+          };
+        case 5:
+          {
+            const a = PI2 + t * PI2;
+            return {
+              x: ins + pr + pr * Math.cos(a),
+              y: h - ins - pr + pr * Math.sin(a)
+            };
+          }
+        case 6:
+          return {
+            x: ins,
+            y: h - ins - pr - t * segV
+          };
+        case 7:
+          {
+            const a = Math.PI + t * PI2;
+            return {
+              x: ins + pr + pr * Math.cos(a),
+              y: ins + pr + pr * Math.sin(a)
+            };
+          }
+      }
+    }
+    pos -= Math.max(len, 0);
+    i++;
+  }
+  return {
+    x: ins + pr,
+    y: ins
+  };
+}
 function SVGButton({
   label,
   color,
@@ -7,7 +86,6 @@ function SVGButton({
 }) {
   const btnRef = React.useRef(null);
   const pathRef = React.useRef(null);
-  const path2Ref = React.useRef(null);
   const gradRef = React.useRef(null);
   const posRef = React.useRef(0);
   const durRef = React.useRef(dur);
@@ -60,9 +138,8 @@ function SVGButton({
       lastTimeRef.current = now;
       const arcPos = posRef.current;
       path.style.strokeDashoffset = -arcPos;
-      if (path2Ref.current) path2Ref.current.style.strokeDashoffset = -arcPos;
-      const p1 = path.getPointAtLength(arcPos);
-      const p2 = path.getPointAtLength((arcPos + arcLen) % perim);
+      const p1 = pointAtPerim(arcPos, w, h, ins, pr);
+      const p2 = pointAtPerim((arcPos + arcLen) % perim, w, h, ins, pr);
       grad.setAttribute('x1', p1.x);
       grad.setAttribute('y1', p1.y);
       grad.setAttribute('x2', p2.x);
@@ -133,13 +210,6 @@ function SVGButton({
     strokeWidth: sw
   }), /*#__PURE__*/React.createElement("path", {
     ref: pathRef,
-    d: pathD,
-    fill: "none",
-    stroke: "url(#arc-grad)",
-    strokeWidth: sw,
-    strokeDasharray: `${arcLen} ${perim - arcLen}`
-  }), /*#__PURE__*/React.createElement("path", {
-    ref: path2Ref,
     d: pathD,
     fill: "none",
     stroke: "url(#arc-grad)",
