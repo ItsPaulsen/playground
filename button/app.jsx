@@ -103,7 +103,7 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
       <button ref={btnRef} className="agent-btn">
         <span style={{ position: 'relative', zIndex: 1 }}>{label}</span>
         {w > 0 && (
-          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}>
+          <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', clipPath: 'inset(0 round 9999px)' }}>
             <defs>
               <linearGradient ref={gradRef} id="arc-grad" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor={color} stopOpacity={0} />
@@ -114,17 +114,12 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
                 <feGaussianBlur stdDeviation="5" result="blur" />
                 <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
               </filter>
-              <clipPath id="btn-clip">
-                <rect x="0" y="0" width={w} height={h} rx={r} ry={r} />
-              </clipPath>
             </defs>
-            <g clipPath="url(#btn-clip)">
             <path d={pathD} fill="none"
               style={{ stroke: 'var(--btn-ring)' }} strokeWidth={sw} />
             <path ref={pathRef} d={pathD} fill="none"
               stroke="url(#arc-grad)" strokeWidth={sw}
               strokeDasharray={`${arcLen} ${perim - arcLen}`} />
-            </g>
           </svg>
         )}
       </button>
