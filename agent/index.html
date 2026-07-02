@@ -34,7 +34,6 @@
     --btn-bg-b:     oklch(0.12 0.025 265);
     --btn-color:    oklch(0.93 0.015 265);
     --btn-overlay:  rgba(255,255,255,.4);
-    --spark-peak:   #ffffff;
     --dot-color:    rgba(129,140,248,.08);
   }
   /* Light theme */
@@ -44,7 +43,6 @@
     --btn-bg-b:     oklch(0.94 0.02 265);
     --btn-color:    oklch(0.2 0.05 265);
     --btn-overlay:  rgba(0,0,0,.4);
-    --spark-peak:   color-mix(in oklch, var(--spark, #818cf8) 40%, white);
     --dot-color:    rgba(99,102,241,.1);
   }
 
@@ -91,7 +89,7 @@
     pointer-events: none;
     background: conic-gradient(from var(--angle),
       transparent 0%, transparent 70%,
-      var(--spark, #818cf8) 83%, var(--spark-peak, #fff) 93%, var(--spark, #818cf8) 100%);
+      var(--spark, #818cf8) 83%, var(--spark, #818cf8) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -117,7 +115,7 @@
     transform: translate(-50%, -50%);
     background: conic-gradient(from var(--angle),
       transparent 0%, transparent 70%,
-      var(--spark, #818cf8) 83%, var(--spark-peak, #fff) 93%, var(--spark, #818cf8) 100%);
+      var(--spark, #818cf8) 83%, var(--spark, #818cf8) 100%);
   }
 
   /* The actual button */
@@ -141,18 +139,11 @@
     transition: opacity .15s;
   }
 
-  .agent-btn:hover::after { opacity: 1; }
-  .agent-btn:active::after { opacity: 1; }
+  .agent-btn:hover::after { opacity: .04; }
+  .agent-btn:active::after { opacity: .04; }
   .agent-btn:focus-visible { outline: 2px solid var(--spark, #818cf8); outline-offset: 6px; }
 
-  /* Hover: 3× faster spin + brighter glow */
-  .btn-outer:hover { animation-duration: calc(var(--dur, 2.5s) / 3); }
-  .btn-outer:hover::after {
-    opacity: min(calc(var(--glow-op, .7) * 1.4), .95);
-    filter: blur(12px);
-  }
-
-  /* Hover-only mode */
+/* Hover-only mode */
   .btn-outer.hover-only { animation: none; }
   .btn-outer.hover-only .btn-shell::before { opacity: 0; }
   .btn-outer.hover-only::after { opacity: 0 !important; transition: none; }
