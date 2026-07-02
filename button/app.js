@@ -201,7 +201,18 @@ function SVGButton({
     in: "blur"
   }), /*#__PURE__*/React.createElement("feMergeNode", {
     in: "SourceGraphic"
-  })))), /*#__PURE__*/React.createElement("path", {
+  }))), /*#__PURE__*/React.createElement("clipPath", {
+    id: "btn-clip"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "0",
+    y: "0",
+    width: w,
+    height: h,
+    rx: r,
+    ry: r
+  }))), /*#__PURE__*/React.createElement("g", {
+    clipPath: "url(#btn-clip)"
+  }, /*#__PURE__*/React.createElement("path", {
     d: pathD,
     fill: "none",
     style: {
@@ -215,7 +226,7 @@ function SVGButton({
     stroke: "url(#arc-grad)",
     strokeWidth: sw,
     strokeDasharray: `${arcLen} ${perim - arcLen}`
-  }))));
+  })))));
 }
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",

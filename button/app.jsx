@@ -114,12 +114,17 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
                 <feGaussianBlur stdDeviation="5" result="blur" />
                 <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
               </filter>
+              <clipPath id="btn-clip">
+                <rect x="0" y="0" width={w} height={h} rx={r} ry={r} />
+              </clipPath>
             </defs>
+            <g clipPath="url(#btn-clip)">
             <path d={pathD} fill="none"
               style={{ stroke: 'var(--btn-ring)' }} strokeWidth={sw} />
             <path ref={pathRef} d={pathD} fill="none"
               stroke="url(#arc-grad)" strokeWidth={sw}
               strokeDasharray={`${arcLen} ${perim - arcLen}`} />
+            </g>
           </svg>
         )}
       </button>
