@@ -44,8 +44,12 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
     const el = btnRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => {
+      el.style.width = '';
       const { width, height } = el.getBoundingClientRect();
-      setSize({ w: Math.round(width), h: Math.round(height) });
+      const w = Math.ceil(width);
+      const h = Math.ceil(height);
+      el.style.width = w + 'px';
+      setSize({ w, h });
     });
     ro.observe(el);
     return () => ro.disconnect();

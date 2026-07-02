@@ -101,13 +101,17 @@ function SVGButton({
     const el = btnRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => {
+      el.style.width = '';
       const {
         width,
         height
       } = el.getBoundingClientRect();
+      const w = Math.ceil(width);
+      const h = Math.ceil(height);
+      el.style.width = w + 'px';
       setSize({
-        w: Math.round(width),
-        h: Math.round(height)
+        w,
+        h
       });
     });
     ro.observe(el);
