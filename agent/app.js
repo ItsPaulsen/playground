@@ -23,11 +23,11 @@ function App() {
   }, /*#__PURE__*/React.createElement("div", {
     className: `btn-outer${t.hoverOnly ? ' hover-only' : ''}`,
     style: outerStyle
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "btn-shell"
   }, /*#__PURE__*/React.createElement("button", {
     className: "agent-btn"
-  }, t.label || 'Agent'), /*#__PURE__*/React.createElement("div", {
-    className: "btn-border"
-  }))), /*#__PURE__*/React.createElement(TweaksPanel, {
+  }, t.label || 'Agent')))), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Button",
     onOpenChange: setPanelOpen,
     renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {

@@ -25,8 +25,9 @@ function App() {
     <>
       <div className="stage" id="main-content">
         <div className={`btn-outer${t.hoverOnly ? ' hover-only' : ''}`} style={outerStyle}>
-          <button className="agent-btn">{t.label || 'Agent'}</button>
-          <div className="btn-border" />
+          <div className="btn-shell">
+            <button className="agent-btn">{t.label || 'Agent'}</button>
+          </div>
         </div>
       </div>
 

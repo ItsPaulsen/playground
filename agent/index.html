@@ -51,15 +51,8 @@
   /* Dot-grid backdrop */
   .stage::before {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    background-image: radial-gradient(circle, rgba(129,140,248,.1) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(129,140,248,.08) 1px, transparent 1px);
     background-size: 36px 36px;
-  }
-
-  /* Radial spotlight behind the button */
-  .stage::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(ellipse 60% 50% at 50% 50%,
-      oklch(0.14 0.06 265) 0%, transparent 70%);
   }
 
   /* ── Button outer wrapper — animation lives here ── */
@@ -71,28 +64,40 @@
     z-index: 1;
   }
 
-  /* Ambient glow behind the button */
+  /* Glow — masked to just the border ring so it doesn't bleed behind the button */
   .btn-outer::after {
-    content: ''; position: absolute; inset: -18px; border-radius: 40px;
+    content: ''; position: absolute; inset: -3px; border-radius: 25px;
+    padding: calc(var(--thick, 2px) + 9px);
     pointer-events: none;
-    background: conic-gradient(from var(--angle),
-      transparent 0%, transparent 70%,
-      var(--spark, #818cf8) 83%, #fff 93%, var(--spark, #818cf8) 100%);
-    filter: blur(26px);
-    opacity: var(--glow-op, .5);
-    transition: opacity .4s, filter .4s;
-  }
-
-  /* Masked border — the spinning spark ring */
-  .btn-border {
-    position: absolute; inset: 0; border-radius: 22px;
-    padding: var(--thick, 2px); pointer-events: none;
     background: conic-gradient(from var(--angle),
       transparent 0%, transparent 70%,
       var(--spark, #818cf8) 83%, #fff 93%, var(--spark, #818cf8) 100%);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+    filter: blur(8px);
+    opacity: var(--glow-op, .7);
+    transition: opacity .4s, filter .4s;
+  }
+
+  /* Border shell — overflow:hidden clips the inner gradient to just the padding strip */
+  .btn-shell {
+    position: relative; z-index: 1;
+    display: inline-flex;
+    border-radius: 22px;
+    padding: var(--thick, 2px);
+    overflow: hidden;
+  }
+
+  /* Spinning gradient — large square so it covers the element at all angles */
+  .btn-shell::before {
+    content: ''; position: absolute; pointer-events: none;
+    width: 400%; aspect-ratio: 1;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(from var(--angle),
+      transparent 0%, transparent 70%,
+      var(--spark, #818cf8) 83%, #fff 93%, var(--spark, #818cf8) 100%);
   }
 
   /* The actual button */
@@ -101,11 +106,11 @@
     padding: 22px 56px;
     background: linear-gradient(160deg, oklch(0.17 0.04 265), oklch(0.12 0.025 265));
     color: oklch(0.93 0.015 265);
-    border: none; border-radius: 22px; outline: none;
+    border: none; border-radius: 20px; outline: none;
     font-family: inherit; font-size: 20px; font-weight: 600;
     letter-spacing: .07em; text-transform: uppercase;
     cursor: pointer;
-    transition: transform .2s cubic-bezier(.22,1,.36,1), background .25s;
+    transition: transform .2s cubic-bezier(.22,1,.36,1);
   }
 
   /* Glass top-edge highlight */
@@ -132,15 +137,17 @@
   /* Hover: 3× faster spin + brighter glow */
   .btn-outer:hover { animation-duration: calc(var(--dur, 2.5s) / 3); }
   .btn-outer:hover::after {
-    opacity: min(calc(var(--glow-op, .5) * 1.6), .9);
-    filter: blur(32px);
+    opacity: min(calc(var(--glow-op, .7) * 1.4), .95);
+    filter: blur(12px);
   }
 
   /* Hover-only mode */
   .btn-outer.hover-only { animation: none; }
-  .btn-outer.hover-only::after { opacity: 0; transition: none; }
+  .btn-outer.hover-only .btn-shell::before { opacity: 0; }
+  .btn-outer.hover-only::after { opacity: 0 !important; transition: none; }
   .btn-outer.hover-only:hover { animation: spin calc(var(--dur, 2.5s) / 1.5) linear infinite; }
-  .btn-outer.hover-only:hover::after { opacity: var(--glow-op, .5); transition: opacity .35s; }
+  .btn-outer.hover-only:hover .btn-shell::before { opacity: 1; }
+  .btn-outer.hover-only:hover::after { opacity: var(--glow-op, .7) !important; transition: opacity .35s; }
 </style>
 </head>
 <body>
