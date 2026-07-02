@@ -25,6 +25,7 @@ function App() {
       setIsDesktop(e.matches);
       setTweak('fontSize', e.matches ? 128 : 72);
     };
+    handler(mq);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
