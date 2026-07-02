@@ -77,10 +77,10 @@ function pointAtPerim(pos, w, h, ins, pr) {
     y: ins
   };
 }
+const SW = 2;
 function SVGButton({
   label,
   color,
-  sw,
   dur,
   onHoverChange
 }) {
@@ -97,32 +97,38 @@ function SVGButton({
   React.useEffect(() => {
     durRef.current = dur;
   }, [dur]);
+  const measureSize = React.useCallback(() => {
+    const el = btnRef.current;
+    if (!el) return;
+    el.style.width = '';
+    const {
+      width,
+      height
+    } = el.getBoundingClientRect();
+    const w = Math.ceil(width);
+    const h = Math.ceil(height);
+    el.style.width = w + 'px';
+    setSize({
+      w,
+      h
+    });
+  }, []);
   React.useEffect(() => {
     const el = btnRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => {
-      el.style.width = '';
-      const {
-        width,
-        height
-      } = el.getBoundingClientRect();
-      const w = Math.ceil(width);
-      const h = Math.ceil(height);
-      el.style.width = w + 'px';
-      setSize({
-        w,
-        h
-      });
-    });
+    const ro = new ResizeObserver(measureSize);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [measureSize]);
+  React.useEffect(() => {
+    measureSize();
+  }, [label, measureSize]);
   const {
     w,
     h
   } = size;
+  const ins = SW / 2;
   const r = h > 0 ? h / 2 : 20;
-  const ins = sw / 2;
   const pr = r - ins;
   const perim = w > 0 ? 2 * (w - 2 * r) + 2 * (h - 2 * r) + 2 * Math.PI * pr : 0;
   const arcLen = perim * 0.28;
@@ -136,8 +142,7 @@ function SVGButton({
     function tick(now) {
       if (lastTimeRef.current !== null) {
         const delta = now - lastTimeRef.current;
-        const pxPerMs = perim / (durRef.current * 1000);
-        posRef.current = (posRef.current + delta * pxPerMs) % perim;
+        posRef.current = (posRef.current + delta * perim / (durRef.current * 1000)) % perim;
       }
       lastTimeRef.current = now;
       const arcPos = posRef.current;
@@ -193,45 +198,30 @@ function SVGButton({
     offset: "100%",
     stopColor: color,
     stopOpacity: 0
-  })), /*#__PURE__*/React.createElement("filter", {
-    id: "svg-glow",
-    x: "-50%",
-    y: "-50%",
-    width: "200%",
-    height: "200%"
-  }, /*#__PURE__*/React.createElement("feGaussianBlur", {
-    stdDeviation: "5",
-    result: "blur"
-  }), /*#__PURE__*/React.createElement("feMerge", null, /*#__PURE__*/React.createElement("feMergeNode", {
-    in: "blur"
-  }), /*#__PURE__*/React.createElement("feMergeNode", {
-    in: "SourceGraphic"
-  })))), /*#__PURE__*/React.createElement("path", {
+  }))), /*#__PURE__*/React.createElement("path", {
     d: pathD,
     fill: "none",
     style: {
       stroke: 'var(--btn-ring)'
     },
-    strokeWidth: sw
+    strokeWidth: SW
   }), /*#__PURE__*/React.createElement("path", {
     ref: pathRef,
     d: pathD,
     fill: "none",
     stroke: "url(#arc-grad)",
-    strokeWidth: sw,
+    strokeWidth: SW,
     strokeDasharray: `${arcLen} ${perim - arcLen}`
   }))));
 }
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",
   "color": "#1d4ed8",
-  "speed": 3,
-  "thickness": 2
+  "speed": 3
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [panelOpen, setPanelOpen] = React.useState(() => window.innerWidth > 639);
   const [hovered, setHovered] = React.useState(false);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const baseDur = 6 - t.speed;
@@ -242,12 +232,10 @@ function App() {
   }, /*#__PURE__*/React.createElement(SVGButton, {
     label: t.label || 'Button',
     color: t.color,
-    sw: t.thickness,
     dur: dur,
     onHoverChange: setHovered
   })), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Button",
-    onOpenChange: setPanelOpen,
     renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
       label: "Reset",
       secondary: true,
@@ -274,14 +262,6 @@ function App() {
     max: 4,
     step: 1,
     onChange: v => setTweak('speed', v)
-  }), /*#__PURE__*/React.createElement(TweakSlider, {
-    label: "Width",
-    value: t.thickness,
-    min: 1,
-    max: 3,
-    step: 1,
-    unit: "px",
-    onChange: v => setTweak('thickness', v)
   })), /*#__PURE__*/React.createElement("div", {
     className: "twk-desktop-only",
     style: {

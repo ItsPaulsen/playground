@@ -5,7 +5,6 @@ function pointAtPerim(pos, w, h, ins, pr) {
   const segV = h - 2*ins - 2*pr;
   const arcL = Math.PI * pr / 2;
   const PI2  = Math.PI / 2;
-
   const segs = [segH, arcL, segV, arcL, segH, arcL, segV, arcL];
   let i = 0;
   for (const len of segs) {
@@ -13,13 +12,13 @@ function pointAtPerim(pos, w, h, ins, pr) {
       if (len <= 0) { i++; continue; }
       const t = pos / len;
       switch (i) {
-        case 0: return { x: ins+pr + t*segH,          y: ins };
+        case 0: return { x: ins+pr + t*segH,         y: ins };
         case 1: { const a = -PI2 + t*PI2; return { x: (w-ins-pr) + pr*Math.cos(a), y: (ins+pr)   + pr*Math.sin(a) }; }
-        case 2: return { x: w-ins,                     y: ins+pr + t*segV };
+        case 2: return { x: w-ins,                    y: ins+pr + t*segV };
         case 3: { const a =      t*PI2; return { x: (w-ins-pr) + pr*Math.cos(a), y: (h-ins-pr)   + pr*Math.sin(a) }; }
-        case 4: return { x: (w-ins-pr) - t*segH,      y: h-ins };
+        case 4: return { x: (w-ins-pr) - t*segH,     y: h-ins };
         case 5: { const a =  PI2 + t*PI2; return { x: (ins+pr)   + pr*Math.cos(a), y: (h-ins-pr) + pr*Math.sin(a) }; }
-        case 6: return { x: ins,                       y: (h-ins-pr) - t*segV };
+        case 6: return { x: ins,                      y: (h-ins-pr) - t*segV };
         case 7: { const a = Math.PI + t*PI2; return { x: (ins+pr) + pr*Math.cos(a), y: (ins+pr)  + pr*Math.sin(a) }; }
       }
     }
@@ -29,37 +28,45 @@ function pointAtPerim(pos, w, h, ins, pr) {
   return { x: ins+pr, y: ins };
 }
 
-function SVGButton({ label, color, sw, dur, onHoverChange }) {
-  const btnRef = React.useRef(null);
-  const pathRef = React.useRef(null);
-  const gradRef = React.useRef(null);
-  const posRef = React.useRef(0);
-  const durRef = React.useRef(dur);
+const SW = 2;
+
+function SVGButton({ label, color, dur, onHoverChange }) {
+  const btnRef   = React.useRef(null);
+  const pathRef  = React.useRef(null);
+  const gradRef  = React.useRef(null);
+  const posRef   = React.useRef(0);
+  const durRef   = React.useRef(dur);
   const lastTimeRef = React.useRef(null);
   const [size, setSize] = React.useState({ w: 0, h: 0 });
 
   React.useEffect(() => { durRef.current = dur; }, [dur]);
 
+  const measureSize = React.useCallback(() => {
+    const el = btnRef.current;
+    if (!el) return;
+    el.style.width = '';
+    const { width, height } = el.getBoundingClientRect();
+    const w = Math.ceil(width);
+    const h = Math.ceil(height);
+    el.style.width = w + 'px';
+    setSize({ w, h });
+  }, []);
+
   React.useEffect(() => {
     const el = btnRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => {
-      el.style.width = '';
-      const { width, height } = el.getBoundingClientRect();
-      const w = Math.ceil(width);
-      const h = Math.ceil(height);
-      el.style.width = w + 'px';
-      setSize({ w, h });
-    });
+    const ro = new ResizeObserver(measureSize);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [measureSize]);
+
+  React.useEffect(() => { measureSize(); }, [label, measureSize]);
 
   const { w, h } = size;
-  const r = h > 0 ? h / 2 : 20;
-  const ins = sw / 2;
-  const pr = r - ins;
-  const perim = w > 0 ? 2 * (w - 2*r) + 2 * (h - 2*r) + 2 * Math.PI * pr : 0;
+  const ins  = SW / 2;
+  const r    = h > 0 ? h / 2 : 20;
+  const pr   = r - ins;
+  const perim  = w > 0 ? 2 * (w - 2*r) + 2 * (h - 2*r) + 2 * Math.PI * pr : 0;
   const arcLen = perim * 0.28;
   const brightColor = `color-mix(in oklch, ${color} 55%, white)`;
 
@@ -71,30 +78,23 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
     const path = pathRef.current;
     const grad = gradRef.current;
     if (!path || !grad || perim === 0) return;
-
     let rafId;
-
     function tick(now) {
       if (lastTimeRef.current !== null) {
         const delta = now - lastTimeRef.current;
-        const pxPerMs = perim / (durRef.current * 1000);
-        posRef.current = (posRef.current + delta * pxPerMs) % perim;
+        posRef.current = (posRef.current + delta * perim / (durRef.current * 1000)) % perim;
       }
       lastTimeRef.current = now;
-
       const arcPos = posRef.current;
       path.style.strokeDashoffset = -arcPos;
-
       const p1 = pointAtPerim(arcPos, w, h, ins, pr);
       const p2 = pointAtPerim((arcPos + arcLen) % perim, w, h, ins, pr);
       grad.setAttribute('x1', p1.x);
       grad.setAttribute('y1', p1.y);
       grad.setAttribute('x2', p2.x);
       grad.setAttribute('y2', p2.y);
-
       rafId = requestAnimationFrame(tick);
     }
-
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
   }, [perim, arcLen]);
@@ -114,15 +114,10 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
                 <stop offset="50%" stopColor={brightColor} />
                 <stop offset="100%" stopColor={color} stopOpacity={0} />
               </linearGradient>
-              <filter id="svg-glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="5" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
             </defs>
-            <path d={pathD} fill="none"
-              style={{ stroke: 'var(--btn-ring)' }} strokeWidth={sw} />
+            <path d={pathD} fill="none" style={{ stroke: 'var(--btn-ring)' }} strokeWidth={SW} />
             <path ref={pathRef} d={pathD} fill="none"
-              stroke="url(#arc-grad)" strokeWidth={sw}
+              stroke="url(#arc-grad)" strokeWidth={SW}
               strokeDasharray={`${arcLen} ${perim - arcLen}`} />
           </svg>
         )}
@@ -134,18 +129,15 @@ function SVGButton({ label, color, sw, dur, onHoverChange }) {
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",
   "color": "#1d4ed8",
-  "speed": 3,
-  "thickness": 2
+  "speed": 3
 }/*EDITMODE-END*/;
 
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [panelOpen, setPanelOpen] = React.useState(() => window.innerWidth > 639);
   const [hovered, setHovered] = React.useState(false);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
-
   const baseDur = 6 - t.speed;
   const dur = hovered ? baseDur * 2 : baseDur;
 
@@ -155,13 +147,12 @@ function App() {
         <SVGButton
           label={t.label || 'Button'}
           color={t.color}
-          sw={t.thickness}
           dur={dur}
           onHoverChange={setHovered}
         />
       </div>
 
-      <TweaksPanel title="Button" onOpenChange={setPanelOpen}
+      <TweaksPanel title="Button"
         renderMobileFooter={(close) => (
           <>
             <TweakButton label="Reset" secondary disabled={!isDirty}
@@ -182,8 +173,6 @@ function App() {
         <TweakSection label="Border">
           <TweakSlider label="Speed" value={t.speed} min={1} max={4} step={1}
                        onChange={(v) => setTweak('speed', v)} />
-          <TweakSlider label="Width" value={t.thickness} min={1} max={3} step={1} unit="px"
-                       onChange={(v) => setTweak('thickness', v)} />
         </TweakSection>
 
         <div className="twk-desktop-only"
