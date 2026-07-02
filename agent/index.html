@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" data-page="agent">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Agent — Paulsen</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content='oklch(0.09 0.025 265)';document.head.appendChild(m);})()</script>
+<link rel="preload" href="/shared/vendor/preact-bundle.js" as="script">
+<link rel="preload" href="../shared/tweaks-panel.js" as="script">
+<link rel="preload" href="app.js" as="script">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
+<link rel="stylesheet" href="/shared/tokens.css" />
+<link rel="stylesheet" href="/shared/components.css" />
+<link rel="stylesheet" href="/shared/tweaks-panel.css" data-twk-css="1" />
+<style>
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: true;
+  }
+
+  @keyframes spin { to { --angle: 360deg; } }
+
+  html, body {
+    margin: 0; padding: 0; height: 100dvh; overflow: hidden;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    background: oklch(0.09 0.025 265);
+  }
+  #root { height: 100%; }
+
+  /* Keep the nav readable on the dark stage background */
+  #site-nav {
+    background: oklch(0.09 0.025 265 / .85);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .stage {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dot-grid backdrop */
+  .stage::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle, rgba(129,140,248,.1) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  /* Radial spotlight behind the button */
+  .stage::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%,
+      oklch(0.14 0.06 265) 0%, transparent 70%);
+  }
+
+  /* ── Button outer wrapper — animation lives here ── */
+  .btn-outer {
+    position: relative;
+    display: inline-flex;
+    border-radius: 22px;
+    animation: spin var(--dur, 2.5s) linear infinite;
+    z-index: 1;
+  }
+
+  /* Ambient glow behind the button */
+  .btn-outer::after {
+    content: ''; position: absolute; inset: -18px; border-radius: 40px;
+    pointer-events: none;
+    background: conic-gradient(from var(--angle),
+      transparent 0%, transparent 70%,
+      var(--spark, #818cf8) 83%, #fff 93%, var(--spark, #818cf8) 100%);
+    filter: blur(26px);
+    opacity: var(--glow-op, .5);
+    transition: opacity .4s, filter .4s;
+  }
+
+  /* Masked border — the spinning spark ring */
+  .btn-border {
+    position: absolute; inset: 0; border-radius: 22px;
+    padding: var(--thick, 2px); pointer-events: none;
+    background: conic-gradient(from var(--angle),
+      transparent 0%, transparent 70%,
+      var(--spark, #818cf8) 83%, #fff 93%, var(--spark, #818cf8) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* The actual button */
+  .agent-btn {
+    position: relative; z-index: 1;
+    padding: 22px 56px;
+    background: linear-gradient(160deg, oklch(0.17 0.04 265), oklch(0.12 0.025 265));
+    color: oklch(0.93 0.015 265);
+    border: none; border-radius: 22px; outline: none;
+    font-family: inherit; font-size: 20px; font-weight: 600;
+    letter-spacing: .07em; text-transform: uppercase;
+    cursor: pointer;
+    transition: transform .2s cubic-bezier(.22,1,.36,1), background .25s;
+  }
+
+  /* Glass top-edge highlight */
+  .agent-btn::before {
+    content: ''; position: absolute;
+    top: 0; left: 15%; right: 15%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+    pointer-events: none;
+  }
+
+  /* Hover shimmer */
+  .agent-btn::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,.06) 50%, transparent 80%);
+    opacity: 0; pointer-events: none;
+    transition: opacity .3s;
+  }
+
+  .agent-btn:hover { transform: scale(1.04); }
+  .agent-btn:hover::after { opacity: 1; }
+  .agent-btn:active { transform: scale(0.97); transition-duration: .08s; }
+  .agent-btn:focus-visible { outline: 2px solid var(--spark, #818cf8); outline-offset: 6px; }
+
+  /* Hover: 3× faster spin + brighter glow */
+  .btn-outer:hover { animation-duration: calc(var(--dur, 2.5s) / 3); }
+  .btn-outer:hover::after {
+    opacity: min(calc(var(--glow-op, .5) * 1.6), .9);
+    filter: blur(32px);
+  }
+
+  /* Hover-only mode */
+  .btn-outer.hover-only { animation: none; }
+  .btn-outer.hover-only::after { opacity: 0; transition: none; }
+  .btn-outer.hover-only:hover { animation: spin calc(var(--dur, 2.5s) / 1.5) linear infinite; }
+  .btn-outer.hover-only:hover::after { opacity: var(--glow-op, .5); transition: opacity .35s; }
+</style>
+</head>
+<body>
+<div id="root" tabindex="-1"></div>
+<script src="/shared/vendor/preact-bundle.js"></script>
+<script src="../shared/tweaks-panel.js"></script>
+<script src="app.js"></script>
+<script src="/header.js"></script>
+</body>
+</html>

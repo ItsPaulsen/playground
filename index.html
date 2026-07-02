@@ -16,6 +16,7 @@
 <link rel="prefetch" href="/trail/">
 <link rel="prefetch" href="/card/">
 <link rel="prefetch" href="/grid/">
+<link rel="prefetch" href="/agent/">
 <link rel="prefetch" href="/shared/vendor/preact-bundle.js" as="script">
 <link rel="prefetch" href="/shared/tweaks-panel.js" as="script">
   <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(0.22 0.01 56)':'oklch(0.98 0.00 106)';document.head.appendChild(m);})()</script>
@@ -144,6 +145,8 @@
     html[data-theme="dark"] .card-icon--teal { background: #134e4a; color: #5eead4; }
     .card-icon--rose { background: rgba(253,164,175,.85); color: #9f1239; }
     html[data-theme="dark"] .card-icon--rose { background: #881337; color: #fda4af; }
+    .card-icon--violet { background: rgba(221,214,254,.85); color: #5b21b6; }
+    html[data-theme="dark"] .card-icon--violet { background: #4c1d95; color: #c4b5fd; }
 
     @keyframes pg-up {
       from { opacity: 0; translate: 0 24px; }
@@ -251,6 +254,16 @@
         </div>
         <h2>Grid</h2>
         <p>Responsive layout grid with live column overlay.</p>
+      </a>
+
+      <a class="card" href="agent/">
+        <div class="card-icon card-icon--violet">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <h2>Agent</h2>
+        <p>Button with animated spinning border and tweakable glow.</p>
       </a>
 
     </div>
