@@ -215,7 +215,7 @@
       <!-- Trail -->
       <a class="card card--trail" href="trail/">
         <div class="card-thumb">
-          <video class="card-video" poster="trail/thumb.avif" loop muted playsinline preload="none"><source src="trail/thumb.mp4" type="video/mp4"></video>
+          <video class="card-video" loop muted playsinline preload="none"></video>
         </div>
         <div class="card-info">
           <h2>Trail</h2>
@@ -226,7 +226,7 @@
       <!-- Card -->
       <a class="card card--card" href="card/">
         <div class="card-thumb">
-          <video class="card-video" poster="card/thumb.avif" loop muted playsinline preload="none"><source src="card/thumb.mp4" type="video/mp4"></video>
+          <video class="card-video" loop muted playsinline preload="none"></video>
         </div>
         <div class="card-info">
           <h2>Card</h2>
@@ -237,7 +237,7 @@
       <!-- Button -->
       <a class="card card--button" href="button/">
         <div class="card-thumb">
-          <video class="card-video" poster="button/thumb.avif" loop muted playsinline preload="none"><source src="button/thumb.mp4" type="video/mp4"></video>
+          <video class="card-video" loop muted playsinline preload="none"></video>
         </div>
         <div class="card-info">
           <h2>Button</h2>
@@ -264,7 +264,10 @@
       document.querySelectorAll('.card-thumb').forEach(function(thumb) {
         var video = thumb.querySelector('.card-video');
         if (!video) return;
-        thumb.addEventListener('mouseenter', function() { video.play(); });
+        thumb.addEventListener('mouseenter', function() {
+          if (video.readyState === 0) video.load();
+          video.play();
+        });
         thumb.addEventListener('mouseleave', function() {
           video.pause();
           video.load();
