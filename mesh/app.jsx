@@ -1,29 +1,28 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "color1": "#f87171",
-  "color2": "#38bdf8",
+  "color1": "#a5f3fc",
+  "color2": "#e9d5ff",
   "count": 2,
-  "speed": 0.5
+  "speed": 1
 }/*EDITMODE-END*/;
 
 const PALETTES = [
-  { light: ['#f87171', '#38bdf8'], dark: ['#dc2626', '#0284c7'] },
-  { light: ['#fb923c', '#a78bfa'], dark: ['#ea580c', '#7c3aed'] },
-  { light: ['#fbbf24', '#2dd4bf'], dark: ['#d97706', '#0d9488'] },
-  { light: ['#facc15', '#818cf8'], dark: ['#ca8a04', '#4f46e5'] },
-  { light: ['#a3e635', '#e879f9'], dark: ['#65a30d', '#c026d3'] },
-  { light: ['#4ade80', '#60a5fa'], dark: ['#16a34a', '#2563eb'] },
-  { light: ['#34d399', '#fb7185'], dark: ['#059669', '#e11d48'] },
-  { light: ['#22d3ee', '#c084fc'], dark: ['#0891b2', '#9333ea'] },
-  { light: ['#38bdf8', '#f472b6'], dark: ['#0284c7', '#db2777'] },
-  { light: ['#60a5fa', '#fbbf24'], dark: ['#2563eb', '#d97706'] },
-  { light: ['#818cf8', '#a3e635'], dark: ['#4f46e5', '#65a30d'] },
-  { light: ['#a78bfa', '#4ade80'], dark: ['#7c3aed', '#16a34a'] },
-  { light: ['#c084fc', '#facc15'], dark: ['#9333ea', '#ca8a04'] },
-  { light: ['#e879f9', '#2dd4bf'], dark: ['#c026d3', '#0d9488'] },
-  { light: ['#f472b6', '#22d3ee'], dark: ['#db2777', '#0891b2'] },
-  { light: ['#fb7185', '#a78bfa'], dark: ['#e11d48', '#7c3aed'] },
-  { light: ['#f87171', '#34d399'], dark: ['#dc2626', '#059669'] },
-  { light: ['#fb923c', '#38bdf8'], dark: ['#ea580c', '#0284c7'] },
+  { light: ['#a5f3fc', '#e9d5ff'], dark: ['#0891b2', '#9333ea'] },
+  { light: ['#fed7aa', '#ddd6fe'], dark: ['#ea580c', '#7c3aed'] },
+  { light: ['#fde68a', '#99f6e4'], dark: ['#d97706', '#0d9488'] },
+  { light: ['#fef08a', '#c7d2fe'], dark: ['#ca8a04', '#4f46e5'] },
+  { light: ['#d9f99d', '#f5d0fe'], dark: ['#65a30d', '#c026d3'] },
+  { light: ['#bbf7d0', '#bfdbfe'], dark: ['#16a34a', '#2563eb'] },
+  { light: ['#a7f3d0', '#fecdd3'], dark: ['#059669', '#e11d48'] },
+  { light: ['#a5f3fc', '#e9d5ff'], dark: ['#0891b2', '#9333ea'] },
+  { light: ['#bae6fd', '#fbcfe8'], dark: ['#0284c7', '#db2777'] },
+  { light: ['#bfdbfe', '#fde68a'], dark: ['#2563eb', '#d97706'] },
+  { light: ['#c7d2fe', '#d9f99d'], dark: ['#4f46e5', '#65a30d'] },
+  { light: ['#ddd6fe', '#bbf7d0'], dark: ['#7c3aed', '#16a34a'] },
+  { light: ['#f5d0fe', '#fef08a'], dark: ['#c026d3', '#ca8a04'] },
+  { light: ['#fbcfe8', '#a5f3fc'], dark: ['#db2777', '#0891b2'] },
+  { light: ['#fecdd3', '#ddd6fe'], dark: ['#e11d48', '#7c3aed'] },
+  { light: ['#fecaca', '#a7f3d0'], dark: ['#dc2626', '#059669'] },
+  { light: ['#fed7aa', '#bae6fd'], dark: ['#ea580c', '#0284c7'] },
 ];
 
 function App() {
@@ -83,7 +82,7 @@ function App() {
         </TweakSection>
 
         <TweakSection label="Animation">
-          <TweakSlider label="Speed" value={t.speed} min={0.1} max={1} step={0.1}
+          <TweakSlider label="Speed" value={t.speed} min={0.1} max={1.5} step={0.1}
                        onChange={v => setTweak('speed', v)} />
         </TweakSection>
 

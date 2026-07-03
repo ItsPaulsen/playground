@@ -103,7 +103,7 @@
       aspect-ratio: 4 / 3;
       object-fit: cover;
       display: block;
-      border-radius: var(--radius-sm);
+      border-radius: 20px;
     }
 
     .card-info {
@@ -112,14 +112,14 @@
 
     .card h2 {
       font-size: 16px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--pg-primary);
-      margin-bottom: 3px;
+      margin-bottom: 4px;
       line-height: 1.3;
     }
 
     .card p {
-      font-size: 13px;
+      font-size: 14px;
       color: var(--pg-muted);
       line-height: 1.5;
     }
@@ -240,12 +240,40 @@
 
   <script src="/header.js"></script>
   <script>
+    function isDark() {
+      return document.documentElement.getAttribute('data-theme') === 'dark';
+    }
+
+    function applyThemeToVideo(video) {
+      var base = video.dataset.base;
+      var suffix = isDark() ? '-dark' : '';
+      video.poster = base + suffix + '.jpg';
+      var wasPlaying = !video.paused;
+      video.src = base + suffix + '.mp4';
+      video.load();
+      if (wasPlaying) video.play();
+    }
+
+    function applyThemeToAll() {
+      document.querySelectorAll('.card-video').forEach(applyThemeToVideo);
+    }
+
     document.querySelectorAll('.card').forEach(function(card) {
       var video = card.querySelector('.card-video');
       if (!video) return;
+      // Store base path (without suffix or extension)
+      var src = video.getAttribute('src');
+      video.dataset.base = src.replace('.mp4', '');
+      applyThemeToVideo(video);
       card.addEventListener('mouseenter', function() { video.play(); });
       card.addEventListener('mouseleave', function() { video.pause(); video.load(); });
     });
+
+    // Watch for theme changes
+    new MutationObserver(applyThemeToAll).observe(
+      document.documentElement,
+      { attributeFilter: ['data-theme'] }
+    );
   </script>
 </body>
 </html>
