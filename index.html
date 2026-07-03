@@ -51,7 +51,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
     }
 
@@ -60,7 +60,7 @@
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 40px; }
       .page-header p { font-size: 16px; }
-      .grid { grid-template-columns: repeat(2, 1fr); }
+      .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (max-width: 639px) {
@@ -68,64 +68,78 @@
       .page-header { margin-bottom: 24px; }
       .page-header h1 { font-size: 32px; }
       .page-header p { font-size: 14px; }
-      .grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     .card {
       display: block;
       text-decoration: none;
       color: inherit;
-      background: var(--pg-surface);
-      border-radius: var(--radius-lg);
-      corner-shape: superellipse(1.7);
       padding: 0;
-      overflow: hidden;
+      position: relative;
       transition: transform .4s cubic-bezier(.25,.46,.45,.94);
     }
 
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: calc(var(--radius-sm) + 8px);
+      corner-shape: superellipse(1.7);
+      background: var(--pg-surface);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
     @media (hover: hover) {
-      .card:hover { transform: scale(1.02); }
+      .card:hover::before { opacity: 1; }
     }
     .card:active { transform: scale(0.97); opacity: 0.7; transition-duration: .08s; }
 
     .card-thumb {
       position: relative;
+      padding: 0;
     }
-
-    .card-thumb {
-      padding: 16px 16px 1px;
+    .card-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      corner-shape: superellipse(1.7);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+      pointer-events: none;
+    }
+    html[data-theme="dark"] .card-thumb::after {
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
     }
 
     .card-thumb img,
     .card-thumb video {
       width: 100%;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
       object-fit: cover;
       display: block;
       border-radius: var(--radius-sm);
-      box-shadow: 0 0 1px 1px rgba(0,0,0,.04);
-    }
-    html[data-theme="dark"] .card-thumb img,
-    html[data-theme="dark"] .card-thumb video {
-      box-shadow: 0 0 1px 1px rgba(255,255,255,.04);
+      corner-shape: superellipse(1.7);
     }
 
     .card-info {
-      padding: 20px 28px 32px;
+      padding: 12px 8px 8px;
     }
 
     .card h2 {
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 500;
       color: var(--pg-primary);
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       line-height: 1.2;
     }
 
     .card p {
-      font-size: 14px;
+      font-size: 12px;
+      font-weight: 400;
       color: var(--pg-muted);
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
 
@@ -172,7 +186,7 @@
         </div>
         <div class="card-info">
           <h2>Wave</h2>
-          <p>Interactive wave animation with tweakable parameters.</p>
+          <p>Interactive animation</p>
         </div>
       </a>
 
@@ -183,7 +197,7 @@
         </div>
         <div class="card-info">
           <h2>Typo</h2>
-          <p>Animated typography with tweakable font controls.</p>
+          <p>Animated typography</p>
         </div>
       </a>
 
@@ -193,8 +207,8 @@
           <video class="card-video" src="mesh/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
-          <h2>Mesh</h2>
-          <p>Animated mesh gradient with tweakable color points.</p>
+          <h2>Gradient</h2>
+          <p>Moving gradient</p>
         </div>
       </a>
 
@@ -205,7 +219,7 @@
         </div>
         <div class="card-info">
           <h2>Trail</h2>
-          <p>Glowing cursor trail with tweakable particles and gravity.</p>
+          <p>Glowing cursor trail</p>
         </div>
       </a>
 
@@ -216,7 +230,7 @@
         </div>
         <div class="card-info">
           <h2>Card</h2>
-          <p>3D credit card with mouse-tracked tilt and specular shine.</p>
+          <p>Card with tracked tilt</p>
         </div>
       </a>
 
@@ -227,7 +241,7 @@
         </div>
         <div class="card-info">
           <h2>Button</h2>
-          <p>Pill button with animated spark border.</p>
+          <p>Moving spark border</p>
         </div>
       </a>
 
@@ -248,37 +262,43 @@
       return document.documentElement.getAttribute('data-theme') === 'dark';
     }
 
-    function setThemeSrc(video) {
-      var base = video.dataset.base;
-      var suffix = isDark() ? '-dark' : '';
-      var newSrc = base + suffix + '.mp4';
-      if (video.getAttribute('src') === newSrc) return;
-      var wasPlaying = !video.paused;
-      video.src = newSrc;
-      video.load();
-      if (wasPlaying) video.play();
-    }
-
-    document.querySelectorAll('.card-video').forEach(function(video) {
-      video.dataset.base = video.getAttribute('src').replace('.mp4', '');
-
-      // Show first frame as static thumbnail
+    function loadVideo(video) {
       video.addEventListener('loadeddata', function() {
         video.currentTime = 0.001;
       }, { once: true });
+      video.load();
+    }
 
-      setThemeSrc(video);
+    function setThemeSrc(video) {
+      var base = video.dataset.base;
+      var newSrc = base + (isDark() ? '-dark' : '') + '.mp4';
+      if (video.getAttribute('src') === newSrc) return;
+      var wasPlaying = !video.paused;
+      video.src = newSrc;
+      loadVideo(video);
+      if (wasPlaying) video.play();
+    }
 
-      var card = video.closest('.card');
-      card.addEventListener('mouseenter', function() { video.play(); });
-      card.addEventListener('mouseleave', function() {
-        video.pause();
-        video.currentTime = 0.001;
-      });
+    var videos = document.querySelectorAll('.card-video');
+    var canHover = window.matchMedia('(hover: hover)').matches;
+
+    videos.forEach(function(video) {
+      video.dataset.base = video.getAttribute('src').replace('.mp4', '');
+      video.src = video.dataset.base + (isDark() ? '-dark' : '') + '.mp4';
+      loadVideo(video);
+
+      if (canHover) {
+        var thumb = video.closest('.card-thumb');
+        thumb.addEventListener('mouseenter', function() { video.play(); });
+        thumb.addEventListener('mouseleave', function() {
+          video.pause();
+          video.currentTime = 0.001;
+        });
+      }
     });
 
     new MutationObserver(function() {
-      document.querySelectorAll('.card-video').forEach(setThemeSrc);
+      videos.forEach(setThemeSrc);
     }).observe(document.documentElement, { attributeFilter: ['data-theme'] });
   </script>
 </body>

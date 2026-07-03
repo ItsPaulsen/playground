@@ -131,3 +131,12 @@ html[data-theme="dark"] .pg-select-dropdown { box-shadow: rgba(0,0,0,.2) 0 6px 2
   font-style: normal;
 }
 .pg-switch[data-on="1"] i { transform: translateX(20px); }
+
+/* ── pg-dot-grid: radial dot backdrop ── */
+.pg-dot-grid {
+  background-image: radial-gradient(circle, oklch(0.87 0.006 56) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+html[data-theme="dark"] .pg-dot-grid {
+  background-image: radial-gradient(circle, var(--pg-border) 1px, transparent 1px);
+}

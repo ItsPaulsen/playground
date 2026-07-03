@@ -26,7 +26,7 @@ function App() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'var(--pg-bg)',
+      background: 'transparent',
       paddingRight: panelOpen && isDesktop ? 300 : 0,
       transition: 'padding-right .35s cubic-bezier(.22,1,.36,1)'
     }
