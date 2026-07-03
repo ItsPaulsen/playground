@@ -164,7 +164,7 @@
       <!-- Wave -->
       <a class="card card--wave" href="wave/">
         <div class="card-thumb">
-          <video class="card-video" poster="wave/thumb.png" src="wave/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" src="wave/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
           <h2>Wave</h2>
@@ -175,7 +175,7 @@
       <!-- Typo -->
       <a class="card card--typo" href="typo/">
         <div class="card-thumb">
-          <video class="card-video" poster="typo/thumb.jpg" src="typo/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" src="typo/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
           <h2>Typo</h2>
@@ -186,7 +186,7 @@
       <!-- Mesh -->
       <a class="card card--mesh" href="mesh/">
         <div class="card-thumb">
-          <video class="card-video" poster="mesh/thumb.jpg" src="mesh/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" src="mesh/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
           <h2>Mesh</h2>
@@ -197,7 +197,7 @@
       <!-- Trail -->
       <a class="card card--trail" href="trail/">
         <div class="card-thumb">
-          <video class="card-video" poster="trail/thumb.jpg" src="trail/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" src="trail/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
           <h2>Trail</h2>
@@ -208,7 +208,7 @@
       <!-- Card -->
       <a class="card card--card" href="card/">
         <div class="card-thumb">
-          <video class="card-video" poster="card/thumb.jpg" src="card/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" src="card/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
           <h2>Card</h2>
@@ -219,7 +219,7 @@
       <!-- Button -->
       <a class="card card--button" href="button/">
         <div class="card-thumb">
-          <video class="card-video" poster="button/thumb.jpg" src="button/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" src="button/thumb.mp4" loop muted playsinline preload="metadata"></video>
         </div>
         <div class="card-info">
           <h2>Button</h2>
@@ -244,36 +244,38 @@
       return document.documentElement.getAttribute('data-theme') === 'dark';
     }
 
-    function applyThemeToVideo(video) {
+    function setThemeSrc(video) {
       var base = video.dataset.base;
       var suffix = isDark() ? '-dark' : '';
-      video.poster = base + suffix + '.png';
+      var newSrc = base + suffix + '.mp4';
+      if (video.getAttribute('src') === newSrc) return;
       var wasPlaying = !video.paused;
-      video.src = base + suffix + '.mp4';
+      video.src = newSrc;
       video.load();
       if (wasPlaying) video.play();
     }
 
-    function applyThemeToAll() {
-      document.querySelectorAll('.card-video').forEach(applyThemeToVideo);
-    }
+    document.querySelectorAll('.card-video').forEach(function(video) {
+      video.dataset.base = video.getAttribute('src').replace('.mp4', '');
 
-    document.querySelectorAll('.card').forEach(function(card) {
-      var video = card.querySelector('.card-video');
-      if (!video) return;
-      // Store base path (without suffix or extension)
-      var src = video.getAttribute('src');
-      video.dataset.base = src.replace('.mp4', '');
-      applyThemeToVideo(video);
+      // Show first frame as static thumbnail
+      video.addEventListener('loadeddata', function() {
+        video.currentTime = 0.001;
+      }, { once: true });
+
+      setThemeSrc(video);
+
+      var card = video.closest('.card');
       card.addEventListener('mouseenter', function() { video.play(); });
-      card.addEventListener('mouseleave', function() { video.pause(); video.load(); });
+      card.addEventListener('mouseleave', function() {
+        video.pause();
+        video.currentTime = 0.001;
+      });
     });
 
-    // Watch for theme changes
-    new MutationObserver(applyThemeToAll).observe(
-      document.documentElement,
-      { attributeFilter: ['data-theme'] }
-    );
+    new MutationObserver(function() {
+      document.querySelectorAll('.card-video').forEach(setThemeSrc);
+    }).observe(document.documentElement, { attributeFilter: ['data-theme'] });
   </script>
 </body>
 </html>
