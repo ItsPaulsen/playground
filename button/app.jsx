@@ -129,7 +129,9 @@ function SVGButton({ label, color, dur, onHoverChange }) {
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",
   "color": "#1d4ed8",
-  "speed": 4
+  "speed": 4,
+  "bgOn": false,
+  "bgColor": "#ffffff"
 }/*EDITMODE-END*/;
 
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
@@ -138,6 +140,16 @@ function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [hovered, setHovered] = React.useState(false);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
+
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
   const baseDur = 6 - t.speed * 0.5;
   const dur = hovered ? baseDur * 2 : baseDur;
 
@@ -168,6 +180,11 @@ function App() {
             onChange={(v) => setTweak('label', v)}
           />
           <TweakColor value={t.color} onChange={(v) => setTweak('color', v)} noAlpha />
+        </TweakSection>
+
+        <TweakSection label="Background">
+          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
+          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <TweakSection label="Spark">

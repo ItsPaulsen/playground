@@ -5,7 +5,9 @@ const TWEAK_DEFAULTS = {
   subtitle: 'Dolor sit amet consectetur adipiscing elit',
   gradient: true,
   color0: '#6366f1',
-  color1: '#d946ef'
+  color1: '#d946ef',
+  bgOn: false,
+  bgColor: '#ffffff'
 };
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
@@ -19,6 +21,15 @@ function App() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
@@ -71,6 +82,17 @@ function App() {
     label: "Subtitle",
     value: t.subtitle,
     onChange: v => setTweak('subtitle', v)
+  })), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Background"
+  }, /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Custom",
+    value: t.bgOn,
+    onChange: v => setTweak('bgOn', v)
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color",
+    value: t.bgColor,
+    onChange: v => setTweak('bgColor', v),
+    noAlpha: true
   })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Color"
   }, /*#__PURE__*/React.createElement(TweakToggle, {

@@ -6,6 +6,8 @@ const TWEAK_DEFAULTS = {
   gradient:    true,
   color0:      '#6366f1',
   color1:      '#d946ef',
+  bgOn:        false,
+  bgColor:     '#ffffff',
 };
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
@@ -21,6 +23,16 @@ function App() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
 
   return (
     <>
@@ -53,6 +65,11 @@ function App() {
         <TweakSection label="Content">
           <TweakText label="Title"    value={t.title}    onChange={(v) => setTweak('title', v)} />
           <TweakText label="Subtitle" value={t.subtitle} onChange={(v) => setTweak('subtitle', v)} />
+        </TweakSection>
+
+        <TweakSection label="Background">
+          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
+          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <TweakSection label="Color">

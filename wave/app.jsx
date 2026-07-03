@@ -13,7 +13,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "pulseAmount": 2,
   "pulseRatio": 0.64,
   "pulseSpeed": 0.5,
-  "seed": 19
+  "seed": 19,
+  "bgOn": false,
+  "bgColor": "#ffffff"
 }/*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 const COLORS = ['#f87171','#fb923c','#fbbf24','#facc15','#a3e635','#4ade80','#34d399','#2dd4bf','#22d3ee','#38bdf8','#60a5fa','#818cf8','#a78bfa','#c084fc','#e879f9','#f472b6','#fb7185'];
@@ -32,6 +34,16 @@ function App() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
 
   const randomize = () => setTweak({
     seed:        rand(0, 50, 1),
@@ -121,6 +133,11 @@ function App() {
                        onChange={(v) => setTweak('pulseRatio', v / 100)} />
           <TweakSlider label="Bulge cadence" value={t.pulseSpeed.toFixed(1)} min={0.5} max={2} step={0.5}
                        onChange={(v) => setTweak('pulseSpeed', Number(v))} />
+        </TweakSection>
+
+        <TweakSection label="Background">
+          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
+          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <div className="twk-desktop-only" style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>

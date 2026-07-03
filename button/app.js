@@ -217,13 +217,24 @@ function SVGButton({
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "label": "Button",
   "color": "#1d4ed8",
-  "speed": 4
+  "speed": 4,
+  "bgOn": false,
+  "bgColor": "#ffffff"
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [hovered, setHovered] = React.useState(false);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
   const baseDur = 6 - t.speed * 0.5;
   const dur = hovered ? baseDur * 2 : baseDur;
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
@@ -252,6 +263,17 @@ function App() {
   }), /*#__PURE__*/React.createElement(TweakColor, {
     value: t.color,
     onChange: v => setTweak('color', v),
+    noAlpha: true
+  })), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Background"
+  }, /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Custom",
+    value: t.bgOn,
+    onChange: v => setTweak('bgOn', v)
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color",
+    value: t.bgColor,
+    onChange: v => setTweak('bgColor', v),
     noAlpha: true
   })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Spark"

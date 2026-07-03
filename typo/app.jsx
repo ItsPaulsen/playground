@@ -10,7 +10,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "fontEffect": "flat",
   "amplitude": 32,
   "speed": 0.49,
-  "spread": 0.32
+  "spread": 0.32,
+  "bgOn": false,
+  "bgColor": "#ffffff"
 }/*EDITMODE-END*/;
 
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
@@ -30,6 +32,16 @@ function App() {
     return () => mq.removeEventListener('change', handler);
   }, []);
   const isDirty = JSON.stringify({ ...t, text: TWEAK_DEFAULTS.text }) !== TWEAK_DEFAULTS_JSON;
+
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
 
   return (
     <>
@@ -88,6 +100,11 @@ function App() {
                        onChange={(v) => setTweak('speed', v / 100 * 0.5 + 0.25)} />
           <TweakSlider label="Wave"      value={Math.round(t.spread * 100)} min={0} max={100} step={1} unit="%"
                        onChange={(v) => setTweak('spread', v / 100)} />
+        </TweakSection>
+
+        <TweakSection label="Background">
+          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
+          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <div className="twk-desktop-only" style={{ display: 'flex', borderTop: '1px solid var(--bd)', marginTop: '8px', paddingTop: '16px' }}>

@@ -9,7 +9,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "fontEffect": "flat",
   "amplitude": 32,
   "speed": 0.49,
-  "spread": 0.32
+  "spread": 0.32,
+  "bgOn": false,
+  "bgColor": "#ffffff"
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
@@ -30,6 +32,15 @@ function App() {
     ...t,
     text: TWEAK_DEFAULTS.text
   }) !== TWEAK_DEFAULTS_JSON;
+  React.useEffect(() => {
+    if (t.bgOn) {
+      document.body.style.background = t.bgColor;
+      document.body.classList.remove('pg-dot-grid');
+    } else {
+      document.body.style.background = '';
+      document.body.classList.add('pg-dot-grid');
+    }
+  }, [t.bgOn, t.bgColor]);
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Typo, {
     t: t,
     panelOpen: panelOpen && isDesktop
@@ -138,6 +149,17 @@ function App() {
     step: 1,
     unit: "%",
     onChange: v => setTweak('spread', v / 100)
+  })), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Background"
+  }, /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Custom",
+    value: t.bgOn,
+    onChange: v => setTweak('bgOn', v)
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color",
+    value: t.bgColor,
+    onChange: v => setTweak('bgColor', v),
+    noAlpha: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "twk-desktop-only",
     style: {
