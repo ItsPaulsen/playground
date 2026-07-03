@@ -164,7 +164,7 @@
       <!-- Wave -->
       <a class="card card--wave" href="wave/">
         <div class="card-thumb">
-          <video class="card-video" poster="wave/thumb.jpg" src="wave/thumb.mp4" loop muted playsinline preload="none"></video>
+          <video class="card-video" poster="wave/thumb.png" src="wave/thumb.mp4" loop muted playsinline preload="none"></video>
         </div>
         <div class="card-info">
           <h2>Wave</h2>
@@ -247,7 +247,7 @@
     function applyThemeToVideo(video) {
       var base = video.dataset.base;
       var suffix = isDark() ? '-dark' : '';
-      video.poster = base + suffix + '.jpg';
+      video.poster = base + suffix + '.png';
       var wasPlaying = !video.paused;
       video.src = base + suffix + '.mp4';
       video.load();
