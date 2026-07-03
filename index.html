@@ -104,11 +104,18 @@
       object-fit: cover;
       display: block;
       border-radius: 20px;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
     }
-    html[data-theme="dark"] .card-thumb img,
-    html[data-theme="dark"] .card-thumb video {
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+
+    .card-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 16px 16px 0;
+      border-radius: 20px;
+      border: 1px solid rgba(0,0,0,.08);
+      pointer-events: none;
+    }
+    html[data-theme="dark"] .card-thumb::after {
+      border-color: rgba(255,255,255,.08);
     }
 
     .card-info {
