@@ -99,10 +99,10 @@ function App() {
       color2: c2
     });
   };
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Mesh, {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Gradient, {
     t: t
   }), /*#__PURE__*/React.createElement(TweaksPanel, {
-    title: "Mesh",
+    title: "Gradient",
     renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
       label: "Reset",
       secondary: true,

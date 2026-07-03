@@ -3,7 +3,7 @@ const COLOR_KEYS = ['color1', 'color2', 'color3', 'color4'];
 // Blobs centered AT the corners — half outside the viewport like aidn.no
 // r=120: each blob is 240% of the viewport in diameter, guaranteeing overlap at center
 const POSITIONS = [[0, 0], [100, 100], [0, 100], [100, 0]];
-function Mesh({
+function Gradient({
   t
 }) {
   const count = t.count || 2;
@@ -52,7 +52,7 @@ function Mesh({
     style: {
       transformBox: 'view-box',
       transformOrigin: '50% 50%',
-      animation: `mesh-orbit ${dur}s linear infinite`
+      animation: `gradient-orbit ${dur}s linear infinite`
     }
   }, colors.map((_, i) => {
     const [cx, cy] = POSITIONS[i % 4];

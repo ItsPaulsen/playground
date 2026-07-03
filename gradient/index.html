@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-page="mesh">
+<html lang="en" data-page="gradient">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Mesh — Paulsen</title>
+<title>Gradient — Paulsen</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -11,7 +11,7 @@
 <script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(0.22 0.01 56)':'oklch(0.98 0.00 106)';document.head.appendChild(m);})()</script>
 <link rel="preload" href="/shared/vendor/preact-bundle.js" as="script">
 <link rel="preload" href="../shared/tweaks-panel.js" as="script">
-<link rel="preload" href="mesh.js" as="script">
+<link rel="preload" href="gradient.js" as="script">
 <link rel="preload" href="app.js" as="script">
 
 
@@ -34,7 +34,7 @@
     --nav-bg: rgba(41,37,36,0.6);
   }
 
-  @keyframes mesh-orbit {
+  @keyframes gradient-orbit {
     from { transform: rotate(0turn); }
     to   { transform: rotate(1turn); }
   }
@@ -43,7 +43,7 @@
 </head>
 <body>
 <div id="root" tabindex="-1"></div>
-<div id="mesh-boot"></div>
+<div id="gradient-boot"></div>
 <script>
 (function(){
   var dark=document.documentElement.getAttribute('data-theme')==='dark';
@@ -54,7 +54,7 @@
     {light:['#22d3ee','#c084fc'],dark:['#0891b2','#9333ea']},
   ];
   var c=palettes[0][dark?'dark':'light'];
-  var boot=document.getElementById('mesh-boot');
+  var boot=document.getElementById('gradient-boot');
   boot.style.cssText='position:fixed;inset:0;pointer-events:none;transition:opacity .15s;background:radial-gradient(ellipse at 65% 40%,'+c[0]+' 0%,transparent 55%),radial-gradient(ellipse at 35% 60%,'+c[1]+' 0%,transparent 55%)';
   new MutationObserver(function(_,obs){
     if(document.getElementById('root').firstChild){
@@ -70,7 +70,7 @@
 <script src="/shared/vendor/preact-bundle.js"></script>
 
 <script src="../shared/tweaks-panel.js"></script>
-<script src="mesh.js"></script>
+<script src="gradient.js"></script>
 <script src="app.js"></script>
 <script src="/header.js"></script>
 </body>

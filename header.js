@@ -13,7 +13,7 @@
   const NAV_ITEMS = [
     { label: 'Wave',  href: '/wave/' },
     { label: 'Typo',  href: '/typo/' },
-    { label: 'Mesh',  href: '/mesh/' },
+    { label: 'Gradient', href: '/gradient/' },
     { label: 'Trail', href: '/trail/' },
     { label: 'Card',  href: '/card/' },
     { label: 'Button', href: '/button/' },

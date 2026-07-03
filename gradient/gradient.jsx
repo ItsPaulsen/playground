@@ -4,7 +4,7 @@ const COLOR_KEYS = ['color1', 'color2', 'color3', 'color4'];
 // r=120: each blob is 240% of the viewport in diameter, guaranteeing overlap at center
 const POSITIONS = [[0, 0], [100, 100], [0, 100], [100, 0]];
 
-function Mesh({ t }) {
+function Gradient({ t }) {
   const count = t.count || 2;
   const dur = (45 / t.speed).toFixed(1);
   const colors = Array.from({ length: count }, (_, i) => t[COLOR_KEYS[i]]);
@@ -29,7 +29,7 @@ function Mesh({ t }) {
         <g style={{
           transformBox: 'view-box',
           transformOrigin: '50% 50%',
-          animation: `mesh-orbit ${dur}s linear infinite`,
+          animation: `gradient-orbit ${dur}s linear infinite`,
         }}>
           {colors.map((_, i) => {
             const [cx, cy] = POSITIONS[i % 4];

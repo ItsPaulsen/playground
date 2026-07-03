@@ -66,9 +66,9 @@ function App() {
 
   return (
     <>
-      <Mesh t={t} />
+      <Gradient t={t} />
 
-      <TweaksPanel title="Mesh"
+      <TweaksPanel title="Gradient"
         renderMobileFooter={(close) => (
           <>
             <TweakButton label="Reset" secondary disabled={!isDirty} onClick={resetTweaks} />
