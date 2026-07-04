@@ -141,13 +141,17 @@
 
     @media (640px <= width < 1024px) {
       .box-row--4col { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (810px <= width < 1024px) {
       .box-row--3col { grid-template-columns: repeat(2, 1fr); }
       .box-row--2col { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (width < 640px) {
-      .box-row--4col { grid-template-columns: repeat(2, 1fr); }
+    @media (width < 810px) {
       .box-row--3col,
       .box-row--2col { grid-template-columns: 1fr; }
+    }
+    @media (width < 640px) {
+      .box-row--4col { grid-template-columns: repeat(2, 1fr); }
     }
 
     .box {
@@ -332,7 +336,8 @@
         <div class="grid-info-tooltip">
           &lt;640: 4 col, 20-gutter, 16-margin<br>
           ≥640: 12 col, 20-gutter, 24-margin<br>
-          ≥1024: 12 col, 20-gutter, 32-margin
+          ≥1024: 12 col, 20-gutter, 32-margin<br>
+          2-up rows stack below 810
         </div>
       </div>
     </div>
