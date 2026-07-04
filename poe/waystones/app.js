@@ -369,7 +369,7 @@ function CombinedBox({
     className: "poe-combined-text"
   }, highlightModNames(combined))) : /*#__PURE__*/React.createElement("span", {
     className: "poe-combined-placeholder"
-  }, "Toggle mods above to build your search string")), /*#__PURE__*/React.createElement("div", {
+  }, "Toggle mods above")), /*#__PURE__*/React.createElement("div", {
     className: "poe-combined-actions"
   }, /*#__PURE__*/React.createElement("button", {
     className: "poe-copy-btn",
