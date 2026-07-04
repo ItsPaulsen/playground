@@ -39,14 +39,14 @@
       font-size: 48px;
       font-weight: 500;
       letter-spacing: -0.02em;
-      line-height: 1.1;
+      line-height: 52px;
     }
 
     .page-header p {
       margin-top: 8px;
       font-size: 18px;
       color: var(--pg-muted);
-      line-height: 1.6;
+      line-height: 28px;
     }
 
     .grid {
@@ -58,16 +58,16 @@
     @media (640px <= width < 1024px) {
       .page { padding: 48px 24px 64px; }
       .page-header { margin-bottom: 32px; }
-      .page-header h1 { font-size: 40px; }
-      .page-header p { font-size: 16px; }
+      .page-header h1 { font-size: 40px; line-height: 44px; }
+      .page-header p { font-size: 16px; line-height: 26px; }
       .grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (width < 640px) {
       .page { padding: 40px 16px 48px; }
       .page-header { margin-bottom: 24px; }
-      .page-header h1 { font-size: 32px; }
-      .page-header p { font-size: 14px; }
+      .page-header h1 { font-size: 32px; line-height: 36px; }
+      .page-header p { font-size: 14px; line-height: 22px; }
       .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
     }
 
