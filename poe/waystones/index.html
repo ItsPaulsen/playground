@@ -28,9 +28,9 @@
   .page {
     max-width: 640px;
     margin: 0 auto;
-    padding: 64px 32px;
-    min-height: 100vh;
-    min-height: 100dvh;
+    padding: 64px 32px 16px;
+    min-height: calc(100vh - var(--header-h, 48px));
+    min-height: calc(100dvh - var(--header-h, 48px));
     display: flex;
     flex-direction: column;
   }
@@ -67,7 +67,7 @@
   /* Combined box — floating bottom bar (sticky: centers with content, never over the scrollbar) */
   .poe-combined {
     position: sticky;
-    bottom: 24px;
+    bottom: 16px;
     width: 100%;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
@@ -335,15 +335,15 @@
   .poe-demand-warning svg { flex-shrink: 0; margin-top: 0; }
 
   @media (640px <= width < 1024px) {
-    .page { padding: 48px 24px 64px; }
+    .page { padding: 48px 24px 16px; }
     .page-header { margin-bottom: 32px; }
     .page-header h1 { font-size: 40px; }
     .page-header p { font-size: 16px; }
   }
 
   @media (width < 640px) {
-    .page { padding: 40px 16px 48px; }
-    .page-header { margin-bottom: 24px; }
+    .page { padding: 40px 16px 16px; }
+    .page-header { margin-bottom: 16px; }
     .page-header h1 { font-size: 32px; }
     .page-header p { font-size: 14px; }
     .pg-bar { width: 110px; }
