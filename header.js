@@ -108,6 +108,8 @@
       opacity: 0; pointer-events: none;
       transition: opacity .4s ease, background .4s ease, backdrop-filter .4s ease;
       font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      overflow-y: auto;
+      overscroll-behavior: contain;
     }
     #site-menu.is-open {
       opacity: 1; pointer-events: auto;
@@ -116,10 +118,10 @@
     }
 
     #site-menu nav {
-      height: 100%;
+      min-height: 100%;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 32px;
-      padding-top: var(--header-h); box-sizing: border-box;
+      padding: var(--header-h) 0 24px; box-sizing: border-box;
     }
 
     #site-menu nav a {
