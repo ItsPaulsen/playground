@@ -142,11 +142,11 @@
     @media (640px <= width < 1024px) {
       .box-row--4col { grid-template-columns: repeat(3, 1fr); }
     }
-    @media (810px <= width < 1024px) {
+    @media (768px <= width < 1024px) {
       .box-row--3col { grid-template-columns: repeat(2, 1fr); }
       .box-row--2col { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (width < 810px) {
+    @media (width < 768px) {
       .box-row--3col,
       .box-row--2col { grid-template-columns: 1fr; }
     }
@@ -196,11 +196,11 @@
       width: 100%;
     }
 
-    @media (width >= 810px) {
+    @media (width >= 768px) {
       .box-row--1col .box-content { max-width: 50%; }
     }
 
-    @media (width < 810px) {
+    @media (width < 768px) {
       .box-row--1col .box-gradient {
         background: radial-gradient(100% 45% at 20% 92%, #000 0%, #0000 100%);
       }
@@ -213,7 +213,7 @@
       margin-bottom: 4px;
     }
 
-    @media (width >= 810px) {
+    @media (width >= 768px) {
       .box-title { font-size: 24px; }
     }
 
@@ -224,7 +224,7 @@
       opacity: 0.72;
     }
 
-    @media (width >= 810px) {
+    @media (width >= 768px) {
       .box-body { font-size: 20px; line-height: 26px; }
     }
 
@@ -337,7 +337,7 @@
           &lt;640: 4 col, 20-gutter, 16-margin<br>
           ≥640: 12 col, 20-gutter, 24-margin<br>
           ≥1024: 12 col, 20-gutter, 32-margin<br>
-          2-up rows stack below 810
+          2-up rows stack below 768
         </div>
       </div>
     </div>
