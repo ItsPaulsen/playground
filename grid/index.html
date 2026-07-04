@@ -47,16 +47,16 @@
       height: 100%;
     }
 
-    @media (min-width: 640px) {
+    @media (width >= 640px) {
       #grid-overlay-inner {
         grid-template-columns: repeat(12, 1fr);
         padding-inline: 24px;
       }
     }
-    @media (min-width: 1025px) {
+    @media (width >= 1024px) {
       #grid-overlay-inner { padding-inline: 32px; }
     }
-    @media (max-width: 639px) {
+    @media (width < 640px) {
       .grid-col:nth-child(n+5) { display: none; }
     }
 
@@ -82,8 +82,8 @@
     .margin-overlay--left  { left: 0; }
     .margin-overlay--right { right: 0; }
 
-    @media (min-width: 640px)  { .margin-overlay { width: 24px; } }
-    @media (min-width: 1025px) { .margin-overlay { width: 32px; } }
+    @media (width >= 640px)  { .margin-overlay { width: 24px; } }
+    @media (width >= 1024px) { .margin-overlay { width: 32px; } }
 
     /* ── Page content ── */
     .page {
@@ -94,8 +94,8 @@
       padding-inline: 16px;
     }
 
-    @media (min-width: 640px)  { .page { padding-inline: 24px; } }
-    @media (min-width: 1025px) { .page { padding-inline: 32px; } }
+    @media (width >= 640px)  { .page { padding-inline: 24px; } }
+    @media (width >= 1024px) { .page { padding-inline: 32px; } }
 
     .page-header {
       margin-bottom: 40px;
@@ -115,12 +115,12 @@
       line-height: 1.6;
     }
 
-    @media (max-width: 1024px) {
+    @media (width < 1024px) {
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 40px; }
       .page-header p  { font-size: 16px; }
     }
-    @media (max-width: 639px) {
+    @media (width < 640px) {
       .page-header { margin-bottom: 24px; }
       .page-header h1 { font-size: 32px; }
       .page-header p  { font-size: 14px; }
@@ -134,18 +134,17 @@
       gap: 20px;
     }
 
-    .box-row--fluid { grid-template-columns: repeat(auto-fit, minmax(min(240px, calc(50% - 10px)), 1fr)); }
     .box-row--4col { grid-template-columns: repeat(4, 1fr); }
     .box-row--3col { grid-template-columns: repeat(3, 1fr); }
     .box-row--2col { grid-template-columns: repeat(2, 1fr); }
     .box-row--1col { grid-template-columns: 1fr; }
 
-    @media (min-width: 640px) and (max-width: 1024px) {
+    @media (640px <= width < 1024px) {
       .box-row--4col { grid-template-columns: repeat(3, 1fr); }
       .box-row--3col { grid-template-columns: repeat(2, 1fr); }
       .box-row--2col { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 639px) {
+    @media (width < 640px) {
       .box-row--4col { grid-template-columns: repeat(2, 1fr); }
       .box-row--3col,
       .box-row--2col { grid-template-columns: 1fr; }
@@ -193,11 +192,11 @@
       width: 100%;
     }
 
-    @media (min-width: 810px) {
+    @media (width >= 810px) {
       .box-row--1col .box-content { max-width: 50%; }
     }
 
-    @media (max-width: 809px) {
+    @media (width < 810px) {
       .box-row--1col .box-gradient {
         background: radial-gradient(100% 45% at 20% 92%, #000 0%, #0000 100%);
       }
@@ -210,7 +209,7 @@
       margin-bottom: 4px;
     }
 
-    @media (min-width: 810px) {
+    @media (width >= 810px) {
       .box-title { font-size: 24px; }
     }
 
@@ -221,7 +220,7 @@
       opacity: 0.72;
     }
 
-    @media (min-width: 810px) {
+    @media (width >= 810px) {
       .box-body { font-size: 20px; line-height: 26px; }
     }
 
@@ -333,7 +332,7 @@
         <div class="grid-info-tooltip">
           &lt;640: 4 col, 20-gutter, 16-margin<br>
           ≥640: 12 col, 20-gutter, 24-margin<br>
-          &gt;1024: 12 col, 20-gutter, 32-margin
+          ≥1024: 12 col, 20-gutter, 32-margin
         </div>
       </div>
     </div>
@@ -431,56 +430,6 @@
       </div>
     </div>
 
-    <div class="section-title">
-      Fluid
-      <div class="grid-info">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-        <div class="grid-info-tooltip">
-          repeat(auto-fit, minmax(min(240px, 50% − 10px), 1fr))<br>
-          No media queries — a column drops when cards would go under 240px<br>
-          Phones: the floor becomes half the row, keeping two columns
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="box-rows">
-        <div class="box-row box-row--fluid">
-          <div class="box">
-            <img src="https://picsum.photos/id/42/900/600" alt="" loading="lazy">
-            <div class="box-gradient"></div>
-            <div class="box-content">
-              <div class="box-title">Auto-fit</div>
-              <div class="box-body">One line of CSS, zero media queries.</div>
-            </div>
-          </div>
-          <div class="box">
-            <img src="https://picsum.photos/id/54/900/600" alt="" loading="lazy">
-            <div class="box-gradient"></div>
-            <div class="box-content">
-              <div class="box-title">240px floor</div>
-              <div class="box-body">A column drops whenever cards would dip below it.</div>
-            </div>
-          </div>
-          <div class="box">
-            <img src="https://picsum.photos/id/63/900/600" alt="" loading="lazy">
-            <div class="box-gradient"></div>
-            <div class="box-content">
-              <div class="box-title">Same rhythm</div>
-              <div class="box-body">Four at max width, three on tablet, two on phones.</div>
-            </div>
-          </div>
-          <div class="box">
-            <img src="https://picsum.photos/id/77/900/600" alt="" loading="lazy">
-            <div class="box-gradient"></div>
-            <div class="box-content">
-              <div class="box-title">By card, not viewport</div>
-              <div class="box-body">Columns respond to available width, wherever it comes from.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script src="/header.js"></script>
