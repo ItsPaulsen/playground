@@ -58,7 +58,8 @@
     }
     @media (width < 640px) {
       #grid-overlay-inner { gap: 16px; }
-      .grid-col:nth-child(n+5) { display: none; }
+      /* first two children are the margin overlays; columns start at child 3 */
+      .grid-col:nth-child(n+7) { display: none; }
     }
 
     .grid-col {
