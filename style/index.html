@@ -55,6 +55,27 @@
       position: relative;
     }
 
+    /* ── Layout ── */
+    .layout-specs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px 40px;
+    }
+
+    .layout-val {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--pg-primary);
+    }
+
+    .grid-page-link {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--pg-muted);
+      text-decoration: none;
+    }
+    .grid-page-link:hover { color: var(--pg-primary); }
+
     /* ── Colors ── */
     .color-themes {
       display: flex;
@@ -89,6 +110,13 @@
     }
     html[data-theme="dark"] .swatch-color { border-color: rgba(255,255,255,.10); }
 
+    .swatch-name {
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--pg-muted);
+      margin-top: 8px;
+    }
+
     .swatch-copy-btn { outline: none; }
     .swatch-copy-btn {
       position: absolute;
@@ -115,7 +143,7 @@
     .type-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(7, auto);
+      grid-template-rows: repeat(8, auto);
       gap: 0 40px;
     }
 
@@ -288,6 +316,7 @@
       .page { padding: 40px 16px 48px; }
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 32px; }
+      .section-title { font-size: 20px; }
 
       .type-grid { display: flex; flex-direction: column; gap: 32px; }
       .type-grid > div { display: block; }
@@ -296,11 +325,15 @@
       .swatch { width: calc((100% - 3 * 16px) / 4); }
       .swatch-color { border-radius: var(--radius-sm); }
 
+      .layout-specs { grid-template-columns: 1fr; gap: 20px; }
     }
 
     @media (640px <= width < 1024px) {
       .page { padding: 48px 24px 64px; }
       .page-header h1 { font-size: 40px; }
+      .section-title { font-size: 22px; }
+
+      .layout-specs { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ── Components ── */
@@ -321,6 +354,40 @@
       <h1>Style Guide</h1>
     </div>
 
+    <!-- Layout -->
+    <div class="section">
+      <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
+        Layout
+        <a class="grid-page-link" href="/grid/">Open grid ↗</a>
+      </div>
+      <div class="layout-specs">
+        <div>
+          <div class="comp-label">Containers</div>
+          <div class="layout-val">1200 grid · 640 narrow<br>(+ margins each side)</div>
+        </div>
+        <div>
+          <div class="comp-label">Columns</div>
+          <div class="layout-val">12 · mobile 4</div>
+        </div>
+        <div>
+          <div class="comp-label">Breakpoints</div>
+          <div class="layout-val">640 · 768 · 1024<br>(width ≥ break = in the tier)</div>
+        </div>
+        <div>
+          <div class="comp-label">Margins</div>
+          <div class="layout-val">32 desktop · 24 tablet · 16 mobile</div>
+        </div>
+        <div>
+          <div class="comp-label">Gutter</div>
+          <div class="layout-val">20 · mobile 16</div>
+        </div>
+        <div>
+          <div class="comp-label">2-up rows</div>
+          <div class="layout-val">Stack below 768</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Colors -->
     <div class="section">
       <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
@@ -333,6 +400,31 @@
         </div>
       </div>
       <div class="color-themes">
+        <div class="color-theme-row">
+          <div class="color-swatches">
+            <div class="swatch" data-color="--pg-bg">
+              <div class="swatch-color" style="background:var(--pg-bg)"></div>
+              <div class="swatch-name">--pg-bg</div>
+            </div>
+            <div class="swatch" data-color="--pg-surface">
+              <div class="swatch-color" style="background:var(--pg-surface)"></div>
+              <div class="swatch-name">--pg-surface</div>
+            </div>
+            <div class="swatch" data-color="--pg-border">
+              <div class="swatch-color" style="background:var(--pg-border)"></div>
+              <div class="swatch-name">--pg-border</div>
+            </div>
+            <div class="swatch" data-color="--pg-muted">
+              <div class="swatch-color" style="background:var(--pg-muted)"></div>
+              <div class="swatch-name">--pg-muted</div>
+            </div>
+            <div class="swatch" data-color="--pg-primary">
+              <div class="swatch-color" style="background:var(--pg-primary)"></div>
+              <div class="swatch-name">--pg-primary</div>
+            </div>
+          </div>
+        </div>
+
         <div class="color-theme-row color-theme-row--light">
           <div class="color-swatches">
             <div class="swatch" data-color="--pg-light-100">
@@ -400,6 +492,10 @@
             <div class="type-meta">16px / 400 / 1.5</div>
           </div>
           <div class="type-row">
+            <div class="type-sample" style="font-size:13px;font-weight:500;line-height:1.4">UI</div>
+            <div class="type-meta">13px / 500 / 1.4</div>
+          </div>
+          <div class="type-row">
             <div class="type-sample" style="font-size:12px;line-height:1.4">Caption</div>
             <div class="type-meta">12px / 400 / 1.4</div>
           </div>
@@ -429,6 +525,10 @@
             <div class="type-meta">14px / 400 / 1.5</div>
           </div>
           <div class="type-row">
+            <div class="type-sample" style="font-size:13px;font-weight:500;line-height:1.4">UI</div>
+            <div class="type-meta">13px / 500 / 1.4</div>
+          </div>
+          <div class="type-row">
             <div class="type-sample" style="font-size:12px;line-height:1.4">Caption</div>
             <div class="type-meta">12px / 400 / 1.4</div>
           </div>
@@ -456,6 +556,10 @@
           <div class="type-row">
             <div class="type-sample" style="font-size:14px;line-height:1.5">Body</div>
             <div class="type-meta">14px / 400 / 1.5</div>
+          </div>
+          <div class="type-row">
+            <div class="type-sample" style="font-size:13px;font-weight:500;line-height:1.4">UI</div>
+            <div class="type-meta">13px / 500 / 1.4</div>
           </div>
           <div class="type-row">
             <div class="type-sample" style="font-size:12px;line-height:1.4">Caption</div>
@@ -596,7 +700,7 @@
       });
 
       var els = Array.from(document.querySelectorAll(
-        '.page-header, .section-title, .shadow-row'
+        '.page-header, .section-title, .shadow-row, .layout-specs'
       )).concat(typeEls, swatchEls, radiusEls, compEls);
       els.forEach(function (el) { el.classList.add('pg-anim'); });
 
@@ -829,6 +933,15 @@
         });
         swatch.querySelector('.swatch-color').appendChild(btn);
       });
+
+      // semantic swatches resolve differently per theme — recompute icon contrast on switch
+      function refreshSwatchBtnColors() {
+        document.querySelectorAll('.swatch[data-color]').forEach(function(sw) {
+          var b = sw.querySelector('.swatch-copy-btn');
+          if (b) b.style.color = isLight(resolveColor(sw.dataset.color)) ? 'oklch(0.22 0.01 56)' : 'oklch(0.98 0.00 106)';
+        });
+      }
+      new MutationObserver(refreshSwatchBtnColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
     })();
   </script>
