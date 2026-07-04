@@ -504,7 +504,9 @@ function App() {
     y1: "17",
     x2: "12.01",
     y2: "17"
-  })), "This combination of mods may return no results."), /*#__PURE__*/React.createElement(CombinedBox, {
+  })), "This combination of mods may return no results."), /*#__PURE__*/React.createElement("div", {
+    className: "poe-spacer"
+  }), /*#__PURE__*/React.createElement(CombinedBox, {
     combined: combined,
     activeMods: activeMods,
     modCountActive: modCountActive,

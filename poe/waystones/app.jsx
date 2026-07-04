@@ -328,6 +328,7 @@ function App() {
         </p>
       )}
 
+      <div className="poe-spacer" />
       <CombinedBox combined={combined} activeMods={activeMods} modCountActive={modCountActive} onReset={reset} />
     </>
   );

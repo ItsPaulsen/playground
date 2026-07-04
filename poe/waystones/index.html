@@ -29,7 +29,19 @@
     max-width: 640px;
     margin: 0 auto;
     padding: 64px 32px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
   }
+
+  /* root fills leftover height; the spacer pushes the bar to the bottom */
+  #root {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .poe-spacer { margin-top: auto; padding-top: 24px; }
 
   .page-header {
     margin-bottom: 40px;
@@ -57,7 +69,6 @@
     position: sticky;
     bottom: 24px;
     width: 100%;
-    margin-top: 24px;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
     border: none;
