@@ -28,7 +28,7 @@
   .page {
     max-width: 640px;
     margin: 0 auto;
-    padding: 64px 32px 100px;
+    padding: 64px 32px;
   }
 
   .page-header {
@@ -52,14 +52,12 @@
     animation: pg-up .8s cubic-bezier(.22,1,.36,1) .1s both;
   }
 
-  /* Combined box — floating bottom bar */
+  /* Combined box — floating bottom bar (sticky: centers with content, never over the scrollbar) */
   .poe-combined {
-    position: fixed;
+    position: sticky;
     bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 48px);
-    max-width: 592px;
+    width: 100%;
+    margin-top: 24px;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
     border: none;
@@ -326,19 +324,19 @@
   .poe-demand-warning svg { flex-shrink: 0; margin-top: 0; }
 
   @media (640px <= width < 1024px) {
-    .page { padding: 48px 24px 100px; }
+    .page { padding: 48px 24px 64px; }
     .page-header { margin-bottom: 32px; }
     .page-header h1 { font-size: 40px; }
     .page-header p { font-size: 16px; }
   }
 
   @media (width < 640px) {
-    .page { padding: 40px 16px 92px; }
+    .page { padding: 40px 16px 48px; }
     .page-header { margin-bottom: 24px; }
     .page-header h1 { font-size: 32px; }
     .page-header p { font-size: 14px; }
     .pg-bar { width: 110px; }
-    .poe-combined { width: calc(100% - 16px); bottom: max(16px, env(safe-area-inset-bottom)); padding: 10px 16px; }
+    .poe-combined { bottom: max(16px, env(safe-area-inset-bottom)); padding: 10px 16px; }
   }
 </style>
 </head>
