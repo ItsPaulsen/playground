@@ -57,6 +57,7 @@
       #grid-overlay-inner { padding-inline: 32px; }
     }
     @media (width < 640px) {
+      #grid-overlay-inner { gap: 16px; }
       .grid-col:nth-child(n+5) { display: none; }
     }
 
@@ -151,6 +152,8 @@
       .box-row--2col { grid-template-columns: 1fr; }
     }
     @media (width < 640px) {
+      .box-rows { gap: 16px; }
+      .box-row { gap: 16px; }
       .box-row--4col { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -334,7 +337,7 @@
       <div class="grid-info">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         <div class="grid-info-tooltip">
-          &lt;640: 4 col, 20-gutter, 16-margin<br>
+          &lt;640: 4 col, 16-gutter, 16-margin<br>
           ≥640: 12 col, 20-gutter, 24-margin<br>
           ≥1024: 12 col, 20-gutter, 32-margin<br>
           2-up rows stack below 768
