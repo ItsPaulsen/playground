@@ -311,6 +311,7 @@
     .type-grid > div.pg-anim.is-visible            { transition-delay: calc(.2s + var(--stagger-i, 0) * .15s); }
     .color-swatches .swatch.pg-anim.is-visible    { transition-delay: calc(.3s + var(--stagger-i, 0) * .08s); }
     .radius-row .radius-item.pg-anim.is-visible    { transition-delay: calc(.2s + var(--stagger-i, 0) * .08s); }
+    .layout-btn.pg-anim.is-visible                 { transition-delay: .3s; }
 
     /* ── Responsive ── */
     @media (width < 640px) {
@@ -631,7 +632,7 @@
       });
 
       var els = Array.from(document.querySelectorAll(
-        '.page-header, .section-title, .shadow-row'
+        '.page-header, .section-title, .shadow-row, .layout-line, .layout-btn'
       )).concat(typeEls, swatchEls, radiusEls, compEls);
       els.forEach(function (el) { el.classList.add('pg-anim'); });
 
