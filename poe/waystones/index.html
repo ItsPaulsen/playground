@@ -26,7 +26,7 @@
   }
 
   .page {
-    max-width: 864px;
+    max-width: 640px;
     margin: 0 auto;
     padding: 64px 32px 100px;
   }
@@ -59,7 +59,7 @@
     left: 50%;
     transform: translateX(-50%);
     width: calc(100% - 48px);
-    max-width: 816px;
+    max-width: 592px;
     background: rgba(255,255,255,0.6);
     backdrop-filter: blur(10px);
     border: none;
@@ -325,14 +325,14 @@
   html[data-theme="dark"] .poe-demand-warning { color: #ef4444; }
   .poe-demand-warning svg { flex-shrink: 0; margin-top: 0; }
 
-  @media (min-width: 640px) and (max-width: 1024px) {
+  @media (640px <= width < 1024px) {
     .page { padding: 48px 24px 100px; }
     .page-header { margin-bottom: 32px; }
     .page-header h1 { font-size: 40px; }
     .page-header p { font-size: 16px; }
   }
 
-  @media (max-width: 639px) {
+  @media (width < 640px) {
     .page { padding: 40px 16px 92px; }
     .page-header { margin-bottom: 24px; }
     .page-header h1 { font-size: 32px; }
