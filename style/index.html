@@ -56,13 +56,29 @@
     }
 
     /* ── Layout ── */
-    .grid-page-link {
-      font-size: 13px;
-      font-weight: 400;
+    .layout-line {
+      font-size: 14px;
+      line-height: 1.5;
       color: var(--pg-muted);
-      text-decoration: none;
+      margin-bottom: 16px;
     }
-    .grid-page-link:hover { color: var(--pg-primary); }
+
+    .layout-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 12px;
+      background: var(--pg-border);
+      color: var(--pg-primary);
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: filter .15s;
+    }
+    .layout-btn:hover { filter: brightness(.95); }
+    html[data-theme="dark"] .layout-btn:hover { filter: brightness(1.15); }
 
     /* ── Colors ── */
     .color-themes {
@@ -574,7 +590,8 @@
     <!-- Layout -->
     <div class="section">
       <div class="section-title">Layout</div>
-      <a class="grid-page-link" href="/grid/">12 columns · 1200 max · breakpoints 640 / 768 / 1024 — open grid ↗</a>
+      <div class="layout-line">1200 max · 1024 / 768 / 640</div>
+      <a class="layout-btn" href="/grid/">Open grid</a>
     </div>
   </div>
 
