@@ -125,7 +125,7 @@
     }
 
     #site-menu nav a {
-      font-size: 48px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1;
+      font-size: 48px; font-weight: 500; line-height: 52px;
       color: var(--pg-primary); text-decoration: none;
       opacity: 0; transform: translateY(-8px);
       transition: opacity .3s ease, transform .3s ease;
