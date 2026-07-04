@@ -56,18 +56,6 @@
     }
 
     /* ── Layout ── */
-    .layout-specs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px 40px;
-    }
-
-    .layout-val {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--pg-primary);
-    }
-
     .grid-page-link {
       font-size: 13px;
       font-weight: 400;
@@ -82,10 +70,6 @@
       flex-direction: column;
       gap: 24px;
     }
-
-    .color-theme-row--dark { display: none; }
-    html[data-theme="dark"] .color-theme-row--light { display: none; }
-    html[data-theme="dark"] .color-theme-row--dark { display: block; }
 
     .color-swatches {
       display: flex;
@@ -115,6 +99,7 @@
       line-height: 1.4;
       color: var(--pg-muted);
       margin-top: 8px;
+      text-align: center;
     }
 
     .swatch-copy-btn { outline: none; }
@@ -324,16 +309,12 @@
       .color-swatches { gap: 16px; }
       .swatch { width: calc((100% - 3 * 16px) / 4); }
       .swatch-color { border-radius: var(--radius-sm); }
-
-      .layout-specs { grid-template-columns: 1fr; gap: 20px; }
     }
 
     @media (640px <= width < 1024px) {
       .page { padding: 48px 24px 64px; }
       .page-header h1 { font-size: 40px; }
       .section-title { font-size: 22px; }
-
-      .layout-specs { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* ── Components ── */
@@ -352,40 +333,6 @@
   <div class="page">
     <div class="page-header">
       <h1>Style Guide</h1>
-    </div>
-
-    <!-- Layout -->
-    <div class="section">
-      <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
-        Layout
-        <a class="grid-page-link" href="/grid/">Open grid ↗</a>
-      </div>
-      <div class="layout-specs">
-        <div>
-          <div class="comp-label">Containers</div>
-          <div class="layout-val">1200 grid · 640 narrow<br>(+ margins each side)</div>
-        </div>
-        <div>
-          <div class="comp-label">Columns</div>
-          <div class="layout-val">12 · mobile 4</div>
-        </div>
-        <div>
-          <div class="comp-label">Breakpoints</div>
-          <div class="layout-val">640 · 768 · 1024<br>(width ≥ break = in the tier)</div>
-        </div>
-        <div>
-          <div class="comp-label">Margins</div>
-          <div class="layout-val">32 desktop · 24 tablet · 16 mobile</div>
-        </div>
-        <div>
-          <div class="comp-label">Gutter</div>
-          <div class="layout-val">20 · mobile 16</div>
-        </div>
-        <div>
-          <div class="comp-label">2-up rows</div>
-          <div class="layout-val">Stack below 768</div>
-        </div>
-      </div>
     </div>
 
     <!-- Colors -->
@@ -425,45 +372,6 @@
           </div>
         </div>
 
-        <div class="color-theme-row color-theme-row--light">
-          <div class="color-swatches">
-            <div class="swatch" data-color="--pg-light-100">
-              <div class="swatch-color" style="background:var(--pg-light-100)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-light-200">
-              <div class="swatch-color" style="background:var(--pg-light-200)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-light-300">
-              <div class="swatch-color" style="background:var(--pg-light-300)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-light-400">
-              <div class="swatch-color" style="background:var(--pg-light-400)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-light-500">
-              <div class="swatch-color" style="background:var(--pg-light-500)"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="color-theme-row color-theme-row--dark">
-          <div class="color-swatches">
-            <div class="swatch" data-color="--pg-dark-500">
-              <div class="swatch-color" style="background:var(--pg-dark-500)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-dark-400">
-              <div class="swatch-color" style="background:var(--pg-dark-400)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-dark-300">
-              <div class="swatch-color" style="background:var(--pg-dark-300)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-dark-200">
-              <div class="swatch-color" style="background:var(--pg-dark-200)"></div>
-            </div>
-            <div class="swatch" data-color="--pg-dark-100">
-              <div class="swatch-color" style="background:var(--pg-dark-100)"></div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -662,6 +570,12 @@
         </div>
       </div>
     </div>
+
+    <!-- Layout -->
+    <div class="section">
+      <div class="section-title">Layout</div>
+      <a class="grid-page-link" href="/grid/">12 columns · 1200 max · breakpoints 640 / 768 / 1024 — open grid ↗</a>
+    </div>
   </div>
 
   <script src="/header.js"></script>
@@ -700,7 +614,7 @@
       });
 
       var els = Array.from(document.querySelectorAll(
-        '.page-header, .section-title, .shadow-row, .layout-specs'
+        '.page-header, .section-title, .shadow-row'
       )).concat(typeEls, swatchEls, radiusEls, compEls);
       els.forEach(function (el) { el.classList.add('pg-anim'); });
 
