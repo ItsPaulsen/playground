@@ -134,6 +134,7 @@
       gap: 20px;
     }
 
+    .box-row--fluid { grid-template-columns: repeat(auto-fit, minmax(min(240px, calc(50% - 10px)), 1fr)); }
     .box-row--4col { grid-template-columns: repeat(4, 1fr); }
     .box-row--3col { grid-template-columns: repeat(3, 1fr); }
     .box-row--2col { grid-template-columns: repeat(2, 1fr); }
@@ -424,6 +425,57 @@
             <div class="box-content">
               <div class="box-title">20px gutter</div>
               <div class="box-body">Consistent spacing across every breakpoint.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">
+      Fluid
+      <div class="grid-info">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <div class="grid-info-tooltip">
+          repeat(auto-fit, minmax(min(240px, 50% − 10px), 1fr))<br>
+          No media queries — a column drops when cards would go under 240px<br>
+          Phones: the floor becomes half the row, keeping two columns
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="box-rows">
+        <div class="box-row box-row--fluid">
+          <div class="box">
+            <img src="https://picsum.photos/id/42/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Auto-fit</div>
+              <div class="box-body">One line of CSS, zero media queries.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/54/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">240px floor</div>
+              <div class="box-body">A column drops whenever cards would dip below it.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/63/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Same rhythm</div>
+              <div class="box-body">Four at max width, three on tablet, two on phones.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/77/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">By card, not viewport</div>
+              <div class="box-body">Columns respond to available width, wherever it comes from.</div>
             </div>
           </div>
         </div>
