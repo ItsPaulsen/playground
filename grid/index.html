@@ -134,15 +134,18 @@
       gap: 20px;
     }
 
+    .box-row--4col { grid-template-columns: repeat(4, 1fr); }
     .box-row--3col { grid-template-columns: repeat(3, 1fr); }
     .box-row--2col { grid-template-columns: repeat(2, 1fr); }
     .box-row--1col { grid-template-columns: 1fr; }
 
     @media (min-width: 640px) and (max-width: 1024px) {
+      .box-row--4col { grid-template-columns: repeat(3, 1fr); }
       .box-row--3col { grid-template-columns: repeat(2, 1fr); }
       .box-row--2col { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 639px) {
+      .box-row--4col { grid-template-columns: repeat(2, 1fr); }
       .box-row--3col,
       .box-row--2col { grid-template-columns: 1fr; }
     }
@@ -383,6 +386,40 @@
           </div>
           <div class="box">
             <img src="https://picsum.photos/id/21/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">20px gutter</div>
+              <div class="box-body">Consistent spacing across every breakpoint.</div>
+            </div>
+          </div>
+        </div>
+        <div class="box-row box-row--4col">
+          <div class="box">
+            <img src="https://picsum.photos/id/24/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Four columns</div>
+              <div class="box-body">Each card spans three of twelve grid tracks.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/28/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Card layout</div>
+              <div class="box-body">The frontpage grid — collapses to 3 then 2.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/33/900/600" alt="" loading="lazy">
+            <div class="box-gradient"></div>
+            <div class="box-content">
+              <div class="box-title">Equal thirds</div>
+              <div class="box-body">Balanced quarters share the row evenly.</div>
+            </div>
+          </div>
+          <div class="box">
+            <img src="https://picsum.photos/id/34/900/600" alt="" loading="lazy">
             <div class="box-gradient"></div>
             <div class="box-content">
               <div class="box-title">20px gutter</div>
