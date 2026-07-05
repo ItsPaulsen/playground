@@ -81,7 +81,7 @@
   padding: 6px;
   border-radius: var(--radius-sm);
   corner-shape: superellipse(1.7);
-  background: var(--pg-surface-glass);
+  background: rgba(255,255,255,.8);
   backdrop-filter: blur(20px) saturate(180%);
   box-shadow: rgba(0,0,0,.05) 0 6px 24px 0, rgba(0,0,0,.06) 0 0 0 1px;
   z-index: 100;
@@ -91,7 +91,7 @@
   transition: opacity .15s, transform .15s;
   white-space: nowrap;
 }
-html[data-theme="dark"] .pg-select-dropdown { box-shadow: rgba(0,0,0,.2) 0 6px 24px 0, rgba(255,255,255,.1) 0 0 0 1px; }
+html[data-theme="dark"] .pg-select-dropdown { background: rgba(41,37,36,.85); box-shadow: rgba(0,0,0,.2) 0 6px 24px 0, rgba(255,255,255,.1) 0 0 0 1px; }
 .pg-select-dropdown.is-open { opacity: 1; pointer-events: all; transform: translateY(0); }
 
 .pg-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
