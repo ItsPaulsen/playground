@@ -699,6 +699,34 @@ function __TweakColorInput({ label, value, onChange, noAlpha }) {
 
   const onOpacityBlur = () => setOpacityStr(String(opacity));
 
+  // Scrubby slider: drag left/right to change opacity; a plain click still focuses for typing.
+  const opacityRef = React.useRef(null);
+  const scrub = React.useRef(null);
+  const onOpacityPointerDown = (e) => {
+    if (e.button !== 0) return;
+    scrub.current = { startX: e.clientX, startVal: opacity, dragging: false, id: e.pointerId };
+  };
+  const onOpacityPointerMove = (e) => {
+    const s = scrub.current;
+    if (!s) return;
+    const dx = e.clientX - s.startX;
+    if (!s.dragging) {
+      if (Math.abs(dx) < 3) return;
+      s.dragging = true;
+      opacityRef.current.blur();
+      try { opacityRef.current.setPointerCapture(s.id); } catch (_) {}
+      document.body.style.cursor = 'ew-resize';
+    }
+    const n = Math.max(0, Math.min(100, Math.round(s.startVal + dx)));
+    setOpacity(n);
+    setOpacityStr(String(n));
+    commitColor(hex, n);
+  };
+  const onOpacityPointerUp = () => {
+    if (scrub.current && scrub.current.dragging) document.body.style.cursor = '';
+    scrub.current = null;
+  };
+
   const row = (
     <div className="twk-color-row">
       <div ref={swatchRef} className="twk-color-preview" style={{ background: hex }}
@@ -709,8 +737,10 @@ function __TweakColorInput({ label, value, onChange, noAlpha }) {
       </div>
       {!noAlpha && (
         <div className="twk-color-opacity">
-          <input className="twk-color-opacity-input" type="text" value={opacityStr}
-                 onChange={onOpacityChange} onBlur={onOpacityBlur} />
+          <input ref={opacityRef} className="twk-color-opacity-input" type="text" value={opacityStr}
+                 style={{ cursor: 'ew-resize', touchAction: 'none' }}
+                 onChange={onOpacityChange} onBlur={onOpacityBlur}
+                 onPointerDown={onOpacityPointerDown} onPointerMove={onOpacityPointerMove} onPointerUp={onOpacityPointerUp} />
           <span className="twk-color-opacity-pct">%</span>
         </div>
       )}
