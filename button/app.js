@@ -84,6 +84,7 @@ function SVGButton({
   dur,
   surface,
   text,
+  border,
   onHoverChange
 }) {
   const btnRef = React.useRef(null);
@@ -208,7 +209,7 @@ function SVGButton({
     d: pathD,
     fill: "none",
     style: {
-      stroke: 'var(--btn-ring)'
+      stroke: border || 'var(--btn-ring)'
     },
     strokeWidth: SW
   }), /*#__PURE__*/React.createElement("path", {
@@ -226,6 +227,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "speed": 4,
   "bgOn": false,
   "textColor": "#1c1917",
+  "borderColor": "rgba(0,0,0,0.08)",
   "btnColor": "#ffffff",
   "bgColor": "#ffffff"
 } /*EDITMODE-END*/;
@@ -254,6 +256,7 @@ function App() {
     dur: dur,
     surface: t.bgOn ? t.btnColor : undefined,
     text: t.bgOn ? t.textColor : undefined,
+    border: t.bgOn ? t.borderColor : undefined,
     onHoverChange: setHovered
   })), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Button",
@@ -294,6 +297,10 @@ function App() {
     value: t.textColor,
     onChange: v => setTweak('textColor', v),
     noAlpha: true
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Border",
+    value: t.borderColor,
+    onChange: v => setTweak('borderColor', v)
   }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
     label: "Button",
     value: t.btnColor,

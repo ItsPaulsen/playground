@@ -30,7 +30,7 @@ function pointAtPerim(pos, w, h, ins, pr) {
 
 const SW = 2;
 
-function SVGButton({ label, color, dur, surface, text, onHoverChange }) {
+function SVGButton({ label, color, dur, surface, text, border, onHoverChange }) {
   const btnRef   = React.useRef(null);
   const pathRef  = React.useRef(null);
   const gradRef  = React.useRef(null);
@@ -115,7 +115,7 @@ function SVGButton({ label, color, dur, surface, text, onHoverChange }) {
                 <stop offset="100%" stopColor={color} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <path d={pathD} fill="none" style={{ stroke: 'var(--btn-ring)' }} strokeWidth={SW} />
+            <path d={pathD} fill="none" style={{ stroke: border || 'var(--btn-ring)' }} strokeWidth={SW} />
             <path ref={pathRef} d={pathD} fill="none"
               stroke="url(#arc-grad)" strokeWidth={SW}
               strokeDasharray={`${arcLen} ${perim - arcLen}`} />
@@ -132,6 +132,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "speed": 4,
   "bgOn": false,
   "textColor": "#1c1917",
+  "borderColor": "rgba(0,0,0,0.08)",
   "btnColor": "#ffffff",
   "bgColor": "#ffffff"
 }/*EDITMODE-END*/;
@@ -164,6 +165,7 @@ function App() {
           dur={dur}
           surface={t.bgOn ? t.btnColor : undefined}
           text={t.bgOn ? t.textColor : undefined}
+          border={t.bgOn ? t.borderColor : undefined}
           onHoverChange={setHovered}
         />
       </div>
@@ -194,6 +196,7 @@ function App() {
         <TweakSection label="Colors">
           <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
           {t.bgOn && <TweakColor label="Text" value={t.textColor} onChange={(v) => setTweak('textColor', v)} noAlpha />}
+          {t.bgOn && <TweakColor label="Border" value={t.borderColor} onChange={(v) => setTweak('borderColor', v)} />}
           {t.bgOn && <TweakColor label="Button" value={t.btnColor} onChange={(v) => setTweak('btnColor', v)} noAlpha />}
           {t.bgOn && <TweakColor label="Background" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
