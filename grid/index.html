@@ -120,13 +120,11 @@
       .page-header { margin-bottom: 32px; }
       .page-header h1 { font-size: 40px; line-height: 44px; }
       .page-header p  { font-size: 16px; line-height: 26px; }
-      .section-title { font-size: 22px; line-height: 26px; }
     }
     @media (width < 640px) {
       .page-header { margin-bottom: 24px; }
       .page-header h1 { font-size: 32px; line-height: 36px; }
       .page-header p  { font-size: 14px; line-height: 22px; }
-      .section-title { font-size: 20px; line-height: 24px; }
     }
 
     /* ── Box rows ── */
@@ -248,6 +246,8 @@
       padding-bottom: 16px;
       border-bottom: 1px solid var(--pg-border);
     }
+    @media (width < 1024px) { .section-title { font-size: 22px; line-height: 26px; } }
+    @media (width < 640px)  { .section-title { font-size: 20px; line-height: 24px; } }
 
     /* ── Live breakpoint label ── */
     .bp-label { display: none; }
