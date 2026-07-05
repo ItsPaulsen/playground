@@ -1024,38 +1024,34 @@ function __TweakColorInput({
   };
   const onOpacityBlur = () => setOpacityStr(String(opacity));
 
-  // Scrubby slider: drag left/right to change opacity; a plain click still focuses for typing.
+  // Scrubby slider on the "%" label: drag left/right to change opacity. The number
+  // field itself stays a plain text input for typing.
   const opacityRef = React.useRef(null);
+  const pctRef = React.useRef(null);
   const scrub = React.useRef(null);
-  const onOpacityPointerDown = e => {
+  const onPctPointerDown = e => {
     if (e.button !== 0) return;
     scrub.current = {
       startX: e.clientX,
       startVal: opacity,
-      dragging: false,
       id: e.pointerId
     };
+    if (opacityRef.current) opacityRef.current.blur();
+    try {
+      pctRef.current.setPointerCapture(e.pointerId);
+    } catch (_) {}
+    document.body.style.cursor = 'ew-resize';
   };
-  const onOpacityPointerMove = e => {
+  const onPctPointerMove = e => {
     const s = scrub.current;
     if (!s) return;
-    const dx = e.clientX - s.startX;
-    if (!s.dragging) {
-      if (Math.abs(dx) < 3) return;
-      s.dragging = true;
-      opacityRef.current.blur();
-      try {
-        opacityRef.current.setPointerCapture(s.id);
-      } catch (_) {}
-      document.body.style.cursor = 'ew-resize';
-    }
-    const n = Math.max(0, Math.min(100, Math.round(s.startVal + dx)));
+    const n = Math.max(0, Math.min(100, Math.round(s.startVal + (e.clientX - s.startX))));
     setOpacity(n);
     setOpacityStr(String(n));
     commitColor(hex, n);
   };
-  const onOpacityPointerUp = () => {
-    if (scrub.current && scrub.current.dragging) document.body.style.cursor = '';
+  const onPctPointerUp = () => {
+    if (scrub.current) document.body.style.cursor = '';
     scrub.current = null;
   };
   const row = /*#__PURE__*/React.createElement("div", {
@@ -1082,17 +1078,19 @@ function __TweakColorInput({
     className: "twk-color-opacity-input",
     type: "text",
     value: opacityStr,
+    onChange: onOpacityChange,
+    onBlur: onOpacityBlur
+  }), /*#__PURE__*/React.createElement("span", {
+    ref: pctRef,
+    className: "twk-color-opacity-pct",
     style: {
       cursor: 'ew-resize',
-      touchAction: 'none'
+      touchAction: 'none',
+      userSelect: 'none'
     },
-    onChange: onOpacityChange,
-    onBlur: onOpacityBlur,
-    onPointerDown: onOpacityPointerDown,
-    onPointerMove: onOpacityPointerMove,
-    onPointerUp: onOpacityPointerUp
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "twk-color-opacity-pct"
+    onPointerDown: onPctPointerDown,
+    onPointerMove: onPctPointerMove,
+    onPointerUp: onPctPointerUp
   }, "%")), 'EyeDropper' in window && /*#__PURE__*/React.createElement("button", {
     type: "button",
     className: "twk-color-pick",
