@@ -9,7 +9,9 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "maxDots": 300,
   "lifetime": 0.35,
   "dotSize": 50,
-  "alpha": 100
+  "alpha": 100,
+  "bgOn": false,
+  "bgColor": "#ffffff"
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 function App() {
@@ -18,6 +20,20 @@ function App() {
     ...t,
     rainbow: TWEAK_DEFAULTS.rainbow
   }) !== TWEAK_DEFAULTS_JSON;
+
+  // Background: custom solid color, else the randomly-loaded photo (window.__trailBg)
+  React.useEffect(() => {
+    const b = document.body;
+    if (t.bgOn) {
+      b.classList.add('custom-bg');
+      b.style.backgroundColor = t.bgColor;
+      b.style.backgroundImage = 'none';
+    } else {
+      b.classList.remove('custom-bg');
+      b.style.backgroundColor = '';
+      b.style.backgroundImage = window.__trailBg || '';
+    }
+  }, [t.bgOn, t.bgColor]);
   const setColor = (i, v) => {
     const c = [...t.colors];
     c[i] = v;
@@ -114,6 +130,17 @@ function App() {
     step: 0.1,
     unit: "s",
     onChange: v => setTweak('lifetime', v)
+  })), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Background"
+  }, /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Custom",
+    value: t.bgOn,
+    onChange: v => setTweak('bgOn', v)
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color",
+    value: t.bgColor,
+    onChange: v => setTweak('bgColor', v),
+    noAlpha: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "twk-desktop-only",
     style: {
