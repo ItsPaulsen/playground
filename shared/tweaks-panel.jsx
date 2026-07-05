@@ -731,7 +731,6 @@ function __TweakColorInput({ label, value, onChange, noAlpha }) {
       <div ref={swatchRef} className="twk-color-preview" style={{ background: hex }}
            onClick={() => setShowPicker(v => !v)} />
       <div className="twk-color-main">
-        <span className="twk-color-hash">#</span>
         <input className="twk-color-hex" type="text" value={hex.replace(/^#/, '')}
                onChange={onHexChange} spellCheck={false} />
       </div>

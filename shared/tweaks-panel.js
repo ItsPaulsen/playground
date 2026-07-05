@@ -1067,9 +1067,7 @@ function __TweakColorInput({
     onClick: () => setShowPicker(v => !v)
   }), /*#__PURE__*/React.createElement("div", {
     className: "twk-color-main"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "twk-color-hash"
-  }, "#"), /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("input", {
     className: "twk-color-hex",
     type: "text",
     value: hex.replace(/^#/, ''),
