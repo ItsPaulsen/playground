@@ -139,12 +139,11 @@ function CreditCard({ t }) {
 
         <div style={{ position: 'absolute', inset: 0, background: gradient }}/>
 
-        {(t.title || t.subtitle) && (
-          <div style={{
-            position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
-            background: 'rgba(0,0,0,.1)',
-          }}/>
-        )}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+          background: 'rgba(0,0,0,.1)',
+        }}/>
+
 
         <div ref={shineRef} style={{
           position: 'absolute',

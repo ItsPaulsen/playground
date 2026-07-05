@@ -167,7 +167,7 @@ function CreditCard({
       inset: 0,
       background: gradient
     }
-  }), (t.title || t.subtitle) && /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'absolute',
       inset: 0,
