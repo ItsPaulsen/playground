@@ -67,17 +67,17 @@ function App() {
           <TweakText label="Subtitle" value={t.subtitle} onChange={(v) => setTweak('subtitle', v)} />
         </TweakSection>
 
-        <TweakSection label="Background">
-          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
-          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
-        </TweakSection>
-
         <TweakSection label="Color">
           <TweakToggle label="Gradient" value={t.gradient} onChange={(v) => setTweak('gradient', v)} />
           {Array.from({ length: t.gradient ? 2 : 1 }, (_, i) => (
             <TweakColor key={i} label={`Color ${i + 1}`} value={t['color' + i]}
                         onChange={(v) => setTweak('color' + i, v)} noAlpha />
           ))}
+        </TweakSection>
+
+        <TweakSection label="Background">
+          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
+          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <div className="twk-desktop-only" style={{ display: 'flex', gap: 8, borderTop: '1px solid var(--bd)', marginTop: 8, paddingTop: 16 }}>

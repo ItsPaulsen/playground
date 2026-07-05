@@ -83,17 +83,6 @@ function App() {
     value: t.subtitle,
     onChange: v => setTweak('subtitle', v)
   })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Background"
-  }, /*#__PURE__*/React.createElement(TweakToggle, {
-    label: "Custom",
-    value: t.bgOn,
-    onChange: v => setTweak('bgOn', v)
-  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
-    label: "Color",
-    value: t.bgColor,
-    onChange: v => setTweak('bgColor', v),
-    noAlpha: true
-  })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Color"
   }, /*#__PURE__*/React.createElement(TweakToggle, {
     label: "Gradient",
@@ -107,7 +96,18 @@ function App() {
     value: t['color' + i],
     onChange: v => setTweak('color' + i, v),
     noAlpha: true
-  }))), /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Background"
+  }, /*#__PURE__*/React.createElement(TweakToggle, {
+    label: "Custom",
+    value: t.bgOn,
+    onChange: v => setTweak('bgOn', v)
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Color",
+    value: t.bgColor,
+    onChange: v => setTweak('bgColor', v),
+    noAlpha: true
+  })), /*#__PURE__*/React.createElement("div", {
     className: "twk-desktop-only",
     style: {
       display: 'flex',

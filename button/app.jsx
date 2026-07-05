@@ -182,14 +182,14 @@ function App() {
           <TweakColor value={t.color} onChange={(v) => setTweak('color', v)} noAlpha />
         </TweakSection>
 
-        <TweakSection label="Background">
-          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
-          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
-        </TweakSection>
-
         <TweakSection label="Spark">
           <TweakSlider label="Speed" value={t.speed} min={1} max={8} step={1}
                        onChange={(v) => setTweak('speed', v)} />
+        </TweakSection>
+
+        <TweakSection label="Background">
+          <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
+          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <div className="twk-desktop-only"

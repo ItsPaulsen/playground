@@ -265,6 +265,15 @@ function App() {
     onChange: v => setTweak('color', v),
     noAlpha: true
   })), /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Spark"
+  }, /*#__PURE__*/React.createElement(TweakSlider, {
+    label: "Speed",
+    value: t.speed,
+    min: 1,
+    max: 8,
+    step: 1,
+    onChange: v => setTweak('speed', v)
+  })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Background"
   }, /*#__PURE__*/React.createElement(TweakToggle, {
     label: "Custom",
@@ -275,15 +284,6 @@ function App() {
     value: t.bgColor,
     onChange: v => setTweak('bgColor', v),
     noAlpha: true
-  })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Spark"
-  }, /*#__PURE__*/React.createElement(TweakSlider, {
-    label: "Speed",
-    value: t.speed,
-    min: 1,
-    max: 8,
-    step: 1,
-    onChange: v => setTweak('speed', v)
   })), /*#__PURE__*/React.createElement("div", {
     className: "twk-desktop-only",
     style: {
