@@ -1012,9 +1012,11 @@ function __TweakColorInput({
     onChange(str);
   };
   const onHexChange = e => {
-    const v = e.target.value;
-    setHex(v);
-    if (/^#[0-9a-fA-F]{6}$/.test(v)) commitColor(v, opacity);
+    // input shows digits only; strip a pasted "#" and cap at 6
+    const digits = e.target.value.replace(/#/g, '').slice(0, 6);
+    const full = '#' + digits;
+    setHex(full);
+    if (/^#[0-9a-fA-F]{6}$/.test(full)) commitColor(full, opacity);
   };
   const onOpacityChange = e => {
     setOpacityStr(e.target.value);
@@ -1065,10 +1067,12 @@ function __TweakColorInput({
     onClick: () => setShowPicker(v => !v)
   }), /*#__PURE__*/React.createElement("div", {
     className: "twk-color-main"
-  }, /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "twk-color-hash"
+  }, "#"), /*#__PURE__*/React.createElement("input", {
     className: "twk-color-hex",
     type: "text",
-    value: hex,
+    value: hex.replace(/^#/, ''),
     onChange: onHexChange,
     spellCheck: false
   })), !noAlpha && /*#__PURE__*/React.createElement("div", {

@@ -685,9 +685,11 @@ function __TweakColorInput({ label, value, onChange, noAlpha }) {
   };
 
   const onHexChange = (e) => {
-    const v = e.target.value;
-    setHex(v);
-    if (/^#[0-9a-fA-F]{6}$/.test(v)) commitColor(v, opacity);
+    // input shows digits only; strip a pasted "#" and cap at 6
+    const digits = e.target.value.replace(/#/g, '').slice(0, 6);
+    const full = '#' + digits;
+    setHex(full);
+    if (/^#[0-9a-fA-F]{6}$/.test(full)) commitColor(full, opacity);
   };
 
   const onOpacityChange = (e) => {
@@ -729,7 +731,8 @@ function __TweakColorInput({ label, value, onChange, noAlpha }) {
       <div ref={swatchRef} className="twk-color-preview" style={{ background: hex }}
            onClick={() => setShowPicker(v => !v)} />
       <div className="twk-color-main">
-        <input className="twk-color-hex" type="text" value={hex}
+        <span className="twk-color-hash">#</span>
+        <input className="twk-color-hex" type="text" value={hex.replace(/^#/, '')}
                onChange={onHexChange} spellCheck={false} />
       </div>
       {!noAlpha && (

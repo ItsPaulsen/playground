@@ -144,8 +144,9 @@
     width:26px;height:26px;border-radius:8px 0 0 8px;
     margin-right:-6px;position:relative;z-index:1;
     box-shadow:inset 1px 0 0 var(--fld-bd),inset 0 1px 0 var(--fld-bd),inset 0 -1px 0 var(--fld-bd)}
+  .twk-color-hash{padding-left:6px;color:var(--val);font-size:12px;user-select:none}
   .twk-color-hex{flex:1;min-width:0;border:0;background:transparent;color:inherit;
-    font:inherit;font-size:12px;padding:0 6px;outline:none}
+    font:inherit;font-size:12px;padding:0 6px 0 1px;outline:none}
   .twk-color-main:focus-within{border-color:var(--fld-bdf)}
   .twk-color-opacity{height:26px;padding:0 6px;border:1px solid var(--fld-bd);border-radius:8px;box-sizing:border-box;
     background:var(--fld-surf);font-size:12px;display:flex;align-items:center;gap:1px;
