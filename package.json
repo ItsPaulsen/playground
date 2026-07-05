@@ -4,14 +4,11 @@
   "scripts": {
     "start": "npx serve . & npm run watch",
     "build": "node scripts/compile.js",
-    "watch": "node scripts/compile.js --watch",
-    "deploy": "wrangler deploy",
-    "preview": "wrangler dev"
+    "watch": "node scripts/compile.js --watch"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.29.0",
-    "@babel/preset-react": "^7.28.5",
-    "wrangler": "^4.102.0"
+    "@babel/preset-react": "^7.28.5"
   }
 }
