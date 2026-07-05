@@ -37,7 +37,7 @@
       text-align: center;
     }
 
-    .content img {
+    .content video {
       max-width: 320px;
       width: 100%;
       border-radius: 12px;
@@ -59,14 +59,14 @@
     }
 
     @media (width < 640px) {
-      .content img { max-width: 240px; }
+      .content video { max-width: 240px; }
       .content hr  { max-width: 240px; }
     }
   </style>
 </head>
 <body>
   <div class="content">
-    <img src="/404.gif" alt="404" />
+    <video src="/404.mp4" poster="/404-poster.avif" autoplay loop muted playsinline aria-label="404"></video>
     <hr />
     <h2>Looks like you're lost...</h2>
   </div>
