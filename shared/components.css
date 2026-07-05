@@ -95,8 +95,7 @@
 html[data-theme="dark"] .pg-select-dropdown { background: rgba(41,37,36,.6); box-shadow: rgba(0,0,0,.2) 0 6px 24px 0, rgba(255,255,255,.1) 0 0 0 1px; }
 .pg-select-dropdown.is-open { opacity: 1; pointer-events: all; transform: translateY(0); }
 
-.pg-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; }
-.pg-select-option { outline: none; }
+.pg-select-option { display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--pg-primary); white-space: nowrap; outline: none; }
 .pg-select-option:hover, .pg-select-option:focus { background: var(--pg-tint); }
 .pg-select-dropdown.show-selected .pg-select-option.is-selected { background: var(--pg-tint); }
 .pg-select-opt-check { opacity: 0; flex-shrink: 0; margin-left: auto; padding-left: 8px; color: var(--pg-primary); display: flex; align-items: center; }
