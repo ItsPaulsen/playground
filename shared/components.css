@@ -24,11 +24,12 @@
   height: 26px;
   border-radius: 8px;
   background: var(--pg-bar-track);
-  cursor: pointer;
+  cursor: grab;
   overflow: hidden;
   user-select: none;
   touch-action: none;
 }
+.pg-bar.is-grabbing { cursor: grabbing; }
 .pg-bar:focus-visible { outline: 2px solid var(--pg-primary); outline-offset: 2px; border-radius: 7px; }
 
 .pg-bar-fill {

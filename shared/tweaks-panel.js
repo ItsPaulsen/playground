@@ -470,7 +470,7 @@ function TweakSlider({
     "aria-valuemax": max,
     "aria-valuenow": value,
     style: {
-      cursor: dragging ? 'grabbing' : 'pointer'
+      cursor: dragging ? 'grabbing' : 'grab'
     },
     onPointerDown: onPointerDown,
     onPointerMove: onPointerMove,

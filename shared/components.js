@@ -100,11 +100,12 @@
     var dragging = false;
     bar.addEventListener('pointerdown', function (e) {
       dragging = true;
+      bar.classList.add('is-grabbing');
       bar.setPointerCapture(e.pointerId);
       setVal(pctFromEvent(e));
     });
     bar.addEventListener('pointermove', function (e) { if (dragging) setVal(pctFromEvent(e)); });
-    bar.addEventListener('pointerup', function () { dragging = false; });
+    bar.addEventListener('pointerup', function () { dragging = false; bar.classList.remove('is-grabbing'); });
     bar.addEventListener('keydown', function (e) {
       var v = parseInt(bar.getAttribute('aria-valuenow') || '50', 10);
       if (e.key === 'ArrowRight' || e.key === 'ArrowUp')   { setVal(v + 1); e.preventDefault(); }

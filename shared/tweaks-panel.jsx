@@ -365,7 +365,7 @@ function TweakSlider({ label, value: rawValue, min = 0, max = 100, step = 1, uni
       <div ref={barRef} className="twk-bar"
            tabIndex={0} role="slider"
            aria-label={label} aria-valuemin={min} aria-valuemax={max} aria-valuenow={value}
-           style={{ cursor: dragging ? 'grabbing' : 'pointer' }}
+           style={{ cursor: dragging ? 'grabbing' : 'grab' }}
            onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp}
            onKeyDown={onKeyDown}>
         <div className="twk-bar-fill" style={{ width: pct + '%' }} />

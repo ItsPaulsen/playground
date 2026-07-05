@@ -82,7 +82,7 @@
   .twk-bar-lbl{font-weight:500;color:var(--label);white-space:nowrap;flex:1;min-width:0}
   .twk-bar:focus-visible{outline:2px solid var(--text);outline-offset:2px;border-radius:8px;}
   .twk-bar{position:relative;width:172px;flex-shrink:0;height:26px;border-radius:8px;background:var(--track);
-    cursor:pointer;overflow:hidden;user-select:none;touch-action:pan-y}
+    cursor:grab;overflow:hidden;user-select:none;touch-action:pan-y}
   .twk-bar-fill{position:absolute;top:0;left:0;bottom:0;background:var(--bar-fill);
     border-radius:8px 0 0 8px;pointer-events:none;min-width:8px}
   .twk-bar-val{position:absolute;inset:0;display:flex;align-items:center;
