@@ -82,6 +82,7 @@ function SVGButton({
   label,
   color,
   dur,
+  surface,
   onHoverChange
 }) {
   const btnRef = React.useRef(null);
@@ -167,7 +168,10 @@ function SVGButton({
     onMouseLeave: () => onHoverChange && onHoverChange(false)
   }, /*#__PURE__*/React.createElement("button", {
     ref: btnRef,
-    className: "agent-btn"
+    className: "agent-btn",
+    style: surface ? {
+      background: surface
+    } : undefined
   }, /*#__PURE__*/React.createElement("span", {
     style: {
       position: 'relative',
@@ -219,6 +223,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "color": "#1d4ed8",
   "speed": 4,
   "bgOn": false,
+  "btnColor": "#ffffff",
   "bgColor": "#ffffff"
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
@@ -244,6 +249,7 @@ function App() {
     label: t.label || 'Button',
     color: t.color,
     dur: dur,
+    surface: t.bgOn ? t.btnColor : undefined,
     onHoverChange: setHovered
   })), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Button",
@@ -274,13 +280,18 @@ function App() {
     step: 1,
     onChange: v => setTweak('speed', v)
   })), /*#__PURE__*/React.createElement(TweakSection, {
-    label: "Background"
+    label: "Surface"
   }, /*#__PURE__*/React.createElement(TweakToggle, {
     label: "Custom",
     value: t.bgOn,
     onChange: v => setTweak('bgOn', v)
   }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
-    label: "Color",
+    label: "Button",
+    value: t.btnColor,
+    onChange: v => setTweak('btnColor', v),
+    noAlpha: true
+  }), t.bgOn && /*#__PURE__*/React.createElement(TweakColor, {
+    label: "Background",
     value: t.bgColor,
     onChange: v => setTweak('bgColor', v),
     noAlpha: true

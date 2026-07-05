@@ -30,7 +30,7 @@ function pointAtPerim(pos, w, h, ins, pr) {
 
 const SW = 2;
 
-function SVGButton({ label, color, dur, onHoverChange }) {
+function SVGButton({ label, color, dur, surface, onHoverChange }) {
   const btnRef   = React.useRef(null);
   const pathRef  = React.useRef(null);
   const gradRef  = React.useRef(null);
@@ -104,7 +104,7 @@ function SVGButton({ label, color, dur, onHoverChange }) {
       onMouseEnter={() => onHoverChange && onHoverChange(true)}
       onMouseLeave={() => onHoverChange && onHoverChange(false)}
     >
-      <button ref={btnRef} className="agent-btn">
+      <button ref={btnRef} className="agent-btn" style={surface ? { background: surface } : undefined}>
         <span style={{ position: 'relative', zIndex: 1 }}>{label}</span>
         {w > 0 && (
           <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible', clipPath: 'inset(0 round 9999px)' }}>
@@ -131,6 +131,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "color": "#1d4ed8",
   "speed": 4,
   "bgOn": false,
+  "btnColor": "#ffffff",
   "bgColor": "#ffffff"
 }/*EDITMODE-END*/;
 
@@ -160,6 +161,7 @@ function App() {
           label={t.label || 'Button'}
           color={t.color}
           dur={dur}
+          surface={t.bgOn ? t.btnColor : undefined}
           onHoverChange={setHovered}
         />
       </div>
@@ -187,9 +189,10 @@ function App() {
                        onChange={(v) => setTweak('speed', v)} />
         </TweakSection>
 
-        <TweakSection label="Background">
+        <TweakSection label="Surface">
           <TweakToggle label="Custom" value={t.bgOn} onChange={(v) => setTweak('bgOn', v)} />
-          {t.bgOn && <TweakColor label="Color" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
+          {t.bgOn && <TweakColor label="Button" value={t.btnColor} onChange={(v) => setTweak('btnColor', v)} noAlpha />}
+          {t.bgOn && <TweakColor label="Background" value={t.bgColor} onChange={(v) => setTweak('bgColor', v)} noAlpha />}
         </TweakSection>
 
         <div className="twk-desktop-only"
