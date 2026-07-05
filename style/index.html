@@ -261,7 +261,8 @@
       top: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(-6px);
-      background: var(--pg-surface);
+      background: rgba(255,255,255,.8);
+      backdrop-filter: blur(20px) saturate(180%);
       border: none;
       border-radius: 12px;
       padding: 10px 14px;
@@ -280,6 +281,7 @@
     }
 
     html[data-theme="dark"] #color-toast {
+      background: rgba(41,37,36,.85);
       box-shadow: rgba(0,0,0,0.2) 0px 6px 24px 0px, rgba(255,255,255,0.1) 0px 0px 0px 1px;
     }
 
