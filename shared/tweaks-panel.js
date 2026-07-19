@@ -213,15 +213,18 @@ function TweaksPanel({
   };
   const onDragStart = e => {
     if (window.innerWidth > MOBILE) return;
-    const touch = e.touches[0];
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch (_) {}
     const now = performance.now();
     const sheetH = panelRef.current ? panelRef.current.offsetHeight : window.innerHeight;
     dragInfo.current = {
       active: true,
-      startY: touch.clientY,
+      startY: e.clientY,
       sheetH,
       points: [{
-        y: touch.clientY,
+        y: e.clientY,
         t: now
       }]
     };
@@ -234,13 +237,11 @@ function TweaksPanel({
   };
   const onDragMove = e => {
     if (!dragInfo.current.active) return;
-    const touch = e.touches[0];
-    if (!touch) return;
     const now = performance.now();
-    const dy = touch.clientY - dragInfo.current.startY;
+    const dy = e.clientY - dragInfo.current.startY;
     const pts = dragInfo.current.points;
     pts.push({
-      y: touch.clientY,
+      y: e.clientY,
       t: now
     });
     while (pts.length > 1 && now - pts[0].t > 200) pts.shift();
@@ -267,16 +268,11 @@ function TweaksPanel({
         backdropRef.current.style.setProperty('opacity', '1', 'important');
       }
     };
-    if (e.type === 'touchcancel') {
+    if (e.type === 'pointercancel') {
       snapBack();
       return;
     }
-    const touch = e.changedTouches[0];
-    if (!touch) {
-      snapBack();
-      return;
-    }
-    const raw = Math.max(0, touch.clientY - dragInfo.current.startY);
+    const raw = Math.max(0, e.clientY - dragInfo.current.startY);
     const pts = dragInfo.current.points;
     const cutoff = performance.now() - 100;
     const recent = pts.filter(p => p.t >= cutoff);
@@ -329,10 +325,10 @@ function TweaksPanel({
     onAnimationEnd: handleAnimEnd
   }, /*#__PURE__*/React.createElement("div", {
     className: "twk-hd",
-    onTouchStart: onDragStart,
-    onTouchMove: onDragMove,
-    onTouchEnd: onDragEnd,
-    onTouchCancel: onDragEnd
+    onPointerDown: onDragStart,
+    onPointerMove: onDragMove,
+    onPointerUp: onDragEnd,
+    onPointerCancel: onDragEnd
   }, /*#__PURE__*/React.createElement("b", null, title), /*#__PURE__*/React.createElement("span", {
     className: "twk-hd-spacer",
     "aria-hidden": "true"
