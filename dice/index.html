@@ -175,14 +175,17 @@
     transition: transform .12s ease, opacity .2s ease, filter .2s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,.14);
   }
-  .btn:not(:disabled):hover { filter: brightness(1.08); }
   .btn:not(:disabled):active { transform: scale(.95); }
   .btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
   .btn.ghost {
     background: var(--pg-tint); color: var(--pg-primary);
     box-shadow: none; width: auto; padding: 0 20px;
   }
-  .btn.ghost:not(:disabled):hover { background: var(--pg-tint-20); filter: none; }
+  /* Hover only on real pointers — on touch, :hover sticks after a tap. */
+  @media (hover: hover) {
+    .btn:not(:disabled):hover { filter: brightness(1.08); }
+    .btn.ghost:not(:disabled):hover { background: var(--pg-tint-20); filter: none; }
+  }
 
   @media (width < 640px) {
     .controls { margin-top: 24px; }
