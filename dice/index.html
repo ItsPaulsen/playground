@@ -41,7 +41,8 @@
     width: var(--s); height: var(--s);
     position: relative;
     perspective: 1200px;
-    cursor: pointer;
+    /* Only interactive (lockable) dice get the pointer — see .die.lockable. */
+    cursor: default;
     outline: none;
     /* Shared face texture — referenced by every face so it's declared once. */
     --face-grad: radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
@@ -54,7 +55,7 @@
      Chrome sample the preserve-3d faces out of sync and visibly unfold the
      cube. The tumble is JS-driven (rAF) for the same reason, and will-change
      is deliberately absent so writes take the fully-committed path. */
-  .die.rolling { cursor: default; }
+  .die.lockable { cursor: pointer; }
 
   .cube {
     position: absolute; inset: 0;

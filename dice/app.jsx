@@ -98,8 +98,8 @@ const LOCK_ICON = (
   </svg>
 );
 
-const Die = React.memo(function Die({ index, value, locked, rolling, size, rx, ry, onToggle, cubeRef }) {
-  const cls = 'die' + (locked ? ' locked' : '') + (rolling ? ' rolling' : '');
+const Die = React.memo(function Die({ index, value, locked, rolling, lockable, size, rx, ry, onToggle, cubeRef }) {
+  const cls = 'die' + (locked ? ' locked' : '') + (rolling ? ' rolling' : '') + (lockable ? ' lockable' : '');
   // The tumble is driven by JS (rAF) writing this element's transform each
   // frame — compositor-driven CSS transitions on a preserve-3d cube make
   // Chrome render the faces out of sync, visibly unfolding the cube mid-roll.
@@ -280,6 +280,7 @@ function App() {
       <div className="tray">
         {dice.map((d, i) => (
           <Die key={i} index={i} value={d.value} locked={d.locked} rolling={rolling && !d.locked}
+               lockable={isYahtzee && hasRolled && !rolling}
                size={t.size} rx={d.rx} ry={d.ry} onToggle={toggleLock} cubeRef={setCubeRef} />
         ))}
       </div>
