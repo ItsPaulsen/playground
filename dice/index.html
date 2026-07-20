@@ -164,6 +164,7 @@
     display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px;
   }
   .btn {
+    -webkit-tap-highlight-color: transparent;
     font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em;
     /* Fixed width so the label (Roll / Roll again / No rolls left) never
        resizes the button mid-turn. */
@@ -193,6 +194,9 @@
 </style>
 </head>
 <body class="pg-dot-grid">
+<!-- iOS Safari only applies :active on tap if the document has a touch
+     listener; this no-op enables the buttons' press-scale on touch. -->
+<script>document.addEventListener('touchstart', function () {}, { passive: true });</script>
 <div id="root" tabindex="-1"></div>
 <script src="/shared/vendor/preact-bundle.js"></script>
 <script src="../shared/tweaks-panel.js"></script>
