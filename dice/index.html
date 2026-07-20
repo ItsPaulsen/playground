@@ -44,6 +44,8 @@
     cursor: pointer;
     outline: none;
     transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+    /* Shared face texture — referenced by every face so it's declared once. */
+    --face-grad: radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
   }
   /* Roll in place — the cube tumbles, the die itself only gives a small scale
      pulse (kept well under the gap so neighbours never touch). */
@@ -71,28 +73,34 @@
      GPU memory on every idle die. */
   .die.rolling .cube, .die.rolling .cube-inner { will-change: transform; }
 
+  /* Faces — the pips are baked into each face as one tiny SVG background
+     layer instead of 9 pip elements per face (54 per die). One painted
+     texture per face keeps the compositor layer count low; the old per-pip
+     layers were what made the roll janky. */
   .face {
     position: absolute; inset: 0;
     border-radius: calc(var(--s) * 0.2);
     corner-shape: superellipse(2.2);
-    background:
-      radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
+    background-image: var(--face-grad);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
     box-shadow:
       inset 0 2px 3px rgba(255,255,255,.45),
       inset 0 -3px 6px rgba(0,0,0,.16);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    place-items: center;
-    padding: calc(var(--s) * 0.15);
     backface-visibility: hidden;
   }
-  .face.f1 { transform: rotateY(0deg)    translateZ(var(--h)); }
-  .face.f6 { transform: rotateY(180deg)  translateZ(var(--h)); }
-  .face.f3 { transform: rotateY(90deg)   translateZ(var(--h)); }
-  .face.f4 { transform: rotateY(-90deg)  translateZ(var(--h)); }
-  .face.f2 { transform: rotateX(90deg)   translateZ(var(--h)); }
-  .face.f5 { transform: rotateX(-90deg)  translateZ(var(--h)); }
+  .face.f1 { transform: rotateY(0deg)    translateZ(var(--h));
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='50' cy='50' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
+  .face.f2 { transform: rotateX(90deg)   translateZ(var(--h));
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
+  .face.f3 { transform: rotateY(90deg)   translateZ(var(--h));
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='50' cy='50' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
+  .face.f4 { transform: rotateY(-90deg)  translateZ(var(--h));
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='73.3' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
+  .face.f5 { transform: rotateX(-90deg)  translateZ(var(--h));
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='50' cy='50' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='73.3' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
+  .face.f6 { transform: rotateY(180deg)  translateZ(var(--h));
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='50' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='73.3' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='50' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
 
   /* Inner core — a closed, square cube (faces meet flush, back-faces visible)
      just inside the shell. Being closed, any sightline through the shell's
@@ -104,33 +112,31 @@
     background: var(--face);
     backface-visibility: visible;
   }
-  .cf.f1 { transform: rotateY(0deg)    translateZ(calc(var(--h) * 0.97)) scale(.97); }
-  .cf.f6 { transform: rotateY(180deg)  translateZ(calc(var(--h) * 0.97)) scale(.97); }
-  .cf.f3 { transform: rotateY(90deg)   translateZ(calc(var(--h) * 0.97)) scale(.97); }
-  .cf.f4 { transform: rotateY(-90deg)  translateZ(calc(var(--h) * 0.97)) scale(.97); }
-  .cf.f2 { transform: rotateX(90deg)   translateZ(calc(var(--h) * 0.97)) scale(.97); }
-  .cf.f5 { transform: rotateX(-90deg)  translateZ(calc(var(--h) * 0.97)) scale(.97); }
-
-  .pip {
-    width: calc(var(--s) * 0.17); height: calc(var(--s) * 0.17);
-    border-radius: 50%;
-    background: radial-gradient(70% 70% at 35% 30%, color-mix(in srgb, var(--pip) 100%, #fff 34%), var(--pip));
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.35);
-  }
-  .pip.hidden { visibility: hidden; }
+  .cf.f1 { transform: rotateY(0deg)    translateZ(calc(var(--h) * 0.87)) scale(.87); }
+  .cf.f6 { transform: rotateY(180deg)  translateZ(calc(var(--h) * 0.87)) scale(.87); }
+  .cf.f3 { transform: rotateY(90deg)   translateZ(calc(var(--h) * 0.87)) scale(.87); }
+  .cf.f4 { transform: rotateY(-90deg)  translateZ(calc(var(--h) * 0.87)) scale(.87); }
+  .cf.f2 { transform: rotateX(90deg)   translateZ(calc(var(--h) * 0.87)) scale(.87); }
+  .cf.f5 { transform: rotateX(-90deg)  translateZ(calc(var(--h) * 0.87)) scale(.87); }
 
   /* Locked = held. Flat screen-space ring around the die (drawn on the
      container, so it stays a clean rounded square regardless of the cube's
      resting orientation). */
-  .die.locked {
-    border-radius: calc(var(--s) * 0.14);
-    outline: 2.5px solid var(--lock-ring, #4f46e5);
-    outline-offset: 4px;
+  /* Ring as a bordered pseudo-element (not outline) so it can inherit the
+     die's exact superellipse corner. Sized 4px outside the die with a matching
+     radius, so the gap stays constant around the whole corner at every size. */
+  .die.locked::before {
+    content: '';
+    position: absolute; inset: calc(var(--s) * -0.055);
+    border: calc(var(--s) * 0.035) solid var(--lock-ring, #4f46e5);
+    border-radius: calc(var(--s) * 0.255);
+    corner-shape: superellipse(2.2);
+    pointer-events: none;
   }
 
   .lock-tag {
     position: absolute; top: calc(var(--s) * -0.1); right: calc(var(--s) * -0.1);
-    width: calc(var(--s) * 0.3); height: calc(var(--s) * 0.3);
+    width: calc(var(--s) * 0.28); height: calc(var(--s) * 0.28);
     display: grid; place-items: center;
     background: var(--lock-ring, #4f46e5); color: #fff;
     border-radius: 50%;

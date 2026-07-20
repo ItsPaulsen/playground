@@ -6,7 +6,6 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 } /*EDITMODE-END*/;
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 const FACE_PALETTE = ['#fafaf9', '#fca5a5', '#fdba74', '#fcd34d', '#86efac', '#7dd3fc', '#a5b4fc', '#d8b4fe', '#f9a8d4'];
-const PIP_COLOR = '#1c1917';
 const HOLD_COLOR = '#4f46e5'; // shared "primary" — matches the Waystones Copy button
 const MAX_ROLLS = 3;
 const FACES = [1, 2, 3, 4, 5, 6];
@@ -17,20 +16,6 @@ const MODE_OPTIONS = [{
   value: 'yahtzee',
   label: 'Yahtzee'
 }];
-
-// Pip layout — which of the nine 3×3 cells carry a dot for each value, flattened
-// up front into the 9 span class names so render is a plain map with no lookups.
-const PIP_CELLS = {
-  1: [4],
-  2: [0, 8],
-  3: [0, 4, 8],
-  4: [0, 2, 6, 8],
-  5: [0, 2, 4, 6, 8],
-  6: [0, 2, 3, 5, 6, 8]
-};
-const PIP_CLASSES = Object.fromEntries(FACES.map(v => [v, Array.from({
-  length: 9
-}, (_, i) => PIP_CELLS[v].includes(i) ? 'pip' : 'pip hidden')]));
 
 // Cube rotation (deg, in [0,360)) that brings each face to the front.
 const BASE = {
@@ -124,19 +109,6 @@ const LOCK_ICON = /*#__PURE__*/React.createElement("svg", {
 }), /*#__PURE__*/React.createElement("path", {
   d: "M8 11V7a4 4 0 0 1 8 0v4"
 }));
-
-// One cube face. Pure and static per value, so memoized — the pip spans never
-// re-render once mounted.
-const Face = React.memo(function Face({
-  value
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: `face f${value}`
-  }, PIP_CLASSES[value].map((cls, i) => /*#__PURE__*/React.createElement("span", {
-    key: i,
-    className: cls
-  })));
-});
 const Die = React.memo(function Die({
   index,
   value,
@@ -174,9 +146,9 @@ const Die = React.memo(function Die({
   }, FACES.map(f => /*#__PURE__*/React.createElement("div", {
     key: `c${f}`,
     className: `cf f${f}`
-  })), FACES.map(f => /*#__PURE__*/React.createElement(Face, {
+  })), FACES.map(f => /*#__PURE__*/React.createElement("div", {
     key: f,
-    value: f
+    className: `face f${f}`
   })))), /*#__PURE__*/React.createElement("span", {
     className: "lock-tag"
   }, LOCK_ICON));
@@ -204,9 +176,12 @@ function App() {
     });
   }, [t.count]);
 
-  // Leaving Yahtzee clears the turn state so Freeplay has no roll cap / holds.
+  // Yahtzee is always 5 dice; leaving it clears the turn state so Freeplay has
+  // no roll cap / holds.
   React.useEffect(() => {
-    if (!isYahtzee) {
+    if (isYahtzee) {
+      if (t.count !== 5) setTweak('count', 5);
+    } else {
       setRollsUsed(0);
       setDice(prev => prev.some(d => d.locked) ? prev.map(d => ({
         ...d,
@@ -275,11 +250,11 @@ function App() {
     })));
   }, []);
   const total = React.useMemo(() => dice.reduce((s, d) => s + d.value, 0), [dice]);
+  const showTotal = dice.length > 1;
   const handName = React.useMemo(() => isYahtzee && hasRolled ? scoreHand(dice.map(d => d.value)) : null, [dice, isYahtzee, hasRolled]);
   const rollLabel = isYahtzee && turnOver ? 'No rolls left' : isYahtzee && hasRolled ? 'Roll again' : 'Roll';
   const stageStyle = {
     '--face': t.faceColor,
-    '--pip': PIP_COLOR,
     '--lock-ring': HOLD_COLOR,
     // A tumbling cube's silhouette widens to ~1.41x at 45°, so the gap must
     // clear ~0.41x the die size or neighbours overlap mid-roll.
@@ -290,20 +265,27 @@ function App() {
     style: stageStyle
   }, /*#__PURE__*/React.createElement("div", {
     className: "readout"
-  }, !isYahtzee ? /*#__PURE__*/React.createElement("div", {
-    className: "hand"
-  }) : rolling ? /*#__PURE__*/React.createElement("div", {
+  }, isYahtzee ? /*#__PURE__*/React.createElement(React.Fragment, null, rolling ? /*#__PURE__*/React.createElement("div", {
     className: "hand"
   }, /*#__PURE__*/React.createElement("span", {
     className: "roll-dots"
   }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null))) : /*#__PURE__*/React.createElement("div", {
     className: "hand reveal",
     key: revealKey
-  }, hasRolled ? handName : 'Roll to start'), dice.length > 1 && /*#__PURE__*/React.createElement("div", {
+  }, hasRolled ? handName : 'Roll to start'), showTotal && /*#__PURE__*/React.createElement("div", {
     className: "sub"
   }, /*#__PURE__*/React.createElement("span", {
     className: "total"
-  }, rolling ? '–' : total))), /*#__PURE__*/React.createElement("div", {
+  }, rolling ? '–' : total))) : showTotal ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "sub"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "total"
+  }, "Total")), /*#__PURE__*/React.createElement("div", {
+    className: "hand reveal",
+    key: revealKey
+  }, rolling ? '–' : total)) : /*#__PURE__*/React.createElement("div", {
+    className: "hand"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "tray"
   }, dice.map((d, i) => /*#__PURE__*/React.createElement(Die, {
     key: i,
@@ -346,7 +328,7 @@ function App() {
     onChange: v => setTweak('mode', v)
   })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Dice"
-  }, /*#__PURE__*/React.createElement(TweakSlider, {
+  }, !isYahtzee && /*#__PURE__*/React.createElement(TweakSlider, {
     label: "Count",
     value: t.count,
     min: 1,

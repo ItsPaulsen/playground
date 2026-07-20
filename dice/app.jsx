@@ -7,25 +7,10 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 const TWEAK_DEFAULTS_JSON = JSON.stringify(TWEAK_DEFAULTS);
 
 const FACE_PALETTE = ['#fafaf9', '#fca5a5', '#fdba74', '#fcd34d', '#86efac', '#7dd3fc', '#a5b4fc', '#d8b4fe', '#f9a8d4'];
-const PIP_COLOR = '#1c1917';
 const HOLD_COLOR = '#4f46e5'; // shared "primary" — matches the Waystones Copy button
 const MAX_ROLLS = 3;
 const FACES = [1, 2, 3, 4, 5, 6];
 const MODE_OPTIONS = [{ value: 'freeplay', label: 'Freeplay' }, { value: 'yahtzee', label: 'Yahtzee' }];
-
-// Pip layout — which of the nine 3×3 cells carry a dot for each value, flattened
-// up front into the 9 span class names so render is a plain map with no lookups.
-const PIP_CELLS = {
-  1: [4],
-  2: [0, 8],
-  3: [0, 4, 8],
-  4: [0, 2, 6, 8],
-  5: [0, 2, 4, 6, 8],
-  6: [0, 2, 3, 5, 6, 8],
-};
-const PIP_CLASSES = Object.fromEntries(
-  FACES.map((v) => [v, Array.from({ length: 9 }, (_, i) => (PIP_CELLS[v].includes(i) ? 'pip' : 'pip hidden'))]),
-);
 
 // Cube rotation (deg, in [0,360)) that brings each face to the front.
 const BASE = {
@@ -83,16 +68,6 @@ const LOCK_ICON = (
   </svg>
 );
 
-// One cube face. Pure and static per value, so memoized — the pip spans never
-// re-render once mounted.
-const Face = React.memo(function Face({ value }) {
-  return (
-    <div className={`face f${value}`}>
-      {PIP_CLASSES[value].map((cls, i) => <span key={i} className={cls} />)}
-    </div>
-  );
-});
-
 const Die = React.memo(function Die({ index, value, locked, rolling, size, rx, ry, dur, onToggle }) {
   const cls = 'die' + (locked ? ' locked' : '') + (rolling ? ' rolling' : '');
   // Transforms are set inline (not via a CSS var) so the transition reliably
@@ -104,9 +79,10 @@ const Die = React.memo(function Die({ index, value, locked, rolling, size, rx, r
       <div className="cube" style={{ transform: `rotateY(${ry}deg)` }}>
         <div className="cube-inner" style={{ transform: `rotateX(${rx}deg)` }}>
           {/* Closed, square inner core so any sightline through the rounded
-              corners hits the die's color, never the page background. */}
+              corners hits the die's color, never the page background. Faces
+              carry their pips as baked-in SVG backgrounds (see CSS). */}
           {FACES.map((f) => <div key={`c${f}`} className={`cf f${f}`} />)}
-          {FACES.map((f) => <Face key={f} value={f} />)}
+          {FACES.map((f) => <div key={f} className={`face f${f}`} />)}
         </div>
       </div>
       <span className="lock-tag">{LOCK_ICON}</span>
@@ -136,9 +112,12 @@ function App() {
     });
   }, [t.count]);
 
-  // Leaving Yahtzee clears the turn state so Freeplay has no roll cap / holds.
+  // Yahtzee is always 5 dice; leaving it clears the turn state so Freeplay has
+  // no roll cap / holds.
   React.useEffect(() => {
-    if (!isYahtzee) {
+    if (isYahtzee) {
+      if (t.count !== 5) setTweak('count', 5);
+    } else {
       setRollsUsed(0);
       setDice((prev) => (prev.some((d) => d.locked) ? prev.map((d) => ({ ...d, locked: false })) : prev));
     }
@@ -190,6 +169,7 @@ function App() {
   }, []);
 
   const total = React.useMemo(() => dice.reduce((s, d) => s + d.value, 0), [dice]);
+  const showTotal = dice.length > 1;
   const handName = React.useMemo(
     () => (isYahtzee && hasRolled ? scoreHand(dice.map((d) => d.value)) : null),
     [dice, isYahtzee, hasRolled],
@@ -201,7 +181,6 @@ function App() {
 
   const stageStyle = {
     '--face': t.faceColor,
-    '--pip': PIP_COLOR,
     '--lock-ring': HOLD_COLOR,
     // A tumbling cube's silhouette widens to ~1.41x at 45°, so the gap must
     // clear ~0.41x the die size or neighbours overlap mid-roll.
@@ -211,17 +190,24 @@ function App() {
   return (
     <div className="stage" style={stageStyle}>
       <div className="readout">
-        {/* Freeplay keeps an empty hand row so the total sits in the same
-            spot it does in Yahtzee. */}
-        {!isYahtzee ? (
-          <div className="hand" />
-        ) : rolling ? (
-          <div className="hand"><span className="roll-dots"><i /><i /><i /></span></div>
+        {/* Yahtzee: big hand name on top, small total below.
+            Freeplay: small "Total" label on top, big number below. */}
+        {isYahtzee ? (
+          <>
+            {rolling ? (
+              <div className="hand"><span className="roll-dots"><i /><i /><i /></span></div>
+            ) : (
+              <div className="hand reveal" key={revealKey}>{hasRolled ? handName : 'Roll to start'}</div>
+            )}
+            {showTotal && <div className="sub"><span className="total">{rolling ? '–' : total}</span></div>}
+          </>
+        ) : showTotal ? (
+          <>
+            <div className="sub"><span className="total">Total</span></div>
+            <div className="hand reveal" key={revealKey}>{rolling ? '–' : total}</div>
+          </>
         ) : (
-          <div className="hand reveal" key={revealKey}>{hasRolled ? handName : 'Roll to start'}</div>
-        )}
-        {dice.length > 1 && (
-          <div className="sub"><span className="total">{rolling ? '–' : total}</span></div>
+          <div className="hand" />
         )}
       </div>
 
@@ -260,8 +246,11 @@ function App() {
         </TweakSection>
 
         <TweakSection label="Dice">
-          <TweakSlider label="Count" value={t.count} min={1} max={6} step={1}
-                       onChange={(v) => setTweak('count', v)} />
+          {/* Yahtzee is fixed at 5 dice — count is Freeplay-only. */}
+          {!isYahtzee && (
+            <TweakSlider label="Count" value={t.count} min={1} max={6} step={1}
+                         onChange={(v) => setTweak('count', v)} />
+          )}
           <TweakSlider label="Size" value={t.size} min={48} max={120} step={2} unit="px"
                        onChange={(v) => setTweak('size', v)} />
         </TweakSection>
