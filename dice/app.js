@@ -107,13 +107,15 @@ function scoreHand(vals) {
   const max = Math.max(...tallies);
   const has = n => tallies.includes(n);
   const run = faces => faces.every(f => counts[f] > 0);
-  const largeStraight = run([1, 2, 3, 4, 5]) || run([2, 3, 4, 5, 6]);
-  const smallStraight = run([1, 2, 3, 4]) || run([2, 3, 4, 5]) || run([3, 4, 5, 6]);
+  // Scandinavian Yatzy straights use all five dice: small = 1-2-3-4-5,
+  // large = 2-3-4-5-6 (not the 4-/5-in-a-row of American Yahtzee).
+  const smallStraight = run([1, 2, 3, 4, 5]);
+  const largeStraight = run([2, 3, 4, 5, 6]);
   if (max === 5) return 'Yahtzee!';
-  if (largeStraight && vals.length >= 5) return 'Large straight';
+  if (largeStraight) return 'Large straight';
+  if (smallStraight) return 'Small straight';
   if (has(3) && has(2)) return 'Full house';
   if (max === 4) return 'Four of a kind';
-  if (smallStraight && vals.length >= 4) return 'Small straight';
   if (max === 3) return 'Three of a kind';
   if (tallies.filter(c => c === 2).length === 2) return 'Two pair';
   if (max === 2) return 'Pair';
@@ -185,6 +187,7 @@ function App() {
   const [rollsUsed, setRollsUsed] = React.useState(0);
   const [hasRolled, setHasRolled] = React.useState(false);
   const [revealKey, setRevealKey] = React.useState(0);
+  const [isMobile, setIsMobile] = React.useState(() => window.matchMedia('(width < 640px)').matches);
   const settleTimer = React.useRef(0);
   const rafId = React.useRef(0);
   const cubes = React.useRef([]);
@@ -223,6 +226,18 @@ function App() {
     clearTimeout(settleTimer.current);
     cancelAnimationFrame(rafId.current);
   }, []);
+
+  // Cap the die size lower on phones (big dice crowd a narrow tray).
+  const SIZE_MAX = isMobile ? 88 : 120;
+  React.useEffect(() => {
+    const mq = window.matchMedia('(width < 640px)');
+    const onChange = e => setIsMobile(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+  React.useEffect(() => {
+    if (t.size > SIZE_MAX) setTweak('size', SIZE_MAX);
+  }, [SIZE_MAX]);
   const turnOver = isYahtzee && rollsUsed >= MAX_ROLLS;
   const canRoll = !rolling && !turnOver;
   const roll = React.useCallback(() => {
@@ -381,7 +396,7 @@ function App() {
     label: "Size",
     value: t.size,
     min: 48,
-    max: 120,
+    max: SIZE_MAX,
     step: 2,
     unit: "px",
     onChange: v => setTweak('size', v)
