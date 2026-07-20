@@ -1,5 +1,6 @@
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "mode": "yahtzee",
+  "lang": "en",
   "count": 5,
   "size": 72,
   "faceColor": "#fafaf9"
@@ -16,6 +17,58 @@ const MODE_OPTIONS = [{
   value: 'yahtzee',
   label: 'Yahtzee'
 }];
+const LANG_OPTIONS = [{
+  value: 'en',
+  label: 'English'
+}, {
+  value: 'no',
+  label: 'Norsk'
+}];
+
+// Gameplay-facing copy per language (English default). Norwegian uses the
+// Scandinavian Yatzy hand names. The tweak panel itself stays English.
+const STRINGS = {
+  en: {
+    roll: 'Roll',
+    rollAgain: 'Roll again',
+    noRolls: 'No rolls left',
+    newTurn: 'New turn',
+    rollToStart: 'Roll to start',
+    turnOver: 'Turn over',
+    total: 'Total',
+    hands: {
+      yahtzee: 'Yahtzee!',
+      largeStraight: 'Large straight',
+      smallStraight: 'Small straight',
+      fullHouse: 'Full house',
+      fourKind: 'Four of a kind',
+      threeKind: 'Three of a kind',
+      twoPair: 'Two pair',
+      pair: 'Pair',
+      none: '—'
+    }
+  },
+  no: {
+    roll: 'Trill',
+    rollAgain: 'Trill igjen',
+    noRolls: 'Ingen kast igjen',
+    newTurn: 'Ny omgang',
+    rollToStart: 'Trill for å starte',
+    turnOver: 'Ferdig',
+    total: 'Sum',
+    hands: {
+      yahtzee: 'Yatzy!',
+      largeStraight: 'Stor straight',
+      smallStraight: 'Liten straight',
+      fullHouse: 'Hus',
+      fourKind: 'Fire like',
+      threeKind: 'Tre like',
+      twoPair: 'To par',
+      pair: 'Par',
+      none: '—'
+    }
+  }
+};
 
 // Per-die roll duration (ms); only this varies between dice so they land at
 // slightly different moments. The turn commits once the slowest die has landed.
@@ -94,7 +147,8 @@ function tumble(entries, cubes, rafRef) {
   rafRef.current = requestAnimationFrame(step);
 }
 
-// Best Yahtzee-style hand present in the faces (best-effort, informational).
+// Best hand present in the faces (best-effort, informational). Returns a key
+// into STRINGS[lang].hands so the label localizes.
 function scoreHand(vals) {
   const counts = [0, 0, 0, 0, 0, 0, 0];
   vals.forEach(v => {
@@ -108,15 +162,15 @@ function scoreHand(vals) {
   // large = 2-3-4-5-6 (not the 4-/5-in-a-row of American Yahtzee).
   const smallStraight = run([1, 2, 3, 4, 5]);
   const largeStraight = run([2, 3, 4, 5, 6]);
-  if (max === 5) return 'Yahtzee!';
-  if (largeStraight) return 'Large straight';
-  if (smallStraight) return 'Small straight';
-  if (has(3) && has(2)) return 'Full house';
-  if (max === 4) return 'Four of a kind';
-  if (max === 3) return 'Three of a kind';
-  if (tallies.filter(c => c === 2).length === 2) return 'Two pair';
-  if (max === 2) return 'Pair';
-  return '—';
+  if (max === 5) return 'yahtzee';
+  if (largeStraight) return 'largeStraight';
+  if (smallStraight) return 'smallStraight';
+  if (has(3) && has(2)) return 'fullHouse';
+  if (max === 4) return 'fourKind';
+  if (max === 3) return 'threeKind';
+  if (tallies.filter(c => c === 2).length === 2) return 'twoPair';
+  if (max === 2) return 'pair';
+  return 'none';
 }
 const LOCK_ICON = /*#__PURE__*/React.createElement("svg", {
   viewBox: "0 0 24 24",
@@ -317,22 +371,23 @@ function App() {
       locked: false
     })));
   }, []);
+  const S = STRINGS[t.lang] || STRINGS.en;
   const total = React.useMemo(() => shown.reduce((s, d) => s + d.value, 0), [shown]);
   const showTotal = t.count > 1;
-  const handName = React.useMemo(() => isYahtzee && hasRolled ? scoreHand(shown.map(d => d.value)) : null, [shown, isYahtzee, hasRolled]);
-  const rollLabel = isYahtzee && turnOver ? 'No rolls left' : isYahtzee && hasRolled ? 'Roll again' : 'Roll';
+  const handName = React.useMemo(() => isYahtzee && hasRolled ? S.hands[scoreHand(shown.map(d => d.value))] : null, [shown, isYahtzee, hasRolled, S]);
+  const rollLabel = isYahtzee && turnOver ? S.noRolls : isYahtzee && hasRolled ? S.rollAgain : S.roll;
 
   // Readout: a small label on top, big text below — same layout in both modes.
   // Yahtzee labels the roll counter and shows the hand; Freeplay labels the
   // total and shows its number. A lone die (Freeplay) shows neither.
-  const readoutLabel = isYahtzee ? turnOver ? 'Turn over' : `${rollsUsed} / ${MAX_ROLLS}` : showTotal ? 'Total' : null;
+  const readoutLabel = isYahtzee ? turnOver ? S.turnOver : `${rollsUsed} / ${MAX_ROLLS}` : showTotal ? S.total : null;
   const readoutLabelAria = isYahtzee && !turnOver ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
   // Same "rolling…" indicator in both modes: the animated dots read better
   // than a static dash while the dice are in the air.
   const rollingBody = /*#__PURE__*/React.createElement("span", {
     className: "roll-dots"
   }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null));
-  const restingBody = isYahtzee ? hasRolled ? handName : 'Roll to start' : total;
+  const restingBody = isYahtzee ? hasRolled ? handName : S.rollToStart : total;
   const showBody = isYahtzee || showTotal;
   const stageStyle = {
     '--face': t.faceColor,
@@ -381,7 +436,7 @@ function App() {
     className: "btn ghost",
     onClick: newTurn,
     disabled: rolling || !hasRolled && rollsUsed === 0
-  }, "New turn")), /*#__PURE__*/React.createElement(TweaksPanel, {
+  }, S.newTurn)), /*#__PURE__*/React.createElement(TweaksPanel, {
     title: "Dice",
     renderMobileFooter: close => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(TweakButton, {
       label: "Reset",
@@ -396,6 +451,12 @@ function App() {
     value: t.mode,
     options: MODE_OPTIONS,
     onChange: v => setTweak('mode', v)
+  })), isYahtzee && /*#__PURE__*/React.createElement(TweakSection, {
+    label: "Language"
+  }, /*#__PURE__*/React.createElement(TweakRadio, {
+    value: t.lang,
+    options: LANG_OPTIONS,
+    onChange: v => setTweak('lang', v)
   })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Dice"
   }, !isYahtzee && /*#__PURE__*/React.createElement(TweakSlider, {
