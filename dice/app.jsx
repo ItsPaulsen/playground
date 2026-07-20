@@ -144,18 +144,20 @@ function App() {
 
     // Each unlocked die tumbles in 3D — whole spins plus a landing turn onto its
     // drawn face. Varied spins + durations keep them from moving in lockstep.
+    // One full turn per axis: enough to read as a real tumble, and the lower
+    // angular velocity keeps any single dropped/skewed frame invisible.
     const anims = [];
     const next = diceRef.current.map((d, i) => {
       if (d.locked) return d;
       const value = d6();
-      const { rx, ry } = nextRot(d.rx, d.ry, value, randInt(1, 2), randInt(1, 2));
-      anims.push({ i, fx: d.rx, fy: d.ry, tx: rx, ty: ry, dur: randInt(880, 1080) });
+      const { rx, ry } = nextRot(d.rx, d.ry, value, 1, 1);
+      anims.push({ i, fx: d.rx, fy: d.ry, tx: rx, ty: ry, dur: randInt(950, 1150) });
       return { ...d, value, rx, ry };
     });
 
     // Tween on the main thread: each frame writes a full, consistent transform,
     // so the compositor never samples the cube's faces out of sync (which
-    // visually unfolds the cube). easeOutQuart = fast spin, long settle.
+    // visually unfolds the cube). easeOutCubic = brisk spin, gentle settle.
     const t0 = performance.now();
     const tick = (now) => {
       let live = false;
@@ -163,7 +165,7 @@ function App() {
         const el = cubes.current[a.i];
         if (!el) continue;
         const p = Math.min(1, (now - t0) / a.dur);
-        const e = 1 - Math.pow(1 - p, 4);
+        const e = 1 - Math.pow(1 - p, 3);
         el.style.transform =
           `rotateY(${a.fy + (a.ty - a.fy) * e}deg) rotateX(${a.fx + (a.tx - a.fx) * e}deg)`;
         if (p < 1) live = true;
@@ -180,7 +182,7 @@ function App() {
       setDice(next);
       setRolling(false);
       setRevealKey((k) => k + 1);
-    }, 1140);
+    }, 1200);
   }, [isYahtzee]);
 
   // Held between rolls (Yahtzee only, and only once you've rolled). Guards live

@@ -43,30 +43,22 @@
     perspective: 1200px;
     cursor: pointer;
     outline: none;
-    transition: transform .28s cubic-bezier(.34,1.56,.64,1);
     /* Shared face texture — referenced by every face so it's declared once. */
     --face-grad: radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
     /* Kept modest so the see-through notches at the cube's corners stay tiny —
        squarer dice beat background bleeding through mid-roll. */
     --face-r: calc(var(--s) * 0.07);
   }
-  /* Roll in place — the cube tumbles; the die (the perspective owner) stays
-     completely static. Animating the perspective element while nested 3D
-     transitions run makes Chrome re-project the scene per frame, which can
-     flash stretched polygons for a frame. */
+  /* No transform transitions or hover lifts anywhere on the die: any
+     compositor-driven transform animation on the cube or its ancestors makes
+     Chrome sample the preserve-3d faces out of sync and visibly unfold the
+     cube. The tumble is JS-driven (rAF) for the same reason, and will-change
+     is deliberately absent so writes take the fully-committed path. */
   .die.rolling { cursor: default; }
-  @media (hover: hover) {
-    .die:not(.rolling):hover { transform: translateY(-3px); }
-  }
 
-  /* The tumble is JS-driven (rAF writes this transform every frame): CSS
-     transitions here run on the compositor, which samples a preserve-3d
-     cube's faces out of sync mid-animation and visibly unfolds it. No
-     transition on transform, on purpose. */
   .cube {
     position: absolute; inset: 0;
     transform-style: preserve-3d;
-    will-change: transform;
   }
 
   /* Faces — the pips are baked into each face as one tiny SVG background
