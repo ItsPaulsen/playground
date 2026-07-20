@@ -45,9 +45,9 @@
     outline: none;
     /* Shared face texture — referenced by every face so it's declared once. */
     --face-grad: radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
-    /* Kept modest so the see-through notches at the cube's corners stay tiny —
-       squarer dice beat background bleeding through mid-roll. */
-    --face-r: calc(var(--s) * 0.07);
+    /* Small radius on purpose: the rounder the corner, the bigger the
+       see-through notches at the cube's corners bleed the background mid-roll. */
+    --face-r: calc(var(--s) * 0.04);
   }
   /* No transform transitions or hover lifts anywhere on the die: any
      compositor-driven transform animation on the cube or its ancestors makes
@@ -74,9 +74,12 @@
     background-image: var(--face-grad);
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    /* Top sheen + bottom shade for the dome feel, plus a hairline dark ring so
+       the die's edge stays defined against a same-tone background. */
     box-shadow:
-      inset 0 2px 3px rgba(255,255,255,.45),
-      inset 0 -3px 6px rgba(0,0,0,.16);
+      inset 0 2px 3px rgba(255,255,255,.4),
+      inset 0 -2px 5px rgba(0,0,0,.13),
+      inset 0 0 0 1px rgba(0,0,0,.07);
     backface-visibility: hidden;
   }
   .face.f1 { transform: rotateY(0deg)    translateZ(var(--h));
@@ -100,7 +103,7 @@
     content: '';
     position: absolute; inset: calc(var(--s) * -0.055);
     border: calc(var(--s) * 0.035) solid var(--lock-ring, #4f46e5);
-    border-radius: calc(var(--s) * 0.125);
+    border-radius: calc(var(--s) * 0.095);
     corner-shape: superellipse(2.2);
     pointer-events: none;
   }
