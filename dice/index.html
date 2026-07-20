@@ -173,7 +173,9 @@
     background: var(--pg-primary); color: var(--pg-bg);
     cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    transition: transform .12s ease, opacity .2s ease, filter .2s ease;
+    /* No opacity transition: the disabled dim should snap on instantly, not
+       fade in over 200ms. */
+    transition: transform .12s ease, filter .2s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,.14);
   }
   .btn:not(:disabled):active { transform: scale(.95); }

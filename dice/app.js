@@ -186,7 +186,7 @@ function App() {
   const [rollsUsed, setRollsUsed] = React.useState(0);
   const [hasRolled, setHasRolled] = React.useState(false);
   const [revealKey, setRevealKey] = React.useState(0);
-  const [isMobile, setIsMobile] = React.useState(() => window.matchMedia('(width < 640px)').matches);
+  const [isNarrow, setIsNarrow] = React.useState(() => window.innerWidth < 640);
   const settleTimer = React.useRef(0);
   const rafId = React.useRef(0);
   const cubes = React.useRef([]);
@@ -226,13 +226,12 @@ function App() {
     cancelAnimationFrame(rafId.current);
   }, []);
 
-  // Cap the die size lower on phones (big dice crowd a narrow tray).
-  const SIZE_MAX = isMobile ? 88 : 120;
+  // Cap the die size lower on narrow screens (big dice crowd the tray).
+  const SIZE_MAX = isNarrow ? 88 : 120;
   React.useEffect(() => {
-    const mq = window.matchMedia('(width < 640px)');
-    const onChange = e => setIsMobile(e.matches);
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
+    const onResize = () => setIsNarrow(window.innerWidth < 640);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
   React.useEffect(() => {
     if (t.size > SIZE_MAX) setTweak('size', SIZE_MAX);
