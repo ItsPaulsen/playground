@@ -46,32 +46,28 @@
     transition: transform .28s cubic-bezier(.34,1.56,.64,1);
     /* Shared face texture — referenced by every face so it's declared once. */
     --face-grad: radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
+    /* Kept modest so the see-through notches at the cube's corners stay tiny —
+       squarer dice beat background bleeding through mid-roll. */
+    --face-r: calc(var(--s) * 0.07);
   }
-  /* Roll in place — the cube tumbles, the die itself only gives a small scale
-     pulse (kept well under the gap so neighbours never touch). */
-  @keyframes die-roll {
-    0%   { transform: scale(1); }
-    30%  { transform: scale(1.05); }
-    100% { transform: scale(1); }
-  }
-  .die.rolling { animation: die-roll var(--roll-dur, .85s) cubic-bezier(.14,.82,.2,1) both; cursor: default; }
+  /* Roll in place — the cube tumbles; the die (the perspective owner) stays
+     completely static. Animating the perspective element while nested 3D
+     transitions run makes Chrome re-project the scene per frame, which can
+     flash stretched polygons for a frame. */
+  .die.rolling { cursor: default; }
   @media (hover: hover) {
     .die:not(.rolling):hover { transform: translateY(-3px); }
   }
 
-  /* Two nested single-axis rotations. Rotating both axes on ONE element lets
-     the browser matrix-interpolate, which occasionally dives through a
-     collapsed frame; one axis per element keeps each spin clean. */
-  .cube, .cube-inner {
+  /* The tumble is JS-driven (rAF writes this transform every frame): CSS
+     transitions here run on the compositor, which samples a preserve-3d
+     cube's faces out of sync mid-animation and visibly unfolds it. No
+     transition on transform, on purpose. */
+  .cube {
     position: absolute; inset: 0;
     transform-style: preserve-3d;
-    /* Front-loaded ease-out: quick early spin, long gentle settle — like a
-       die losing momentum on a table. */
-    transition: transform var(--roll-dur, .85s) cubic-bezier(.14,.82,.2,1);
+    will-change: transform;
   }
-  /* Hint the compositor only during the roll — a permanent will-change wastes
-     GPU memory on every idle die. */
-  .die.rolling .cube, .die.rolling .cube-inner { will-change: transform; }
 
   /* Faces — the pips are baked into each face as one tiny SVG background
      layer instead of 9 pip elements per face (54 per die). One painted
@@ -79,8 +75,10 @@
      layers were what made the roll janky. */
   .face {
     position: absolute; inset: 0;
-    border-radius: calc(var(--s) * 0.2);
-    corner-shape: superellipse(2.2);
+    /* Plain circular corners on purpose: superellipse corner-shape clipping on
+       composited 3D-rotating layers can mis-rasterize (stray-polygon flashes),
+       and at this small radius the two are indistinguishable. */
+    border-radius: var(--face-r);
     background-image: var(--face-grad);
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -102,23 +100,6 @@
   .face.f6 { transform: rotateY(180deg)  translateZ(var(--h));
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='50' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='73.3' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='50' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
 
-  /* Inner core — a closed, square cube (faces meet flush, back-faces visible)
-     just inside the shell. Being closed, any sightline through the shell's
-     rounded-corner notches lands on the die's color, not the background.
-     Kept the exact face color so it's invisible where it peeks past the
-     rounded corners at rest. */
-  .cf {
-    position: absolute; inset: 0;
-    background: var(--face);
-    backface-visibility: visible;
-  }
-  .cf.f1 { transform: rotateY(0deg)    translateZ(calc(var(--h) * 0.87)) scale(.87); }
-  .cf.f6 { transform: rotateY(180deg)  translateZ(calc(var(--h) * 0.87)) scale(.87); }
-  .cf.f3 { transform: rotateY(90deg)   translateZ(calc(var(--h) * 0.87)) scale(.87); }
-  .cf.f4 { transform: rotateY(-90deg)  translateZ(calc(var(--h) * 0.87)) scale(.87); }
-  .cf.f2 { transform: rotateX(90deg)   translateZ(calc(var(--h) * 0.87)) scale(.87); }
-  .cf.f5 { transform: rotateX(-90deg)  translateZ(calc(var(--h) * 0.87)) scale(.87); }
-
   /* Locked = held. Flat screen-space ring around the die (drawn on the
      container, so it stays a clean rounded square regardless of the cube's
      resting orientation). */
@@ -129,7 +110,7 @@
     content: '';
     position: absolute; inset: calc(var(--s) * -0.055);
     border: calc(var(--s) * 0.035) solid var(--lock-ring, #4f46e5);
-    border-radius: calc(var(--s) * 0.255);
+    border-radius: calc(var(--s) * 0.125);
     corner-shape: superellipse(2.2);
     pointer-events: none;
   }

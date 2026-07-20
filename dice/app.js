@@ -54,8 +54,7 @@ const makeDie = () => {
     value,
     locked: false,
     rx: BASE[value].x,
-    ry: BASE[value].y,
-    dur: 850
+    ry: BASE[value].y
   };
 };
 
@@ -117,39 +116,33 @@ const Die = React.memo(function Die({
   size,
   rx,
   ry,
-  dur,
-  onToggle
+  onToggle,
+  cubeRef
 }) {
   const cls = 'die' + (locked ? ' locked' : '') + (rolling ? ' rolling' : '');
-  // Transforms are set inline (not via a CSS var) so the transition reliably
-  // interpolates the angle — a var()-driven transform can jump/collapse.
+  // The tumble is driven by JS (rAF) writing this element's transform each
+  // frame — compositor-driven CSS transitions on a preserve-3d cube make
+  // Chrome render the faces out of sync, visibly unfolding the cube mid-roll.
+  // The inline transform here is just the resting pose between rolls.
   return /*#__PURE__*/React.createElement("div", {
     className: cls,
     onClick: () => onToggle(index),
     style: {
-      '--s': size + 'px',
-      '--roll-dur': dur + 'ms'
+      '--s': size + 'px'
     },
     role: "button",
     "aria-pressed": locked,
     "aria-label": `Die showing ${value}${locked ? ', held' : ''}`
   }, /*#__PURE__*/React.createElement("div", {
     className: "cube",
+    ref: el => cubeRef(index, el),
     style: {
-      transform: `rotateY(${ry}deg)`
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "cube-inner",
-    style: {
-      transform: `rotateX(${rx}deg)`
+      transform: `rotateY(${ry}deg) rotateX(${rx}deg)`
     }
   }, FACES.map(f => /*#__PURE__*/React.createElement("div", {
-    key: `c${f}`,
-    className: `cf f${f}`
-  })), FACES.map(f => /*#__PURE__*/React.createElement("div", {
     key: f,
     className: `face f${f}`
-  })))), /*#__PURE__*/React.createElement("span", {
+  }))), /*#__PURE__*/React.createElement("span", {
     className: "lock-tag"
   }, LOCK_ICON));
 });
@@ -165,6 +158,15 @@ function App() {
   const [hasRolled, setHasRolled] = React.useState(false);
   const [revealKey, setRevealKey] = React.useState(0);
   const settleTimer = React.useRef(0);
+  const rafId = React.useRef(0);
+  const cubes = React.useRef([]);
+  const setCubeRef = React.useCallback((i, el) => {
+    cubes.current[i] = el;
+  }, []);
+  // Mirror of dice for the roll handler, so it can read current angles without
+  // re-creating itself (and re-rendering every Die) on each dice change.
+  const diceRef = React.useRef(dice);
+  diceRef.current = dice;
 
   // Keep the tray length in sync with the count tweak, preserving existing dice.
   React.useEffect(() => {
@@ -189,7 +191,10 @@ function App() {
       })) : prev);
     }
   }, [isYahtzee]);
-  React.useEffect(() => () => clearTimeout(settleTimer.current), []);
+  React.useEffect(() => () => {
+    clearTimeout(settleTimer.current);
+    cancelAnimationFrame(rafId.current);
+  }, []);
   const turnOver = isYahtzee && rollsUsed >= MAX_ROLLS;
   const canRoll = !rolling && !turnOver;
   const roll = React.useCallback(() => {
@@ -200,23 +205,53 @@ function App() {
 
     // Each unlocked die tumbles in 3D — whole spins plus a landing turn onto its
     // drawn face. Varied spins + durations keep them from moving in lockstep.
-    setDice(ds => ds.map(d => {
+    const anims = [];
+    const next = diceRef.current.map((d, i) => {
       if (d.locked) return d;
       const value = d6();
       const {
         rx,
         ry
       } = nextRot(d.rx, d.ry, value, randInt(1, 2), randInt(1, 2));
+      anims.push({
+        i,
+        fx: d.rx,
+        fy: d.ry,
+        tx: rx,
+        ty: ry,
+        dur: randInt(880, 1080)
+      });
       return {
         ...d,
         value,
         rx,
-        ry,
-        dur: randInt(880, 1080)
+        ry
       };
-    }));
+    });
+
+    // Tween on the main thread: each frame writes a full, consistent transform,
+    // so the compositor never samples the cube's faces out of sync (which
+    // visually unfolds the cube). easeOutQuart = fast spin, long settle.
+    const t0 = performance.now();
+    const tick = now => {
+      let live = false;
+      for (const a of anims) {
+        const el = cubes.current[a.i];
+        if (!el) continue;
+        const p = Math.min(1, (now - t0) / a.dur);
+        const e = 1 - Math.pow(1 - p, 4);
+        el.style.transform = `rotateY(${a.fy + (a.ty - a.fy) * e}deg) rotateX(${a.fx + (a.tx - a.fx) * e}deg)`;
+        if (p < 1) live = true;
+      }
+      if (live) rafId.current = requestAnimationFrame(tick);
+    };
+    cancelAnimationFrame(rafId.current);
+    rafId.current = requestAnimationFrame(tick);
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(() => {
+      // Commit values + final angles only now — React re-renders each cube with
+      // exactly the transform the last tween frame wrote, so nothing jumps.
+      setDice(next);
       setRolling(false);
       setRevealKey(k => k + 1);
     }, 1140);
@@ -296,8 +331,8 @@ function App() {
     size: t.size,
     rx: d.rx,
     ry: d.ry,
-    dur: d.dur,
-    onToggle: toggleLock
+    onToggle: toggleLock,
+    cubeRef: setCubeRef
   }))), isYahtzee && /*#__PURE__*/React.createElement("div", {
     className: "roll-counter",
     "aria-label": `${rollsUsed} of ${MAX_ROLLS} rolls used`
