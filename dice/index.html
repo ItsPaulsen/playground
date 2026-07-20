@@ -159,14 +159,15 @@
     color: var(--pg-primary); font-weight: 600;
   }
   /* ── Controls ── */
-  /* Stacked everywhere: Roll (primary) on top, New turn (reset) below, both
-     stretched to equal width. */
+  /* Stacked everywhere: Roll (primary) on top, New turn (reset) below. */
   .controls {
-    display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-top: 30px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px;
   }
   .btn {
     font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em;
-    height: 48px; padding: 0 28px;
+    /* Fixed width so the label (Roll / Roll again / No rolls left) never
+       resizes the button mid-turn. */
+    width: 156px; height: 48px; padding: 0 28px;
     border: none; border-radius: 999px;
     background: var(--pg-primary); color: var(--pg-bg);
     cursor: pointer;
@@ -179,7 +180,7 @@
   .btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
   .btn.ghost {
     background: var(--pg-tint); color: var(--pg-primary);
-    box-shadow: none; padding: 0 20px;
+    box-shadow: none; width: auto; padding: 0 20px;
   }
   .btn.ghost:hover { background: var(--pg-tint-20); filter: none; }
 
