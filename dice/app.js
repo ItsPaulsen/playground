@@ -178,10 +178,12 @@ function App() {
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const isYahtzee = t.mode === 'yahtzee';
 
-  // Fresh page shows an orderly 1,2,3,… rather than a random scatter.
+  // Always hold 6 dice (faces 1..6 on a fresh page); the count tweak only
+  // controls how many are shown, so dialing count down and back up never
+  // regenerates faces.
   const [dice, setDice] = React.useState(() => Array.from({
-    length: TWEAK_DEFAULTS.count
-  }, (_, i) => makeDie(i % 6 + 1)));
+    length: 6
+  }, (_, i) => makeDie(i + 1)));
   const [rolling, setRolling] = React.useState(false);
   const [rollsUsed, setRollsUsed] = React.useState(0);
   const [hasRolled, setHasRolled] = React.useState(false);
@@ -197,25 +199,9 @@ function App() {
   // re-creating itself (and re-rendering every Die) on each dice change.
   const diceRef = React.useRef(dice);
   diceRef.current = dice;
-  const hasRolledRef = React.useRef(hasRolled);
-  hasRolledRef.current = hasRolled;
 
-  // Keep the tray length in sync with the count tweak. Until the first roll the
-  // board is just the orderly 1,2,3,… so rebuild it in sequence; once rolled,
-  // preserve the existing faces and only add/drop from the end.
-  React.useEffect(() => {
-    setDice(prev => {
-      if (prev.length === t.count) return prev;
-      if (!hasRolledRef.current) {
-        return Array.from({
-          length: t.count
-        }, (_, i) => makeDie(i % 6 + 1));
-      }
-      return prev.length < t.count ? prev.concat(Array.from({
-        length: t.count - prev.length
-      }, makeDie)) : prev.slice(0, t.count);
-    });
-  }, [t.count]);
+  // The dice shown for the current count (always a prefix of the 6 in state).
+  const shown = React.useMemo(() => dice.slice(0, t.count), [dice, t.count]);
 
   // Yahtzee is always 5 dice; leaving it clears the turn state so Freeplay has
   // no roll cap / holds.
@@ -259,6 +245,7 @@ function App() {
     const isLastRoll = isYahtzee && rollsUsed + 1 >= MAX_ROLLS;
     const anims = [];
     const next = diceRef.current.map((d, i) => {
+      if (i >= t.count) return d; // hidden die — leave it
       if (d.locked) return {
         ...d,
         locked: !isLastRoll
@@ -300,7 +287,7 @@ function App() {
       setRevealKey(k => k + 1);
       if (isYahtzee) setRollsUsed(n => n + 1);
     }, settleMs);
-  }, [isYahtzee, rollsUsed]);
+  }, [isYahtzee, rollsUsed, t.count]);
 
   // Held between rolls (Yahtzee only, and only once you've rolled). Guards live
   // in a ref so the handler stays stable and dice can skip re-rendering.
@@ -330,9 +317,9 @@ function App() {
       locked: false
     })));
   }, []);
-  const total = React.useMemo(() => dice.reduce((s, d) => s + d.value, 0), [dice]);
-  const showTotal = dice.length > 1;
-  const handName = React.useMemo(() => isYahtzee && hasRolled ? scoreHand(dice.map(d => d.value)) : null, [dice, isYahtzee, hasRolled]);
+  const total = React.useMemo(() => shown.reduce((s, d) => s + d.value, 0), [shown]);
+  const showTotal = t.count > 1;
+  const handName = React.useMemo(() => isYahtzee && hasRolled ? scoreHand(shown.map(d => d.value)) : null, [shown, isYahtzee, hasRolled]);
   const rollLabel = isYahtzee && turnOver ? 'No rolls left' : isYahtzee && hasRolled ? 'Roll again' : 'Roll';
 
   // Readout: a small label on top, big text below — same layout in both modes.
@@ -373,7 +360,7 @@ function App() {
     key: revealKey
   }, restingBody)), /*#__PURE__*/React.createElement("div", {
     className: "tray"
-  }, dice.map((d, i) => /*#__PURE__*/React.createElement(Die, {
+  }, shown.map((d, i) => /*#__PURE__*/React.createElement(Die, {
     key: i,
     index: i,
     value: d.value,
