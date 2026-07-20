@@ -145,6 +145,8 @@
     100% { transform: scale(1); }
   }
   .readout .hand.final { animation: hand-final .5s cubic-bezier(.34,1.56,.64,1) both; }
+  /* "Turn over" label pops in alongside the final hand. */
+  .readout .sub.pop { animation: hand-final .5s cubic-bezier(.34,1.56,.64,1) both; }
 
   .roll-dots { display: inline-flex; gap: 7px; }
   .roll-dots i {

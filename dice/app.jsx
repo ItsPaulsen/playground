@@ -268,7 +268,9 @@ function App() {
     <div className="stage" style={stageStyle}>
       <div className="readout">
         {readoutLabel && (
-          <div className="sub"><span className="total" aria-label={readoutLabelAria}>{readoutLabel}</span></div>
+          <div className={`sub${turnOver ? ' pop' : ''}`}>
+            <span className="total" aria-label={readoutLabelAria}>{readoutLabel}</span>
+          </div>
         )}
         {!showBody ? <div className="hand" />
           : rolling ? <div className="hand">{rollingBody}</div>

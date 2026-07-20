@@ -349,7 +349,7 @@ function App() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "readout"
   }, readoutLabel && /*#__PURE__*/React.createElement("div", {
-    className: "sub"
+    className: `sub${turnOver ? ' pop' : ''}`
   }, /*#__PURE__*/React.createElement("span", {
     className: "total",
     "aria-label": readoutLabelAria
