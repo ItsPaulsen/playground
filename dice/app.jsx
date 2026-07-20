@@ -137,11 +137,18 @@ function App() {
   // re-creating itself (and re-rendering every Die) on each dice change.
   const diceRef = React.useRef(dice);
   diceRef.current = dice;
+  const hasRolledRef = React.useRef(hasRolled);
+  hasRolledRef.current = hasRolled;
 
-  // Keep the tray length in sync with the count tweak, preserving existing dice.
+  // Keep the tray length in sync with the count tweak. Until the first roll the
+  // board is just the orderly 1,2,3,… so rebuild it in sequence; once rolled,
+  // preserve the existing faces and only add/drop from the end.
   React.useEffect(() => {
     setDice((prev) => {
       if (prev.length === t.count) return prev;
+      if (!hasRolledRef.current) {
+        return Array.from({ length: t.count }, (_, i) => makeDie((i % 6) + 1));
+      }
       return prev.length < t.count
         ? prev.concat(Array.from({ length: t.count - prev.length }, makeDie))
         : prev.slice(0, t.count);
