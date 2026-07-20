@@ -202,6 +202,16 @@ function TweaksPanel({
   }, []);
   const dismiss = () => {
     setClosing(true);
+    // Fade the backdrop out during the close so its last painted frame is
+    // transparent before it unmounts. iOS Safari tints the area behind the
+    // address bar by sampling the page's top pixels, and it keeps a stale
+    // sample when a still-opaque overlay disappears in one frame — the tint
+    // would stick after the sheet closed. !important because the drag path
+    // sets inline opacity the same way.
+    if (backdropRef.current) {
+      backdropRef.current.style.transition = 'opacity .3s ease';
+      backdropRef.current.style.setProperty('opacity', '0', 'important');
+    }
     clearTimeout(closeTimerRef.current);
     closeTimerRef.current = setTimeout(() => {
       setClosing(false);
