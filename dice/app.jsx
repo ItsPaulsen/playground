@@ -98,8 +98,8 @@ const LOCK_ICON = (
   </svg>
 );
 
-const Die = React.memo(function Die({ index, value, locked, rolling, lockable, size, rx, ry, onToggle, cubeRef }) {
-  const cls = 'die' + (locked ? ' locked' : '') + (rolling ? ' rolling' : '') + (lockable ? ' lockable' : '');
+const Die = React.memo(function Die({ index, value, locked, lockable, size, rx, ry, onToggle, cubeRef }) {
+  const cls = 'die' + (locked ? ' locked' : '') + (lockable ? ' lockable' : '');
   // The tumble is driven by JS (rAF) writing this element's transform each
   // frame — compositor-driven CSS transitions on a preserve-3d cube make
   // Chrome render the faces out of sync, visibly unfolding the cube mid-roll.
@@ -240,6 +240,17 @@ function App() {
     : isYahtzee && hasRolled ? 'Roll again'
     : 'Roll';
 
+  // Readout: a small label on top, big text below — same layout in both modes.
+  // Yahtzee labels the roll counter and shows the hand; Freeplay labels the
+  // total and shows its number. A lone die (Freeplay) shows neither.
+  const readoutLabel = isYahtzee ? `${rollsUsed} / ${MAX_ROLLS}` : showTotal ? 'Total' : null;
+  const readoutLabelAria = isYahtzee ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
+  const rollingBody = isYahtzee
+    ? <span className="roll-dots"><i /><i /><i /></span>
+    : '–';
+  const restingBody = isYahtzee ? (hasRolled ? handName : 'Roll to start') : total;
+  const showBody = isYahtzee || showTotal;
+
   const stageStyle = {
     '--face': t.faceColor,
     '--lock-ring': HOLD_COLOR,
@@ -251,35 +262,17 @@ function App() {
   return (
     <div className="stage" style={stageStyle}>
       <div className="readout">
-        {/* Yahtzee: big hand name on top, small total below.
-            Freeplay: small "Total" label on top, big number below. */}
-        {/* Both modes share the layout: small label on top, big text below. */}
-        {isYahtzee ? (
-          <>
-            <div className="sub">
-              <span className="total" aria-label={`${rollsUsed} of ${MAX_ROLLS} rolls used`}>
-                {rollsUsed} / {MAX_ROLLS}
-              </span>
-            </div>
-            {rolling ? (
-              <div className="hand"><span className="roll-dots"><i /><i /><i /></span></div>
-            ) : (
-              <div className="hand reveal" key={revealKey}>{hasRolled ? handName : 'Roll to start'}</div>
-            )}
-          </>
-        ) : showTotal ? (
-          <>
-            <div className="sub"><span className="total">Total</span></div>
-            <div className="hand reveal" key={revealKey}>{rolling ? '–' : total}</div>
-          </>
-        ) : (
-          <div className="hand" />
+        {readoutLabel && (
+          <div className="sub"><span className="total" aria-label={readoutLabelAria}>{readoutLabel}</span></div>
         )}
+        {!showBody ? <div className="hand" />
+          : rolling ? <div className="hand">{rollingBody}</div>
+          : <div className="hand reveal" key={revealKey}>{restingBody}</div>}
       </div>
 
       <div className="tray">
         {dice.map((d, i) => (
-          <Die key={i} index={i} value={d.value} locked={d.locked} rolling={rolling && !d.locked}
+          <Die key={i} index={i} value={d.value} locked={d.locked}
                lockable={isYahtzee && hasRolled && !rolling}
                size={t.size} rx={d.rx} ry={d.ry} onToggle={toggleLock} cubeRef={setCubeRef} />
         ))}

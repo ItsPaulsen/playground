@@ -141,7 +141,6 @@ const Die = React.memo(function Die({
   index,
   value,
   locked,
-  rolling,
   lockable,
   size,
   rx,
@@ -149,7 +148,7 @@ const Die = React.memo(function Die({
   onToggle,
   cubeRef
 }) {
-  const cls = 'die' + (locked ? ' locked' : '') + (rolling ? ' rolling' : '') + (lockable ? ' lockable' : '');
+  const cls = 'die' + (locked ? ' locked' : '') + (lockable ? ' lockable' : '');
   // The tumble is driven by JS (rAF) writing this element's transform each
   // frame — compositor-driven CSS transitions on a preserve-3d cube make
   // Chrome render the faces out of sync, visibly unfolding the cube mid-roll.
@@ -318,6 +317,17 @@ function App() {
   const showTotal = dice.length > 1;
   const handName = React.useMemo(() => isYahtzee && hasRolled ? scoreHand(dice.map(d => d.value)) : null, [dice, isYahtzee, hasRolled]);
   const rollLabel = isYahtzee && turnOver ? 'No rolls left' : isYahtzee && hasRolled ? 'Roll again' : 'Roll';
+
+  // Readout: a small label on top, big text below — same layout in both modes.
+  // Yahtzee labels the roll counter and shows the hand; Freeplay labels the
+  // total and shows its number. A lone die (Freeplay) shows neither.
+  const readoutLabel = isYahtzee ? `${rollsUsed} / ${MAX_ROLLS}` : showTotal ? 'Total' : null;
+  const readoutLabelAria = isYahtzee ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
+  const rollingBody = isYahtzee ? /*#__PURE__*/React.createElement("span", {
+    className: "roll-dots"
+  }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null)) : '–';
+  const restingBody = isYahtzee ? hasRolled ? handName : 'Roll to start' : total;
+  const showBody = isYahtzee || showTotal;
   const stageStyle = {
     '--face': t.faceColor,
     '--lock-ring': HOLD_COLOR,
@@ -330,35 +340,25 @@ function App() {
     style: stageStyle
   }, /*#__PURE__*/React.createElement("div", {
     className: "readout"
-  }, isYahtzee ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, readoutLabel && /*#__PURE__*/React.createElement("div", {
     className: "sub"
   }, /*#__PURE__*/React.createElement("span", {
     className: "total",
-    "aria-label": `${rollsUsed} of ${MAX_ROLLS} rolls used`
-  }, rollsUsed, " / ", MAX_ROLLS)), rolling ? /*#__PURE__*/React.createElement("div", {
+    "aria-label": readoutLabelAria
+  }, readoutLabel)), !showBody ? /*#__PURE__*/React.createElement("div", {
     className: "hand"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "roll-dots"
-  }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null))) : /*#__PURE__*/React.createElement("div", {
+  }) : rolling ? /*#__PURE__*/React.createElement("div", {
+    className: "hand"
+  }, rollingBody) : /*#__PURE__*/React.createElement("div", {
     className: "hand reveal",
     key: revealKey
-  }, hasRolled ? handName : 'Roll to start')) : showTotal ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    className: "sub"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "total"
-  }, "Total")), /*#__PURE__*/React.createElement("div", {
-    className: "hand reveal",
-    key: revealKey
-  }, rolling ? '–' : total)) : /*#__PURE__*/React.createElement("div", {
-    className: "hand"
-  })), /*#__PURE__*/React.createElement("div", {
+  }, restingBody)), /*#__PURE__*/React.createElement("div", {
     className: "tray"
   }, dice.map((d, i) => /*#__PURE__*/React.createElement(Die, {
     key: i,
     index: i,
     value: d.value,
     locked: d.locked,
-    rolling: rolling && !d.locked,
     lockable: isYahtzee && hasRolled && !rolling,
     size: t.size,
     rx: d.rx,

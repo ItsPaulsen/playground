@@ -50,13 +50,13 @@
        see-through notches at the cube's corners bleed the background mid-roll. */
     --face-r: calc(var(--s) * 0.04);
   }
-  /* No transform transitions or hover lifts anywhere on the die: any
+  .die.lockable { cursor: pointer; }
+
+  /* No transform transitions or hover lifts anywhere on the die or cube: any
      compositor-driven transform animation on the cube or its ancestors makes
      Chrome sample the preserve-3d faces out of sync and visibly unfold the
      cube. The tumble is JS-driven (rAF) for the same reason, and will-change
      is deliberately absent so writes take the fully-committed path. */
-  .die.lockable { cursor: pointer; }
-
   .cube {
     position: absolute; inset: 0;
     transform-style: preserve-3d;
@@ -152,8 +152,7 @@
   }
 
   .readout .sub {
-    font-size: 13px; font-weight: 500; color: var(--pg-muted);
-    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500;
   }
   .readout .sub .total {
     font-variant-numeric: tabular-nums;
