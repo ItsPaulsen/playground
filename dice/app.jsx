@@ -187,9 +187,12 @@ function App() {
     if (isYahtzee) setRollsUsed((n) => n + 1);
 
     // Draw each unlocked die's new value + target orientation, then tumble.
+    // After the last roll of a turn holds are meaningless, so they release
+    // as the dice settle.
+    const isLastRoll = isYahtzee && rollsUsed + 1 >= MAX_ROLLS;
     const anims = [];
     const next = diceRef.current.map((d, i) => {
-      if (d.locked) return d;
+      if (d.locked) return { ...d, locked: !isLastRoll };
       const value = d6();
       const { rx, ry } = nextRot(d.rx, d.ry, value);
       anims.push({ i, fx: d.rx, fy: d.ry, tx: rx, ty: ry, dur: randInt(ROLL_MIN_MS, ROLL_MAX_MS) });
@@ -209,15 +212,15 @@ function App() {
       setRolling(false);
       setRevealKey((k) => k + 1);
     }, settleMs);
-  }, [isYahtzee]);
+  }, [isYahtzee, rollsUsed]);
 
   // Held between rolls (Yahtzee only, and only once you've rolled). Guards live
   // in a ref so the handler stays stable and dice can skip re-rendering.
   const guard = React.useRef({});
-  guard.current = { rolling, isYahtzee, hasRolled };
+  guard.current = { rolling, isYahtzee, hasRolled, turnOver };
   const toggleLock = React.useCallback((i) => {
     const g = guard.current;
-    if (g.rolling || !g.isYahtzee || !g.hasRolled) return;
+    if (g.rolling || !g.isYahtzee || !g.hasRolled || g.turnOver) return;
     setDice((ds) => ds.map((d, j) => (j === i ? { ...d, locked: !d.locked } : d)));
   }, []);
 
@@ -273,7 +276,7 @@ function App() {
       <div className="tray">
         {dice.map((d, i) => (
           <Die key={i} index={i} value={d.value} locked={d.locked}
-               lockable={isYahtzee && hasRolled && !rolling}
+               lockable={isYahtzee && hasRolled && !rolling && !turnOver}
                size={t.size} rx={d.rx} ry={d.ry} onToggle={toggleLock} cubeRef={setCubeRef} />
         ))}
       </div>
