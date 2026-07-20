@@ -340,9 +340,11 @@ function App() {
   // total and shows its number. A lone die (Freeplay) shows neither.
   const readoutLabel = isYahtzee ? turnOver ? 'Turn over' : `${rollsUsed} / ${MAX_ROLLS}` : showTotal ? 'Total' : null;
   const readoutLabelAria = isYahtzee && !turnOver ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
-  const rollingBody = isYahtzee ? /*#__PURE__*/React.createElement("span", {
+  // Same "rolling…" indicator in both modes: the animated dots read better
+  // than a static dash while the dice are in the air.
+  const rollingBody = /*#__PURE__*/React.createElement("span", {
     className: "roll-dots"
-  }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null)) : '–';
+  }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null));
   const restingBody = isYahtzee ? hasRolled ? handName : 'Roll to start' : total;
   const showBody = isYahtzee || showTotal;
   const stageStyle = {

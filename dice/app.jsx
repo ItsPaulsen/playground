@@ -257,9 +257,9 @@ function App() {
   const readoutLabel = isYahtzee ? (turnOver ? 'Turn over' : `${rollsUsed} / ${MAX_ROLLS}`)
     : showTotal ? 'Total' : null;
   const readoutLabelAria = isYahtzee && !turnOver ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
-  const rollingBody = isYahtzee
-    ? <span className="roll-dots"><i /><i /><i /></span>
-    : '–';
+  // Same "rolling…" indicator in both modes: the animated dots read better
+  // than a static dash while the dice are in the air.
+  const rollingBody = <span className="roll-dots"><i /><i /><i /></span>;
   const restingBody = isYahtzee ? (hasRolled ? handName : 'Roll to start') : total;
   const showBody = isYahtzee || showTotal;
 
