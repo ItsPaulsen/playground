@@ -234,18 +234,19 @@ function App() {
       <div className="readout">
         {/* Yahtzee: big hand name on top, small total below.
             Freeplay: small "Total" label on top, big number below. */}
+        {/* Both modes share the layout: small label on top, big text below. */}
         {isYahtzee ? (
           <>
-            {rolling ? (
-              <div className="hand"><span className="roll-dots"><i /><i /><i /></span></div>
-            ) : (
-              <div className="hand reveal" key={revealKey}>{hasRolled ? handName : 'Roll to start'}</div>
-            )}
             <div className="sub">
               <span className="total" aria-label={`${rollsUsed} of ${MAX_ROLLS} rolls used`}>
                 {rollsUsed} / {MAX_ROLLS}
               </span>
             </div>
+            {rolling ? (
+              <div className="hand"><span className="roll-dots"><i /><i /><i /></span></div>
+            ) : (
+              <div className="hand reveal" key={revealKey}>{hasRolled ? handName : 'Roll to start'}</div>
+            )}
           </>
         ) : showTotal ? (
           <>

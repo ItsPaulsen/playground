@@ -309,19 +309,19 @@ function App() {
     style: stageStyle
   }, /*#__PURE__*/React.createElement("div", {
     className: "readout"
-  }, isYahtzee ? /*#__PURE__*/React.createElement(React.Fragment, null, rolling ? /*#__PURE__*/React.createElement("div", {
+  }, isYahtzee ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "sub"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "total",
+    "aria-label": `${rollsUsed} of ${MAX_ROLLS} rolls used`
+  }, rollsUsed, " / ", MAX_ROLLS)), rolling ? /*#__PURE__*/React.createElement("div", {
     className: "hand"
   }, /*#__PURE__*/React.createElement("span", {
     className: "roll-dots"
   }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null))) : /*#__PURE__*/React.createElement("div", {
     className: "hand reveal",
     key: revealKey
-  }, hasRolled ? handName : 'Roll to start'), /*#__PURE__*/React.createElement("div", {
-    className: "sub"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "total",
-    "aria-label": `${rollsUsed} of ${MAX_ROLLS} rolls used`
-  }, rollsUsed, " / ", MAX_ROLLS))) : showTotal ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, hasRolled ? handName : 'Roll to start')) : showTotal ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "sub"
   }, /*#__PURE__*/React.createElement("span", {
     className: "total"
