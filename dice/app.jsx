@@ -241,7 +241,11 @@ function App() {
             ) : (
               <div className="hand reveal" key={revealKey}>{hasRolled ? handName : 'Roll to start'}</div>
             )}
-            {showTotal && <div className="sub"><span className="total">{rolling ? '–' : total}</span></div>}
+            <div className="sub">
+              <span className="total" aria-label={`${rollsUsed} of ${MAX_ROLLS} rolls used`}>
+                {rollsUsed} / {MAX_ROLLS}
+              </span>
+            </div>
           </>
         ) : showTotal ? (
           <>
@@ -259,12 +263,6 @@ function App() {
                size={t.size} rx={d.rx} ry={d.ry} onToggle={toggleLock} cubeRef={setCubeRef} />
         ))}
       </div>
-
-      {isYahtzee && (
-        <div className="roll-counter" aria-label={`${rollsUsed} of ${MAX_ROLLS} rolls used`}>
-          {rollsUsed} / {MAX_ROLLS}
-        </div>
-      )}
 
       <div className="controls">
         <button className="btn" onClick={roll} disabled={!canRoll}>{rollLabel}</button>

@@ -316,11 +316,12 @@ function App() {
   }, /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null), /*#__PURE__*/React.createElement("i", null))) : /*#__PURE__*/React.createElement("div", {
     className: "hand reveal",
     key: revealKey
-  }, hasRolled ? handName : 'Roll to start'), showTotal && /*#__PURE__*/React.createElement("div", {
+  }, hasRolled ? handName : 'Roll to start'), /*#__PURE__*/React.createElement("div", {
     className: "sub"
   }, /*#__PURE__*/React.createElement("span", {
-    className: "total"
-  }, rolling ? '–' : total))) : showTotal ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "total",
+    "aria-label": `${rollsUsed} of ${MAX_ROLLS} rolls used`
+  }, rollsUsed, " / ", MAX_ROLLS))) : showTotal ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "sub"
   }, /*#__PURE__*/React.createElement("span", {
     className: "total"
@@ -342,10 +343,7 @@ function App() {
     ry: d.ry,
     onToggle: toggleLock,
     cubeRef: setCubeRef
-  }))), isYahtzee && /*#__PURE__*/React.createElement("div", {
-    className: "roll-counter",
-    "aria-label": `${rollsUsed} of ${MAX_ROLLS} rolls used`
-  }, rollsUsed, " / ", MAX_ROLLS), /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("div", {
     className: "controls"
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn",

@@ -158,20 +158,10 @@
     font-variant-numeric: tabular-nums;
     color: var(--pg-primary); font-weight: 600;
   }
-  /* Matches the total: same size, same primary color, and the same distance
-     from the dice (tray padding + this margin == readout's margin-bottom). */
-  .roll-counter {
-    margin-top: 12px;
-    font-size: 13px; font-weight: 600; color: var(--pg-primary);
-    font-variant-numeric: tabular-nums; letter-spacing: .04em;
-  }
-
   /* ── Controls ── */
   .controls {
     display: flex; align-items: center; gap: 12px; margin-top: 30px;
   }
-  /* Tighter gap when the roll counter sits directly above the buttons. */
-  .roll-counter + .controls { margin-top: 16px; }
   .btn {
     font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em;
     height: 48px; padding: 0 28px;
