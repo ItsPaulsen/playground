@@ -243,8 +243,6 @@ function App() {
   const roll = React.useCallback(() => {
     setRolling(true);
     setHasRolled(true);
-    // The roll has happened the moment you click — count it now, not on settle.
-    if (isYahtzee) setRollsUsed(n => n + 1);
 
     // Draw each unlocked die's new value + target orientation, then tumble.
     // After the last roll of a turn holds are meaningless, so they release
@@ -285,10 +283,13 @@ function App() {
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(() => {
       // React re-renders each cube with exactly the transform the last tween
-      // frame wrote, so nothing jumps.
+      // frame wrote, so nothing jumps. Count the roll only now, as the dice
+      // land, so the counter (and the "Turn over" state it drives) never jumps
+      // ahead of the animation.
       setDice(next);
       setRolling(false);
       setRevealKey(k => k + 1);
+      if (isYahtzee) setRollsUsed(n => n + 1);
     }, settleMs);
   }, [isYahtzee, rollsUsed]);
 
