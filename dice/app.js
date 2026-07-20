@@ -392,6 +392,9 @@ function App() {
   const stageStyle = {
     '--face': t.faceColor,
     '--lock-ring': HOLD_COLOR,
+    // Fixed Roll-button width, sized to the longest label in the active
+    // language ("No rolls left" vs the longer "Ingen kast igjen").
+    '--btn-w': t.lang === 'no' ? '184px' : '156px',
     // A tumbling cube's silhouette widens to ~1.41x at 45°, so the gap must
     // clear ~0.41x the die size or neighbours overlap mid-roll.
     '--die-gap': Math.round(t.size * 0.44) + 'px'

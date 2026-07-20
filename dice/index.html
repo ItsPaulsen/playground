@@ -177,9 +177,9 @@
   .btn {
     -webkit-tap-highlight-color: transparent;
     font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em;
-    /* Fixed width so the label (Roll / Roll again / No rolls left) never
-       resizes the button mid-turn. */
-    width: 156px; height: 48px; padding: 0 28px;
+    /* Fixed width (per-language, see --btn-w) so the label never resizes the
+       button mid-turn. */
+    width: var(--btn-w, 156px); height: 48px; padding: 0 28px;
     border: none; border-radius: 999px;
     background: var(--pg-primary); color: var(--pg-bg);
     cursor: pointer;
