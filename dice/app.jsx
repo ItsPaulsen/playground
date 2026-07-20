@@ -12,6 +12,12 @@ const MAX_ROLLS = 3;
 const FACES = [1, 2, 3, 4, 5, 6];
 const MODE_OPTIONS = [{ value: 'freeplay', label: 'Freeplay' }, { value: 'yahtzee', label: 'Yahtzee' }];
 
+// Per-die roll duration (ms); only this varies between dice so they land at
+// slightly different moments. The turn commits once the slowest die has landed.
+const ROLL_MIN_MS = 950;
+const ROLL_MAX_MS = 1150;
+const SETTLE_MS = ROLL_MAX_MS + 60;
+
 // Cube rotation (deg, in [0,360)) that brings each face to the front.
 const BASE = {
   1: { x: 0, y: 0 },
@@ -24,6 +30,7 @@ const BASE = {
 
 const d6 = () => 1 + Math.floor(Math.random() * 6);
 const randInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
+const easeOutCubic = (p) => 1 - Math.pow(1 - p, 3);
 
 // A resting die, already oriented so the drawn value faces the viewer.
 const makeDie = () => {
@@ -31,13 +38,35 @@ const makeDie = () => {
   return { value, locked: false, rx: BASE[value].x, ry: BASE[value].y };
 };
 
-// Next absolute rotation: spin forward whole turns, then land on the value's face.
-const nextRot = (prevX, prevY, value, spinX, spinY) => {
+// Target orientation: one full forward turn per axis, landing on the value's face.
+const nextRot = (prevX, prevY, value) => {
   const b = BASE[value];
   const dx = (((b.x - (prevX % 360)) % 360) + 360) % 360;
   const dy = (((b.y - (prevY % 360)) % 360) + 360) % 360;
-  return { rx: prevX + 360 * spinX + dx, ry: prevY + 360 * spinY + dy };
+  return { rx: prevX + 360 + dx, ry: prevY + 360 + dy };
 };
+
+// Tween cubes from their current angles to targets, writing one complete
+// transform per frame. Never a CSS transition: the compositor samples a
+// preserve-3d cube's faces out of sync mid-animation and visibly unfolds it.
+function tumble(entries, cubes, rafRef) {
+  const start = performance.now();
+  const step = (now) => {
+    let live = false;
+    for (const a of entries) {
+      const el = cubes[a.i];
+      if (!el) continue;
+      const p = Math.min(1, (now - start) / a.dur);
+      const e = easeOutCubic(p);
+      el.style.transform =
+        `rotateY(${a.fy + (a.ty - a.fy) * e}deg) rotateX(${a.fx + (a.tx - a.fx) * e}deg)`;
+      if (p < 1) live = true;
+    }
+    if (live) rafRef.current = requestAnimationFrame(step);
+  };
+  cancelAnimationFrame(rafRef.current);
+  rafRef.current = requestAnimationFrame(step);
+}
 
 // Best Yahtzee-style hand present in the faces (best-effort, informational).
 function scoreHand(vals) {
@@ -142,38 +171,16 @@ function App() {
     // The roll has happened the moment you click — count it now, not on settle.
     if (isYahtzee) setRollsUsed((n) => n + 1);
 
-    // Each unlocked die tumbles in 3D — whole spins plus a landing turn onto its
-    // drawn face. Varied spins + durations keep them from moving in lockstep.
-    // One full turn per axis: enough to read as a real tumble, and the lower
-    // angular velocity keeps any single dropped/skewed frame invisible.
+    // Draw each unlocked die's new value + target orientation, then tumble.
     const anims = [];
     const next = diceRef.current.map((d, i) => {
       if (d.locked) return d;
       const value = d6();
-      const { rx, ry } = nextRot(d.rx, d.ry, value, 1, 1);
-      anims.push({ i, fx: d.rx, fy: d.ry, tx: rx, ty: ry, dur: randInt(950, 1150) });
+      const { rx, ry } = nextRot(d.rx, d.ry, value);
+      anims.push({ i, fx: d.rx, fy: d.ry, tx: rx, ty: ry, dur: randInt(ROLL_MIN_MS, ROLL_MAX_MS) });
       return { ...d, value, rx, ry };
     });
-
-    // Tween on the main thread: each frame writes a full, consistent transform,
-    // so the compositor never samples the cube's faces out of sync (which
-    // visually unfolds the cube). easeOutCubic = brisk spin, gentle settle.
-    const t0 = performance.now();
-    const tick = (now) => {
-      let live = false;
-      for (const a of anims) {
-        const el = cubes.current[a.i];
-        if (!el) continue;
-        const p = Math.min(1, (now - t0) / a.dur);
-        const e = 1 - Math.pow(1 - p, 3);
-        el.style.transform =
-          `rotateY(${a.fy + (a.ty - a.fy) * e}deg) rotateX(${a.fx + (a.tx - a.fx) * e}deg)`;
-        if (p < 1) live = true;
-      }
-      if (live) rafId.current = requestAnimationFrame(tick);
-    };
-    cancelAnimationFrame(rafId.current);
-    rafId.current = requestAnimationFrame(tick);
+    tumble(anims, cubes.current, rafId);
 
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(() => {
@@ -182,7 +189,7 @@ function App() {
       setDice(next);
       setRolling(false);
       setRevealKey((k) => k + 1);
-    }, 1200);
+    }, SETTLE_MS);
   }, [isYahtzee]);
 
   // Held between rolls (Yahtzee only, and only once you've rolled). Guards live

@@ -92,12 +92,10 @@
   .face.f6 { transform: rotateY(180deg)  translateZ(var(--h));
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><radialGradient id='g' cx='.35' cy='.3' r='.75'><stop offset='0' stop-color='%23696766'/><stop offset='1' stop-color='%231c1917'/></radialGradient><circle cx='26.7' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='50' r='8.5' fill='url(%23g)'/><circle cx='26.7' cy='73.3' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='26.7' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='50' r='8.5' fill='url(%23g)'/><circle cx='73.3' cy='73.3' r='8.5' fill='url(%23g)'/></svg>"), var(--face-grad); }
 
-  /* Locked = held. Flat screen-space ring around the die (drawn on the
-     container, so it stays a clean rounded square regardless of the cube's
-     resting orientation). */
-  /* Ring as a bordered pseudo-element (not outline) so it can inherit the
-     die's exact superellipse corner. Sized 4px outside the die with a matching
-     radius, so the gap stays constant around the whole corner at every size. */
+  /* Held: a ring around the die. A bordered pseudo-element (not outline) so it
+     can carry the superellipse corner, offset a hair outside the die with a
+     matching radius so the gap stays even at every size. Drawn on the static
+     container, so it reads the same whatever face the cube landed on. */
   .die.locked::before {
     content: '';
     position: absolute; inset: calc(var(--s) * -0.055);
