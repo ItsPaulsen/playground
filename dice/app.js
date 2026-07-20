@@ -53,16 +53,14 @@ const d6 = () => 1 + Math.floor(Math.random() * 6);
 const randInt = (min, max) => min + Math.floor(Math.random() * (max - min + 1));
 const easeOutCubic = p => 1 - Math.pow(1 - p, 3);
 
-// A resting die, already oriented so the drawn value faces the viewer.
-const makeDie = () => {
-  const value = d6();
-  return {
-    value,
-    locked: false,
-    rx: BASE[value].x,
-    ry: BASE[value].y
-  };
-};
+// A resting die, already oriented so its value faces the viewer. Defaults to a
+// random roll; pass a value for a deterministic face.
+const makeDie = (value = d6()) => ({
+  value,
+  locked: false,
+  rx: BASE[value].x,
+  ry: BASE[value].y
+});
 
 // Target orientation: one full forward turn per axis, landing on the value's face.
 const nextRot = (prevX, prevY, value) => {
@@ -179,9 +177,11 @@ function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const isDirty = JSON.stringify(t) !== TWEAK_DEFAULTS_JSON;
   const isYahtzee = t.mode === 'yahtzee';
+
+  // Fresh page shows an orderly 1,2,3,… rather than a random scatter.
   const [dice, setDice] = React.useState(() => Array.from({
     length: TWEAK_DEFAULTS.count
-  }, makeDie));
+  }, (_, i) => makeDie(i % 6 + 1)));
   const [rolling, setRolling] = React.useState(false);
   const [rollsUsed, setRollsUsed] = React.useState(0);
   const [hasRolled, setHasRolled] = React.useState(false);
