@@ -124,7 +124,7 @@
   /* ── Readout ── */
   .readout {
     display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px;
-    min-height: 56px; margin-bottom: 12px;
+    min-height: 56px; margin-bottom: 16px; /* + tray's 24px padding = 40 to the dice */
   }
   .readout .hand {
     font-size: 22px; font-weight: 600; line-height: 1.1; letter-spacing: -.01em;
@@ -161,7 +161,8 @@
   /* ── Controls ── */
   /* Stacked everywhere: Roll (primary) on top, New turn (reset) below. */
   .controls {
-    display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 30px;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    margin-top: 16px; /* + tray's 24px padding = 40 from the dice */
   }
   .btn {
     -webkit-tap-highlight-color: transparent;
@@ -189,9 +190,6 @@
     .btn.ghost:not(:disabled):hover { background: var(--pg-tint-20); filter: none; }
   }
 
-  @media (width < 640px) {
-    .controls { margin-top: 24px; }
-  }
 </style>
 </head>
 <body class="pg-dot-grid">
