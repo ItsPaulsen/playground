@@ -246,8 +246,9 @@ function App() {
   // Readout: a small label on top, big text below — same layout in both modes.
   // Yahtzee labels the roll counter and shows the hand; Freeplay labels the
   // total and shows its number. A lone die (Freeplay) shows neither.
-  const readoutLabel = isYahtzee ? `${rollsUsed} / ${MAX_ROLLS}` : showTotal ? 'Total' : null;
-  const readoutLabelAria = isYahtzee ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
+  const readoutLabel = isYahtzee ? (turnOver ? 'Turn over' : `${rollsUsed} / ${MAX_ROLLS}`)
+    : showTotal ? 'Total' : null;
+  const readoutLabelAria = isYahtzee && !turnOver ? `${rollsUsed} of ${MAX_ROLLS} rolls used` : undefined;
   const rollingBody = isYahtzee
     ? <span className="roll-dots"><i /><i /><i /></span>
     : '–';
@@ -270,7 +271,7 @@ function App() {
         )}
         {!showBody ? <div className="hand" />
           : rolling ? <div className="hand">{rollingBody}</div>
-          : <div className="hand reveal" key={revealKey}>{restingBody}</div>}
+          : <div className={`hand ${turnOver ? 'final' : 'reveal'}`} key={revealKey}>{restingBody}</div>}
       </div>
 
       <div className="tray">

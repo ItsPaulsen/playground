@@ -137,6 +137,14 @@
     to   { opacity: 1; }
   }
   .readout .hand.reveal { animation: hand-reveal .28s ease both; }
+  /* Final result of a Yahtzee turn lands with a gentle pop, so the last roll
+     reads as the finish rather than just another reveal. */
+  @keyframes hand-final {
+    0%   { opacity: 0; transform: scale(.9); }
+    60%  { opacity: 1; transform: scale(1.06); }
+    100% { transform: scale(1); }
+  }
+  .readout .hand.final { animation: hand-final .5s cubic-bezier(.34,1.56,.64,1) both; }
 
   .roll-dots { display: inline-flex; gap: 7px; }
   .roll-dots i {
