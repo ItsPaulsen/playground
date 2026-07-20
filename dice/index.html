@@ -161,7 +161,7 @@
   /* ── Controls ── */
   /* Stacked everywhere: Roll (primary) on top, New turn (reset) below. */
   .controls {
-    display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px;
+    display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 30px;
   }
   .btn {
     -webkit-tap-highlight-color: transparent;
@@ -176,13 +176,12 @@
     /* No opacity transition: the disabled dim should snap on instantly, not
        fade in over 200ms. */
     transition: transform .12s ease, filter .2s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,.14);
   }
   .btn:not(:disabled):active { transform: scale(.95); }
-  .btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
   .btn.ghost {
     background: var(--pg-tint); color: var(--pg-primary);
-    box-shadow: none; width: auto; padding: 0 20px;
+    width: auto; padding: 0 20px;
   }
   /* Hover only on real pointers — on touch, :hover sticks after a tap. */
   @media (hover: hover) {
