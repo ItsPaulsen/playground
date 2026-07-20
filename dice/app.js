@@ -21,7 +21,6 @@ const MODE_OPTIONS = [{
 // slightly different moments. The turn commits once the slowest die has landed.
 const ROLL_MIN_MS = 950;
 const ROLL_MAX_MS = 1150;
-const SETTLE_MS = ROLL_MAX_MS + 60;
 
 // Cube rotation (deg, in [0,360)) that brings each face to the front.
 const BASE = {
@@ -271,14 +270,19 @@ function App() {
       };
     });
     tumble(anims, cubes.current, rafId);
+
+    // Commit exactly when the slowest die of THIS roll lands, so the disabled
+    // window tracks the real motion instead of a fixed worst-case time (which
+    // left the buttons greyed for up to ~200ms after the dice had stopped).
+    const settleMs = anims.reduce((m, a) => Math.max(m, a.dur), 0) + 40;
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(() => {
-      // Commit values + final angles only now — React re-renders each cube with
-      // exactly the transform the last tween frame wrote, so nothing jumps.
+      // React re-renders each cube with exactly the transform the last tween
+      // frame wrote, so nothing jumps.
       setDice(next);
       setRolling(false);
       setRevealKey(k => k + 1);
-    }, SETTLE_MS);
+    }, settleMs);
   }, [isYahtzee]);
 
   // Held between rolls (Yahtzee only, and only once you've rolled). Guards live
