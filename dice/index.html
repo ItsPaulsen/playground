@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" data-page="dice">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dice</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<script>(function(){var t=localStorage.getItem('pg-theme')||'light';document.documentElement.setAttribute('data-theme',t);var m=document.createElement('meta');m.name='theme-color';m.content=t==='dark'?'oklch(0.22 0.01 56)':'oklch(0.98 0.00 106)';document.head.appendChild(m);})()</script>
+<link rel="preload" href="/shared/vendor/preact-bundle.js" as="script">
+<link rel="preload" href="../shared/tweaks-panel.js" as="script">
+<link rel="preload" href="app.js" as="script">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&display=swap"></noscript>
+<link rel="stylesheet" href="/shared/tokens.css" />
+<link rel="stylesheet" href="/shared/components.css" />
+<link rel="stylesheet" href="/shared/tweaks-panel.css" data-twk-css="1" />
+<style>
+  html, body { margin: 0; padding: 0; height: 100dvh; background: var(--pg-bg); overflow: hidden;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; color: var(--pg-primary); }
+  #root, .stage { position: fixed; top: env(safe-area-inset-top,0px); left: 0; right: 0; bottom: env(safe-area-inset-bottom,0px); }
+  .stage { display: flex; flex-direction: column; align-items: center; justify-content: center;
+    overflow: hidden; -webkit-user-select: none; user-select: none; }
+
+  /* ── Dice tray ── */
+  .tray {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: var(--die-gap, 20px);
+    max-width: min(90vw, 620px);
+    padding: 24px;
+  }
+
+  /* ── A single die: a real 3D cube ── */
+  .die {
+    --s: var(--die-size, 72px);
+    --h: calc(var(--s) / 2);
+    width: var(--s); height: var(--s);
+    position: relative;
+    perspective: 1200px;
+    cursor: pointer;
+    outline: none;
+    transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+  }
+  /* Roll in place — the cube tumbles, the die itself only gives a small scale
+     pulse (kept well under the gap so neighbours never touch). */
+  @keyframes die-roll {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  .die.rolling { animation: die-roll var(--roll-dur, .85s) cubic-bezier(.14,.82,.2,1) both; cursor: default; }
+  @media (hover: hover) {
+    .die:not(.rolling):hover { transform: translateY(-3px); }
+  }
+
+  /* Two nested single-axis rotations. Rotating both axes on ONE element lets
+     the browser matrix-interpolate, which occasionally dives through a
+     collapsed frame; one axis per element keeps each spin clean. */
+  .cube, .cube-inner {
+    position: absolute; inset: 0;
+    transform-style: preserve-3d;
+    /* Front-loaded ease-out: quick early spin, long gentle settle — like a
+       die losing momentum on a table. */
+    transition: transform var(--roll-dur, .85s) cubic-bezier(.14,.82,.2,1);
+  }
+  /* Hint the compositor only during the roll — a permanent will-change wastes
+     GPU memory on every idle die. */
+  .die.rolling .cube, .die.rolling .cube-inner { will-change: transform; }
+
+  .face {
+    position: absolute; inset: 0;
+    border-radius: calc(var(--s) * 0.2);
+    corner-shape: superellipse(2.2);
+    background:
+      radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
+    box-shadow:
+      inset 0 2px 3px rgba(255,255,255,.45),
+      inset 0 -3px 6px rgba(0,0,0,.16);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    place-items: center;
+    padding: calc(var(--s) * 0.15);
+    backface-visibility: hidden;
+  }
+  .face.f1 { transform: rotateY(0deg)    translateZ(var(--h)); }
+  .face.f6 { transform: rotateY(180deg)  translateZ(var(--h)); }
+  .face.f3 { transform: rotateY(90deg)   translateZ(var(--h)); }
+  .face.f4 { transform: rotateY(-90deg)  translateZ(var(--h)); }
+  .face.f2 { transform: rotateX(90deg)   translateZ(var(--h)); }
+  .face.f5 { transform: rotateX(-90deg)  translateZ(var(--h)); }
+
+  /* Inner core — a closed, square cube (faces meet flush, back-faces visible)
+     just inside the shell. Being closed, any sightline through the shell's
+     rounded-corner notches lands on the die's color, not the background.
+     Kept the exact face color so it's invisible where it peeks past the
+     rounded corners at rest. */
+  .cf {
+    position: absolute; inset: 0;
+    background: var(--face);
+    backface-visibility: visible;
+  }
+  .cf.f1 { transform: rotateY(0deg)    translateZ(calc(var(--h) * 0.97)) scale(.97); }
+  .cf.f6 { transform: rotateY(180deg)  translateZ(calc(var(--h) * 0.97)) scale(.97); }
+  .cf.f3 { transform: rotateY(90deg)   translateZ(calc(var(--h) * 0.97)) scale(.97); }
+  .cf.f4 { transform: rotateY(-90deg)  translateZ(calc(var(--h) * 0.97)) scale(.97); }
+  .cf.f2 { transform: rotateX(90deg)   translateZ(calc(var(--h) * 0.97)) scale(.97); }
+  .cf.f5 { transform: rotateX(-90deg)  translateZ(calc(var(--h) * 0.97)) scale(.97); }
+
+  .pip {
+    width: calc(var(--s) * 0.17); height: calc(var(--s) * 0.17);
+    border-radius: 50%;
+    background: radial-gradient(70% 70% at 35% 30%, color-mix(in srgb, var(--pip) 100%, #fff 34%), var(--pip));
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.35);
+  }
+  .pip.hidden { visibility: hidden; }
+
+  /* Locked = held. Flat screen-space ring around the die (drawn on the
+     container, so it stays a clean rounded square regardless of the cube's
+     resting orientation). */
+  .die.locked {
+    border-radius: calc(var(--s) * 0.14);
+    outline: 2.5px solid var(--lock-ring, #4f46e5);
+    outline-offset: 4px;
+  }
+
+  .lock-tag {
+    position: absolute; top: calc(var(--s) * -0.1); right: calc(var(--s) * -0.1);
+    width: calc(var(--s) * 0.3); height: calc(var(--s) * 0.3);
+    display: grid; place-items: center;
+    background: var(--lock-ring, #4f46e5); color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,.25);
+    opacity: 0; transform: scale(.4); transition: opacity .2s ease, transform .2s cubic-bezier(.34,1.56,.64,1);
+    pointer-events: none; z-index: 2;
+  }
+  .die.locked .lock-tag { opacity: 1; transform: scale(1); }
+  .lock-tag svg { width: 58%; height: 58%; }
+
+  /* ── Readout ── */
+  .readout {
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px;
+    min-height: 56px; margin-bottom: 12px;
+  }
+  .readout .hand {
+    font-size: 22px; font-weight: 600; line-height: 1.1; letter-spacing: -.01em;
+    min-height: 26px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  @keyframes hand-reveal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .readout .hand.reveal { animation: hand-reveal .28s ease both; }
+
+  .roll-dots { display: inline-flex; gap: 7px; }
+  .roll-dots i {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: color-mix(in srgb, var(--pg-primary) 40%, transparent);
+    animation: roll-bounce 1s infinite ease-in-out both;
+  }
+  .roll-dots i:nth-child(2) { animation-delay: .16s; }
+  .roll-dots i:nth-child(3) { animation-delay: .32s; }
+  @keyframes roll-bounce {
+    0%, 75%, 100% { transform: translateY(0);   opacity: .45; }
+    35%           { transform: translateY(-7px); opacity: 1; }
+  }
+
+  .readout .sub {
+    font-size: 13px; font-weight: 500; color: var(--pg-muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .readout .sub .total {
+    font-variant-numeric: tabular-nums;
+    color: var(--pg-primary); font-weight: 600;
+  }
+  /* Matches the total: same size, same primary color, and the same distance
+     from the dice (tray padding + this margin == readout's margin-bottom). */
+  .roll-counter {
+    margin-top: 12px;
+    font-size: 13px; font-weight: 600; color: var(--pg-primary);
+    font-variant-numeric: tabular-nums; letter-spacing: .04em;
+  }
+
+  /* ── Controls ── */
+  .controls {
+    display: flex; align-items: center; gap: 12px; margin-top: 30px;
+  }
+  /* Tighter gap when the roll counter sits directly above the buttons. */
+  .roll-counter + .controls { margin-top: 16px; }
+  .btn {
+    font-family: inherit; font-size: 15px; font-weight: 600; letter-spacing: -.01em;
+    height: 48px; padding: 0 28px;
+    border: none; border-radius: 999px;
+    background: var(--pg-primary); color: var(--pg-bg);
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform .12s ease, opacity .2s ease, filter .2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,.14);
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: scale(.95); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+  .btn.ghost {
+    background: var(--pg-tint); color: var(--pg-primary);
+    box-shadow: none; padding: 0 20px;
+  }
+  .btn.ghost:hover { background: var(--pg-tint-20); filter: none; }
+
+  @media (width < 640px) {
+    .controls { margin-top: 24px; }
+  }
+</style>
+</head>
+<body class="pg-dot-grid">
+<div id="root" tabindex="-1"></div>
+<script src="/shared/vendor/preact-bundle.js"></script>
+<script src="../shared/tweaks-panel.js"></script>
+<script src="app.js"></script>
+<script src="/shared/header.js"></script>
+</body>
+</html>

@@ -121,6 +121,52 @@
       corner-shape: superellipse(1.7);
     }
 
+    /* ── Dice card thumbnail (static, pending a thumb.mov) ── */
+    .dice-thumb {
+      width: 100%;
+      aspect-ratio: 3 / 2;
+      border-radius: var(--radius-sm);
+      corner-shape: superellipse(1.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9%;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 120% at 30% 20%, oklch(0.72 0.13 264), oklch(0.55 0.16 274));
+    }
+    html[data-theme="dark"] .dice-thumb {
+      background: radial-gradient(120% 120% at 30% 20%, oklch(0.5 0.13 264), oklch(0.34 0.11 274));
+    }
+    .dt-die {
+      --d: 30%;
+      width: var(--d); aspect-ratio: 1;
+      border-radius: 22%;
+      corner-shape: superellipse(2.2);
+      background:
+        radial-gradient(120% 120% at 30% 22%, #ffffff 0%, #f2f0ee 55%, #e2dfdb 100%);
+      box-shadow: inset 0 2px 3px rgba(255,255,255,.6), inset 0 -3px 6px rgba(0,0,0,.14), 0 6px 14px rgba(0,0,0,.22);
+      /* pips drawn as dark dots on a 3×3 field */
+      --pip: radial-gradient(circle at center, #1c1917 0 34%, transparent 36%);
+      background-repeat: no-repeat;
+    }
+    .dt-a {
+      transform: rotate(-11deg);
+      background-image:
+        var(--pip), var(--pip), var(--pip), var(--pip), var(--pip),
+        radial-gradient(120% 120% at 30% 22%, #ffffff 0%, #f2f0ee 55%, #e2dfdb 100%);
+      background-size: 26% 26%, 26% 26%, 26% 26%, 26% 26%, 26% 26%, 100% 100%;
+      background-position: 22% 22%, 78% 22%, 50% 50%, 22% 78%, 78% 78%, 0 0;
+    }
+    .dt-b {
+      transform: rotate(8deg) translateY(6%);
+      background-image:
+        var(--pip), var(--pip), var(--pip),
+        radial-gradient(120% 120% at 30% 22%, #ffffff 0%, #f2f0ee 55%, #e2dfdb 100%);
+      background-size: 26% 26%, 26% 26%, 26% 26%, 100% 100%;
+      background-position: 22% 22%, 50% 50%, 78% 78%, 0 0;
+    }
+
     .card-info {
       padding: 12px 8px 8px;
     }
@@ -155,6 +201,7 @@
     .card:nth-child(4) { animation-delay: .5s; }
     .card:nth-child(5) { animation-delay: .6s; }
     .card:nth-child(6) { animation-delay: .7s; }
+    .card:nth-child(7) { animation-delay: .8s; }
 
     .style-link {
       font-size: 12px;
@@ -228,6 +275,20 @@
         <div class="card-info">
           <h2>Card</h2>
           <p>Card with tracked tilt</p>
+        </div>
+      </a>
+
+      <!-- Dice -->
+      <a class="card card--dice" href="dice/">
+        <div class="card-thumb">
+          <div class="dice-thumb" aria-hidden="true">
+            <span class="dt-die dt-a"></span>
+            <span class="dt-die dt-b"></span>
+          </div>
+        </div>
+        <div class="card-info">
+          <h2>Dice</h2>
+          <p>Roll &amp; hold, Yahtzee</p>
         </div>
       </a>
 
