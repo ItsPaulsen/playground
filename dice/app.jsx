@@ -128,7 +128,7 @@ function App() {
   const [rollsUsed, setRollsUsed] = React.useState(0);
   const [hasRolled, setHasRolled] = React.useState(false);
   const [revealKey, setRevealKey] = React.useState(0);
-  const [isNarrow, setIsNarrow] = React.useState(() => window.innerWidth < 640);
+  const [isTouch, setIsTouch] = React.useState(() => window.matchMedia('(pointer: coarse)').matches);
   const settleTimer = React.useRef(0);
   const rafId = React.useRef(0);
   const cubes = React.useRef([]);
@@ -164,12 +164,14 @@ function App() {
     cancelAnimationFrame(rafId.current);
   }, []);
 
-  // Cap the die size lower on narrow screens (big dice crowd the tray).
-  const SIZE_MAX = isNarrow ? 88 : 120;
+  // Cap the die size lower on touch devices (phones/tablets), regardless of
+  // orientation — width alone misfires in landscape.
+  const SIZE_MAX = isTouch ? 88 : 120;
   React.useEffect(() => {
-    const onResize = () => setIsNarrow(window.innerWidth < 640);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    const mq = window.matchMedia('(pointer: coarse)');
+    const onChange = () => setIsTouch(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
   }, []);
   React.useEffect(() => {
     if (t.size > SIZE_MAX) setTweak('size', SIZE_MAX);
