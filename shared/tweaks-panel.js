@@ -208,8 +208,11 @@ function TweaksPanel({
     // sample when a still-opaque overlay disappears in one frame — the tint
     // would stick after the sheet closed. !important because the drag path
     // sets inline opacity the same way.
+    // The fade MUST finish before the unmount: the panel's close animation is
+    // .2s and handleAnimEnd unmounts on it, so keep this shorter (.15s) or the
+    // backdrop gets yanked mid-fade — still opaque — and the tint sticks.
     if (backdropRef.current) {
-      backdropRef.current.style.transition = 'opacity .3s ease';
+      backdropRef.current.style.transition = 'opacity .15s ease';
       backdropRef.current.style.setProperty('opacity', '0', 'important');
     }
     clearTimeout(closeTimerRef.current);
