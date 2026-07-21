@@ -44,6 +44,10 @@
     /* Only interactive (lockable) dice get the pointer — see .die.lockable. */
     cursor: default;
     outline: none;
+    /* No mobile tap-highlight on any die: it's a square overlay that clashes
+       with the rounded 3D shape, and lockable dice already signal a tap via the
+       lock ring — the non-lockable ones should show nothing at all. */
+    -webkit-tap-highlight-color: transparent;
     /* Shared face texture — referenced by every face so it's declared once. */
     --face-grad: radial-gradient(120% 120% at 30% 22%, color-mix(in srgb, var(--face) 100%, #fff 26%) 0%, var(--face) 46%, color-mix(in srgb, var(--face) 100%, #000 12%) 100%);
     /* Small radius on purpose: the rounder the corner, the bigger the
