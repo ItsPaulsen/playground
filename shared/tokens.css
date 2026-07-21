@@ -52,6 +52,9 @@ html[data-theme="dark"] {
   }
 }
 
+/* Kill the default mobile tap-highlight box everywhere; press feedback is supplied per-control. */
+html { -webkit-tap-highlight-color: transparent; }
+
 :focus-visible {
   outline: 2px solid var(--pg-primary);
   outline-offset: 2px;
