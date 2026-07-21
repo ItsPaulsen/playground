@@ -94,7 +94,9 @@
     @media (hover: hover) {
       .card:hover::before { opacity: 1; }
     }
-    .card:active { transform: scale(0.97); opacity: 0.7; transition-duration: .08s; }
+    @media (hover: none) {
+      .card:active { transform: scale(0.97); opacity: 0.7; transition-duration: .08s; }
+    }
 
     .card-thumb {
       position: relative;
@@ -283,6 +285,8 @@
       });
     } else {
       document.querySelectorAll('.card-video source').forEach(function(s) { s.remove(); });
+      // iOS only applies :active to elements that have a touch listener bound.
+      document.addEventListener('touchstart', function() {}, { passive: true });
     }
   </script>
 </body>
