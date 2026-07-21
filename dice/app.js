@@ -74,6 +74,12 @@ const STRINGS = {
 // slightly different moments. The turn commits once the slowest die has landed.
 const ROLL_MIN_MS = 950;
 const ROLL_MAX_MS = 1150;
+// Commit the turn this many ms before the slowest die's tween formally ends.
+// easeOutCubic is ~99.9% of the way there by then (at 90% of the duration the
+// eased position is 1 − 0.1³), so the dice already look at rest — this only
+// moves the readout / counter / button "landing" a touch sooner, without
+// changing the roll motion itself.
+const LAND_EARLY_MS = 200;
 
 // Cube rotation (deg, in [0,360)) that brings each face to the front.
 const BASE = {
@@ -329,13 +335,15 @@ function App() {
     // Commit exactly when the slowest die of THIS roll lands, so the disabled
     // window tracks the real motion instead of a fixed worst-case time (which
     // left the buttons greyed for up to ~200ms after the dice had stopped).
-    const settleMs = anims.reduce((m, a) => Math.max(m, a.dur), 0) + 40;
+    const settleMs = Math.max(0, anims.reduce((m, a) => Math.max(m, a.dur), 0) + 40 - LAND_EARLY_MS);
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(() => {
-      // React re-renders each cube with exactly the transform the last tween
-      // frame wrote, so nothing jumps. Count the roll only now, as the dice
-      // land, so the counter (and the "Turn over" state it drives) never jumps
-      // ahead of the animation.
+      // Stop the tween here so its trailing frames (still climbing the last
+      // ~0.1% of the ease) don't overwrite the final transform React is about
+      // to commit; the die's last painted pose and the committed pose match, so
+      // nothing jumps. Count the roll only now, as the dice land, so the counter
+      // (and the "Turn over" state it drives) never jumps ahead of the animation.
+      cancelAnimationFrame(rafId.current);
       setDice(next);
       setRolling(false);
       setRevealKey(k => k + 1);
