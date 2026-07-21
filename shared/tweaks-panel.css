@@ -241,6 +241,11 @@
   html[data-theme="dark"] .twk-fab{
     background:oklch(0.27 0.01 34 / 0.6);color:oklch(0.98 0.00 106 / .8);box-shadow:rgba(0,0,0,0.2) 0px 6px 24px 0px, rgba(255,255,255,0.1) 0px 0px 0px 1px;
   }
+  /* Reopen/FAB: the transition lives on the visible state, so showing eases in
+     (opacity 0→1 after the panel is gone) while hiding is instant (the hidden
+     state cancels the transition) — no flash over the panel as it opens. */
+  .twk-fab,.twk-reopen{opacity:1;transition:opacity .28s ease}
+  .twk-fab[data-hidden="1"],.twk-reopen[data-hidden="1"]{opacity:0;visibility:hidden;pointer-events:none;transition:none}
 
   @media (max-width:639px){
     .twk-reopen{display:none!important;}

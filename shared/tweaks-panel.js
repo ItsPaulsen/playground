@@ -375,19 +375,13 @@ function TweaksPanel({
     "aria-label": "Open tweaks",
     onTouchEnd: openPanelTouch,
     onClick: openPanel,
-    style: open ? {
-      visibility: 'hidden',
-      pointerEvents: 'none'
-    } : undefined
+    "data-hidden": open ? '1' : undefined
   }, FILTER_ICON), /*#__PURE__*/React.createElement("button", {
     className: "twk-fab",
     "aria-label": "Open tweaks",
     onTouchEnd: openPanelTouch,
     onClick: openPanel,
-    style: open ? {
-      visibility: 'hidden',
-      pointerEvents: 'none'
-    } : undefined
+    "data-hidden": open ? '1' : undefined
   }, FILTER_ICON, "Filter")), document.body);
 }
 

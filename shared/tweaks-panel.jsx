@@ -286,15 +286,18 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
           </button>
         </div>
       )}
-      {/* Always in DOM; hidden when panel is open so iOS keeps the touch target registered */}
+      {/* Always in DOM; hidden (data-hidden) while the panel is open — and it
+          stays open through the close animation, so the button only reappears
+          once the panel is gone. CSS makes hiding instant and showing a fade,
+          so it never flashes over the opening panel but eases back in on close. */}
       <button className="twk-reopen" aria-label="Open tweaks"
         onTouchEnd={openPanelTouch} onClick={openPanel}
-        style={open ? {visibility:'hidden',pointerEvents:'none'} : undefined}>
+        data-hidden={open ? '1' : undefined}>
         {FILTER_ICON}
       </button>
       <button className="twk-fab" aria-label="Open tweaks"
         onTouchEnd={openPanelTouch} onClick={openPanel}
-        style={open ? {visibility:'hidden',pointerEvents:'none'} : undefined}>
+        data-hidden={open ? '1' : undefined}>
         {FILTER_ICON}
         Filter
       </button>
