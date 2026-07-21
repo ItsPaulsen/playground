@@ -158,15 +158,11 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
 
   const dismiss = () => {
     setClosing(true);
-    // Fade the backdrop out during the close so its last painted frame is
-    // transparent before it unmounts. iOS Safari tints the area behind the
-    // address bar by sampling the page's top pixels, and it keeps a stale
-    // sample when a still-opaque overlay disappears in one frame — the tint
-    // would stick after the sheet closed. !important because the drag path
-    // sets inline opacity the same way.
-    // The fade MUST finish before the unmount: the panel's close animation is
-    // .2s and handleAnimEnd unmounts on it, so keep this shorter (.15s) or the
-    // backdrop gets yanked mid-fade — still opaque — and the tint sticks.
+    // Ease the backdrop out as the sheet closes so it doesn't pop when it
+    // unmounts — it has no CSS close animation (only twk-backdrop-in on open),
+    // so fade opacity imperatively. Keep this shorter than the panel's .2s close
+    // animation (handleAnimEnd unmounts on it) so the fade finishes first.
+    // !important because the drag path sets inline opacity the same way.
     if (backdropRef.current) {
       backdropRef.current.style.transition = 'opacity .15s ease';
       backdropRef.current.style.setProperty('opacity', '0', 'important');

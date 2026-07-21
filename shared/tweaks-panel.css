@@ -220,19 +220,17 @@
        background-color transparent, Safari falls through to the light page bg;
        that's what actually prevents the tint. Clear at BOTH ends so neither the
        top nor the bottom toolbar gets a dark sample: transparent through the top
-       safe zone (safe-area + 8px), ramp down to the peak dim, then fade back to
-       transparent before the bottom. Dark in the middle, clear at the edges. */
+       safe zone (safe-area + 8px), ramp down to the --twk-scrim peak, then fade
+       back to transparent before the bottom. Dark in the middle, clear at the
+       edges; the theme only swaps the peak alpha. */
     .twk-backdrop{display:block;position:fixed;inset:0;z-index:var(--z-modal);
+      --twk-scrim:rgba(0,0,0,.4);
       background:linear-gradient(to bottom,
         rgba(0,0,0,0) calc(env(safe-area-inset-top,0px) + 8px),
-        rgba(0,0,0,.4) 80%,
+        var(--twk-scrim) 80%,
         rgba(0,0,0,0) 90%);
       animation:twk-backdrop-in .5s cubic-bezier(.16,1,.3,1) both;}
-    html[data-theme="dark"] .twk-backdrop{
-      background:linear-gradient(to bottom,
-        rgba(0,0,0,0) calc(env(safe-area-inset-top,0px) + 8px),
-        rgba(0,0,0,.5) 80%,
-        rgba(0,0,0,0) 90%);}
+    html[data-theme="dark"] .twk-backdrop{--twk-scrim:rgba(0,0,0,.5);}
     .twk-panel{z-index:calc(var(--z-modal) + 1)!important;}
     .twk-hd{position:relative;touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab;}
     .twk-hd:active{cursor:grabbing;}
