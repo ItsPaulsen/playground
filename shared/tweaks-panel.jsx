@@ -156,37 +156,6 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // iOS Safari samples fixed/overlay elements (the backdrop's tint, the panel's
-  // backdrop-filter) for the address-bar color, and does NOT re-sample when they
-  // leave the DOM — so the tint stays stuck behind the address bar after the
-  // sheet closes. Only a real scroll re-composites it; nothing purely in JS/CSS
-  // does. So on a genuine open→closed transition we nudge the scroll by 1px and
-  // restore it. Pages that exactly fit the viewport can't scroll, so we lend a
-  // 2px sliver of height for the duration of the nudge, then take it back. The
-  // hops are spread across frames so iOS registers a real scroll delta.
-  const wasOpenRef = React.useRef(open);
-  React.useEffect(() => {
-    const justClosed = wasOpenRef.current && !open;
-    wasOpenRef.current = open;
-    if (!justClosed) return undefined;
-    const de = document.documentElement;
-    const body = document.body;
-    const prevMinH = body.style.minHeight;
-    const rafs = [];
-    const hop = (fn) => rafs.push(requestAnimationFrame(fn));
-    hop(() => {
-      const lent = de.scrollHeight <= window.innerHeight;
-      if (lent) body.style.minHeight = (window.innerHeight + 2) + 'px';
-      const y = window.scrollY;
-      window.scrollTo(0, y + 1);
-      hop(() => {
-        window.scrollTo(0, y);
-        hop(() => { if (lent) body.style.minHeight = prevMinH; });
-      });
-    });
-    return () => rafs.forEach(cancelAnimationFrame);
-  }, [open]);
-
   const dismiss = () => {
     setClosing(true);
     // Fade the backdrop out during the close so its last painted frame is
