@@ -454,7 +454,7 @@ function App() {
     value: t.mode,
     options: MODE_OPTIONS,
     onChange: v => setTweak('mode', v)
-  })), isYahtzee && /*#__PURE__*/React.createElement(TweakSection, {
+  })), /*#__PURE__*/React.createElement(TweakSection, {
     label: "Language"
   }, /*#__PURE__*/React.createElement(TweakRadio, {
     value: t.lang,

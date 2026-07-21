@@ -324,7 +324,7 @@ function TweaksPanel({
   return ReactDOM.createPortal(/*#__PURE__*/React.createElement(React.Fragment, null, open && /*#__PURE__*/React.createElement("div", {
     ref: backdropRef,
     className: "twk-backdrop",
-    onClick: dismiss,
+    onPointerDown: dismiss,
     style: closing || openGuard ? {
       pointerEvents: 'none'
     } : undefined

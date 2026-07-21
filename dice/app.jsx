@@ -331,11 +331,9 @@ function App() {
           <TweakRadio value={t.mode} options={MODE_OPTIONS} onChange={(v) => setTweak('mode', v)} />
         </TweakSection>
 
-        {isYahtzee && (
-          <TweakSection label="Language">
-            <TweakRadio value={t.lang} options={LANG_OPTIONS} onChange={(v) => setTweak('lang', v)} />
-          </TweakSection>
-        )}
+        <TweakSection label="Language">
+          <TweakRadio value={t.lang} options={LANG_OPTIONS} onChange={(v) => setTweak('lang', v)} />
+        </TweakSection>
 
         <TweakSection label="Dice">
           {/* Yahtzee is fixed at 5 dice — count is Freeplay-only. */}

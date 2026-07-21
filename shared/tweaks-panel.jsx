@@ -258,7 +258,7 @@ function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children, onOpe
   return ReactDOM.createPortal(
     <>
       {open && (
-        <div ref={backdropRef} className="twk-backdrop" onClick={dismiss} style={closing || openGuard ? {pointerEvents:'none'} : undefined} />
+        <div ref={backdropRef} className="twk-backdrop" onPointerDown={dismiss} style={closing || openGuard ? {pointerEvents:'none'} : undefined} />
       )}
       {open && (
         <div ref={panelRef} className={`twk-panel twk-opening${closing ? ' twk-closing' : ''}`} data-noncommentable="" onAnimationEnd={handleAnimEnd}>
